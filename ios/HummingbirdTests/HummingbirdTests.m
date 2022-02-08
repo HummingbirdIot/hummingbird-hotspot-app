@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface MakerAppTests : XCTestCase
+@interface HummingbirdTests : XCTestCase
 
 @end
 
-@implementation MakerAppTests
+@implementation HummingbirdTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
