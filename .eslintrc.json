@@ -45,6 +45,7 @@
     ],
     "no-empty-function": "off",
     "no-empty": "off",
+    "no-console": "off",
     "consistent-return": "off",
     "react/require-default-props": "off",
     "@typescript-eslint/no-empty-function": "off",

@@ -1,5 +1,5 @@
 import { cleanup, renderWithNav } from '../utils/testUtils'
-import HotspotsScreen from '../features/hotspots/root/HotspotsScreen'
+import HotspotsScreen from '../features/hotspots_old/root/HotspotsScreen'
 
 afterEach(cleanup)
 

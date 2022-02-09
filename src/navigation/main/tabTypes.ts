@@ -1,7 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 
-export type MainTabType = 'Hotspots' | 'More'
+export type MainTabType = 'Hotspots' | 'OldHotspots' | 'More'
 
 export type TabBarIconType = {
   focused: boolean

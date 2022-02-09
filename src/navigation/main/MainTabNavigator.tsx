@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import Hotspots from '../../features/hotspots/root/HotspotsNavigator'
+import OldHotspots from '../../features/hotspots_old/root/HotspotsNavigator'
 // import WalletNavigator from '../../features/wallet/WalletNavigator'
 import { TabBarIconType, MainTabType, RootNavigationProp } from './tabTypes'
 import TabBarIcon from './TabBarIcon'
@@ -77,8 +78,7 @@ const MainTabs = () => {
       screenOptions={screenOptions}
     >
       <MainTab.Screen name="Hotspots" component={Hotspots} />
-      {/* <MainTab.Screen name="Wallet" component={WalletNavigator} /> */}
-      {/* <MainTab.Screen name="Notifications" component={NotificationsScreen} /> */}
+      <MainTab.Screen name="OldHotspots" component={OldHotspots} />
       <MainTab.Screen name="More" component={More} />
     </MainTab.Navigator>
   )

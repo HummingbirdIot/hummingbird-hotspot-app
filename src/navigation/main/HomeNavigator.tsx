@@ -3,9 +3,9 @@ import { Platform } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import LockScreen from '../../features/lock/LockScreen'
 import defaultScreenOptions from '../defaultScreenOptions'
-import HotspotSetup from '../../features/hotspots/setup/HotspotSetupNavigator'
+import HotspotSetup from '../../features/hotspots_old/setup/HotspotSetupNavigator'
 import MainTabs from './MainTabNavigator'
-import HotspotAssert from '../../features/hotspots/setup/HotspotAssertNavigator'
+import HotspotAssert from '../../features/hotspots_old/setup/HotspotAssertNavigator'
 
 const HomeStack = createStackNavigator()
 

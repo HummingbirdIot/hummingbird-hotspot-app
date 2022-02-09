@@ -1,6 +1,8 @@
 import React, { memo } from 'react'
 import Cog from '@assets/images/cog.svg'
-import Hotspot from '@assets/images/placeholder.svg'
+// import Hotspot from '@assets/images/placeholder.svg'
+import Hotspot from '@assets/images/hotspotIcon.svg'
+import Account from '@assets/images/accountIcon.svg'
 import Box from '../../components/Box'
 import { MainTabType, TabBarIconType } from './tabTypes'
 import { useColors } from '../../theme/themeHooks'
@@ -20,6 +22,9 @@ const Icon = ({
 }) => {
   if (name === 'Hotspots') {
     return <Hotspot height={size} width={size} color={color} />
+  }
+  if (name === 'OldHotspots') {
+    return <Account height={size} width={size} color={color} />
   }
   return <Cog color={color} height={size} width={size} />
 }

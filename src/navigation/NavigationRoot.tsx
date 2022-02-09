@@ -19,8 +19,7 @@ const NavigationRoot = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  // eslint-disable-next-line no-console
-  console.log('MyLOG::walletLinkToken:', walletLinkToken)
+  // console.log('MyLOG::walletLinkToken:', walletLinkToken)
   if (!walletLinkToken) {
     return (
       <OnboardingStack.Navigator

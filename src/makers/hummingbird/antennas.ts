@@ -1,13 +1,8 @@
 import { MakerAntenna } from '../antennaMakerTypes'
 
-const EXAMPLE_US = {
-  name: 'Example Hotspot (US 915)',
-  gain: 1.2,
+const HUMMINGBIRD_H500 = {
+  name: 'Hummingbird Miner (All)',
+  gain: 3,
 } as MakerAntenna
 
-const EXAMPLE_EU = {
-  name: 'Example Hotspot (EU 868)',
-  gain: 2.3,
-} as MakerAntenna
-
-export default { EXAMPLE_US, EXAMPLE_EU }
+export default { HUMMINGBIRD_H500 }
