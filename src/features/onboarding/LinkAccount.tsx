@@ -18,8 +18,8 @@ const LinkAccount = () => {
         const url = WalletLink.createWalletLinkUrl({
           universalLink: app.universalLink,
           requestAppId: getBundleId(),
-          callbackUrl: 'makerappscheme://',
-          appName: 'Maker App',
+          callbackUrl: 'hummingbirdscheme://',
+          appName: 'Hummingbird',
         })
 
         Linking.openURL(url)

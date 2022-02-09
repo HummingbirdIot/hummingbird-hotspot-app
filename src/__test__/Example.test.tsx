@@ -6,7 +6,7 @@ afterEach(cleanup)
 describe('Test Hotspot Screen', () => {
   it('renders HotspotScreen.tsx', async () => {
     const hotspotScreen = renderWithNav(HotspotsScreen)
-    const title = hotspotScreen.findByText('Add a\n[Placeholder] Miner')
+    const title = hotspotScreen.findByText('Add a\nHummingbird Miner')
     expect(title).toBeDefined()
   })
 })

@@ -19,6 +19,8 @@ const NavigationRoot = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
+  // eslint-disable-next-line no-console
+  console.log('MyLOG::walletLinkToken:', walletLinkToken)
   if (!walletLinkToken) {
     return (
       <OnboardingStack.Navigator
@@ -34,6 +36,8 @@ const NavigationRoot = () => {
     )
   }
 
+  // eslint-disable-next-line no-console
+  console.log('MyLOG::defaultScreenOptions:', defaultScreenOptions)
   return (
     <MainStack.Navigator headerMode="none" screenOptions={defaultScreenOptions}>
       <MainStack.Screen name="MainTab" component={HomeNav} />

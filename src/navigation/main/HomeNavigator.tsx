@@ -15,6 +15,7 @@ const HomeStackScreen = () => {
       mode="modal"
       screenOptions={({ route }) => {
         if (route.name === 'LockScreen')
+          // 锁频模式下，禁用掉手势
           return { ...defaultScreenOptions, gestureEnabled: false }
 
         if (Platform.OS === 'android') return defaultScreenOptions

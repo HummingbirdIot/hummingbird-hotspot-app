@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "iphone": "react-native run-ios  --simulator=\"Ivan's Phone\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc",
     "prettier": "prettier --write *.ts*",
     "start": "react-native start",

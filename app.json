@@ -1,7 +1,7 @@
 {
   "name": "Hummingbird",
-  "displayName": "Maker App",
+  "displayName": "Hummingbird",
   "expo": {
-    "scheme": "makerappscheme"
+    "scheme": "hummingbirdscheme"
   }
 }

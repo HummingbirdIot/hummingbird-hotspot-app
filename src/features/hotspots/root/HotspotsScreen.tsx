@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from 'react'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useTranslation } from 'react-i18next'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import AddIcon from '@assets/images/add.svg'
 import { Linking } from 'react-native'
 import { useAsync } from 'react-async-hook'
@@ -17,8 +17,14 @@ const HotspotsScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()
   const [accountAddress, setAccountAddress] = useState('')
 
+  const route = useRoute()
+  console.log('MyLOG::HotspotsScreen::route', route)
+
   useAsync(async () => {
     const account = await getAddress()
+
+    console.log('MyLOG::HotspotsScreen:', typeof account, account)
+
     setAccountAddress(account || '')
   }, [])
 
@@ -46,7 +52,8 @@ const HotspotsScreen = () => {
         >
           <Text variant="h2">{t('hotspots.empty.title')}</Text>
           <Text variant="body1" marginTop="ms">
-            {t('hotspots.empty.body')}
+            {/* {t('hotspots.empty.body')} */}
+            accountAddress: {accountAddress}
           </Text>
           <Button
             onPress={addHotspot}

@@ -1,4 +1,4 @@
-package com.maker.makerapp;
+package org.maker.hummingbird;
 import expo.modules.ReactActivityDelegateWrapper;
 import com.facebook.react.ReactActivityDelegate;
 

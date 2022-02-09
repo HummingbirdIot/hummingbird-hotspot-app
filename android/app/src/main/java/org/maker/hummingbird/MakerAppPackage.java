@@ -1,4 +1,4 @@
-package com.maker.makerapp;
+package org.maker.hummingbird;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

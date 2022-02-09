@@ -52,7 +52,7 @@ export default {
       login_with_helium: 'Already have a Helium Wallet?\nTap to get started.',
       subtitle:
         'Lorem ipsum <b><errorText>$HNT</errorText></b> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      title: 'Welcome\nto Maker App',
+      title: 'Welcome\nto Hummingbird',
     },
     linkAccount: {
       stepOne: '1. Download a supported Wallet App',
@@ -298,7 +298,7 @@ export default {
         add: 'Add Hotspot',
         assertLocation: 'Assert Location',
       },
-      title: 'Add a\n[Placeholder] Miner',
+      title: 'Add a\nHummingbird Miner',
     },
   },
   learn: {

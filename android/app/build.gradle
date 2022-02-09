@@ -173,7 +173,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.maker.makerapp"
+        applicationId "org.maker.hummingbird"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode getVersionCode()
