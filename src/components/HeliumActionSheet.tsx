@@ -134,11 +134,7 @@ const HeliumActionSheet = ({
   )
 
   const handleItemSelected = useCallback(
-    (
-      value: string | number,
-      index: number,
-      action?: () => void,
-    ) => async () => {
+    (value: string | number, index: number, action?: () => void) => async () => {
       if (closeOnSelect) {
         handleClose()
       }

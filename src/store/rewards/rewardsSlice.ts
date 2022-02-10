@@ -87,11 +87,13 @@ export const fetchChartData = createAsyncThunk<
 >(
   'rewards/fetchChartData',
   async ({ address, numDays, resource }: FetchDetailsParams, { getState }) => {
-    const currentState = (getState() as {
-      rewards: {
-        chartData: GatewayIndex<GatewayChartRecord>
+    const currentState = (
+      getState() as {
+        rewards: {
+          chartData: GatewayIndex<GatewayChartRecord>
+        }
       }
-    }).rewards
+    ).rewards
     const chartData = currentState.chartData[address] || {}
     const details = chartData[numDays]
     if (hasValidCache(details)) {
@@ -145,9 +147,8 @@ export const fetchChartData = createAsyncThunk<
         fullRange[0].total,
         CurrencyType.networkToken,
       )
-      const previousBalance: Balance<NetworkTokens> = fullBalance.minus(
-        selectedBalance,
-      )
+      const previousBalance: Balance<NetworkTokens> =
+        fullBalance.minus(selectedBalance)
       if (
         previousBalance.integerBalance > 0 &&
         selectedBalance.integerBalance > 0

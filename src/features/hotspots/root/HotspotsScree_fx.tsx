@@ -28,13 +28,15 @@ const HotspotsScreen = () => {
     setAccountAddress(account || '')
   }, [])
 
-  const addHotspot = useCallback(() => navigation.push('HotspotSetup'), [
-    navigation,
-  ])
+  const addHotspot = useCallback(
+    () => navigation.push('HotspotSetup'),
+    [navigation],
+  )
 
-  const assertHotspot = useCallback(() => navigation.push('HotspotAssert'), [
-    navigation,
-  ])
+  const assertHotspot = useCallback(
+    () => navigation.push('HotspotAssert'),
+    [navigation],
+  )
 
   const openExplorer = useCallback(
     () => Linking.openURL(`${EXPLORER_BASE_URL}/accounts/${accountAddress}`),

@@ -50,9 +50,10 @@ const HotspotSetupExternalScreen = () => {
     [params.hotspotType],
   )
 
-  const handleClose = useCallback(() => navigation.navigate('MainTabs'), [
-    navigation,
-  ])
+  const handleClose = useCallback(
+    () => navigation.navigate('MainTabs'),
+    [navigation],
+  )
 
   const handleBarCodeScanned = useDebouncedCallback(
     (result: BarCodeScannerResult) => {
