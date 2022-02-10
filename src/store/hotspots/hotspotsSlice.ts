@@ -87,6 +87,10 @@ export const fetchHotspotsData = createAsyncThunk(
     // ] = allHotspots as [Hotspot[], WalletHotspot[]]
 
     const hotspots = await getHotspots()
+    // const followedHotspots = await getWallet('hotspots/follow', null, {
+    //   camelCase: true,
+    // })
+    // console.log('followedHotspots', followedHotspots)
 
     return {
       hotspots,

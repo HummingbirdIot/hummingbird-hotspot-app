@@ -68,7 +68,9 @@ export const hotspotOnChain = async (address: string) => {
 
 export const getHotspots = async () => {
   // console.log('MyLOG::getHotspots', breadcrumbOpts)
-  const address = await getAddress()
+  const address =
+    (await getAddress()) ||
+    '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65'
   if (!address) return []
   // console.log('MyLOG::getHotspots::address:', address)
 

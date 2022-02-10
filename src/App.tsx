@@ -30,6 +30,7 @@ import SecurityScreen from './features/security/SecurityScreen'
 import AppLinkProvider from './providers/AppLinkProvider'
 import { navigationRef } from './navigation/navigator'
 import useMount from './utils/useMount'
+import { fetchInitialData } from './store/helium/heliumDataSlice'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */
@@ -70,6 +71,13 @@ const App = () => {
 
   useMount(() => {
     dispatch(restoreAppSettings())
+  })
+
+  useEffect(() => {
+    // if (!isBackedUp || !settingsLoaded || !featuresLoaded) return
+
+    dispatch(fetchInitialData())
+    // configChainVars()
   })
 
   useEffect(() => {

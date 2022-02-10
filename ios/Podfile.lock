@@ -1,7 +1,7 @@
 PODS:
   - boost (1.76.0)
   - DoubleConversion (1.1.6)
-  - EXApplication (4.0.0):
+  - EXApplication (4.0.2):
     - ExpoModulesCore
   - EXBarCodeScanner (11.1.2):
     - EXImageLoader
@@ -12,18 +12,18 @@ PODS:
     - ExpoModulesCore
   - EXConstants (12.1.3):
     - ExpoModulesCore
-  - EXErrorRecovery (3.0.3):
+  - EXErrorRecovery (3.0.5):
     - ExpoModulesCore
   - EXFileSystem (13.0.3):
     - ExpoModulesCore
-  - EXFont (10.0.3):
+  - EXFont (10.0.5):
     - ExpoModulesCore
   - EXHaptics (11.0.3):
     - ExpoModulesCore
   - EXImageLoader (3.0.0):
     - ExpoModulesCore
     - React-Core
-  - EXKeepAwake (10.0.0):
+  - EXKeepAwake (10.0.2):
     - ExpoModulesCore
   - EXLocalAuthentication (12.0.1):
     - ExpoModulesCore
@@ -32,9 +32,9 @@ PODS:
     - UMTaskManagerInterface
   - EXPermissions (13.0.3):
     - ExpoModulesCore
-  - Expo (43.0.3):
+  - Expo (43.0.5):
     - ExpoModulesCore
-  - ExpoModulesCore (0.4.8):
+  - ExpoModulesCore (0.4.10):
     - React-Core
   - EXSecureStore (11.0.3):
     - ExpoModulesCore
@@ -51,7 +51,7 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.66.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - helium-react-native-sdk (0.1.4):
+  - helium-react-native-sdk (0.1.6):
     - React-Core
   - Mapbox-iOS-SDK (5.9.0):
     - MapboxMobileEvents (= 0.10.2)
@@ -260,23 +260,23 @@ PODS:
     - React-Core
   - react-native-blur (0.8.0):
     - React
-  - react-native-config (1.4.2):
-    - react-native-config/App (= 1.4.2)
-  - react-native-config/App (1.4.2):
+  - react-native-config (1.4.5):
+    - react-native-config/App (= 1.4.5)
+  - react-native-config/App (1.4.5):
     - React-Core
-  - react-native-get-random-values (1.7.1):
+  - react-native-get-random-values (1.7.2):
     - React-Core
-  - react-native-mapbox-gl (8.2.0-beta2):
+  - react-native-mapbox-gl (8.5.0):
     - Mapbox-iOS-SDK (~> 5.9.0)
     - React
     - React-Core
-    - react-native-mapbox-gl/DynamicLibrary (= 8.2.0-beta2)
-    - react-native-mapbox-gl/StaticLibraryFixer (= 8.2.0-beta2)
-  - react-native-mapbox-gl/DynamicLibrary (8.2.0-beta2):
+    - react-native-mapbox-gl/DynamicLibrary (= 8.5.0)
+    - react-native-mapbox-gl/StaticLibraryFixer (= 8.5.0)
+  - react-native-mapbox-gl/DynamicLibrary (8.5.0):
     - Mapbox-iOS-SDK (~> 5.9.0)
     - React
     - React-Core
-  - react-native-mapbox-gl/StaticLibraryFixer (8.2.0-beta2):
+  - react-native-mapbox-gl/StaticLibraryFixer (8.5.0):
     - Mapbox-iOS-SDK (~> 5.9.0)
     - React
     - React-Core
@@ -356,7 +356,7 @@ PODS:
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
-  - RNDeviceInfo (8.4.4):
+  - RNDeviceInfo (8.4.9):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
@@ -619,32 +619,32 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
-  EXApplication: 0e15240e4d125b62f1cae48759ffbbd32b9286a6
+  EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
   EXBarCodeScanner: cc450529b9c5e02dd9e2498cc0dddf153f120dfe
   EXCamera: 03d69135ceb6f5f18f37b63eddb63d7643b65c42
   EXConstants: 6d585d93723b18d7a8c283591a335609e3bc153e
-  EXErrorRecovery: ac2622400a32be84604591f70d0efff416e4b9a2
+  EXErrorRecovery: b0d7582714a2cc896e94a2308a356f94dbf14ef7
   EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
-  EXFont: 2e1c6fe726d008a039db80df95f48b4921b7fe59
+  EXFont: 2597c10ac85a69d348d44d7873eccf5a7576ef5e
   EXHaptics: f52df335f17192e440d9639c971ebcbb3fb91dec
   EXImageLoader: 939451be6f7b731aaa6588920b90743f20121a4d
-  EXKeepAwake: 8aa32396a5972d26e75e538603aad0f032396503
+  EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
   EXLocalAuthentication: c0ec9379a81c3c823a362382b6a2145e880d9840
   EXLocation: 192eaee761c159d1479111a0ced3bab7ad8475a3
   EXPermissions: 7696f4c16e89981f84c04d96327f7e1e592373c0
-  Expo: 5316c3ecdc34eb0cad340d01dc8beec97c7e879e
-  ExpoModulesCore: a9a9bf32b2da35cd9b7299c80790c03a91ac7d15
+  Expo: d9588796cd19999da4d440d87bf7eb7ae4dbd608
+  ExpoModulesCore: c9438f6add0fb7b04b7c64eb97a833d2752a7834
   EXSecureStore: 919bf7c28472862020d2cd7b59b69aae160b5d40
   EXSplashScreen: 57f329dbf25c5c12800feed79068a056453dc772
   FBLazyVector: de148e8310b8b878db304ceea2fec13f2c02e3a0
   FBReactNativeSpec: 6192956c9e346013d5f1809ba049af720b11c6a4
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 43737235ae6a21de4f45297f4f73b6420fc2ecb2
-  helium-react-native-sdk: a3e6739ad7fbafdb41a6bc976fee6055964269c0
+  glog: 5337263514dd6f09803962437687240c5dc39aa4
+  helium-react-native-sdk: 7f3ed1ac93ce3ed4c00104a679d548168c370cf8
   Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
   MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
-  RCT-Folly: e2636706cc3fded205cf0d380428ec0ea7455f80
+  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 59d2b744d8c2bf2d9bc7032a9f654809adcf7d50
   RCTTypeSafety: d0aaf7ccae5c70a4aaa3a5c3e9e0db97efae760e
   React: fbe655dd1d12c052299b61abdc576720098d80fc
@@ -658,9 +658,9 @@ SPEC CHECKSUMS:
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-config: c98128a72bc2c3a1ca72caec0b021f0fa944aa29
-  react-native-get-random-values: 2c4ff6b44cb71291dabe9a8ae87d3877dcf387da
-  react-native-mapbox-gl: e0dea71cecc84e7a8744bf07bc8a3cc8dbef8894
+  react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
+  react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
+  react-native-mapbox-gl: 955d2c064b56ef058b9cc0fbbf6cf743b05c928e
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-simple-toast: bf002828cf816775a6809f7a9ec3907509bce11f
   react-native-sodium: be31e3fd97b1e9abd0853d7623fbec4b390b6615
@@ -678,7 +678,7 @@ SPEC CHECKSUMS:
   ReactCommon: 9bac022ab71596f2b0fde1268272543184c63971
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
-  RNDeviceInfo: 98cc93d4b3b09b33e784b751f04d414065a61fd4
+  RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNReanimated: 65583befd5706cc9c86ae9a081786181ced37b93
@@ -689,6 +689,6 @@ SPEC CHECKSUMS:
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: 02af88f80d1ff6602cb90842d89b3600ad4616fd
+PODFILE CHECKSUM: 63cdfed3a64bb7b956ed60f2c48de5874d903b17
 
 COCOAPODS: 1.11.2

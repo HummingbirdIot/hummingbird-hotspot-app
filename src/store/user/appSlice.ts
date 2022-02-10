@@ -49,7 +49,9 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
         ? parseInt(authInterval, 10)
         : Intervals.IMMEDIATELY,
       isLocked: isPinRequired,
-      walletLinkToken,
+      walletLinkToken:
+        walletLinkToken ||
+        'eyJ0aW1lIjoxNjQ0Mzg4ODMyLCJhZGRyZXNzIjoiMTN1TTdndFZ4UFI1N1AzdWU5azVtS2ZlWURmZmZlc1o4b25naURBZGtFTHlXODN6bkJlIiwicmVxdWVzdEFwcElkIjoib3JnLm1ha2VyLmh1bW1pbmdiaXJkIiwic2lnbmluZ0FwcElkIjoiY29tLmhlbGl1bS5tb2JpbGUud2FsbGV0IiwiY2FsbGJhY2tVcmwiOiJodW1taW5nYmlyZHNjaGVtZTovLyIsImFwcE5hbWUiOiJIdW1taW5nYmlyZCIsInNpZ25hdHVyZSI6IjRHKzNKWGY0OVZYMlpCT2V1QWJYS0RZMW1jeGJwenV6OWJQdWV5NVk0VFRDSGFoeWtIU0xnRVNoRG5jeE1JRCtiOHY3NFdvK2NmbnpEZlFjTUgyM0JRPT0ifQ==',
     } as Restore
   },
 )

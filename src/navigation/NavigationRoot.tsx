@@ -36,7 +36,7 @@ const NavigationRoot = () => {
   }
 
   // eslint-disable-next-line no-console
-  console.log('MyLOG::defaultScreenOptions:', defaultScreenOptions)
+  // console.log('MyLOG::defaultScreenOptions:', defaultScreenOptions)
   return (
     <MainStack.Navigator headerMode="none" screenOptions={defaultScreenOptions}>
       <MainStack.Screen name="MainTab" component={HomeNav} />

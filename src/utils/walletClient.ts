@@ -23,20 +23,20 @@ const makeRequest = async (
   url: string,
   opts: RequestInit & { showCursor?: boolean },
 ) => {
-  console.log(`MyLOG::httpRequest ${opts.method} ${url}`, breadcrumbOpts)
+  // console.log(`MyLOG::httpRequest ${opts.method} ${url}`, breadcrumbOpts)
   try {
     const token = await getWalletApiToken()
     if (!token) {
       console.log('MyLOG::walletClient::no token:', breadcrumbOpts)
       throw new Error('no token')
     }
-    console.log('MyLOG::makeRequest:', token)
+    console.log('MyLOG::makeRequest:', token, opts)
 
-    const baseUrl =
-      Config.WALLET_API_BASE_URL || 'https://wallet.api.helium.systems/api'
+    const baseUrl = Config.WALLET_API_BASE_URL
+    // const baseUrl = 'https://wallet.api.helium.systems/api'
     const route = [baseUrl, url].join('/')
 
-    console.log('MyLOG::makeRequest::route:', route)
+    console.log('MyLOG::makeWalletRequest::route:', route)
 
     const response = await fetch(route, {
       ...opts,
@@ -135,7 +135,7 @@ export const deleteWallet = async (
 }
 
 export const getWalletExt = async (url: string) => {
-  console.log(`httpRequest GET ${url}`, breadcrumbOpts)
+  // console.log(`MyLOG::getWalletExt::httpRequest GET ${url}`, breadcrumbOpts)
   try {
     const baseUrl = Config.WALLET_API_BASE_URL.replace('/api', '/ext/api')
     const route = [baseUrl, url].join('/')

@@ -65,13 +65,11 @@ export default {
   },
   antennas: {
     elevation_info: {
-      desc:
-        'Estimate how high the antenna is placed relative to the ground. An antenna located on the roof of a single-story house is typically 5 meters.',
+      desc: 'Estimate how high the antenna is placed relative to the ground. An antenna located on the roof of a single-story house is typically 5 meters.',
       title: 'Hotspot Height',
     },
     gain_info: {
-      desc:
-        'A value between 1 and 15 to one decimal point. This is provided by your hotspot or antenna manufacturer.',
+      desc: 'A value between 1 and 15 to one decimal point. This is provided by your hotspot or antenna manufacturer.',
       title: 'Antenna TX / RX Gain',
     },
     onboarding: {
@@ -106,6 +104,8 @@ export default {
     understand: 'I understand',
     unknown: 'Unknown',
     period: '.',
+    meters: '{{distance}}m',
+    kilometers: '{{distance}}km',
   },
   hotspot_details: {
     no_location_body: 'Pair with the Hotspot to begin.',
@@ -234,13 +234,11 @@ export default {
     },
     pair: {
       alert_ble_off: {
-        body:
-          'To start pairing, turn on Bluetooth. Keep Bluetooth on until you finish registration.',
+        body: 'To start pairing, turn on Bluetooth. Keep Bluetooth on until you finish registration.',
         title: 'Enable Bluetooth',
       },
       alert_no_permissions: {
-        body:
-          'MakerApp needs permission to use Bluetooth. You can enable Bluetooth permission in Settings.',
+        body: 'MakerApp needs permission to use Bluetooth. You can enable Bluetooth permission in Settings.',
         title: 'Authorize Bluetooth',
       },
       scan: 'Scan for my Hotspot',
