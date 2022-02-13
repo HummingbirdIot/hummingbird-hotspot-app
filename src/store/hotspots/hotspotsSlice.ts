@@ -187,7 +187,8 @@ const hotspotsSlice = createSlice({
       const followed: Hotspot[] = action.payload.followedHotspots
       state.followedHotspots = handleCacheFulfilled({ data: followed })
       state.followedHotspotsObj = hotspotsToObj(followed)
-      state.hotspots = handleCacheFulfilled({ data: action.payload.hotspots })
+      state.hotspots =
+        handleCacheFulfilled({ data: action.payload.hotspots }) || []
       state.hotspotsLoaded = true
       state.failure = false
     })
