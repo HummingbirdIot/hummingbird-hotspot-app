@@ -19,7 +19,9 @@ target 'Hummingbird' do
     :hermes_enabled => podfile_properties['expo.jsEngine'] == 'hermes'
   )
 
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+
+
 
   target 'HummingbirdTests' do
     inherit! :complete

@@ -1,125 +1,39 @@
-import 'react-native-gesture-handler'
-import React, { useEffect, useMemo } from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import {
-  LogBox,
-  Platform,
-  StatusBar,
-  UIManager,
-  useColorScheme,
-} from 'react-native'
-import useAppState from 'react-native-appstate-hook'
-import { ThemeProvider } from '@shopify/restyle'
-import Config from 'react-native-config'
-import { useSelector } from 'react-redux'
-import MapboxGL from '@react-native-mapbox-gl/maps'
-import { useAsync } from 'react-async-hook'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import * as SplashScreen from 'expo-splash-screen'
-import { NavigationContainer } from '@react-navigation/native'
-import {
-  HotspotBleProvider,
-  OnboardingProvider,
-} from '@helium/react-native-sdk'
+import React, { useMemo } from 'react'
+// import { Platform } from 'react-native'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ThemeProvider, Button, colors } from 'react-native-elements'
 import { theme, darkThemeColors, lightThemeColors } from './theme/theme'
-import NavigationRoot from './navigation/NavigationRoot'
-import { useAppDispatch } from './store/store'
-import appSlice, { restoreAppSettings } from './store/user/appSlice'
-import { RootState } from './store/rootReducer'
-import SecurityScreen from './features/security/SecurityScreen'
-import AppLinkProvider from './providers/AppLinkProvider'
-import { navigationRef } from './navigation/navigator'
-import useMount from './utils/useMount'
-import { fetchInitialData } from './store/helium/heliumDataSlice'
 
-SplashScreen.preventAutoHideAsync().catch(() => {
-  /* reloading the app might trigger some race conditions, ignore them */
-})
+import Root from './views/Root'
 
-const App = () => {
-  const colorScheme = useColorScheme()
+// const theme = {
+//   colors: {
+//     ...Platform.select({
+//       default: colors.platform.android,
+//       ios: colors.platform.ios,
+//     }),
+//   },
+//   // Avatar: {
+//   //   rounded: true,
+//   // },
+//   // Badge: {
+//   //   textStyle: { fontSize: 30 },
+//   // },
+//   Button: {
+//     containerStyle: {
+//       marginTop: 10,
+//     },
+//   },
+// }
 
-  if (Platform.OS === 'android') {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true)
-    }
-  }
+// const RaisedButton = (props: any) => <Button raised {...props} />
 
-  LogBox.ignoreLogs([
-    "Accessing the 'state' property of the 'route' object is not supported.",
-    'Setting a timer',
-    'Calling getNode() on the ref of an Animated component',
-    'Native splash screen is already hidden',
-    'No Native splash screen',
-    'RCTBridge required dispatch_sync to load',
-    'Require cycle',
-    'new NativeEventEmitter',
-    'EventEmitter.removeListener(',
-  ])
-
-  const { appState } = useAppState()
-  const dispatch = useAppDispatch()
-
-  const {
-    lastIdle,
-    isPinRequired,
-    authInterval,
-    isRestored,
-    isRequestingPermission,
-    isLocked,
-  } = useSelector((state: RootState) => state.app)
-
-  useMount(() => {
-    dispatch(restoreAppSettings())
-  })
-
-  useEffect(() => {
-    // if (!isBackedUp || !settingsLoaded || !featuresLoaded) return
-
-    dispatch(fetchInitialData())
-    // configChainVars()
-  })
-
-  useEffect(() => {
-    MapboxGL.setAccessToken(Config.MAPBOX_ACCESS_TOKEN)
-  }, [dispatch])
-
-  // handle app state changes
-  useEffect(() => {
-    if (appState === 'background' && !isLocked) {
-      dispatch(appSlice.actions.updateLastIdle())
-      return
-    }
-
-    const isActive = appState === 'active'
-    const now = Date.now()
-    const expiration = now - authInterval
-    const lastIdleExpired = lastIdle && expiration > lastIdle
-
-    // pin is required and last idle is past user interval, lock the screen
-    const shouldLock =
-      isActive && isPinRequired && !isRequestingPermission && lastIdleExpired
-
-    if (shouldLock) {
-      dispatch(appSlice.actions.lock(true))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appState])
-
-  // hide splash screen
-  useAsync(async () => {
-    if (isRestored) {
-      await SplashScreen.hideAsync()
-    }
-  }, [isRestored])
-
-  useEffect(() => {
-    // Hide splash after 5 seconds, deal with the consequences?
-    const timeout = setTimeout(() => {
-      SplashScreen.hideAsync()
-    }, 5000)
-    return () => clearInterval(timeout)
-  }, [dispatch])
+function App() {
+  const colorScheme: ColorSchemeName = useColorScheme()
+  console.log('App::ColorSchemeName:', colorScheme)
 
   const colorAdaptedTheme = useMemo(
     () => ({
@@ -130,29 +44,19 @@ const App = () => {
   )
 
   return (
-    <OnboardingProvider baseUrl="https://onboarding.dewi.org/api/v2">
-      <HotspotBleProvider>
-        <ThemeProvider theme={colorAdaptedTheme}>
-          <BottomSheetModalProvider>
-            <SafeAreaProvider>
-              {/* TODO: Will need to adapt status bar for light/dark modes */}
-              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-              {Platform.OS === 'android' && (
-                <StatusBar translucent backgroundColor="transparent" />
-              )}
-              <NavigationContainer ref={navigationRef}>
-                <AppLinkProvider>
-                  <NavigationRoot />
-                </AppLinkProvider>
-              </NavigationContainer>
-            </SafeAreaProvider>
-            <SecurityScreen
-              visible={appState !== 'active' && appState !== 'unknown'}
-            />
-          </BottomSheetModalProvider>
-        </ThemeProvider>
-      </HotspotBleProvider>
-    </OnboardingProvider>
+    <ThemeProvider theme={colorAdaptedTheme}>
+      <SafeAreaProvider>
+        <Root />
+        {/* <SafeAreaView edges={['top', 'right', 'bottom', 'left']}>
+          <Button title="My Button" />
+          <Button
+            title="My 2nd Button"
+            containerStyle={{ backgroundColor: 'red' }}
+            titleStyle={{ color: 'pink' }}
+          />
+        </SafeAreaView> */}
+      </SafeAreaProvider>
+    </ThemeProvider>
   )
 }
 
