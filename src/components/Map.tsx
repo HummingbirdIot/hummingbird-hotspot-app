@@ -91,6 +91,7 @@ const Map = ({
       userCoords &&
       isFinite(userCoords.longitude) &&
       isFinite(userCoords.latitude)
+    console.log('Map::centerUserLocation:', userCoords)
     camera.current?.setCamera({
       centerCoordinate: hasCoords
         ? [userCoords.longitude, userCoords.latitude]
@@ -106,7 +107,7 @@ const Map = ({
       if (!loc?.coords || (userCoords.latitude && userCoords.longitude)) {
         return
       }
-
+      console.log('Map::handleUserLocationUpdate:', loc)
       setUserCoords(loc.coords)
     },
     [userCoords],

@@ -9,6 +9,13 @@ import hotspotsSlice, {
 } from './hotspots/hotspotsSlice'
 import rewardsSlice from './rewards/rewardsSlice'
 import featuresSlice from './features/featuresSlice'
+import accountSlice from './account/accountSlice'
+
+const accountConfig = {
+  key: accountSlice.name,
+  storage: AsyncStorage,
+  blacklist: ['rewardsSum'],
+}
 
 const hotspotsConfig = {
   key: hotspotsSlice.name,
@@ -20,6 +27,7 @@ const hotspotsConfig = {
 
 const rootReducer = combineReducers({
   app: appSlice.reducer,
+  account: persistReducer(accountConfig, accountSlice.reducer),
   location: locationSlice.reducer,
   hotspots: persistReducer(hotspotsConfig, hotspotsSlice.reducer),
   heliumData: heliumDataSlice.reducer,

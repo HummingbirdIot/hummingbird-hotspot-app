@@ -6,8 +6,10 @@ import {
   signOut,
 } from '../../utils/secureAccount'
 import { Intervals } from '../../features/moreTab/more/useAuthIntervals'
+// import OneSignal from 'react-native-onesignal'
 
 export type AppState = {
+  isBackedUp: boolean
   isSettingUpHotspot: boolean
   isRestored: boolean
   isPinRequired: boolean
@@ -18,6 +20,7 @@ export type AppState = {
   walletLinkToken?: string
 }
 const initialState: AppState = {
+  isBackedUp: false,
   isSettingUpHotspot: false,
   isRestored: false,
   isPinRequired: false,
@@ -38,12 +41,22 @@ type Restore = {
 export const restoreAppSettings = createAsyncThunk<Restore>(
   'app/restoreAppSettings',
   async () => {
-    const [isPinRequired, authInterval, walletLinkToken] = await Promise.all([
-      getSecureItem('requirePin'),
-      getSecureItem('authInterval'),
-      getSecureItem('walletLinkToken'),
-    ])
+    const [isBackedUp, isPinRequired, authInterval, walletLinkToken, address] =
+      await Promise.all([
+        getSecureItem('accountBackedUp'),
+        getSecureItem('requirePin'),
+        getSecureItem('authInterval'),
+        getSecureItem('walletLinkToken'),
+        getSecureItem('address'),
+      ])
+    if (isBackedUp && address) {
+      // 推送
+      console.log('OneSignal.sendTags:', { address })
+      // OneSignal.sendTags({ address })
+      // Logger.setUser(address)
+    }
     return {
+      isBackedUp,
       isPinRequired,
       authInterval: authInterval
         ? parseInt(authInterval, 10)

@@ -10,6 +10,7 @@ import { heliumHttpClient } from '@helium/react-native-sdk'
 // import { Platform } from 'react-native'
 // import { getVersion } from 'react-native-device-info'
 import { subDays } from 'date-fns'
+// import { Transaction } from '@helium/transactions'
 import { getAddress } from './secureAccount'
 import {
   HotspotActivityFilters,
@@ -28,6 +29,12 @@ const client = new Client(Network.production, {
 })
 
 const breadcrumbOpts = { type: 'HTTP Request', category: 'appDataClient' }
+
+// export const configChainVars = async () => {
+//   console.log('configChainVars', breadcrumbOpts)
+//   const vars = await client.vars.getTransactionVars()
+//   Transaction.config(vars)
+// }
 
 export const submitTxn = async (txn: string) => {
   return heliumHttpClient.transactions.submit(txn)

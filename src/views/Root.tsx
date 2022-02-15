@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { Text } from 'react-native'
 import { View, Text } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FullTheme, Header, ThemeProps, withTheme } from 'react-native-elements'
@@ -17,9 +16,9 @@ import { useSpacing } from '../theme/themeHooks'
 import { Spacing } from '../theme/theme'
 
 import { getAddress } from '../utils/secureAccount'
-import HotspotDetailChart from './overview/details/HotspotDetailChart'
+import HotspotDetailChart from './main/overview/details/HotspotDetailChart'
 import { RootState } from '../store/rootReducer'
-import { getRewardChartData } from './overview/details/RewardsHelper'
+import { getRewardChartData } from './main/overview/details/RewardsHelper'
 import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
@@ -180,16 +179,14 @@ const RootNavigator = () => {
   console.log('Root::SafeAreaInsets:', insets)
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          options={{ headerShown: false }}
-          component={HomeScreen}
-        />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        options={{ headerShown: false }}
+        component={HomeScreen}
+      />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+    </Stack.Navigator>
   )
 }
 

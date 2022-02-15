@@ -9,13 +9,13 @@ const stringKeys = [
   'authInterval',
   'language',
   'walletLinkToken',
-  // 'address',
+  'address',
   'walletApiToken',
   'keypair',
 ] as const
 type StringKey = typeof stringKeys[number]
 
-const boolKeys = ['requirePin'] as const
+const boolKeys = ['accountBackedUp', 'requirePin'] as const
 type BooleanKey = typeof boolKeys[number]
 
 export const setSecureItem = async (
