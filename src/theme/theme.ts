@@ -1,18 +1,18 @@
 import { createTheme } from '@shopify/restyle'
 import { TextProps } from 'react-native'
 
-export const Font = {
-  main: {
-    light: 'Inter-Light',
-    regular: 'Inter-Regular',
-    medium: 'Inter-Medium',
-    semiBold: 'Inter-SemiBold',
-  },
-  mono: {
-    light: 'InputMono-Light',
-    regular: 'InputMono-Regular',
-  },
-}
+// export const Font = {
+//   main: {
+//     light: 'Inter-Light',
+//     regular: 'Inter-Regular',
+//     medium: 'Inter-Medium',
+//     semiBold: 'Inter-SemiBold',
+//   },
+//   mono: {
+//     light: 'InputMono-Light',
+//     regular: 'InputMono-Regular',
+//   },
+// }
 
 const textVariants = {
   h1: {

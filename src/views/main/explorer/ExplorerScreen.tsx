@@ -6,8 +6,8 @@ import Map from '../../../components/Map'
 
 const ExplorerScreen = () => {
   const [mapCenter, setMapCenter] = useState([-122.419, 37.775])
-  // const [markerCenter, setMarkerCenter] = useState([-122.419, 37.775])
-  // const markerCenter = [-122.419, 37.775]
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [markerCenter, setMarkerCenter] = useState([-122.419, 37.775])
   //   const [locationName, setLocationName] = useState('')
   //   const [hasGPSLocation, setHasGPSLocation] = useState(false)
 
@@ -41,7 +41,7 @@ const ExplorerScreen = () => {
       mapCenter={mapCenter}
       // onMapMoved={onMapMoved}
       onDidFinishLoadingMap={onDidFinishLoadingMap}
-      // markerLocation={markerCenter}
+      markerLocation={markerCenter}
       currentLocationEnabled
     />
   )

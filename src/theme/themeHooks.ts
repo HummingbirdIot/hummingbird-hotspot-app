@@ -2,6 +2,8 @@ import { useTheme } from '@shopify/restyle'
 import { ww } from '../utils/layout'
 import { Theme } from './theme'
 
+export { useElementsTheme } from './elements'
+
 export const useColors = () => {
   const { colors } = useTheme<Theme>()
   return colors

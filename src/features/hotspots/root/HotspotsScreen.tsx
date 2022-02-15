@@ -26,6 +26,9 @@ import { getAddress } from '../../../utils/secureAccount'
 export const HELIUM_OLD_MAKER_ADDRESS =
   '14fzfjFcHpDR1rTH8BNPvSi5dKBbgxaDnmsVPbCjuq9ENjpZbxh'
 
+export const HUMMINGBIRD_MAKER_ADDRESS =
+  '14DdSjvEkBQ46xQ24LAtHwQkAeoUUZHfGCosgJe33nRQ6rZwPG3'
+
 const HotspotsScreen = () => {
   const { t } = useTranslation()
   // const navigation = useNavigation<RootNavigationProp>()

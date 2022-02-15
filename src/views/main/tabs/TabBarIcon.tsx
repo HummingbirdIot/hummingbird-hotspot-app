@@ -34,8 +34,8 @@ const Icon = ({
 }
 
 const TabBarIcon = ({ name, focused, size }: Props) => {
-  const { black, bobcatRed } = useColors()
-  const color = focused ? bobcatRed : black
+  const { whiteTransparent75, yellow } = useColors()
+  const color = focused ? yellow : whiteTransparent75
 
   return (
     <Box

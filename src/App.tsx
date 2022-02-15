@@ -34,26 +34,7 @@ import { fetchInitialData } from './store/helium/heliumDataSlice'
 // import NavigationRoot from './navigation/NavigationRoot'
 import { navigationRef } from './navigation/navigator'
 import RootView from './views/RootView'
-
-// const theme = {
-//   colors: {
-//     ...Platform.select({
-//       default: colors.platform.android,
-//       ios: colors.platform.ios,
-//     }),
-//   },
-//   // Avatar: {
-//   //   rounded: true,
-//   // },
-//   // Badge: {
-//   //   textStyle: { fontSize: 30 },
-//   // },
-//   Button: {
-//     containerStyle: {
-//       marginTop: 10,
-//     },
-//   },
-// }
+import { useElementsTheme } from './theme/themeHooks'
 
 // const RaisedButton = (props: any) => <Button raised {...props} />
 
@@ -169,11 +150,13 @@ function App() {
     [colorScheme],
   )
 
+  const elementsTheme = useElementsTheme()
+
   return (
     <OnboardingProvider baseUrl="https://onboarding.dewi.org/api/v2">
       <HotspotBleProvider>
         <ThemeProvider theme={colorAdaptedTheme}>
-          <ElementsThemeProvider>
+          <ElementsThemeProvider theme={elementsTheme}>
             <SafeAreaProvider>
               {/* TODO: Will need to adapt status bar for light/dark modes */}
               {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
