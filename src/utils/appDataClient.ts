@@ -7,20 +7,24 @@ import Client, {
   // Validator,
 } from '@helium/http'
 import { heliumHttpClient } from '@helium/react-native-sdk'
-import { Platform } from 'react-native'
-import { getVersion } from 'react-native-device-info'
+// import { Platform } from 'react-native'
+// import { getVersion } from 'react-native-device-info'
 import { subDays } from 'date-fns'
 import { getAddress } from './secureAccount'
+import {
+  HotspotActivityFilters,
+  HotspotActivityType,
+} from '../features/hotspots/root/hotspotTypes'
 
 const MAX = 100000
-const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
-  Platform.OS
-}-js-client`
+// const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
+//   Platform.OS
+// }-js-client`
 
 const client = new Client(Network.production, {
   retry: 1,
-  name: userAgent,
-  userAgent,
+  // name: userAgent,
+  // userAgent,
 })
 
 const breadcrumbOpts = { type: 'HTTP Request', category: 'appDataClient' }
@@ -95,6 +99,19 @@ const getRewardsRange = (numDaysBack: number) => {
   return { maxTime, minTime }
 }
 
+export const getAccountRewards = async (
+  address: string,
+  numDaysBack: number,
+  bucket: Bucket = 'day',
+) => {
+  console.log('getAccountRewards', breadcrumbOpts)
+
+  const list = await client
+    .account('13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65')
+    .rewards.sum.list({ ...getRewardsRange(numDaysBack), bucket })
+  return list.take(MAX)
+}
+
 export const getHotspotRewards = async (
   address: string,
   numDaysBack: number,
@@ -117,5 +134,20 @@ export const getValidatorRewards = async (
   const list = await client
     .validator(address)
     .rewards.sum.list({ ...getRewardsRange(numDaysBack), bucket })
+  return list.take(MAX)
+}
+
+export const getHotspotActivityList = async (
+  gateway: string,
+  filterType: HotspotActivityType,
+) => {
+  console.log('getHotspotActivityList', breadcrumbOpts)
+  const params = { filterTypes: HotspotActivityFilters[filterType] }
+  return client.hotspot(gateway).activity.list(params)
+}
+
+export const getWitnessedHotspots = async (address: string) => {
+  console.log('getWitnessedHotspots', breadcrumbOpts)
+  const list = await client.hotspot(address).witnesses.list()
   return list.take(MAX)
 }

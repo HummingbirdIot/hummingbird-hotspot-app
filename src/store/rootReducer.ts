@@ -7,6 +7,8 @@ import heliumDataSlice from './helium/heliumDataSlice'
 import hotspotsSlice, {
   hotspotsSliceMigrations,
 } from './hotspots/hotspotsSlice'
+import rewardsSlice from './rewards/rewardsSlice'
+import featuresSlice from './features/featuresSlice'
 
 const hotspotsConfig = {
   key: hotspotsSlice.name,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   location: locationSlice.reducer,
   hotspots: persistReducer(hotspotsConfig, hotspotsSlice.reducer),
   heliumData: heliumDataSlice.reducer,
+  rewards: rewardsSlice.reducer,
+  features: featuresSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

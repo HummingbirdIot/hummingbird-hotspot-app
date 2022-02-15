@@ -11,9 +11,14 @@ import android.view.WindowManager;
 import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends ReactActivity {
-    @Override
+  // @Override
+  // protected void onCreate(Bundle savedInstanceState) {
+  //   super.onCreate(savedInstanceState);
+  // }
+
+  @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    super.onCreate(null);
   }
 
   /**
