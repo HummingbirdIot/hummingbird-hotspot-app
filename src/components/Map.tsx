@@ -107,7 +107,7 @@ const Map = ({
       if (!loc?.coords || (userCoords.latitude && userCoords.longitude)) {
         return
       }
-      console.log('Map::handleUserLocationUpdate:', loc)
+      // console.log('Map::handleUserLocationUpdate:', loc)
       setUserCoords(loc.coords)
     },
     [userCoords],

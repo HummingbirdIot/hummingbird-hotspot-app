@@ -3,6 +3,7 @@ import React, { memo, useCallback, useEffect, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { ButtonGroup } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
 import Box from '../../../components/Box'
 import Map from '../../../components/Map'
@@ -15,6 +16,7 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
+import ActivitiesList from '../../list/ActivitiesList'
 
 const truncateAddress = (address: string, startWith = 10) => {
   const start = address.slice(0, startWith)
@@ -25,36 +27,51 @@ const truncateAddress = (address: string, startWith = 10) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotDetailScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
+  const insets = useSafeAreaInsets()
+  // console.log('Root::SafeAreaInsets:', insets)
+
   const { index, routes } = navigation.getState()
-  //   console.log('HotspotDetailScreen::navigation::route:', index, routes[index])
+  // console.log(
+  //   'HotspotDetailScreen::navigation::route:',
+  //   index,
+  //   routes,
+  //   navigation,
+  // )
   //   console.log(
   //     'HotspotDetailScreen::navigation::routeParams:',
   //     index,
   //     routes[index].params,
   //   )
+  // return <ThemedText>Hello</ThemedText>
   const { title, hotspot, makerName } = routes[index].params
   const [lng, lat] = [hotspot?.lng || 0, hotspot?.lat || 0]
-  console.log('HotspotDetailScreen::hotspot:', hotspot)
+  // console.log('HotspotDetailScreen::hotspot:', hotspot)
 
   useEffect(() => navigation.setOptions({ title }), [navigation, title])
 
   const [mapCenter, setMapCenter] = useState([lng, lat])
   const [markerCenter, setMarkerCenter] = useState([lng, lat])
+  const [mapArea, setMapArea] = useState(<Box />)
+  useEffect(() => {
+    const el = (
+      <Map
+        maxZoomLevel={12}
+        mapCenter={mapCenter}
+        //   onDidFinishLoadingMap={onDidFinishLoadingMap}
+        markerLocation={markerCenter}
+        currentLocationEnabled
+      />
+    )
+    setMapArea(el)
+  }, [mapCenter, markerCenter])
+
   const [selectedIndex, updateIndex] = useState(0)
   const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
 
   return (
-    <Box flex={1} backgroundColor="primaryBackground">
-      <Box flex={6}>
-        <Map
-          maxZoomLevel={12}
-          mapCenter={mapCenter}
-          //   onDidFinishLoadingMap={onDidFinishLoadingMap}
-          markerLocation={markerCenter}
-          currentLocationEnabled
-        />
-      </Box>
-      <Box flex={8}>
+    <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
+      <Box flex={6}>{mapArea}</Box>
+      <Box flex={9} backgroundColor="primaryBackground">
         <Box
           style={{
             padding: 10,
@@ -147,36 +164,18 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           />
           <ScrollView
             style={{
-              paddingLeft: 10,
-              paddingRight: 10,
+              flex: 1,
             }}
           >
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
-            <Text>{title}</Text>
+            <Box
+              style={{
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: insets.bottom,
+              }}
+            >
+              <ActivitiesList hotspot={hotspot} />
+            </Box>
           </ScrollView>
         </Box>
       </Box>

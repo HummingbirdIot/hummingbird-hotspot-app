@@ -149,8 +149,15 @@ export const getHotspotActivityList = async (
   filterType: HotspotActivityType,
 ) => {
   console.log('getHotspotActivityList', breadcrumbOpts)
-  const params = { filterTypes: HotspotActivityFilters[filterType] }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { cursor } = (await client.hotspot(gateway).activity.list()) as any
+  // console.log('getHotspotActivityList::cursor:', cursor)
+  const params = {
+    filterTypes: HotspotActivityFilters[filterType],
+    cursor,
+  }
   return client.hotspot(gateway).activity.list(params)
+  // return client.hotspot(gateway).roles.list(params)
 }
 
 export const getWitnessedHotspots = async (address: string) => {

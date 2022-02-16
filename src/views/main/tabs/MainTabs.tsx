@@ -15,7 +15,7 @@ import { wp } from '../../../utils/layout'
 import appSlice from '../../../store/user/appSlice'
 
 import OverviewScreen from '../overview/OverviewScreen'
-import HotspotsScreen from '../hotspots/HotspotsScreen'
+import HotspotsScreen from '../hotspots/HotspotsListScreen'
 import ExplorerScreen from '../explorer/ExplorerScreen'
 import MoreScreen from '../more/MoreScreen'
 

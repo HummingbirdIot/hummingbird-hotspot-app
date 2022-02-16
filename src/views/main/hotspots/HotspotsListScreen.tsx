@@ -14,11 +14,13 @@ import useMount from '../../../utils/useMount'
 import { useColors } from '../../../theme/themeHooks'
 import Location from '../../../assets/images/location.svg'
 import Signal from '../../../assets/images/signal.svg'
-import {
-  HELIUM_OLD_MAKER_ADDRESS,
-  HUMMINGBIRD_MAKER_ADDRESS,
-} from '../../../features/hotspots/root/HotspotsScreen'
 import { locale } from '../../../utils/i18n'
+
+export const HELIUM_OLD_MAKER_ADDRESS =
+  '14fzfjFcHpDR1rTH8BNPvSi5dKBbgxaDnmsVPbCjuq9ENjpZbxh'
+
+export const HUMMINGBIRD_MAKER_ADDRESS =
+  '14DdSjvEkBQ46xQ24LAtHwQkAeoUUZHfGCosgJe33nRQ6rZwPG3'
 
 const formatHotspotName = (name: string) => {
   return name.split('-').map((str) => {
@@ -49,19 +51,19 @@ const getMakerName = (hotspot: HotspotData, makers: Maker[] | undefined) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const HotspotsScreen = ({ navigation }: any) => {
+const HotspotsListScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
 
   const { surfaceContrast } = useColors()
-  // console.log('HotspotsScreen::surfaceContrast:', surfaceContrast)
+  // console.log('HotspotsListScreen::surfaceContrast:', surfaceContrast)
 
   const makers = useSelector((state: RootState) => state.heliumData.makers)
-  // console.log('MyLOG::HotspotsScreen::makers:', makers)
+  // console.log('MyLOG::HotspotsListScreen::makers:', makers)
 
   const hotspots = useSelector(
     (state: RootState) => state.hotspots.hotspots.data,
   )
-  // console.log('HotspotsScreen::hotspots:', hotspots)
+  // console.log('HotspotsListScreen::hotspots:', hotspots)
   const dispatch = useAppDispatch()
 
   useMount(() => {
@@ -80,16 +82,20 @@ const HotspotsScreen = ({ navigation }: any) => {
         rightComponent={{
           icon: 'add',
           color: '#fff',
-          onPress: () => navigation.navigate('HotspotSetup'),
+          onPress: () => {
+            // console.log('rightComponent', navigation.getParent())
+            navigation.navigate('HotspotSetup')
+          },
         }}
       />
       <ScrollView>
-        {hotspots.map((hotspot, i) => (
+        {hotspots.map((hotspot) => (
           <ListItem
-            key={hotspot.address + i.toString()}
+            key={hotspot.address}
             bottomDivider
             onPress={() =>
-              navigation.navigate('HotspotDetailScreen', {
+              navigation.navigate('HotspotDetail', {
+                // screen: 'HotspotDetail',
                 title: formatHotspotName(hotspot.name || '').join(' '),
                 makerName: getMakerName(hotspot, makers),
                 hotspot,
@@ -107,13 +113,15 @@ const HotspotsScreen = ({ navigation }: any) => {
                 {formatHotspotName(hotspot.name || '').map((str, j) => {
                   if (j === 2) {
                     return (
-                      <Text style={{ fontSize: 22, fontWeight: '500' }}>
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Text key={j} style={{ fontSize: 22, fontWeight: '500' }}>
                         {str}
                       </Text>
                     )
                   }
                   return (
-                    <Text style={{ fontSize: 22, fontWeight: '200' }}>
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Text key={j} style={{ fontSize: 22, fontWeight: '200' }}>
                       {str}{' '}
                     </Text>
                   )
@@ -178,4 +186,4 @@ const HotspotsScreen = ({ navigation }: any) => {
   )
 }
 
-export default memo(HotspotsScreen)
+export default memo(HotspotsListScreen)

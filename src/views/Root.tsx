@@ -28,14 +28,6 @@ import { fetchHotspotData } from '../store/hotspotDetails/hotspotDetailsSlice'
 import usePrevious from '../utils/usePrevious'
 import { getAccount } from '../utils/appDataClient'
 
-// const Root = () => {
-//   // const { theme /* , updateTheme, replaceTheme */ } = props
-//   const insets = useSafeAreaInsets()
-//   console.log('Root::SafeAreaInsets:', insets)
-
-//   return <></>
-// }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HomeScreen = ({ navigation }: any) => {
   const spacing = useSpacing()

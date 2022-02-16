@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
-// import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useSelector } from 'react-redux'
 
@@ -12,6 +10,8 @@ import Onboarding from '../features/onboarding/OnboardingNavigator'
 import defaultScreenOptions from './conf/defaultScreenOptions'
 import { useColors } from '../theme/themeHooks'
 import MainTabs from './main/tabs/MainTabs'
+// import HotspotsNavigator from './main/hotspots/HotspotsNavigator'
+import HotspotDetailScreen from './main/hotspots/HotspotDetailScreen'
 
 const OnboardingStack = createStackNavigator()
 const MainStack = createStackNavigator()
@@ -30,11 +30,9 @@ const DetailsScreen = () => (
 )
 
 const RootNavigator = () => {
-  const insets = useSafeAreaInsets()
-  console.log('Root::SafeAreaInsets:', insets)
-
   const { walletLinkToken } = useSelector((state: RootState) => state.app)
   const colors = useColors()
+  const { surfaceContrast, white } = colors
 
   useEffect(() => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
@@ -55,16 +53,26 @@ const RootNavigator = () => {
     )
   }
 
+  const headerStyles = {
+    headerTitleStyle: {
+      color: white,
+    },
+    headerStyle: {
+      backgroundColor: surfaceContrast,
+    },
+  }
+
   return (
     <MainStack.Navigator
-      headerMode="none"
+      // headerMode="none"
       screenOptions={({ route }) => {
         if (route.name === 'LockScreen')
           // 锁频模式下，禁用掉手势
           return { ...defaultScreenOptions, gestureEnabled: false }
 
-        if (Platform.OS === 'android') return defaultScreenOptions
-        return {}
+        if (Platform.OS === 'android')
+          return { ...defaultScreenOptions, ...headerStyles }
+        return headerStyles
       }}
     >
       <MainStack.Screen
@@ -72,16 +80,24 @@ const RootNavigator = () => {
         options={{ headerShown: false }}
         component={MainTabs}
       />
-      <MainStack.Screen
-        name="HotspotSetup"
-        options={{ headerShown: false }}
-        component={HomeScreen}
-      />
-      <MainStack.Screen
-        name="HotspotAssert"
-        options={{ headerShown: false }}
-        component={HomeScreen}
-      />
+      {/* <MainStack.Screen name="HotspotViews" component={HotspotsNavigator} /> */}
+      <MainStack.Group>
+        <MainStack.Screen
+          name="HotspotDetail"
+          options={{ headerShown: true }}
+          component={HotspotDetailScreen}
+        />
+        <MainStack.Screen
+          name="HotspotSetup"
+          options={{ headerShown: false }}
+          component={HomeScreen}
+        />
+        <MainStack.Screen
+          name="HotspotAssert"
+          options={{ headerShown: false }}
+          component={HomeScreen}
+        />
+      </MainStack.Group>
       <MainStack.Screen name="LockScreen" component={DetailsScreen} />
     </MainStack.Navigator>
   )
