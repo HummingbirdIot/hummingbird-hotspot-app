@@ -84,8 +84,8 @@ const HotspotsListScreen = ({ navigation }: any) => {
           color: '#fff',
           onPress: () => {
             // console.log('rightComponent', navigation.getParent())
-            // navigation.navigate('HotspotSetup')
-            navigation.navigate('HotspotAssert')
+            navigation.navigate('HotspotSetup')
+            // navigation.navigate('HotspotAssert')
           },
         }}
       />

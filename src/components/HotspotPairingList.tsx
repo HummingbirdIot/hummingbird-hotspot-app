@@ -22,7 +22,18 @@ const HotspotPairingList = ({
 }) => {
   const spacing = useSpacing()
 
-  console.log('HotspotPairingList::hotspots:', hotspots)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  console.log(
+    'HotspotPairingList::hotspots:',
+    hotspots.length,
+    hotspots.map((hotspot) => {
+      const hotspotCopy = { ...hotspot } as any
+      // eslint-disable-next-line no-underscore-dangle
+      hotspotCopy._manager = ''
+      return hotspotCopy
+    }),
+  )
 
   return (
     <FlatList

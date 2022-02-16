@@ -49,12 +49,39 @@ const HotspotSetupWifiConnectingScreen = () => {
 
   const goToNextStep = useCallback(async () => {
     const address = await getAddress()
-    const hotspot = await getHotspotDetails(hotspotAddress)
-    if (hotspot && hotspot.owner === address) {
-      navigation.replace('OwnedHotspotErrorScreen')
-    } else if (hotspot && hotspot.owner !== address) {
-      navigation.replace('NotHotspotOwnerErrorScreen')
-    } else {
+    console.log(
+      'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
+      address,
+    )
+    try {
+      const hotspot = await getHotspotDetails(hotspotAddress)
+      console.log(
+        'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
+        hotspotAddress,
+        hotspot,
+      )
+      if (hotspot && hotspot.owner === address) {
+        navigation.replace('OwnedHotspotErrorScreen')
+      } else if (hotspot && hotspot.owner !== address) {
+        navigation.replace('NotHotspotOwnerErrorScreen')
+      } else {
+        console.log(
+          'HotspotSetupWifiConnectingScreen::goToNextStep::addGatewayTxn:',
+          hotspotType,
+          addGatewayTxn,
+        )
+        navigation.replace('HotspotSetupLocationInfoScreen', {
+          hotspotAddress,
+          addGatewayTxn,
+          hotspotType,
+        })
+      }
+    } catch (error) {
+      console.log(
+        'HotspotSetupWifiConnectingScreen::getHotspotDetails::error:',
+        hotspotAddress,
+        error,
+      )
       navigation.replace('HotspotSetupLocationInfoScreen', {
         hotspotAddress,
         addGatewayTxn,
@@ -64,21 +91,34 @@ const HotspotSetupWifiConnectingScreen = () => {
   }, [addGatewayTxn, hotspotAddress, hotspotType, navigation])
 
   const connectToWifi = useCallback(async () => {
-    const response = await setWifi(network, password)
-    if (response === 'not_found') {
-      showOKAlert({
-        titleKey: 'generic.error',
-        messageKey: 'generic.something_went_wrong',
-      })
-      navigation.goBack()
-    } else if (response === 'invalid') {
-      showOKAlert({
-        titleKey: 'generic.error',
-        messageKey: 'generic.invalid_password',
-      })
-      navigation.goBack()
-    } else {
-      goToNextStep()
+    console.log(
+      'HotspotSetupWifiConnectingScreen::connectToWifi::network:',
+      network,
+      password,
+    )
+    try {
+      const response = await setWifi(network, password)
+      console.log(
+        'HotspotSetupWifiConnectingScreen::connectToWifi::response:',
+        response,
+      )
+      if (response === 'not_found') {
+        showOKAlert({
+          titleKey: 'generic.error',
+          messageKey: 'generic.something_went_wrong',
+        })
+        navigation.goBack()
+      } else if (response === 'invalid') {
+        showOKAlert({
+          titleKey: 'generic.error',
+          messageKey: 'generic.invalid_password',
+        })
+        navigation.goBack()
+      } else {
+        goToNextStep()
+      }
+    } catch (error) {
+      console.log('HotspotSetupWifiConnectingScreen::setWifi::error:', error)
     }
   }, [goToNextStep, navigation, network, password, setWifi, showOKAlert])
 

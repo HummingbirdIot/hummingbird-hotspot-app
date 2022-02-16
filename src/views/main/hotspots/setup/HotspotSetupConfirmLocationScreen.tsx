@@ -85,6 +85,7 @@ const HotspotSetupConfirmLocationScreen = () => {
   }, [ownerAddress, account, getOnboardingRecord, params.hotspotAddress])
 
   const navNext = useCallback(async () => {
+    console.log('HotspotTxnsProgressScreen::navNextParams', params)
     navigation.replace('HotspotTxnsProgressScreen', params)
   }, [navigation, params])
 

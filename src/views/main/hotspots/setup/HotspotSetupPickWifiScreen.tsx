@@ -87,15 +87,40 @@ const HotspotSetupPickWifiScreen = () => {
 
   const navSkip = useCallback(async () => {
     const token = await getSecureItem('walletLinkToken')
+    console.log('HotspotSetupPickWifiScreen::navSkip::token:', token)
     if (!token) return
     const address = await getAddress()
-    const hotspot = await getHotspotDetails(hotspotAddress)
+    console.log('HotspotSetupPickWifiScreen::navSkip::address:', address)
+    try {
+      const hotspot = await getHotspotDetails(hotspotAddress)
+      console.log(
+        'HotspotSetupPickWifiScreen::navSkip::hotspot:',
+        hotspotAddress,
+        hotspot,
+      )
 
-    if (hotspot && hotspot.owner === address) {
-      navigation.replace('OwnedHotspotErrorScreen')
-    } else if (hotspot && hotspot.owner !== address) {
-      navigation.replace('NotHotspotOwnerErrorScreen')
-    } else {
+      if (hotspot && hotspot.owner === address) {
+        navigation.replace('OwnedHotspotErrorScreen')
+      } else if (hotspot && hotspot.owner !== address) {
+        navigation.replace('NotHotspotOwnerErrorScreen')
+      } else {
+        console.log(
+          'HotspotSetupPickWifiScreen::navSkip::addGatewayTxn:',
+          hotspotType,
+          addGatewayTxn,
+        )
+        navigation.replace('HotspotSetupLocationInfoScreen', {
+          hotspotAddress,
+          addGatewayTxn,
+          hotspotType,
+        })
+      }
+    } catch (error) {
+      console.log(
+        'HotspotSetupLocationInfoScreen::getHotspotDetails::error:',
+        hotspotAddress,
+        error,
+      )
       navigation.replace('HotspotSetupLocationInfoScreen', {
         hotspotAddress,
         addGatewayTxn,
@@ -105,6 +130,11 @@ const HotspotSetupPickWifiScreen = () => {
   }, [addGatewayTxn, hotspotAddress, navigation, hotspotType])
 
   const navNext = (network: string) => {
+    console.log('HotspotSetupPickWifiScreen::navSkip::network:', network)
+    console.log(
+      'HotspotSetupPickWifiScreen::navSkip::hotspotAddress:',
+      hotspotAddress,
+    )
     navigation.navigate('HotspotSetupWifiScreen', {
       network,
       hotspotAddress,

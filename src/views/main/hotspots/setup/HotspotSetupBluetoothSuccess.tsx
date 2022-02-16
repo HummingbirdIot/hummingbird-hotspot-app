@@ -50,13 +50,21 @@ const HotspotSetupBluetoothSuccess = () => {
 
   const handleConnect = useCallback(
     async (hotspot: Device) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hotspotCopy = { ...hotspot } as any
+      // eslint-disable-next-line no-underscore-dangle
+      hotspotCopy._manager = ''
+      console.log(
+        'HotspotSetupBluetoothSuccess::handleConnect::connect',
+        connectStatus,
+        hotspotCopy,
+      )
       if (connectStatus === 'connecting') return
 
       setConnectStatus(hotspot.id)
       try {
         const connected = await isConnected()
         if (!connected) {
-          console.log('HotspotSetupBluetoothSuccess::handleConnect::connect')
           await connect(hotspot)
         }
         setConnectStatus(true)
@@ -90,6 +98,12 @@ const HotspotSetupBluetoothSuccess = () => {
         const networks = uniq((await readWifiNetworks(false)) || [])
         const connectedNetworks = uniq((await readWifiNetworks(true)) || [])
         const hotspotAddress = await getOnboardingAddress()
+        console.log(
+          'HotspotSetupBluetoothSuccess::hotspotAddress:',
+          hotspotType,
+          hotspotAddress,
+          firmwareDetails,
+        )
         const onboardingRecord = await getOnboardingRecord(hotspotAddress)
         if (!onboardingRecord) return
 

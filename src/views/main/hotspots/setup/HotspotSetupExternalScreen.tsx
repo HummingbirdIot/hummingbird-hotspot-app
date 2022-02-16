@@ -62,7 +62,8 @@ const HotspotSetupExternalScreen = () => {
           hotspotType: params.hotspotType,
         })
         triggerNotification('success')
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         if (error.message) {
           Toast.showWithGravity(error.message, Toast.LONG, Toast.CENTER)
         }
