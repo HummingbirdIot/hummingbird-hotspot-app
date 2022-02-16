@@ -12,16 +12,12 @@ import { useColors } from '../theme/themeHooks'
 import MainTabs from './main/tabs/MainTabs'
 // import HotspotsNavigator from './main/hotspots/HotspotsNavigator'
 import HotspotDetailScreen from './main/hotspots/HotspotDetailScreen'
+import HotspotAssertNavigator from './main/hotspots/HotspotAssertNavigator'
+import HotspotSetupNavigator from './main/hotspots/HotspotSetupNavigator'
 
 const OnboardingStack = createStackNavigator()
 const MainStack = createStackNavigator()
 // const MainStack = createNativeStackNavigator()
-
-const HomeScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Home Screen</Text>
-  </View>
-)
 
 const DetailsScreen = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -90,12 +86,12 @@ const RootNavigator = () => {
         <MainStack.Screen
           name="HotspotSetup"
           options={{ headerShown: false }}
-          component={HomeScreen}
+          component={HotspotSetupNavigator}
         />
         <MainStack.Screen
           name="HotspotAssert"
           options={{ headerShown: false }}
-          component={HomeScreen}
+          component={HotspotAssertNavigator}
         />
       </MainStack.Group>
       <MainStack.Screen name="LockScreen" component={DetailsScreen} />

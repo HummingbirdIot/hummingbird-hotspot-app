@@ -65,7 +65,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     setMapArea(el)
   }, [mapCenter, markerCenter])
 
-  const [selectedIndex, updateIndex] = useState(0)
+  const [selectedIndex, updateIndex] = useState(1)
   const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
 
   return (

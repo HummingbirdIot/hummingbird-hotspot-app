@@ -85,9 +85,14 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
   const [activities, setActivitiesList] = useState<Array<any>>([])
   useMount(() => {
     async function fetchActivitiesList() {
-      const { data } = await getHotspotActivityList(hotspot.address, 'all')
-      // console.log('ActivitiesList::fetchActivitiesList:', data[5])
-      setActivitiesList(data || [])
+      const { cursor, data } = (await getHotspotActivityList(
+        hotspot.address,
+        'all',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      )) as any
+      const full = await getHotspotActivityList(hotspot.address, 'all', cursor)
+      console.log('ActivitiesList::fetchActivitiesList:', data.fee)
+      setActivitiesList([data[0], ...full.data])
     }
     fetchActivitiesList()
   })
@@ -98,19 +103,22 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
         .filter(
           (activity) =>
             activity.challenger !== hotspot.address ||
-            activity.type === 'poc_request_v1',
+            activity.type === 'poc_request_v1' ||
+            activity.type === 'assert_location_v2',
         )
         .map((activity) => {
           const icon = getTxnIconPath(activity)
           const color = getTxnTypeColor(activity.type)
           let desc = `Height: ${activity.height}`
-          if (activity.totalAmount) {
+          if (activity.fee) {
+            desc = `- ${activity.fee.floatBalance.toString() || '0'} DC`
+            // console.log('balance:', desc)
+          } else if (activity.totalAmount) {
             desc = `+ ${
               activity.totalAmount.floatBalance.toString() || '0'
             } HNT`
             // console.log('balance:', desc)
-          }
-          if (
+          } else if (
             activity.challenger !== hotspot.address &&
             activity.challengerLon !== undefined &&
             activity.challengerLat !== undefined

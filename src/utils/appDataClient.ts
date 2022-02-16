@@ -79,9 +79,7 @@ export const hotspotOnChain = async (address: string) => {
 
 export const getHotspots = async () => {
   // console.log('MyLOG::getHotspots', breadcrumbOpts)
-  const address =
-    (await getAddress()) ||
-    '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65'
+  const address = await getAddress()
   if (!address) return []
   // console.log('MyLOG::getHotspots::address:', address)
 
@@ -114,7 +112,7 @@ export const getAccountRewards = async (
   console.log('getAccountRewards', breadcrumbOpts)
 
   const list = await client
-    .account('13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65')
+    .account(address) // '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65')
     .rewards.sum.list({ ...getRewardsRange(numDaysBack), bucket })
   return list.take(MAX)
 }
@@ -147,11 +145,15 @@ export const getValidatorRewards = async (
 export const getHotspotActivityList = async (
   gateway: string,
   filterType: HotspotActivityType,
+  cursor: string | undefined = undefined,
 ) => {
   console.log('getHotspotActivityList', breadcrumbOpts)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { cursor } = (await client.hotspot(gateway).activity.list()) as any
+  // const { cursor, data } = (await client
+  //   .hotspot(gateway)
+  //   .activity.list()) as any
   // console.log('getHotspotActivityList::cursor:', cursor)
+  // console.log('getHotspotActivityList::data[0]:', data[0])
   const params = {
     filterTypes: HotspotActivityFilters[filterType],
     cursor,

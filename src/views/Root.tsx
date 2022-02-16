@@ -36,9 +36,7 @@ const HomeScreen = ({ navigation }: any) => {
   useAsync(async () => {
     const account = await getAddress()
     // console.log('MyLOG::accountAddress:', typeof account, account)
-    setAccountAddress(
-      account || '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
-    )
+    setAccountAddress(account || '')
   }, [])
 
   return (
@@ -111,9 +109,9 @@ const DetailsScreen = () => {
   const [account, setAccount] = useState<Account>()
 
   useEffect(() => {
-    getAccount('13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65').then(
-      setAccount,
-    )
+    getAccount(
+      address || '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
+    ).then(setAccount)
   }, [address])
 
   console.log('Root::account:', account)

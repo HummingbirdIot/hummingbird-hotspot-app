@@ -48,6 +48,7 @@ const useAppLink = () => {
 
       const link = parseUrl(nextUrl)
       if (!link) return
+      console.log('setUrlAsync::link:', nextUrl, link)
       navToAppLink(link)
     })
     const getUrlAsync = async () => {
@@ -56,6 +57,8 @@ const useAppLink = () => {
 
       const link = parseUrl(initialUrl)
       if (!link) return
+
+      console.log('getUrlAsync::link:', initialUrl, link)
       navToAppLink(link)
     }
 
@@ -64,6 +67,8 @@ const useAppLink = () => {
 
   const navToAppLink = useCallback(
     (record: AppLink | WalletLink) => {
+      console.log('navToAppLink::AppLinkRecord:', record)
+
       if (isLocked) {
         setUnhandledLink(record)
         return

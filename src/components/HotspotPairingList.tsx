@@ -21,6 +21,9 @@ const HotspotPairingList = ({
   connect: boolean | string
 }) => {
   const spacing = useSpacing()
+
+  console.log('HotspotPairingList::hotspots:', hotspots)
+
   return (
     <FlatList
       contentContainerStyle={{ paddingTop: spacing.lx }}

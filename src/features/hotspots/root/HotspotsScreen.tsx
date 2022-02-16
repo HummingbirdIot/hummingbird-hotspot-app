@@ -48,9 +48,10 @@ const HotspotsScreen = () => {
   useAsync(async () => {
     const account = await getAddress()
     // console.log('MyLOG::accountAddress:', typeof account, account)
-    setAccountAddress(
-      account || '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
-    )
+    setAccountAddress(account || '')
+    // setAccountAddress(
+    //   account || '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
+    // )
   }, [])
 
   const makers = useSelector((state: RootState) => state.heliumData.makers)

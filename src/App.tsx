@@ -35,6 +35,7 @@ import { fetchInitialData } from './store/helium/heliumDataSlice'
 import { navigationRef } from './navigation/navigator'
 import RootView from './views/RootView'
 import { useElementsTheme } from './theme/themeHooks'
+import AppLinkProvider from './providers/AppLinkProvider'
 
 // const RaisedButton = (props: any) => <Button raised {...props} />
 
@@ -101,7 +102,7 @@ function App() {
   })
 
   useEffect(() => {
-    console.log('App::Config:', Config)
+    // console.log('App::Config:', Config)
     MapboxGL.setAccessToken(Config.MAPBOX_ACCESS_TOKEN)
   }, [dispatch])
 
@@ -164,7 +165,9 @@ function App() {
                 <StatusBar translucent backgroundColor="transparent" />
               )}
               <NavigationContainer ref={navigationRef}>
-                <RootView />
+                <AppLinkProvider>
+                  <RootView />
+                </AppLinkProvider>
               </NavigationContainer>
 
               {/* <SafeAreaView edges={['top', 'right', 'bottom', 'left']}>

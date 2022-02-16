@@ -17,7 +17,7 @@ import appSlice from '../../../store/user/appSlice'
 import OverviewScreen from '../overview/OverviewScreen'
 import HotspotsScreen from '../hotspots/HotspotsListScreen'
 import ExplorerScreen from '../explorer/ExplorerScreen'
-import MoreScreen from '../more/MoreScreen'
+import MoreNavigator from '../more/MoreNavigator'
 
 const MainTab = createBottomTabNavigator()
 
@@ -85,7 +85,7 @@ const MainTabs = () => {
       <MainTab.Screen name="Overview" component={OverviewScreen} />
       <MainTab.Screen name="Hotspots" component={HotspotsScreen} />
       <MainTab.Screen name="Explorer" component={ExplorerScreen} />
-      <MainTab.Screen name="More" component={MoreScreen} />
+      <MainTab.Screen name="More" component={MoreNavigator} />
     </MainTab.Navigator>
   )
 }
