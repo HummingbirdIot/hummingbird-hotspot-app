@@ -15,7 +15,7 @@ import { getAddress } from './secureAccount'
 import {
   HotspotActivityFilters,
   HotspotActivityType,
-} from '../features/hotspots/root/hotspotTypes'
+} from '../views/main/hotspots/hotspotTypes'
 
 const MAX = 100000
 // const userAgent = `hummingbird-hotspot-app-${getVersion()}-${

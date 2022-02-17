@@ -10,7 +10,7 @@ import {
   handleCacheFulfilled,
   hasValidCache,
 } from '../../utils/cacheUtils'
-import { HotspotSyncStatus } from '../../features/hotspots/root/hotspotTypes'
+import { HotspotSyncStatus } from '../../views/main/hotspots/hotspotTypes'
 import { WalletReward } from '../rewards/rewardsSlice'
 
 export type Rewards = Record<string, Balance<NetworkTokens>>

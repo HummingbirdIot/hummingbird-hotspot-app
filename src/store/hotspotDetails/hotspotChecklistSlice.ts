@@ -3,7 +3,7 @@ import { PocReceiptsV1 } from '@helium/http'
 import { Reward, RewardsV1 } from '@helium/http/build/models/Transaction'
 // eslint-disable-next-line import/named
 import { getHotspotActivityList } from '../../utils/appDataClient'
-import { HotspotActivityType } from '../../features/hotspots/root/hotspotTypes'
+import { HotspotActivityType } from '../../views/main/hotspots/hotspotTypes'
 
 const getTransactions = async (
   gateway: string,
