@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavigationContainerRef } from '@react-navigation/native'
-import { LockScreenRequestType } from './main/tabTypes'
+import { LockScreenRequestType } from './main/tabs/tabTypes'
 import { AppLink, HotspotLink } from '../providers/appLinkTypes'
 
 export const navigationRef = React.createRef<NavigationContainerRef>()

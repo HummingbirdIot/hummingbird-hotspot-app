@@ -12,7 +12,7 @@ import { BarCodeScannerResult } from 'expo-barcode-scanner'
 import { useSelector } from 'react-redux'
 import useMount from '../utils/useMount'
 import { RootState } from '../store/rootReducer'
-import navigator from '../navigation/navigator'
+import navigator from '../views/navigator'
 import {
   AppLink,
   AppLinkFields,

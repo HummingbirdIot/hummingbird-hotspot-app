@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Platform } from 'react-native'
-import WelcomeScreen from './welcome/WelcomeScreen'
+import WelcomeScreen from './WelcomeScreen'
 import { OnboardingStackParamList } from './onboardingTypes'
-import DefaultScreenOptions from '../../navigation/defaultScreenOptions'
+import DefaultScreenOptions from '../defaultScreenOptions'
 import CreateAccount from './CreateAccount'
 
 const OnboardingStack = createStackNavigator<OnboardingStackParamList>()

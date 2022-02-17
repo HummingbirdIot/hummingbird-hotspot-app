@@ -4,12 +4,12 @@ import { WalletLink } from '@helium/react-native-sdk'
 import { Linking, Platform } from 'react-native'
 import { getBundleId } from 'react-native-device-info'
 import { useNavigation } from '@react-navigation/native'
-import Text from '../../../components/Text'
-import { OnboardingNavigationProp } from '../onboardingTypes'
-import Box from '../../../components/Box'
+import Text from '../../components/Text'
+import { OnboardingNavigationProp } from './onboardingTypes'
+import Box from '../../components/Box'
 // import TextTransform from '../../../components/TextTransform'
-import SafeAreaBox from '../../../components/SafeAreaBox'
-import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
+import SafeAreaBox from '../../components/SafeAreaBox'
+import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 
 const WelcomeScreen = () => {
   const { t } = useTranslation()

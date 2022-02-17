@@ -35,8 +35,8 @@ static void InitializeFlipper(UIApplication *application) {
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"Hummingbird" initialProperties:nil];
-//  rootView.backgroundColor = [UIColor colorWithRed: 0.07 green: 0.09 blue: 0.18 alpha: 1.00];
-  rootView.backgroundColor = [UIColor whiteColor];
+  rootView.backgroundColor = [UIColor colorWithRed: 0.07 green: 0.09 blue: 0.18 alpha: 1.00];
+  // rootView.backgroundColor = [UIColor whiteColor];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

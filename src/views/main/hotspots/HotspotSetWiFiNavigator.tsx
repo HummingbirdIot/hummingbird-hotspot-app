@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import HotspotSetupScanningScreen from './setup/HotspotSetupScanningScreen'
 import HotspotSetupPickHotspotScreen from './setup/HotspotSetupPickHotspotScreen'
 import HotspotSetupWifiScreen from './setup/HotspotSetupWifiScreen'
-import defaultScreenOptions from '../../../navigation/defaultScreenOptions'
+import defaultScreenOptions from '../../defaultScreenOptions'
 import HotspotSetupWifiConnectingScreen from './setup/HotspotSetupWifiConnectingScreen'
 import HotspotSetupPickWifiScreen from './setup/HotspotSetupPickWifiScreen'
 
