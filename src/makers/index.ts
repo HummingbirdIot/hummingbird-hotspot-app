@@ -1,6 +1,5 @@
 import example from './example'
 import hummingbird from './hummingbird'
-import customAntennas from './hummingbird/antennas'
 import { LangType, supportedLangs } from '../utils/i18n/i18nTypes'
 import { HotspotMakerLangField } from './hotspotMakerTypes'
 
@@ -10,12 +9,11 @@ export const Makers: Record<string, { id: number; supportEmail: string }> = {
 }
 
 export const AntennaModels = {
-  // ...example.antennas,
-  ...customAntennas,
+  ...example.antennas,
+  ...hummingbird.antennas,
 }
 
 export const HotspotMakerModels = {
-  // ...example.hotspots,
   ...hummingbird.hotspots,
 }
 
