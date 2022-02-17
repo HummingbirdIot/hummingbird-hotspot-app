@@ -116,26 +116,40 @@ const HotspotSetupConfirmLocationScreen = () => {
               {t('hotspot_setup.location_fee.subtitle_fee')}
             </Text>
           )}
-          <Text
-            variant="subtitle1"
-            marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
-            numberOfLines={2}
-            adjustsFontSizeToFit
-            maxFontSizeMultiplier={1.3}
-          >
-            {t('hotspot_setup.location_fee.confirm_location')}
-          </Text>
-          <Box
-            height={200}
-            borderRadius="l"
-            overflow="hidden"
-            marginBottom={{ phone: 'm', smallPhone: 'ms' }}
-          >
-            <HotspotLocationPreview
-              mapCenter={coords}
-              locationName={params.locationName}
-            />
-          </Box>
+          {coords ? (
+            <Text
+              variant="subtitle1"
+              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+              maxFontSizeMultiplier={1.3}
+            >
+              {t('hotspot_setup.location_fee.confirm_location')}
+            </Text>
+          ) : (
+            <Text
+              variant="subtitle1"
+              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+              maxFontSizeMultiplier={1.3}
+            >
+              {t('hotspot_setup.location_fee.confirm_location')}
+            </Text>
+          )}
+          {coords ? (
+            <Box
+              height={200}
+              borderRadius="l"
+              overflow="hidden"
+              marginBottom={{ phone: 'm', smallPhone: 'ms' }}
+            >
+              <HotspotLocationPreview
+                mapCenter={coords}
+                locationName={params.locationName}
+              />
+            </Box>
+          ) : null}
 
           <Box
             flexDirection="row"

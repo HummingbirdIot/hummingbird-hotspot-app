@@ -57,7 +57,7 @@ const HotspotSetupConfirmLocationScreen = () => {
 
   useEffect(() => {
     if (!ownerAddress) return
-    console.log('HotspotSetupConfirmLocationScreen::ownerAddress', ownerAddress)
+    // console.log('HotspotSetupConfirmLocationScreen::ownerAddress', ownerAddress)
 
     getAccount(ownerAddress).then(setAccount)
   }, [ownerAddress])
@@ -65,11 +65,11 @@ const HotspotSetupConfirmLocationScreen = () => {
 
   useAsync(async () => {
     const onboardingRecord = await getOnboardingRecord(params.hotspotAddress)
-    console.log(
-      'HotspotSetupConfirmLocationScreen::onboardingRecord',
-      onboardingRecord,
-    )
-    console.log('HotspotSetupConfirmLocationScreen::account', account)
+    // console.log(
+    //   'HotspotSetupConfirmLocationScreen::onboardingRecord',
+    //   onboardingRecord,
+    // )
+    // console.log('HotspotSetupConfirmLocationScreen::account', account)
     if (!onboardingRecord || !ownerAddress || !account?.balance) {
       return
     }
@@ -106,12 +106,13 @@ const HotspotSetupConfirmLocationScreen = () => {
 
   const { isFree, hasSufficientBalance, totalStakingAmount } = feeData
   console.log(
-    'HotspotSetupConfirmLocationScreen::feeData',
+    'HotspotSetupConfirmLocationScreen::feeData:',
     isFree,
     hasSufficientBalance,
     totalStakingAmount,
     feeData,
   )
+  console.log('HotspotSetupConfirmLocationScreen::coords', coords, params)
 
   return (
     <BackScreen onClose={handleClose}>
@@ -135,26 +136,40 @@ const HotspotSetupConfirmLocationScreen = () => {
               {t('hotspot_setup.location_fee.subtitle_fee')}
             </Text>
           )}
-          <Text
-            variant="subtitle1"
-            marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
-            numberOfLines={2}
-            adjustsFontSizeToFit
-            maxFontSizeMultiplier={1.3}
-          >
-            {t('hotspot_setup.location_fee.confirm_location')}
-          </Text>
-          <Box
-            height={200}
-            borderRadius="l"
-            overflow="hidden"
-            marginBottom={{ phone: 'm', smallPhone: 'ms' }}
-          >
-            <HotspotLocationPreview
-              mapCenter={coords}
-              locationName={params.locationName}
-            />
-          </Box>
+          {coords ? (
+            <Text
+              variant="subtitle1"
+              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+              maxFontSizeMultiplier={1.3}
+            >
+              {t('hotspot_setup.location_fee.confirm_location')}
+            </Text>
+          ) : (
+            <Text
+              variant="subtitle1"
+              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+              maxFontSizeMultiplier={1.3}
+            >
+              {t('hotspot_setup.location_fee.confirm_location')}
+            </Text>
+          )}
+          {coords ? (
+            <Box
+              height={200}
+              borderRadius="l"
+              overflow="hidden"
+              marginBottom={{ phone: 'm', smallPhone: 'ms' }}
+            >
+              <HotspotLocationPreview
+                mapCenter={coords}
+                locationName={params.locationName}
+              />
+            </Box>
+          ) : null}
 
           <Box
             flexDirection="row"

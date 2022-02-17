@@ -70,18 +70,33 @@ const HotspotSetupPickLocationScreen = () => {
     }
   }, [])
 
-  const navNext = useCallback(() => {
+  const navToAntennaSetup = useCallback(() => {
     console.log(
-      'HotspotSetupPickLocationScreen::navNext',
+      'HotspotSetupPickLocationScreen::navToAntennaSetup',
       locationName,
       markerCenter,
-      // navigation,
       params,
     )
     navigation.navigate('AntennaSetupScreen', {
       ...params,
       coords: markerCenter,
       locationName,
+    })
+  }, [locationName, markerCenter, navigation, params])
+
+  const navNext = useCallback(() => {
+    console.log(
+      'HotspotSetupPickLocationScreen::navNext',
+      locationName,
+      markerCenter,
+      params,
+    )
+    navigation.navigate('HotspotSetupConfirmLocationScreen', {
+      ...params,
+      coords: markerCenter,
+      locationName,
+      // gain,
+      // elevation,
     })
   }, [locationName, markerCenter, navigation, params])
 
@@ -103,6 +118,14 @@ const HotspotSetupPickLocationScreen = () => {
   }, [])
 
   const searchSnapPoints = useMemo(() => ['85%'], [])
+
+  if (params.gatewayAction === 'assertAntenna') {
+    navigation.replace('AntennaSetupScreen', {
+      ...params,
+      // gatewayAction: 'assertLocation',
+    })
+    return <Box flex={1} />
+  }
 
   return (
     <SafeAreaBox
@@ -141,9 +164,17 @@ const HotspotSetupPickLocationScreen = () => {
             <Text variant="body1" marginBottom="xs">
               {t('hotspot_setup.location.title')}
             </Text>
-            <Text variant="body1">Addr: {locationName}</Text>
+            <Text variant="body1">Location Name: {locationName}</Text>
           </Box>
         </Box>
+        <DebouncedButton
+          onPress={navToAntennaSetup}
+          variant="primary"
+          mode="contained"
+          disabled={disabled || !hasGPSLocation}
+          title="Set Antenna"
+          marginBottom="m"
+        />
         <DebouncedButton
           onPress={navNext}
           variant="primary"

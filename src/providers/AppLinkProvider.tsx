@@ -99,10 +99,12 @@ const useAppLink = () => {
           if (hotspotLink.status === 'success') {
             console.log('navToAppLink::sign_hotspot::hotspotLink:', hotspotLink)
             navigator.submitGatewayTxns(hotspotLink)
+          } else if (hotspotLink.status === 'user_cancelled') {
+            navigator.goToMainTabs()
           } else {
             // TODO: handle failure status codes
             // eslint-disable-next-line no-console
-            console.error(`Failed with status ${hotspotLink.status}`)
+            console.log(`Failed with status ${hotspotLink.status}`)
             navigator.goToMainTabs()
           }
           break

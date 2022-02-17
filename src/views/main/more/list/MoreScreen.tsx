@@ -28,8 +28,8 @@ import MoreListItem, { MoreListItemType } from './MoreListItem'
 import useAuthIntervals from './useAuthIntervals'
 import { useSpacing } from '../../../../theme/themeHooks'
 import Box from '../../../../components/Box'
-import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
-import { useLanguageContext } from '../../../../providers/LanguageProvider'
+// import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
+// import { useLanguageContext } from '../../../../providers/LanguageProvider'
 import { getSecureItem } from '../../../../utils/secureAccount'
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
@@ -41,7 +41,7 @@ const MoreScreen = () => {
   const authIntervals = useAuthIntervals()
   const navigation = useNavigation<MoreNavigationProp & RootNavigationProp>()
   const spacing = useSpacing()
-  const { changeLanguage, language } = useLanguageContext()
+  // const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
 
   useAsync(async () => {
@@ -71,12 +71,12 @@ const MoreScreen = () => {
     }
   }, [dispatch, params, navigation])
 
-  const handleLanguageChange = useCallback(
-    (lng: string) => {
-      changeLanguage(lng)
-    },
-    [changeLanguage],
-  )
+  // const handleLanguageChange = useCallback(
+  //   (lng: string) => {
+  //     changeLanguage(lng)
+  //   },
+  //   [changeLanguage],
+  // )
 
   const handlePinRequired = useCallback(
     (value?: boolean) => {
@@ -160,14 +160,14 @@ const MoreScreen = () => {
       {
         title: t('more.sections.app.title'),
         data: [
-          {
-            title: t('more.sections.app.language'),
-            value: language,
-            select: {
-              items: SUPPORTED_LANGUAGUES,
-              onValueSelect: handleLanguageChange,
-            },
-          },
+          // {
+          //   title: t('more.sections.app.language'),
+          //   value: language,
+          //   select: {
+          //     items: SUPPORTED_LANGUAGUES,
+          //     onValueSelect: handleLanguageChange,
+          //   },
+          // },
           {
             title: t('more.sections.app.signOutWithLink', { address }),
             onPress: handleSignOut,
@@ -181,8 +181,6 @@ const MoreScreen = () => {
     handlePinRequired,
     app.isPinRequired,
     app.authInterval,
-    language,
-    handleLanguageChange,
     address,
     handleSignOut,
     authIntervals,

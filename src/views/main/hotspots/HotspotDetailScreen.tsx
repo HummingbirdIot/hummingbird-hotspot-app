@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { Button, ScrollView, Text, View } from 'react-native'
-import { ButtonGroup, Header } from 'react-native-elements'
+import {
+  BottomSheet,
+  ButtonGroup,
+  Header,
+  ListItem,
+} from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
@@ -101,6 +106,63 @@ const HotspotDetailScreen = ({ navigation }: any) => {
 
   const { surfaceContrast } = useColors()
 
+  const [isVisible, setIsVisible] = useState(false)
+  const list = [
+    {
+      title: 'Assert Location And Antenna',
+      onPress: () => {
+        if (!hotspot) return
+        console.log('Assert Location')
+        navigation.replace('HotspotAssert', {
+          hotspotAddress: hotspot.address,
+          // hotspotType: 'ExampleHotspotBLE',
+          gatewayAction: 'assertLocation',
+          gain: hotspot.gain,
+          elevation: hotspot.elevation,
+        })
+      },
+    },
+    {
+      title: 'Assert Antenna',
+      onPress: () => {
+        if (!hotspot) return
+        console.log('Assert Antenna')
+        const { address, lng, lat, geocode, location } = hotspot
+        const { long_street: street, long_city: city } = geocode
+        const locationName =
+          street && city ? [street, city].join(', ') : 'Loading...'
+        navigation.replace('HotspotAssert', {
+          hotspotAddress: address,
+          // hotspotType: 'ExampleHotspotBLE',
+          locationName,
+          coords: [lng, lat],
+          currentLocation: location,
+          gatewayAction: 'assertAntenna',
+        })
+      },
+    },
+    {
+      title: 'Update WiFi',
+      onPress: () => {
+        if (!hotspot) return
+        console.log('Assert Location')
+        navigation.replace('HotspotAssert', {
+          hotspotAddress: hotspot.address,
+          hotspotType: 'ExampleHotspotBLE',
+          gatewayAction: 'assertLocation',
+        })
+      },
+    },
+    {
+      title: 'Cancel',
+      containerStyle: {
+        /* backgroundColor: 'red' */
+      },
+      titleStyle: { color: 'gray' },
+      onPress: () => setIsVisible(false),
+    },
+  ]
+
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
       <Header
@@ -117,10 +179,11 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           },
         }}
         rightComponent={{
-          icon: 'settings',
+          icon: 'menu',
           color: '#fff',
           onPress: () => {
-            navigation.navigate('HotspotAssert')
+            // navigation.navigate('HotspotAssert')
+            setIsVisible(true)
           },
         }}
       />
@@ -210,12 +273,12 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           </Box>
         </Box>
         <Box flex={1}>
-          <ButtonGroup
+          {/* <ButtonGroup
             onPress={updateIndex}
             selectedIndex={selectedIndex}
             buttons={buttons}
             containerStyle={{ height: 30 }}
-          />
+          /> */}
           <ScrollView
             style={{
               flex: 1,
@@ -233,6 +296,23 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           </ScrollView>
         </Box>
       </Box>
+      <BottomSheet
+        isVisible={isVisible}
+        containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
+      >
+        {list.map((l, i) => (
+          <ListItem
+            // eslint-disable-next-line react/no-array-index-key
+            key={i}
+            containerStyle={l.containerStyle || {}}
+            onPress={l.onPress}
+          >
+            <ListItem.Content>
+              <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        ))}
+      </BottomSheet>
     </Box>
   )
 }

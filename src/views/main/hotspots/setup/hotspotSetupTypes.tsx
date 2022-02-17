@@ -10,7 +10,7 @@ export type HotspotConnectStatus =
   | 'service_unavailable'
   | 'details_fetch_failure'
 
-type GatewayAction = 'addGateway' | 'assertLocation'
+type GatewayAction = 'addGateway' | 'assertLocation' | 'assertAntenna'
 
 export type HotspotSetupStackParamList = {
   HotspotSetupSelectionScreen: { gatewayAction: GatewayAction }
@@ -75,6 +75,7 @@ export type HotspotSetupStackParamList = {
     hotspotType: HotspotType
     addGatewayTxn?: string
     hotspotAddress: string
+    gatewayAction: GatewayAction
   }
   AntennaSetupScreen: {
     hotspotType: HotspotType

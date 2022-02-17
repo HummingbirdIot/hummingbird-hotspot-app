@@ -106,14 +106,14 @@ const HotspotTxnsProgressScreen = () => {
         elevation: params.elevation,
         dataOnly: false,
         owner: ownerAddress,
-        // currentLocation: '', // If reasserting location, put previous location here
+        currentLocation: params.currentLocation || '', // If reasserting location, put previous location here
         makerAddress: onboardingRecord.maker.address,
         locationNonceLimit: onboardingRecord.maker.locationNonceLimit || 0,
       })
-      console.log(
-        'HotspotTxnsProgressScreen::assertLocationTxn:',
-        assertLocationTxn,
-      )
+      // console.log(
+      //   'HotspotTxnsProgressScreen::assertLocationTxn:',
+      //   assertLocationTxn,
+      // )
       updateParams.assertLocationTxn = assertLocationTxn.toString()
     }
 
