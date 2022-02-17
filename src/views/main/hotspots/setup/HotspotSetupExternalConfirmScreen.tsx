@@ -45,9 +45,15 @@ const HotspotSetupExternalConfirmScreen = () => {
   useEffect(() => {
     if (!publicKey) return
 
+    console.log('HotspotSetupExternalConfirmScreen::publicKey:', publicKey)
+
     const getRecord = async () => {
       const onboardingRecord = await getOnboardingRecord(publicKey)
       if (!onboardingRecord) return
+      console.log(
+        'HotspotSetupExternalConfirmScreen::onboardingRecord:',
+        onboardingRecord,
+      )
       animateTransition('HotspotSetupExternalConfirmScreen.GetMac')
       setMacAddress(onboardingRecord.macEth0 || t('generic.unknown'))
     }
@@ -56,9 +62,17 @@ const HotspotSetupExternalConfirmScreen = () => {
 
   useEffect(() => {
     if (!params.addGatewayTxn) return
-
+    console.log('HotspotSetupExternalConfirmScreen::useRouteParams:', params)
     const addGatewayTxn = AddGateway.txnFromString(params.addGatewayTxn)
 
+    console.log(
+      'HotspotSetupExternalConfirmScreen::addGatewayTxn::gateway:',
+      addGatewayTxn.gateway,
+    )
+    console.log(
+      'HotspotSetupExternalConfirmScreen::addGatewayTxn::owner:',
+      addGatewayTxn.owner,
+    )
     setPublicKey(addGatewayTxn.gateway?.b58 || '')
     setOwnerAddress(addGatewayTxn.owner?.b58 || '')
   }, [params])

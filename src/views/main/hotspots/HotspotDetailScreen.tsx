@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useCallback, useEffect, useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
-import { ButtonGroup } from 'react-native-elements'
+import { Button, ScrollView, Text, View } from 'react-native'
+import { ButtonGroup, Header } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
@@ -17,6 +17,7 @@ import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
 import ActivitiesList from '../../list/ActivitiesList'
+import { useColors } from '../../../theme/themeHooks'
 
 const truncateAddress = (address: string, startWith = 10) => {
   const start = address.slice(0, startWith)
@@ -44,32 +45,85 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   //   )
   // return <ThemedText>Hello</ThemedText>
   const { title, hotspot, makerName } = routes[index].params
-  const [lng, lat] = [hotspot?.lng || 0, hotspot?.lat || 0]
+  // const [lng, lat] = [hotspot?.lng || 0, hotspot?.lat || 0]
   // console.log('HotspotDetailScreen::hotspot:', hotspot)
 
-  useEffect(() => navigation.setOptions({ title }), [navigation, title])
+  // useEffect(() => navigation.setOptions({ title }), [navigation, title])
 
-  const [mapCenter, setMapCenter] = useState([lng, lat])
-  const [markerCenter, setMarkerCenter] = useState([lng, lat])
+  // const [mapCenter, setMapCenter] = useState([lng, lat])
+  // const [markerCenter, setMarkerCenter] = useState([lng, lat])
   const [mapArea, setMapArea] = useState(<Box />)
   useEffect(() => {
-    const el = (
-      <Map
-        maxZoomLevel={12}
-        mapCenter={mapCenter}
-        //   onDidFinishLoadingMap={onDidFinishLoadingMap}
-        markerLocation={markerCenter}
-        currentLocationEnabled
-      />
-    )
-    setMapArea(el)
-  }, [mapCenter, markerCenter])
+    const { lng, lat } = hotspot
+    if (lng && lat) {
+      const el = (
+        <Map
+          maxZoomLevel={12}
+          mapCenter={[lng, lat]}
+          //   onDidFinishLoadingMap={onDidFinishLoadingMap}
+          markerLocation={[lng, lat]}
+          currentLocationEnabled
+        />
+      )
+      setMapArea(el)
+    } else {
+      const el = (
+        <Box flex={1} justifyContent="center">
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 16,
+              color: 'white',
+            }}
+          >
+            This Hotspot haven&apos;t been asserted location yet
+          </Text>
+          <Button
+            title="Assert Location"
+            onPress={() => {
+              if (!hotspot) return
+              console.log('Assert Location')
+              navigation.replace('HotspotAssert', {
+                hotspotAddress: hotspot.address,
+                hotspotType: 'ExampleHotspotBLE',
+                gatewayAction: 'assertLocation',
+              })
+            }}
+          />
+        </Box>
+      )
+      setMapArea(el)
+    }
+  }, [hotspot, navigation])
 
   const [selectedIndex, updateIndex] = useState(1)
   const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
 
+  const { surfaceContrast } = useColors()
+
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
+      <Header
+        backgroundColor={surfaceContrast}
+        centerComponent={{
+          text: title,
+          // style: { fontSize: 20, color: '#fff' },
+        }}
+        leftComponent={{
+          icon: 'arrow-back-ios',
+          color: '#fff',
+          onPress: () => {
+            navigation.goBack()
+          },
+        }}
+        rightComponent={{
+          icon: 'settings',
+          color: '#fff',
+          onPress: () => {
+            navigation.navigate('HotspotAssert')
+          },
+        }}
+      />
       <Box flex={6}>{mapArea}</Box>
       <Box flex={9} backgroundColor="primaryBackground">
         <Box

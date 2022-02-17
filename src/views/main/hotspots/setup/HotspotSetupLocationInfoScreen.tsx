@@ -28,6 +28,10 @@ const HotspotSetupLocationInfoScreen = () => {
 
   const checkLocationPermissions = async () => {
     await maybeGetLocation(true)
+    console.log(
+      'HotspotSetupLocationInfoScreen::checkLocationPermissions',
+      params,
+    )
     navigation.navigate('HotspotSetupPickLocationScreen', params)
   }
 

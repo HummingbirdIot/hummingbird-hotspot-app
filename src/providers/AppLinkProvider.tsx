@@ -43,12 +43,13 @@ const useAppLink = () => {
   const dispatch = useAppDispatch()
 
   useMount(() => {
-    Linking.addEventListener('url', ({ url: nextUrl }) => {
+    Linking.addEventListener('url', ({ url: nextUrl, ...rest }) => {
       if (!nextUrl) return
 
+      console.log('ListenUrlEvent::rest:', rest)
       const link = parseUrl(nextUrl)
       if (!link) return
-      console.log('setUrlAsync::link:', nextUrl, link)
+      console.log('parseUrl::link:', nextUrl, link)
       navToAppLink(link)
     })
     const getUrlAsync = async () => {
@@ -58,7 +59,7 @@ const useAppLink = () => {
       const link = parseUrl(initialUrl)
       if (!link) return
 
-      console.log('getUrlAsync::link:', initialUrl, link)
+      console.log('parseUrl::getUrlAsync:link:', initialUrl, link)
       navToAppLink(link)
     }
 
@@ -67,7 +68,7 @@ const useAppLink = () => {
 
   const navToAppLink = useCallback(
     (record: AppLink | WalletLink) => {
-      console.log('navToAppLink::AppLinkRecord:', record)
+      console.log('navToAppLink::AppLinkRecord:', record.type, record)
 
       if (isLocked) {
         setUnhandledLink(record)
@@ -79,12 +80,14 @@ const useAppLink = () => {
           const { resource: txnStr } = record as AppLink
           if (!txnStr) return
 
+          console.log('navToAppLink::add_gateway::txnStr:', txnStr)
           navigator.confirmAddGateway(txnStr)
           break
         }
         case 'link_wallet': {
           const walletLink = record as WalletLink
           if (walletLink.status === 'success' && walletLink.token) {
+            console.log('navToAppLink::link_wallet::token:', walletLink.token)
             dispatch(appSlice.actions.storeWalletLinkToken(walletLink.token))
           } else {
             // TODO: handle error
@@ -94,6 +97,7 @@ const useAppLink = () => {
         case 'sign_hotspot': {
           const hotspotLink = record as HotspotLink
           if (hotspotLink.status === 'success') {
+            console.log('navToAppLink::sign_hotspot::hotspotLink:', hotspotLink)
             navigator.submitGatewayTxns(hotspotLink)
           } else {
             // TODO: handle failure status codes

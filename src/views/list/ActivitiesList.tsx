@@ -90,9 +90,33 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
         'all',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       )) as any
-      const full = await getHotspotActivityList(hotspot.address, 'all', cursor)
-      console.log('ActivitiesList::fetchActivitiesList:', data.fee)
-      setActivitiesList([data[0], ...full.data])
+      const full = (await getHotspotActivityList(
+        hotspot.address,
+        'all',
+        cursor,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      )) as any
+      // console.log('ActivitiesList::fetchActivitiesList::preview:', data[0].fee)
+      // console.log(
+      //   'ActivitiesList::fetchActivitiesList::firstData::single:',
+      //   data[0].type,
+      //   data[0].hash,
+      //   data[0],
+      // )
+      // console.log(
+      //   'ActivitiesList::fetchActivitiesList::firstData::list:',
+      //   full.data[0].type,
+      //   full.data[0].hash,
+      //   full.data[0],
+      // )
+      if (
+        data[0]?.type === full.data[0]?.type &&
+        data[0]?.hash === full.data[0]?.hash
+      ) {
+        setActivitiesList(full.data)
+      } else {
+        setActivitiesList([data[0], ...full.data])
+      }
     }
     fetchActivitiesList()
   })
@@ -102,9 +126,10 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
       {activities
         .filter(
           (activity) =>
-            activity.challenger !== hotspot.address ||
-            activity.type === 'poc_request_v1' ||
-            activity.type === 'assert_location_v2',
+            activity &&
+            (activity.challenger !== hotspot.address ||
+              activity.type === 'poc_request_v1' ||
+              activity.type === 'assert_location_v2'),
         )
         .map((activity) => {
           const icon = getTxnIconPath(activity)

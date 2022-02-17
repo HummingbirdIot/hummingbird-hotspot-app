@@ -23,23 +23,24 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useSelector } from 'react-redux'
 import { useAsync } from 'react-async-hook'
 import { NavigationContainer } from '@react-navigation/native'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { theme, darkThemeColors, lightThemeColors } from './theme/theme'
 import SecurityScreen from './views/security/SecurityScreen'
-// import Root from './views/Root'
 import { useAppDispatch } from './store/store'
 import { RootState } from './store/rootReducer'
 import appSlice, { restoreAppSettings } from './store/user/appSlice'
 import useMount from './utils/useMount'
 import { fetchInitialData } from './store/helium/heliumDataSlice'
-// import NavigationRoot from './navigation/NavigationRoot'
 import { navigationRef } from './navigation/navigator'
-import RootView from './views/RootView'
+import RootNavigator from './views/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
 
-// const RaisedButton = (props: any) => <Button raised {...props} />
+SplashScreen.preventAutoHideAsync().catch(() => {
+  /* reloading the app might trigger some race conditions, ignore them */
+})
 
-function appConfig() {
+const appConfig = () => {
   // 设置安卓动画增强优化特性
   if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -63,7 +64,7 @@ function appConfig() {
   ])
 }
 
-function App() {
+const App = () => {
   // 获取当前系统主题信息
   const colorScheme: ColorSchemeName = useColorScheme()
   // console.log('App::ColorSchemeName:', colorScheme)
@@ -158,27 +159,23 @@ function App() {
       <HotspotBleProvider>
         <ThemeProvider theme={colorAdaptedTheme}>
           <ElementsThemeProvider theme={elementsTheme}>
-            <SafeAreaProvider>
-              {/* TODO: Will need to adapt status bar for light/dark modes */}
-              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-              {Platform.OS === 'android' && (
-                <StatusBar translucent backgroundColor="transparent" />
-              )}
-              <NavigationContainer ref={navigationRef}>
-                <AppLinkProvider>
-                  <RootView />
-                </AppLinkProvider>
-              </NavigationContainer>
+            <BottomSheetModalProvider>
+              <SafeAreaProvider>
+                {/* TODO: Will need to adapt status bar for light/dark modes */}
+                {Platform.OS === 'ios' && (
+                  <StatusBar barStyle="light-content" />
+                )}
+                {Platform.OS === 'android' && (
+                  <StatusBar translucent backgroundColor="transparent" />
+                )}
+                <NavigationContainer ref={navigationRef}>
+                  <AppLinkProvider>
+                    <RootNavigator />
+                  </AppLinkProvider>
+                </NavigationContainer>
+              </SafeAreaProvider>
+            </BottomSheetModalProvider>
 
-              {/* <SafeAreaView edges={['top', 'right', 'bottom', 'left']}>
-          <Button title="My Button" />
-          <Button
-            title="My 2nd Button"
-            containerStyle={{ backgroundColor: 'red' }}
-            titleStyle={{ color: 'pink' }}
-          />
-        </SafeAreaView> */}
-            </SafeAreaProvider>
             <SecurityScreen
               visible={appState !== 'active' && appState !== 'unknown'}
             />

@@ -35,6 +35,7 @@ export async function getSecureItem(key: AccountStoreKey) {
 
 export const getAddress = async () => {
   // return '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65'
+  // return '13uM7gtVxPR57P3ue9k5mKfeYDfffesZ8ongiDAdkELyW83znBe'
   const token = await getSecureItem('walletLinkToken')
   if (!token) return
   const parsed = WalletLink.parseWalletLinkToken(token)

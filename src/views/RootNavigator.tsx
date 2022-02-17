@@ -12,8 +12,10 @@ import { useColors } from '../theme/themeHooks'
 import MainTabs from './main/tabs/MainTabs'
 // import HotspotsNavigator from './main/hotspots/HotspotsNavigator'
 import HotspotDetailScreen from './main/hotspots/HotspotDetailScreen'
-import HotspotAssertNavigator from './main/hotspots/HotspotAssertNavigator'
+import HotspotAssertLocationNavigator from './main/hotspots/HotspotAssertLocationNavigator'
 import HotspotSetupNavigator from './main/hotspots/HotspotSetupNavigator'
+
+const usingSimulator = false
 
 const OnboardingStack = createStackNavigator()
 const MainStack = createStackNavigator()
@@ -28,13 +30,13 @@ const DetailsScreen = () => (
 const RootNavigator = () => {
   const { walletLinkToken } = useSelector((state: RootState) => state.app)
   const colors = useColors()
-  const { surfaceContrast, white } = colors
+  // const { surfaceContrast, white } = colors
 
   useEffect(() => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  if (!walletLinkToken) {
+  if (!walletLinkToken && !usingSimulator) {
     return (
       <OnboardingStack.Navigator
         headerMode="none"
@@ -50,12 +52,12 @@ const RootNavigator = () => {
   }
 
   const headerStyles = {
-    headerTitleStyle: {
-      color: white,
-    },
-    headerStyle: {
-      backgroundColor: surfaceContrast,
-    },
+    // headerTitleStyle: {
+    //   color: white,
+    // },
+    // headerStyle: {
+    //   backgroundColor: surfaceContrast,
+    // },
   }
 
   return (
@@ -80,7 +82,7 @@ const RootNavigator = () => {
       <MainStack.Group>
         <MainStack.Screen
           name="HotspotDetail"
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
           component={HotspotDetailScreen}
         />
         <MainStack.Screen
@@ -91,7 +93,12 @@ const RootNavigator = () => {
         <MainStack.Screen
           name="HotspotAssert"
           options={{ headerShown: false }}
-          component={HotspotAssertNavigator}
+          component={HotspotAssertLocationNavigator}
+        />
+        <MainStack.Screen
+          name="HotspotSetWiFi"
+          options={{ headerShown: false }}
+          component={HotspotAssertLocationNavigator}
         />
       </MainStack.Group>
       <MainStack.Screen name="LockScreen" component={DetailsScreen} />

@@ -48,6 +48,8 @@ const AntennaSetupScreen = () => {
   const navNext = useCallback(async () => {
     if (!antenna) return
 
+    console.log('AntennaSetupScreen::navNext::params:', params)
+    console.log('AntennaSetupScreen::navNext::elevation:', elevation)
     navigation.navigate('HotspotSetupConfirmLocationScreen', {
       ...params,
       gain,

@@ -5,7 +5,7 @@ import LockScreen from '../../features/lock/LockScreen'
 import defaultScreenOptions from '../defaultScreenOptions'
 import HotspotSetup from '../../views/main/hotspots/HotspotSetupNavigator'
 import MainTabs from './MainTabNavigator'
-import HotspotAssert from '../../views/main/hotspots/HotspotAssertNavigator'
+import HotspotAssert from '../../views/main/hotspots/HotspotAssertLocationNavigator'
 
 const HomeStack = createStackNavigator()
 
