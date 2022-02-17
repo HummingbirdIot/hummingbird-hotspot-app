@@ -1,8 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList } from 'react-native-gesture-handler'
 import { Edge } from 'react-native-safe-area-context'
+import { Linking, Platform } from 'react-native'
+import { useHotspotBle } from '@helium/react-native-sdk'
+import { useSelector } from 'react-redux'
+import usePermissionManager from '../../../../utils/usePermissionManager'
 import BackScreen from '../../../../components/BackScreen'
 import Box from '../../../../components/Box'
 import Text from '../../../../components/Text'
@@ -17,6 +21,10 @@ import {
   HotspotMakerModels,
 } from '../../../../makers'
 import { useBorderRadii } from '../../../../theme/themeHooks'
+import useAlert from '../../../../utils/useAlert'
+import { RootState } from '../../../../store/rootReducer'
+import { getLocationPermission } from '../../../../store/location/locationSlice'
+import { useAppDispatch } from '../../../../store/store'
 
 const ItemSeparatorComponent = () => (
   <Box height={1} backgroundColor="primaryBackground" />
@@ -33,14 +41,95 @@ const HotspotSetupSelectionScreen = () => {
   const radii = useBorderRadii()
 
   const { params } = useRoute<Route>()
+  const { enable, getState } = useHotspotBle()
+  const { showOKCancelAlert } = useAlert()
+  const dispatch = useAppDispatch()
+  const { requestLocationPermission } = usePermissionManager()
+  const { permissionResponse, locationBlocked } = useSelector(
+    (state: RootState) => state.location,
+  )
+
+  const checkBluetooth = useCallback(async () => {
+    const state = await getState()
+
+    if (state === 'PoweredOn') {
+      return true
+    }
+
+    if (Platform.OS === 'ios') {
+      if (state === 'PoweredOff') {
+        const decision = await showOKCancelAlert({
+          titleKey: 'hotspot_setup.pair.alert_ble_off.title',
+          messageKey: 'hotspot_setup.pair.alert_ble_off.body',
+          okKey: 'generic.go_to_settings',
+        })
+        if (decision) Linking.openURL('App-Prefs:Bluetooth')
+      } else {
+        const decision = await showOKCancelAlert({
+          titleKey: 'hotspot_setup.pair.alert_ble_off.title',
+          messageKey: 'hotspot_setup.pair.alert_ble_off.body',
+          okKey: 'generic.go_to_settings',
+        })
+        if (decision) Linking.openURL('app-settings:')
+      }
+    }
+    if (Platform.OS === 'android') {
+      await enable()
+      return true
+    }
+  }, [enable, getState, showOKCancelAlert])
+
+  useEffect(() => {
+    getState()
+
+    dispatch(getLocationPermission())
+  }, [dispatch, getState])
+
+  const checkLocation = useCallback(async () => {
+    if (Platform.OS === 'ios') return true
+
+    if (permissionResponse?.granted) {
+      return true
+    }
+
+    if (!locationBlocked) {
+      const response = await requestLocationPermission()
+      if (response && response.granted) {
+        return true
+      }
+    } else {
+      const decision = await showOKCancelAlert({
+        titleKey: 'permissions.location.title',
+        messageKey: 'permissions.location.message',
+        okKey: 'generic.go_to_settings',
+      })
+      if (decision) Linking.openSettings()
+    }
+  }, [
+    locationBlocked,
+    permissionResponse?.granted,
+    requestLocationPermission,
+    showOKCancelAlert,
+  ])
 
   const handlePress = useCallback(
-    (hotspotType: HotspotType) => () => {
+    (hotspotType: HotspotType) => async () => {
       const { onboardType } = HotspotMakerModels[hotspotType]
+      console.log(
+        'HotspotSetupSelectionScreen::onboardType:',
+        hotspotType,
+        onboardType,
+      )
       if (onboardType === 'BLE') {
-        navigation.push('HotspotSetupEducationScreen', {
-          hotspotType,
+        // navigation.push('HotspotSetupEducationScreen', {
+        //   hotspotType,
+        //   ...params,
+        // })
+        await checkBluetooth()
+        await checkLocation()
+        navigation.push('HotspotSetupScanningScreen', {
           ...params,
+          hotspotType,
         })
       } else {
         navigation.push('HotspotSetupExternalScreen', {
@@ -49,7 +138,7 @@ const HotspotSetupSelectionScreen = () => {
         })
       }
     },
-    [navigation, params],
+    [checkBluetooth, checkLocation, navigation, params],
   )
 
   const keyExtractor = useCallback((item) => item, [])

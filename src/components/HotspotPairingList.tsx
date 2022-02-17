@@ -23,17 +23,13 @@ const HotspotPairingList = ({
   const spacing = useSpacing()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-  console.log(
-    'HotspotPairingList::hotspots:',
-    hotspots.length,
-    hotspots.map((hotspot) => {
-      const hotspotCopy = { ...hotspot } as any
-      // eslint-disable-next-line no-underscore-dangle
-      hotspotCopy._manager = ''
-      return hotspotCopy
-    }),
-  )
+  useEffect(() => {
+    console.log(
+      'HotspotPairingList::hotspotsCount:',
+      hotspots.length,
+      hotspots.map((hotspot) => `${hotspot.localName}: ${hotspot.id}`),
+    )
+  }, [hotspots])
 
   return (
     <FlatList

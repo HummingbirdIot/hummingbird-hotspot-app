@@ -2,29 +2,10 @@ import { Hotspot } from '@helium/http'
 import React, { memo, useState } from 'react'
 import { Avatar, ListItem, Text } from 'react-native-elements'
 // import Role from '@helium/http/build/models/Role'
-import {
-  getTxnIconPath,
-  getTxnTypeColor,
-  getTxnTypeName,
-} from '../../utils/txns'
-import { getHotspotActivityList } from '../../utils/appDataClient'
-import useMount from '../../utils/useMount'
-import Box from '../../components/Box'
-// import Role from '@helium/http/build/models/Role'
-// import { useSelector } from 'react-redux'
-// import { HotspotData } from '@helium/http/build/models/Hotspot'
-// import { Maker } from '@helium/onboarding'
-// import { useTranslation } from 'react-i18next'
-// import ThemedText from '../../../components/Text'
-// import Box from '../../../components/Box'
-// import { useAppDispatch } from '../../../store/store'
-// import { fetchHotspotsData } from '../../../store/hotspots/hotspotsSlice'
-// import { RootState } from '../../../store/rootReducer'
-// import useMount from '../../../utils/useMount'
-// import { useColors } from '../../../theme/themeHooks'
-// import Location from '../../../assets/images/location.svg'
-// import Signal from '../../../assets/images/signal.svg'
-// import { locale } from '../../../utils/i18n'
+import { getTxnIconPath, getTxnTypeColor, getTxnTypeName } from '../utils/txns'
+import { getHotspotActivityList } from '../utils/appDataClient'
+import useMount from '../utils/useMount'
+import Box from './Box'
 
 /**
  * 获取两经纬度之间的距离
@@ -96,7 +77,8 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
         cursor,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       )) as any
-      // console.log('ActivitiesList::fetchActivitiesList::preview:', data[0].fee)
+      console.log('ActivitiesList::fetchActivitiesList::preview:', data)
+      console.log('ActivitiesList::fetchActivitiesList::all:', full)
       // console.log(
       //   'ActivitiesList::fetchActivitiesList::firstData::single:',
       //   data[0].type,
@@ -136,7 +118,11 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
           const color = getTxnTypeColor(activity.type)
           let desc = `Height: ${activity.height}`
           if (activity.fee) {
-            desc = `- ${activity.fee.floatBalance.toString() || '0'} DC`
+            desc = `- ${
+              (
+                activity.stakingFee.floatBalance + activity.fee.floatBalance
+              ).toString() || '0'
+            } DC`
             // console.log('balance:', desc)
           } else if (activity.totalAmount) {
             desc = `+ ${

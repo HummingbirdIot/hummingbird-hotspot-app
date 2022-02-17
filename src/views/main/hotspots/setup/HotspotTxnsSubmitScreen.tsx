@@ -20,44 +20,53 @@ const HotspotTxnsSubmitScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()
   const { postPaymentTransaction } = useOnboarding()
 
-  console.log('HotspotTxnsSubmitScreen::useRoute::params:', params)
-
   useAsync(async () => {
+    console.log('HotspotTxnsSubmitScreen::useAsync::routeParams:', params)
     if (!params.gatewayAddress) {
       throw new Error('Gateway address not found')
     }
-    if (params.gatewayTxn) {
-      const gatewayTxn = await postPaymentTransaction(
-        params.gatewayAddress,
-        params.gatewayTxn,
-      )
-
-      if (!gatewayTxn) {
-        return
-      }
-      console.log('HotspotTxnsSubmitScreen::gatewayTxn:', gatewayTxn)
-      await submitTxn(gatewayTxn)
-    }
-
-    if (params.assertTxn) {
-      let finalTxn = params.assertTxn
-      const assertTxn = AssertLocationV2.fromString(finalTxn)
-
-      console.log('HotspotTxnsSubmitScreen::assertTxn:', assertTxn)
-      const isFree = assertTxn.owner?.b58 !== assertTxn.payer?.b58 // Maker is paying
-      if (isFree) {
-        // If the maker is paying, post to onboarding
-        const onboardAssertTxn = await postPaymentTransaction(
-          params.gatewayAddress,
-          params.assertTxn,
+    try {
+      if (params.gatewayTxn) {
+        console.log(
+          'HotspotTxnsSubmitScreen::params::gatewayTxn:',
+          params.gatewayTxn,
         )
-        if (!onboardAssertTxn) return
+        const gatewayTxn = await postPaymentTransaction(
+          params.gatewayAddress,
+          params.gatewayTxn,
+        )
 
-        finalTxn = onboardAssertTxn
+        if (!gatewayTxn) {
+          console.log('HotspotTxnsSubmitScreen::!gatewayTxn:')
+          return
+        }
+        console.log('HotspotTxnsSubmitScreen::gatewayTxn:', gatewayTxn)
+        await submitTxn(gatewayTxn)
       }
-      await submitTxn(finalTxn)
+
+      if (params.assertTxn) {
+        let finalTxn = params.assertTxn
+        const assertTxn = AssertLocationV2.fromString(finalTxn)
+
+        const isFree = assertTxn.owner?.b58 !== assertTxn.payer?.b58 // Maker is paying
+        console.log('HotspotTxnsSubmitScreen::assertTxn:', isFree, assertTxn)
+        if (isFree) {
+          // If the maker is paying, post to onboarding
+          const onboardAssertTxn = await postPaymentTransaction(
+            params.gatewayAddress,
+            params.assertTxn,
+          )
+          if (!onboardAssertTxn) return
+
+          finalTxn = onboardAssertTxn
+        }
+        console.log('HotspotTxnsSubmitScreen::finalTxn:', isFree, finalTxn)
+        await submitTxn(finalTxn)
+      }
+    } catch (error) {
+      console.log('HotspotTxnsSubmitScreen::error:', error)
     }
-  }, [])
+  }, [params])
 
   return (
     <SafeAreaBox

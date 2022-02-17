@@ -148,7 +148,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     // color={isHidden ? colors.grayLightText : colors.grayText}
                   />
                   <ThemedText
-                    flex={5}
+                    flex={7}
                     variant="body2"
                     // color={isHidden ? 'grayLightText' : 'grayText'}
                     marginLeft="xs"
@@ -162,7 +162,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     // color={isHidden ? colors.grayLightText : colors.grayText}
                   />
                   <ThemedText
-                    flex={1}
+                    flex={2}
                     variant="body2"
                     // color={isHidden ? 'grayLightText' : 'grayText'}
                     marginLeft="xs"
@@ -170,7 +170,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     {t('generic.meters', { distance: hotspot?.elevation || 0 })}
                   </ThemedText>
                   <ThemedText
-                    flex={2}
+                    flex={3}
                     variant="body2"
                     // color={isHidden ? 'grayLightText' : 'grayText'}
                     marginLeft="xs"

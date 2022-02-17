@@ -10,7 +10,11 @@ export type HotspotConnectStatus =
   | 'service_unavailable'
   | 'details_fetch_failure'
 
-type GatewayAction = 'addGateway' | 'assertLocation' | 'assertAntenna'
+type GatewayAction =
+  | 'addGateway'
+  | 'assertLocation'
+  | 'assertAntenna'
+  | 'setWiFi'
 
 export type HotspotSetupStackParamList = {
   HotspotSetupSelectionScreen: { gatewayAction: GatewayAction }
@@ -47,6 +51,7 @@ export type HotspotSetupStackParamList = {
     addGatewayTxn?: string
     hotspotAddress: string
     hotspotType: HotspotType
+    gatewayAction: GatewayAction
   }
   FirmwareUpdateNeededScreen: {
     current: boolean
@@ -58,6 +63,7 @@ export type HotspotSetupStackParamList = {
     addGatewayTxn?: string
     hotspotAddress: string
     hotspotType: HotspotType
+    gatewayAction: GatewayAction
   }
   HotspotSetupWifiConnectingScreen: {
     network: string
@@ -65,6 +71,7 @@ export type HotspotSetupStackParamList = {
     addGatewayTxn?: string
     hotspotAddress: string
     hotspotType: HotspotType
+    gatewayAction: GatewayAction
   }
   HotspotSetupLocationInfoScreen: {
     hotspotType: HotspotType
@@ -105,6 +112,7 @@ export type HotspotSetupStackParamList = {
     gain?: number
     coords?: number[]
     locationName?: string
+    currentLocation?: string
   }
   NotHotspotOwnerErrorScreen: undefined
   OwnedHotspotErrorScreen: undefined

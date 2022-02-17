@@ -69,6 +69,7 @@ const HotspotSetupPickWifiScreen = () => {
       hotspotAddress,
       addGatewayTxn,
       hotspotType,
+      gatewayAction,
     },
   } = useRoute<Route>()
   const { readWifiNetworks } = useHotspotBle()
@@ -86,48 +87,65 @@ const HotspotSetupPickWifiScreen = () => {
   }, [wifiNetworks])
 
   const navSkip = useCallback(async () => {
-    const token = await getSecureItem('walletLinkToken')
-    console.log('HotspotSetupPickWifiScreen::navSkip::token:', token)
-    if (!token) return
-    const address = await getAddress()
-    console.log('HotspotSetupPickWifiScreen::navSkip::address:', address)
-    try {
-      const hotspot = await getHotspotDetails(hotspotAddress)
-      console.log(
-        'HotspotSetupPickWifiScreen::navSkip::hotspot:',
-        hotspotAddress,
-        hotspot,
-      )
-
-      if (hotspot && hotspot.owner === address) {
-        navigation.replace('OwnedHotspotErrorScreen')
-      } else if (hotspot && hotspot.owner !== address) {
-        navigation.replace('NotHotspotOwnerErrorScreen')
-      } else {
+    if (gatewayAction === 'setWiFi') {
+      rootNav.navigate('MainTabs')
+      // rootNav.navigate('HotspotDetail', {
+      //   // screen: 'HotspotDetail',
+      //   title: formatHotspotName(hotspot.name || '').join(' '),
+      //   makerName: getMakerName(hotspot, makers),
+      //   hotspot,
+      // })
+    } else {
+      const token = await getSecureItem('walletLinkToken')
+      console.log('HotspotSetupPickWifiScreen::navSkip::token:', token)
+      if (!token) return
+      const address = await getAddress()
+      console.log('HotspotSetupPickWifiScreen::navSkip::address:', address)
+      try {
+        const hotspot = await getHotspotDetails(hotspotAddress)
         console.log(
-          'HotspotSetupPickWifiScreen::navSkip::addGatewayTxn:',
-          hotspotType,
-          addGatewayTxn,
+          'HotspotSetupPickWifiScreen::navSkip::hotspot:',
+          hotspotAddress,
+          hotspot,
         )
-        navigation.replace('HotspotSetupLocationInfoScreen', {
+
+        if (hotspot && hotspot.owner === address) {
+          navigation.replace('OwnedHotspotErrorScreen')
+        } else if (hotspot && hotspot.owner !== address) {
+          navigation.replace('NotHotspotOwnerErrorScreen')
+        } else {
+          console.log(
+            'HotspotSetupPickWifiScreen::navSkip::addGatewayTxn:',
+            hotspotType,
+            addGatewayTxn,
+          )
+          navigation.navigate('HotspotTxnsProgressScreen', {
+            hotspotAddress,
+            addGatewayTxn,
+            // hotspotType,
+          })
+        }
+      } catch (error) {
+        console.log(
+          'HotspotSetupLocationInfoScreen::getHotspotDetails::error:',
+          hotspotAddress,
+          error,
+        )
+        navigation.navigate('HotspotTxnsProgressScreen', {
           hotspotAddress,
           addGatewayTxn,
-          hotspotType,
+          // hotspotType,
         })
       }
-    } catch (error) {
-      console.log(
-        'HotspotSetupLocationInfoScreen::getHotspotDetails::error:',
-        hotspotAddress,
-        error,
-      )
-      navigation.replace('HotspotSetupLocationInfoScreen', {
-        hotspotAddress,
-        addGatewayTxn,
-        hotspotType,
-      })
     }
-  }, [addGatewayTxn, hotspotAddress, navigation, hotspotType])
+  }, [
+    gatewayAction,
+    rootNav,
+    hotspotAddress,
+    navigation,
+    hotspotType,
+    addGatewayTxn,
+  ])
 
   const navNext = (network: string) => {
     console.log('HotspotSetupPickWifiScreen::navSkip::network:', network)
@@ -136,6 +154,7 @@ const HotspotSetupPickWifiScreen = () => {
       hotspotAddress,
     )
     navigation.navigate('HotspotSetupWifiScreen', {
+      gatewayAction,
       network,
       hotspotAddress,
       addGatewayTxn,

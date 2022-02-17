@@ -64,24 +64,31 @@ const HotspotSetupConfirmLocationScreen = () => {
   // console.log('HotspotSetupConfirmLocationScreen::account', account)
 
   useAsync(async () => {
-    const onboardingRecord = await getOnboardingRecord(params.hotspotAddress)
-    // console.log(
-    //   'HotspotSetupConfirmLocationScreen::onboardingRecord',
-    //   onboardingRecord,
-    // )
-    // console.log('HotspotSetupConfirmLocationScreen::account', account)
-    if (!onboardingRecord || !ownerAddress || !account?.balance) {
-      return
-    }
+    try {
+      const onboardingRecord = await getOnboardingRecord(params.hotspotAddress)
+      // console.log(
+      //   'HotspotSetupConfirmLocationScreen::onboardingRecord',
+      //   onboardingRecord,
+      // )
+      // console.log('HotspotSetupConfirmLocationScreen::account', account)
+      if (!onboardingRecord || !ownerAddress || !account?.balance) {
+        return
+      }
 
-    Location.loadLocationFeeData({
-      nonce: 0,
-      accountIntegerBalance: account.balance.integerBalance,
-      dataOnly: false,
-      owner: ownerAddress,
-      locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
-      makerAddress: onboardingRecord.maker.address,
-    }).then(setFeeData)
+      Location.loadLocationFeeData({
+        nonce: 0,
+        accountIntegerBalance: account.balance.integerBalance,
+        dataOnly: false,
+        owner: ownerAddress,
+        locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
+        makerAddress: onboardingRecord.maker.address,
+      }).then(setFeeData)
+    } catch (error) {
+      console.log(
+        'HotspotSetupConfirmLocationScreen:: GettingFee::error:',
+        error,
+      )
+    }
   }, [ownerAddress, account, getOnboardingRecord, params.hotspotAddress])
 
   const navNext = useCallback(async () => {

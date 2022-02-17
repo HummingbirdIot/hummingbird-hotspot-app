@@ -50,14 +50,12 @@ const HotspotSetupBluetoothSuccess = () => {
 
   const handleConnect = useCallback(
     async (hotspot: Device) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const hotspotCopy = { ...hotspot } as any
-      // eslint-disable-next-line no-underscore-dangle
-      hotspotCopy._manager = ''
       console.log(
-        'HotspotSetupBluetoothSuccess::handleConnect::connect',
+        'HotspotSetupBluetoothSuccess::handleConnect::hotspot:',
         connectStatus,
-        hotspotCopy,
+        hotspot.localName,
+        hotspot.id,
+        hotspot,
       )
       if (connectStatus === 'connecting') return
 
@@ -108,19 +106,15 @@ const HotspotSetupBluetoothSuccess = () => {
         if (!onboardingRecord) return
 
         // navigate to next screen
-        console.log(
-          'HotspotSetupBluetoothSuccess::gatewayAction:',
-          gatewayAction,
-        )
-        if (gatewayAction === 'addGateway') {
+        // console.log(
+        //   'HotspotSetupBluetoothSuccess::gatewayAction:',
+        //   gatewayAction,
+        // )
+        if (gatewayAction === 'addGateway' || gatewayAction === 'setWiFi') {
           navigation.replace('HotspotSetupPickWifiScreen', {
+            gatewayAction,
             networks,
             connectedNetworks,
-            hotspotAddress,
-            hotspotType,
-          })
-        } else {
-          navigation.replace('HotspotSetupPickLocationScreen', {
             hotspotAddress,
             hotspotType,
           })

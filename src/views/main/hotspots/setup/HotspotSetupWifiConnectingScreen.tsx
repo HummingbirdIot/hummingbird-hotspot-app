@@ -14,6 +14,7 @@ import Box from '../../../../components/Box'
 import SafeAreaBox from '../../../../components/SafeAreaBox'
 import { getHotspotDetails } from '../../../../utils/appDataClient'
 import { getAddress } from '../../../../utils/secureAccount'
+import { RootNavigationProp } from '../../tabs/tabTypes'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -23,9 +24,17 @@ type Route = RouteProp<
 const HotspotSetupWifiConnectingScreen = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const rootNav = useNavigation<RootNavigationProp>()
 
   const {
-    params: { network, password, hotspotAddress, addGatewayTxn, hotspotType },
+    params: {
+      network,
+      password,
+      hotspotAddress,
+      addGatewayTxn,
+      hotspotType,
+      gatewayAction,
+    },
   } = useRoute<Route>()
 
   const { readWifiNetworks, setWifi, removeConfiguredWifi } = useHotspotBle()
@@ -48,47 +57,64 @@ const HotspotSetupWifiConnectingScreen = () => {
   )
 
   const goToNextStep = useCallback(async () => {
-    const address = await getAddress()
-    console.log(
-      'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
-      address,
-    )
-    try {
-      const hotspot = await getHotspotDetails(hotspotAddress)
+    if (gatewayAction === 'setWiFi') {
+      console.log('HotspotSetupWifiConnectingScreen::Set WiFi Success!')
+      rootNav.navigate('MainTabs')
+    } else {
+      const address = await getAddress()
       console.log(
-        'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
-        hotspotAddress,
-        hotspot,
+        'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
+        address,
       )
-      if (hotspot && hotspot.owner === address) {
-        navigation.replace('OwnedHotspotErrorScreen')
-      } else if (hotspot && hotspot.owner !== address) {
-        navigation.replace('NotHotspotOwnerErrorScreen')
-      } else {
+      try {
+        const hotspot = await getHotspotDetails(hotspotAddress)
         console.log(
-          'HotspotSetupWifiConnectingScreen::goToNextStep::addGatewayTxn:',
-          hotspotType,
-          addGatewayTxn,
+          'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
+          hotspotAddress,
+          hotspot,
         )
-        navigation.replace('HotspotSetupLocationInfoScreen', {
+        if (hotspot && hotspot.owner === address) {
+          navigation.replace('OwnedHotspotErrorScreen')
+        } else if (hotspot && hotspot.owner !== address) {
+          navigation.replace('NotHotspotOwnerErrorScreen')
+        } else {
+          console.log(
+            'HotspotSetupWifiConnectingScreen::goToNextStep::addGatewayTxn:',
+            hotspotType,
+            addGatewayTxn,
+          )
+          // navigation.replace('HotspotSetupLocationInfoScreen', {
+          //   hotspotAddress,
+          //   addGatewayTxn,
+          //   hotspotType,
+          // })
+          navigation.navigate('HotspotTxnsProgressScreen', {
+            hotspotAddress,
+            addGatewayTxn,
+            // hotspotType,
+          })
+        }
+      } catch (error) {
+        console.log(
+          'HotspotSetupWifiConnectingScreen::getHotspotDetails::error:',
+          hotspotAddress,
+          error,
+        )
+        navigation.replace('HotspotTxnsProgressScreen', {
           hotspotAddress,
           addGatewayTxn,
-          hotspotType,
+          // hotspotType,
         })
       }
-    } catch (error) {
-      console.log(
-        'HotspotSetupWifiConnectingScreen::getHotspotDetails::error:',
-        hotspotAddress,
-        error,
-      )
-      navigation.replace('HotspotSetupLocationInfoScreen', {
-        hotspotAddress,
-        addGatewayTxn,
-        hotspotType,
-      })
     }
-  }, [addGatewayTxn, hotspotAddress, hotspotType, navigation])
+  }, [
+    addGatewayTxn,
+    gatewayAction,
+    hotspotAddress,
+    hotspotType,
+    navigation,
+    rootNav,
+  ])
 
   const connectToWifi = useCallback(async () => {
     console.log(
@@ -119,16 +145,23 @@ const HotspotSetupWifiConnectingScreen = () => {
       }
     } catch (error) {
       console.log('HotspotSetupWifiConnectingScreen::setWifi::error:', error)
+      navigation.goBack()
     }
   }, [goToNextStep, navigation, network, password, setWifi, showOKAlert])
 
   const forgetWifi = async () => {
     try {
       const connectedNetworks = uniq((await readWifiNetworks(true)) || [])
+      console.log(
+        'HotspotSetupWifiConnectingScreen::forgetWifi::connectedNetworks:',
+        connectedNetworks.length,
+        connectedNetworks,
+      )
       if (connectedNetworks.length > 0) {
         await removeConfiguredWifi(connectedNetworks[0])
       }
     } catch (e) {
+      console.log('HotspotSetupWifiConnectingScreen::forgetWifi::error:', e)
       handleError(e)
     }
   }

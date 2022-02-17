@@ -75,46 +75,50 @@ const HotspotTxnsProgressScreen = () => {
       token,
     } as WalletLink.SignHotspotRequest
 
-    // check if add gateway needed
-    const isOnChain = await hotspotOnChain(hotspotAddress)
-    const onboardingRecord = await getOnboardingRecord(hotspotAddress)
-    if (!onboardingRecord) return
-    if (!isOnChain) {
-      // if so, construct and publish add gateway
-      if (qrAddGatewayTxn) {
-        // Gateway QR scanned
-        updateParams.addGatewayTxn = qrAddGatewayTxn
-      } else {
-        // Gateway BLE scanned
-        const addGatewayTxn = await createGatewayTxn({
-          ownerAddress,
-          payerAddress: onboardingRecord.maker.address,
-        })
-        updateParams.addGatewayTxn = addGatewayTxn
+    try {
+      // check if add gateway needed
+      const isOnChain = await hotspotOnChain(hotspotAddress)
+      const onboardingRecord = await getOnboardingRecord(hotspotAddress)
+      if (!onboardingRecord) return
+      if (!isOnChain) {
+        // if so, construct and publish add gateway
+        if (qrAddGatewayTxn) {
+          // Gateway QR scanned
+          updateParams.addGatewayTxn = qrAddGatewayTxn
+        } else {
+          // Gateway BLE scanned
+          const addGatewayTxn = await createGatewayTxn({
+            ownerAddress,
+            payerAddress: onboardingRecord.maker.address,
+          })
+          updateParams.addGatewayTxn = addGatewayTxn
+        }
       }
-    }
 
-    // construct and publish assert location
-    if (params.coords) {
-      const [lng, lat] = params.coords
+      // construct and publish assert location
+      if (params.coords) {
+        const [lng, lat] = params.coords
 
-      const assertLocationTxn = await Location.createLocationTxn({
-        gateway: hotspotAddress,
-        lat,
-        lng,
-        decimalGain: params.gain,
-        elevation: params.elevation,
-        dataOnly: false,
-        owner: ownerAddress,
-        currentLocation: params.currentLocation || '', // If reasserting location, put previous location here
-        makerAddress: onboardingRecord.maker.address,
-        locationNonceLimit: onboardingRecord.maker.locationNonceLimit || 0,
-      })
-      // console.log(
-      //   'HotspotTxnsProgressScreen::assertLocationTxn:',
-      //   assertLocationTxn,
-      // )
-      updateParams.assertLocationTxn = assertLocationTxn.toString()
+        const assertLocationTxn = await Location.createLocationTxn({
+          gateway: hotspotAddress,
+          lat,
+          lng,
+          decimalGain: params.gain,
+          elevation: params.elevation,
+          dataOnly: false,
+          owner: ownerAddress,
+          currentLocation: params.currentLocation || '', // If reasserting location, put previous location here
+          makerAddress: onboardingRecord.maker.address,
+          locationNonceLimit: onboardingRecord.maker.locationNonceLimit || 0,
+        })
+        // console.log(
+        //   'HotspotTxnsProgressScreen::assertLocationTxn:',
+        //   assertLocationTxn,
+        // )
+        updateParams.assertLocationTxn = assertLocationTxn.toString()
+      }
+    } catch (error) {
+      console.log('HotspotTxnsProgressScreen::fixParams::error:', error)
     }
 
     console.log('HotspotTxnsProgressScreen::updateParams:', updateParams)

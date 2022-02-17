@@ -52,7 +52,7 @@ export default {
       login_with_helium: 'Already have a Helium Wallet?\nTap to get started.',
       subtitle:
         'Lorem ipsum <b><errorText>$HNT</errorText></b> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      title: 'Welcome\nto Hummingbird',
+      title: 'Welcome to\nHummingbird',
     },
     linkAccount: {
       stepOne: '1. Download a supported Wallet App',
@@ -327,8 +327,8 @@ export default {
       title: 'REGISTERING HOTSPOT',
     },
     selection: {
-      subtitle: '[Placeholder instructions]',
-      title: 'Add\nyour Hotspot.',
+      subtitle: 'Add your new Hummingbird Hotspot.',
+      title: 'Add Hotspot.',
     },
     skip_location: {
       subtitle_1: 'You have decided to assert location later.',

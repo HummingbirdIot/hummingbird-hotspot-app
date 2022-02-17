@@ -175,13 +175,15 @@ const HotspotSetupPickLocationScreen = () => {
           title="Set Antenna"
           marginBottom="m"
         />
-        <DebouncedButton
-          onPress={navNext}
-          variant="primary"
-          mode="contained"
-          disabled={disabled || !hasGPSLocation}
-          title={t('hotspot_setup.location.next')}
-        />
+        {params.gatewayAction !== 'addGateway' ? (
+          <DebouncedButton
+            onPress={navNext}
+            variant="primary"
+            mode="contained"
+            disabled={disabled || !hasGPSLocation}
+            title={t('hotspot_setup.location.next')}
+          />
+        ) : null}
       </Box>
       <BottomSheetModalProvider>
         <BottomSheetModal

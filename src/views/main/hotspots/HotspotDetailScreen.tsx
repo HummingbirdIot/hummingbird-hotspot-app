@@ -21,7 +21,7 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
-import ActivitiesList from '../../list/ActivitiesList'
+import ActivitiesList from '../../../components/ActivitiesList'
 import { useColors } from '../../../theme/themeHooks'
 
 const truncateAddress = (address: string, startWith = 10) => {
@@ -87,11 +87,12 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             title="Assert Location"
             onPress={() => {
               if (!hotspot) return
-              console.log('Assert Location')
+              console.log('Assert Location:', hotspot)
               navigation.replace('HotspotAssert', {
                 hotspotAddress: hotspot.address,
-                hotspotType: 'ExampleHotspotBLE',
                 gatewayAction: 'assertLocation',
+                gain: hotspot.gain / 10,
+                elevation: hotspot.elevation,
               })
             }}
           />
@@ -112,12 +113,10 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       title: 'Assert Location And Antenna',
       onPress: () => {
         if (!hotspot) return
-        console.log('Assert Location')
         navigation.replace('HotspotAssert', {
           hotspotAddress: hotspot.address,
-          // hotspotType: 'ExampleHotspotBLE',
           gatewayAction: 'assertLocation',
-          gain: hotspot.gain,
+          gain: hotspot.gain / 10,
           elevation: hotspot.elevation,
         })
       },
@@ -126,14 +125,12 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       title: 'Assert Antenna',
       onPress: () => {
         if (!hotspot) return
-        console.log('Assert Antenna')
         const { address, lng, lat, geocode, location } = hotspot
         const { long_street: street, long_city: city } = geocode
         const locationName =
           street && city ? [street, city].join(', ') : 'Loading...'
         navigation.replace('HotspotAssert', {
           hotspotAddress: address,
-          // hotspotType: 'ExampleHotspotBLE',
           locationName,
           coords: [lng, lat],
           currentLocation: location,
@@ -145,11 +142,8 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       title: 'Update WiFi',
       onPress: () => {
         if (!hotspot) return
-        console.log('Assert Location')
-        navigation.replace('HotspotAssert', {
+        navigation.replace('HotspotSetWiFi', {
           hotspotAddress: hotspot.address,
-          hotspotType: 'ExampleHotspotBLE',
-          gatewayAction: 'assertLocation',
         })
       },
     },

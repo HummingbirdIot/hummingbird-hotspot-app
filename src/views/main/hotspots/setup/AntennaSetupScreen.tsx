@@ -31,7 +31,7 @@ const AntennaSetupScreen = () => {
     const country = getCountry()
     const isUS = country === 'US'
     const makerAntenna =
-      HotspotMakerModels[params.hotspotType || 'ExampleHotspotBLE'].antenna
+      HotspotMakerModels[params.hotspotType || 'HUMMINGBIRD_H500'].antenna
     const ant =
       isUS && makerAntenna?.us ? makerAntenna.us : makerAntenna?.default
 
