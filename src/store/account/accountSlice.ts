@@ -3,13 +3,13 @@ import { Account } from '@helium/http'
 import { getAccount } from '../../utils/appDataClient'
 import { getWallet, postWallet } from '../../utils/walletClient'
 import { ChartData, ChartRange } from '../../components/BarChart/types'
-import { FilterType } from '../../features/wallet/root/walletTypes'
+import { FilterType } from '../../components/BarChart/walletTypes'
 // eslint-disable-next-line import/extensions
 import { Loading } from '../activity/activitySlice'
 import {
   CacheRecord,
-  handleCacheFulfilled,
-  handleCacheRejected,
+  // handleCacheFulfilled,
+  // handleCacheRejected,
   hasValidCache,
 } from '../../utils/cacheUtils'
 // import { getSecureItem } from '../../utils/secureAccount'
@@ -74,47 +74,23 @@ type AccountData = {
 
 type SettingsBag = Array<{ key: string; value: string }>
 
-const settingsBagToKeyValue = (payload: SettingsBag) =>
-  payload.reduce((obj, { value, key }) => {
-    let val: string | boolean | number | undefined
-    if (boolKeys.includes(key as BooleanKey)) {
-      val = value === 'true'
-    } else if (stringKeys.includes(key as StringKey)) {
-      val = value
-    } else {
-      return obj
-    }
-    return { ...obj, [key]: val }
-  }, {})
+// const settingsBagToKeyValue = (payload: SettingsBag) =>
+//   payload.reduce((obj, { value, key }) => {
+//     let val: string | boolean | number | undefined
+//     if (boolKeys.includes(key as BooleanKey)) {
+//       val = value === 'true'
+//     } else if (stringKeys.includes(key as StringKey)) {
+//       val = value
+//     } else {
+//       return obj
+//     }
+//     return { ...obj, [key]: val }
+//   }, {})
 
 // if this call fails we load the app with default settings and retry every 30 seconds
-export const fetchAccountSettings = createAsyncThunk<SettingsBag>(
-  'account/fetchAccountSettings',
-  async () => getWallet('accounts/settings'),
-)
-
-// export const transferAppSettingsToAccount = createAsyncThunk<SettingsBag>(
-//   'account/transferAppSettingsToAccount ',
-//   async () => {
-//     const fleetEnabled = await getSecureItem('fleetModeEnabled')
-//     const fleetAutoEnabled = await getSecureItem('hasFleetModeAutoEnabled')
-//     const convertHnt = await getSecureItem('convertHntToCurrency')
-//     const settings = [
-//       {
-//         key: 'isFleetModeEnabled',
-//         value: String(fleetEnabled),
-//       },
-//       {
-//         key: 'hasFleetModeAutoEnabled',
-//         value: String(fleetAutoEnabled),
-//       },
-//       {
-//         key: 'convertHntToCurrency',
-//         value: String(convertHnt),
-//       },
-//     ]
-//     return postWallet('accounts/settings', { settings })
-//   },
+// export const fetchAccountSettings = createAsyncThunk<SettingsBag>(
+//   'account/fetchAccountSettings',
+//   async () => getWallet('accounts/settings'),
 // )
 
 export const fetchData = createAsyncThunk<AccountData>(
@@ -127,13 +103,13 @@ export const fetchData = createAsyncThunk<AccountData>(
   },
 )
 
-type ActivityChartParams = { range: ChartRange; filterType: FilterType }
-export const fetchActivityChart = createAsyncThunk<
-  ChartData[],
-  ActivityChartParams
->('account/fetchActivityChart', async ({ range, filterType }) => {
-  return getWallet('wallet/chart', { range, type: filterType })
-})
+// type ActivityChartParams = { range: ChartRange; filterType: FilterType }
+// export const fetchActivityChart = createAsyncThunk<
+//   ChartData[],
+//   ActivityChartParams
+// >('account/fetchActivityChart', async ({ range, filterType }) => {
+//   return getWallet('wallet/chart', { range, type: filterType })
+// })
 
 export const fetchAccountRewards = createAsyncThunk(
   'account/fetchAccountRewards',
@@ -153,24 +129,24 @@ export const fetchAccountRewards = createAsyncThunk(
   },
 )
 
-export const updateFleetModeEnabled = createAsyncThunk<
-  SettingsBag,
-  { enabled: boolean; autoEnabled?: boolean }
->('account/updateFleetModeEnabled', async ({ enabled, autoEnabled }) => {
-  const settings = [
-    {
-      key: 'isFleetModeEnabled',
-      value: String(enabled),
-    },
-  ]
-  if (autoEnabled) {
-    settings.push({
-      key: 'hasFleetModeAutoEnabled',
-      value: String(autoEnabled),
-    })
-  }
-  return postWallet('accounts/settings', { settings })
-})
+// export const updateFleetModeEnabled = createAsyncThunk<
+//   SettingsBag,
+//   { enabled: boolean; autoEnabled?: boolean }
+// >('account/updateFleetModeEnabled', async ({ enabled, autoEnabled }) => {
+//   const settings = [
+//     {
+//       key: 'isFleetModeEnabled',
+//       value: String(enabled),
+//     },
+//   ]
+//   if (autoEnabled) {
+//     settings.push({
+//       key: 'hasFleetModeAutoEnabled',
+//       value: String(autoEnabled),
+//     })
+//   }
+//   return postWallet('accounts/settings', { settings })
+// })
 
 export const updateSetting = createAsyncThunk<
   SettingsBag,
@@ -212,65 +188,65 @@ const accountSlice = createSlice({
     builder.addCase(fetchData.rejected, (state, _action) => {
       state.fetchDataStatus = 'rejected'
     })
-    builder.addCase(fetchActivityChart.pending, (state, { meta }) => {
-      const currentChart =
-        state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
+    // builder.addCase(fetchActivityChart.pending, (state, { meta }) => {
+    //   const currentChart =
+    //     state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
 
-      if (!state.activityChart[meta.arg.filterType]) {
-        state.activityChart[meta.arg.filterType] = {} as ActivityChart
-      }
+    //   if (!state.activityChart[meta.arg.filterType]) {
+    //     state.activityChart[meta.arg.filterType] = {} as ActivityChart
+    //   }
 
-      if (!state.activityChart[meta.arg.filterType][meta.arg.range]) {
-        state.activityChart[meta.arg.filterType][meta.arg.range] = {
-          ...currentChart,
-          data: [] as ChartData[],
-        }
-      }
+    //   if (!state.activityChart[meta.arg.filterType][meta.arg.range]) {
+    //     state.activityChart[meta.arg.filterType][meta.arg.range] = {
+    //       ...currentChart,
+    //       data: [] as ChartData[],
+    //     }
+    //   }
 
-      state.activityChart[meta.arg.filterType][meta.arg.range].loading =
-        'pending'
-    })
-    builder.addCase(
-      fetchActivityChart.fulfilled,
-      (state, { meta, payload }) => {
-        const currentChart =
-          state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
+    //   state.activityChart[meta.arg.filterType][meta.arg.range].loading =
+    //     'pending'
+    // })
+    // builder.addCase(
+    //   fetchActivityChart.fulfilled,
+    //   (state, { meta, payload }) => {
+    //     const currentChart =
+    //       state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
 
-        state.activityChart[meta.arg.filterType][meta.arg.range] = {
-          ...currentChart,
-          data: payload,
-          loading: 'fulfilled',
-        }
-      },
-    )
-    builder.addCase(fetchActivityChart.rejected, (state, { meta }) => {
-      const currentChart =
-        state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
+    //     state.activityChart[meta.arg.filterType][meta.arg.range] = {
+    //       ...currentChart,
+    //       data: payload,
+    //       loading: 'fulfilled',
+    //     }
+    //   },
+    // )
+    // builder.addCase(fetchActivityChart.rejected, (state, { meta }) => {
+    //   const currentChart =
+    //     state.activityChart[meta.arg.filterType]?.[meta.arg.range] || {}
 
-      state.activityChart[meta.arg.filterType][meta.arg.range] = {
-        ...currentChart,
-        loading: 'rejected',
-      }
-    })
-    builder.addCase(fetchAccountRewards.rejected, (state) => {
-      state.rewardsSum = handleCacheRejected()
-    })
-    builder.addCase(fetchAccountRewards.fulfilled, (state, { payload }) => {
-      state.rewardsSum = handleCacheFulfilled(payload)
-    })
-    builder.addCase(fetchAccountSettings.fulfilled, (state, { payload }) => {
-      const settings = settingsBagToKeyValue(payload)
-      return {
-        ...state,
-        settings: { ...state.settings, ...settings },
-        settingsLoaded: true,
-        fetchAccountSettingsFailed: false,
-      }
-    })
-    builder.addCase(fetchAccountSettings.rejected, (state) => {
-      state.settingsLoaded = true
-      state.fetchAccountSettingsFailed = true
-    })
+    //   state.activityChart[meta.arg.filterType][meta.arg.range] = {
+    //     ...currentChart,
+    //     loading: 'rejected',
+    //   }
+    // })
+    // builder.addCase(fetchAccountRewards.rejected, (state) => {
+    //   state.rewardsSum = handleCacheRejected()
+    // })
+    // builder.addCase(fetchAccountRewards.fulfilled, (state, { payload }) => {
+    //   state.rewardsSum = handleCacheFulfilled(payload)
+    // })
+    // builder.addCase(fetchAccountSettings.fulfilled, (state, { payload }) => {
+    //   const settings = settingsBagToKeyValue(payload)
+    //   return {
+    //     ...state,
+    //     settings: { ...state.settings, ...settings },
+    //     settingsLoaded: true,
+    //     fetchAccountSettingsFailed: false,
+    //   }
+    // })
+    // builder.addCase(fetchAccountSettings.rejected, (state) => {
+    //   state.settingsLoaded = true
+    //   state.fetchAccountSettingsFailed = true
+    // })
     // builder.addCase(
     //   transferAppSettingsToAccount.fulfilled,
     //   (state, { payload }) => {
@@ -283,22 +259,22 @@ const accountSlice = createSlice({
     //     }
     //   },
     // )
-    builder.addCase(
-      updateFleetModeEnabled.pending,
-      (
-        state,
-        {
-          meta: {
-            arg: { enabled, autoEnabled },
-          },
-        },
-      ) => {
-        state.settings.isFleetModeEnabled = enabled
-        if (autoEnabled) {
-          state.settings.hasFleetModeAutoEnabled = true
-        }
-      },
-    )
+    // builder.addCase(
+    //   updateFleetModeEnabled.pending,
+    //   (
+    //     state,
+    //     {
+    //       meta: {
+    //         arg: { enabled, autoEnabled },
+    //       },
+    //     },
+    //   ) => {
+    //     state.settings.isFleetModeEnabled = enabled
+    //     if (autoEnabled) {
+    //       state.settings.hasFleetModeAutoEnabled = true
+    //     }
+    //   },
+    // )
     builder.addCase(
       updateSetting.pending,
       (

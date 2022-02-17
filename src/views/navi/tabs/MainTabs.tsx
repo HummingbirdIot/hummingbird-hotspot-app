@@ -14,9 +14,9 @@ import { useAppDispatch } from '../../../store/store'
 import { wp } from '../../../utils/layout'
 import appSlice from '../../../store/user/appSlice'
 
-// import OverviewScreen from '../overview/OverviewScreen'
+import OverviewScreen from '../../main/overview/OverviewScreen'
 import HotspotsNavigator from '../../main/hotspots/HotspotsNavigator'
-// import ExplorerScreen from '../explorer/ExplorerScreen'
+// import ExplorerScreen from '../../main/explorer/ExplorerScreen'
 import MoreNavigator from '../../main/more/MoreNavigator'
 
 const MainTab = createBottomTabNavigator()
@@ -82,7 +82,7 @@ const MainTabs = () => {
       tabBarOptions={tabBarOptions}
       screenOptions={screenOptions}
     >
-      {/* <MainTab.Screen name="Overview" component={OverviewScreen} /> */}
+      <MainTab.Screen name="Overview" component={OverviewScreen} />
       <MainTab.Screen name="Hotspots" component={HotspotsNavigator} />
       {/* <MainTab.Screen name="Explorer" component={ExplorerScreen} /> */}
       <MainTab.Screen name="More" component={MoreNavigator} />

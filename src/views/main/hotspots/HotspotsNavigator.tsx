@@ -16,7 +16,7 @@ const More = ({ navigation, route }: Props) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route)
     navigation.setOptions({
-      tabBarVisible: !routeName || routeName === 'MoreScreen',
+      tabBarVisible: !routeName || routeName === 'HotspotListScreen',
     })
   }, [navigation, route])
 
@@ -28,9 +28,12 @@ const More = ({ navigation, route }: Props) => {
       }
       mode={Platform.OS === 'android' ? 'modal' : undefined}
     >
-      <HotspotStack.Screen name="Hotspots" component={HotspotListScreen} />
       <HotspotStack.Screen
-        name="HotspotDetail"
+        name="HotspotListScreen"
+        component={HotspotListScreen}
+      />
+      <HotspotStack.Screen
+        name="HotspotDetailScreen"
         component={HotspotDetailScreen}
       />
     </HotspotStack.Navigator>

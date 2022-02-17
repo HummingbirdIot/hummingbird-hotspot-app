@@ -16,8 +16,6 @@ import WelcomeScreen from '../link/WelcomeScreen'
 import CreateAccountScreen from '../link/CreateAccountScreen'
 import { OnboardingStackParamList } from '../link/onboardingTypes'
 
-const usingSimulator = false
-
 const OnboardingStack = createStackNavigator<OnboardingStackParamList>()
 const MainStack = createStackNavigator()
 // const MainStack = createNativeStackNavigator()
@@ -37,7 +35,7 @@ const RootNavigator = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  if (!walletLinkToken && !usingSimulator) {
+  if (!walletLinkToken) {
     return (
       <OnboardingStack.Navigator
         headerMode="none"

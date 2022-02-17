@@ -49,6 +49,11 @@ const HotspotSetupSelectionScreen = () => {
     (state: RootState) => state.location,
   )
 
+  useEffect(() => {
+    getState()
+    dispatch(getLocationPermission())
+  }, [dispatch, getState])
+
   const checkBluetooth = useCallback(async () => {
     const state = await getState()
 
@@ -78,12 +83,6 @@ const HotspotSetupSelectionScreen = () => {
       return true
     }
   }, [enable, getState, showOKCancelAlert])
-
-  useEffect(() => {
-    getState()
-
-    dispatch(getLocationPermission())
-  }, [dispatch, getState])
 
   const checkLocation = useCallback(async () => {
     if (Platform.OS === 'ios') return true

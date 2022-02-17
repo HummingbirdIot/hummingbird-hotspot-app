@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useCallback, useEffect, useState } from 'react'
-import { Button, ScrollView, Text, View } from 'react-native'
+import { Button, Linking, Platform, ScrollView, Text, View } from 'react-native'
+import { useSelector } from 'react-redux'
 import {
   BottomSheet,
   ButtonGroup,
@@ -9,11 +10,12 @@ import {
 } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useHotspotBle } from '@helium/react-native-sdk'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
+import { useAsync } from 'react-async-hook'
 import Box from '../../../components/Box'
 import Map from '../../../components/Map'
 import ThemedText from '../../../components/Text'
-
 import Location from '../../../assets/images/location.svg'
 import IconMaker from '../../../assets/images/maker.svg'
 import IconElevation from '../../../assets/images/gain.svg'
@@ -23,6 +25,12 @@ import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
 import ActivitiesList from '../../../components/ActivitiesList'
 import { useColors } from '../../../theme/themeHooks'
+import { getLocationPermission } from '../../../store/location/locationSlice'
+import { RootState } from '../../../store/rootReducer'
+import usePermissionManager from '../../../utils/usePermissionManager'
+import { useAppDispatch } from '../../../store/store'
+import useAlert from '../../../utils/useAlert'
+import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
 
 const truncateAddress = (address: string, startWith = 10) => {
   const start = address.slice(0, startWith)
@@ -34,9 +42,26 @@ const truncateAddress = (address: string, startWith = 10) => {
 const HotspotDetailScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
-  // console.log('Root::SafeAreaInsets:', insets)
-
   const { index, routes } = navigation.getState()
+  const { title, makerName } = routes[index].params
+  const { enable, getState } = useHotspotBle()
+  const { showOKCancelAlert } = useAlert()
+  const dispatch = useAppDispatch()
+  const { requestLocationPermission } = usePermissionManager()
+  const { permissionResponse, locationBlocked } = useSelector(
+    (state: RootState) => state.location,
+  )
+
+  let { hotspot } = routes[index].params
+  useAsync(async () => {
+    if (hotspot) {
+      await setSecureItem('currentHotspot', hotspot)
+    } else {
+      hotspot = await getSecureItem('currentHotspot')
+    }
+  }, [hotspot])
+
+  // console.log('Root::SafeAreaInsets:', insets)
   // console.log(
   //   'HotspotDetailScreen::navigation::route:',
   //   index,
@@ -48,16 +73,135 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   //     index,
   //     routes[index].params,
   //   )
-  // return <ThemedText>Hello</ThemedText>
-  const { title, hotspot, makerName } = routes[index].params
-  // const [lng, lat] = [hotspot?.lng || 0, hotspot?.lat || 0]
   // console.log('HotspotDetailScreen::hotspot:', hotspot)
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
 
-  // const [mapCenter, setMapCenter] = useState([lng, lat])
-  // const [markerCenter, setMarkerCenter] = useState([lng, lat])
+  useEffect(() => {
+    getState()
+    dispatch(getLocationPermission())
+  }, [dispatch, getState])
+
+  const checkBluetooth = useCallback(async () => {
+    const state = await getState()
+
+    if (state === 'PoweredOn') {
+      return true
+    }
+
+    if (Platform.OS === 'ios') {
+      if (state === 'PoweredOff') {
+        const decision = await showOKCancelAlert({
+          titleKey: 'hotspot_setup.pair.alert_ble_off.title',
+          messageKey: 'hotspot_setup.pair.alert_ble_off.body',
+          okKey: 'generic.go_to_settings',
+        })
+        if (decision) Linking.openURL('App-Prefs:Bluetooth')
+      } else {
+        const decision = await showOKCancelAlert({
+          titleKey: 'hotspot_setup.pair.alert_ble_off.title',
+          messageKey: 'hotspot_setup.pair.alert_ble_off.body',
+          okKey: 'generic.go_to_settings',
+        })
+        if (decision) Linking.openURL('app-settings:')
+      }
+    }
+    if (Platform.OS === 'android') {
+      await enable()
+      return true
+    }
+  }, [enable, getState, showOKCancelAlert])
+
+  const checkLocation = useCallback(async () => {
+    if (Platform.OS === 'ios') return true
+
+    if (permissionResponse?.granted) {
+      return true
+    }
+
+    if (!locationBlocked) {
+      const response = await requestLocationPermission()
+      if (response && response.granted) {
+        return true
+      }
+    } else {
+      const decision = await showOKCancelAlert({
+        titleKey: 'permissions.location.title',
+        messageKey: 'permissions.location.message',
+        okKey: 'generic.go_to_settings',
+      })
+      if (decision) Linking.openSettings()
+    }
+  }, [
+    locationBlocked,
+    permissionResponse?.granted,
+    requestLocationPermission,
+    showOKCancelAlert,
+  ])
+
   const [mapArea, setMapArea] = useState(<Box />)
+
+  const [selectedIndex, updateIndex] = useState(1)
+  const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
+
+  const { surfaceContrast } = useColors()
+
+  const assertLocation = useCallback(async () => {
+    if (!hotspot) return
+    await checkLocation()
+    navigation.push('HotspotAssert', {
+      hotspotAddress: hotspot.address,
+      gatewayAction: 'assertLocation',
+      gain: hotspot.gain ? hotspot.gain / 10 : 1.2,
+      elevation: hotspot.elevation || 0,
+    })
+  }, [hotspot, navigation, checkLocation])
+  const assertAntenna = async () => {
+    if (!hotspot) return
+    await checkLocation()
+    const { address, lng, lat, geocode, location } = hotspot
+    const { long_street: street, long_city: city } = geocode
+    const locationName =
+      street && city ? [street, city].join(', ') : 'Loading...'
+    navigation.push('HotspotAssert', {
+      hotspotAddress: address,
+      locationName,
+      coords: [lng, lat],
+      currentLocation: location,
+      gatewayAction: 'assertAntenna',
+    })
+  }
+  const setWiFi = async () => {
+    if (!hotspot) return
+    await checkBluetooth()
+    navigation.push('HotspotSetWiFi', {
+      hotspotAddress: hotspot.address,
+    })
+  }
+  const [isVisible, setIsVisible] = useState(false)
+  const list = [
+    {
+      title: 'Assert Location And Antenna',
+      onPress: assertLocation,
+    },
+    {
+      title: 'Assert Antenna',
+      onPress: assertAntenna,
+    },
+    {
+      title: 'Update WiFi',
+      onPress: setWiFi,
+    },
+    {
+      title: 'Cancel',
+      containerStyle: {
+        /* backgroundColor: 'red' */
+      },
+      titleStyle: { color: 'gray' },
+      onPress: () => setIsVisible(false),
+    },
+  ]
+
   useEffect(() => {
     const { lng, lat } = hotspot
     if (lng && lat) {
@@ -83,79 +227,12 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           >
             This Hotspot haven&apos;t been asserted location yet
           </Text>
-          <Button
-            title="Assert Location"
-            onPress={() => {
-              if (!hotspot) return
-              console.log('Assert Location:', hotspot)
-              navigation.replace('HotspotAssert', {
-                hotspotAddress: hotspot.address,
-                gatewayAction: 'assertLocation',
-                gain: hotspot.gain / 10,
-                elevation: hotspot.elevation,
-              })
-            }}
-          />
+          <Button title="Assert Location" onPress={assertLocation} />
         </Box>
       )
       setMapArea(el)
     }
-  }, [hotspot, navigation])
-
-  const [selectedIndex, updateIndex] = useState(1)
-  const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
-
-  const { surfaceContrast } = useColors()
-
-  const [isVisible, setIsVisible] = useState(false)
-  const list = [
-    {
-      title: 'Assert Location And Antenna',
-      onPress: () => {
-        if (!hotspot) return
-        navigation.replace('HotspotAssert', {
-          hotspotAddress: hotspot.address,
-          gatewayAction: 'assertLocation',
-          gain: hotspot.gain / 10,
-          elevation: hotspot.elevation,
-        })
-      },
-    },
-    {
-      title: 'Assert Antenna',
-      onPress: () => {
-        if (!hotspot) return
-        const { address, lng, lat, geocode, location } = hotspot
-        const { long_street: street, long_city: city } = geocode
-        const locationName =
-          street && city ? [street, city].join(', ') : 'Loading...'
-        navigation.replace('HotspotAssert', {
-          hotspotAddress: address,
-          locationName,
-          coords: [lng, lat],
-          currentLocation: location,
-          gatewayAction: 'assertAntenna',
-        })
-      },
-    },
-    {
-      title: 'Update WiFi',
-      onPress: () => {
-        if (!hotspot) return
-        navigation.replace('HotspotSetWiFi', {
-          hotspotAddress: hotspot.address,
-        })
-      },
-    },
-    {
-      title: 'Cancel',
-      containerStyle: {
-        /* backgroundColor: 'red' */
-      },
-      titleStyle: { color: 'gray' },
-      onPress: () => setIsVisible(false),
-    },
-  ]
+  }, [hotspot, navigation, assertLocation])
 
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>

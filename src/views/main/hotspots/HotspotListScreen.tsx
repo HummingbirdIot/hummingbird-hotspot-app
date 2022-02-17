@@ -96,7 +96,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
               key={hotspot.address}
               bottomDivider
               onPress={() =>
-                navigation.navigate('HotspotDetail', {
+                navigation.navigate('HotspotDetailScreen', {
                   // screen: 'HotspotDetail',
                   title: formatHotspotName(hotspot.name || '').join(' '),
                   makerName: getMakerName(hotspot, makers),

@@ -9,9 +9,10 @@ const stringKeys = [
   'authInterval',
   'language',
   'walletLinkToken',
-  'address',
   'walletApiToken',
+  'address',
   'keypair',
+  'currentHotspot',
 ] as const
 type StringKey = typeof stringKeys[number]
 
@@ -34,14 +35,11 @@ export async function getSecureItem(key: AccountStoreKey) {
 }
 
 export const getAddress = async () => {
-  // return '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65'
-  // return '13uM7gtVxPR57P3ue9k5mKfeYDfffesZ8ongiDAdkELyW83znBe'
   const token = await getSecureItem('walletLinkToken')
-  if (!token) return
+  if (!token) return null
   const parsed = WalletLink.parseWalletLinkToken(token)
-  if (!parsed?.address) return
-  const { address } = parsed
-  return address
+  if (!parsed?.address) return null
+  return parsed.address
 }
 
 export const deleteSecureItem = async (key: AccountStoreKey) =>
@@ -88,9 +86,10 @@ export const getWalletApiToken = async () => {
   const existingToken = await getSecureItem('walletApiToken')
   if (existingToken) return existingToken
 
-  // const address = await getSecureItem('address')
-  const address = await getAddress()
-  console.log('address', address)
+  let address = await getSecureItem('address')
+  if (!address) {
+    address = await getAddress()
+  }
   if (!address) return
 
   const apiToken = await makeWalletApiToken(address)
