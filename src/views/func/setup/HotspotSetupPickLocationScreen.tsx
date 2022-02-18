@@ -118,14 +118,6 @@ const HotspotSetupPickLocationScreen = () => {
 
   const searchSnapPoints = useMemo(() => ['85%'], [])
 
-  if (params.gatewayAction === 'assertAntenna') {
-    navigation.replace('AntennaSetupScreen', {
-      ...params,
-      // gatewayAction: 'assertLocation',
-    })
-    return <Box flex={1} />
-  }
-
   return (
     <SafeAreaBox
       flex={1}

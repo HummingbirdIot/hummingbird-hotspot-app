@@ -127,7 +127,8 @@ const ActivitiesList = ({
           if (activity.fee) {
             desc = `- ${
               (
-                activity.stakingFee.floatBalance + activity.fee.floatBalance
+                (activity?.stakingFee.floatBalance || 0) +
+                activity.fee.floatBalance
               ).toString() || '0'
             } DC`
             // console.log('balance:', desc)
@@ -153,6 +154,21 @@ const ActivitiesList = ({
               desc = `~ ${dist.toFixed(3)} km`
               // console.log('distance:', desc)
             }
+          } else if (activity.type === 'state_channel_close_v1') {
+            // console.log('ActivitiesList::PointedActivity::state_channel_close_v1:', activity)
+            // console.log(
+            //   'ActivitiesList::PointedActivity::summaries:',
+            //   activity.stateChannel.summaries,
+            // )
+            let numPackets = 0
+            let numDcs = 0
+            activity.stateChannel.summaries.forEach(
+              (summary: { numPackets: number; numDcs: number }) => {
+                numPackets += summary.numPackets || 0
+                numDcs += summary.numDcs || 0
+              },
+            )
+            desc = `${numPackets} packets | ${numDcs} DC`
           }
           return (
             <ListItem key={activity.hash} bottomDivider>

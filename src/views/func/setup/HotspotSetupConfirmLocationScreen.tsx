@@ -45,12 +45,12 @@ const HotspotSetupConfirmLocationScreen = () => {
     totalStakingAmountDC: Balance<DataCredits>
     totalStakingAmountUsd: Balance<USDollars>
   }>()
-  const [fetchFeeDataError, setFetchFeeDataError] = useState<unknown>(null)
   const { params } = useRoute<Route>()
   const { elevation, gain, coords, hotspot } = params
+  const [fetchFeeDataError, setFetchFeeDataError] = useState<unknown>(null)
   const { getOnboardingRecord } = useOnboarding()
 
-  console.log('HotspotSetupConfirmLocationScreen::routeParams:', params)
+  // console.log('HotspotSetupConfirmLocationScreen::routeParams:', params)
 
   useAsync(async () => {
     const address = await getAddress()
@@ -79,17 +79,6 @@ const HotspotSetupConfirmLocationScreen = () => {
           return
         }
 
-        console.log(
-          'HotspotSetupConfirmLocationScreen::loadLocationFeeData::params:',
-          {
-            nonce: hotspot?.nonce || 0,
-            accountIntegerBalance: account.balance.integerBalance,
-            dataOnly: hotspot?.mode === 'dataonly',
-            owner: ownerAddress,
-            locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
-            makerAddress: onboardingRecord.maker.address,
-          },
-        )
         Location.loadLocationFeeData({
           nonce: hotspot?.nonce || 0,
           accountIntegerBalance: account.balance.integerBalance,
@@ -99,9 +88,6 @@ const HotspotSetupConfirmLocationScreen = () => {
           makerAddress: onboardingRecord.maker.address,
         })
           .then(setFeeData)
-          .then(() => {
-            setFetchFeeDataError(null)
-          })
           .catch((error) => {
             console.log(
               'HotspotSetupConfirmLocationScreen::GettingFee::error:',
@@ -167,13 +153,14 @@ const HotspotSetupConfirmLocationScreen = () => {
   }
 
   const { isFree, hasSufficientBalance, totalStakingAmount } = feeData
-  console.log(
-    'HotspotSetupConfirmLocationScreen::feeData:',
-    isFree,
-    hasSufficientBalance,
-    totalStakingAmount,
-    feeData,
-  )
+  // console.log(
+  //   'HotspotSetupConfirmLocationScreen::feeData:',
+  //   isFree,
+  //   hasSufficientBalance,
+  //   totalStakingAmount,
+  //   totalStakingAmount?.toString(),
+  //   feeData,
+  // )
   // console.log('HotspotSetupConfirmLocationScreen::coords:', coords, params)
 
   return (
@@ -198,40 +185,26 @@ const HotspotSetupConfirmLocationScreen = () => {
               {t('hotspot_setup.location_fee.subtitle_fee')}
             </Text>
           )}
-          {coords ? (
-            <Text
-              variant="subtitle1"
-              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
-              numberOfLines={2}
-              adjustsFontSizeToFit
-              maxFontSizeMultiplier={1.3}
-            >
-              {t('hotspot_setup.location_fee.confirm_location')}
-            </Text>
-          ) : (
-            <Text
-              variant="subtitle1"
-              marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
-              numberOfLines={2}
-              adjustsFontSizeToFit
-              maxFontSizeMultiplier={1.3}
-            >
-              {t('hotspot_setup.location_fee.confirm_location')}
-            </Text>
-          )}
-          {coords ? (
-            <Box
-              height={200}
-              borderRadius="l"
-              overflow="hidden"
-              marginBottom={{ phone: 'm', smallPhone: 'ms' }}
-            >
-              <HotspotLocationPreview
-                mapCenter={coords}
-                locationName={params.locationName}
-              />
-            </Box>
-          ) : null}
+          <Text
+            variant="subtitle1"
+            marginBottom={{ phone: 'xl', smallPhone: 'ms' }}
+            numberOfLines={2}
+            adjustsFontSizeToFit
+            maxFontSizeMultiplier={1.3}
+          >
+            {t('hotspot_setup.location_fee.confirm_location')}
+          </Text>
+          <Box
+            height={200}
+            borderRadius="l"
+            overflow="hidden"
+            marginBottom={{ phone: 'm', smallPhone: 'ms' }}
+          >
+            <HotspotLocationPreview
+              mapCenter={coords}
+              locationName={params.locationName}
+            />
+          </Box>
 
           <Box
             flexDirection="row"

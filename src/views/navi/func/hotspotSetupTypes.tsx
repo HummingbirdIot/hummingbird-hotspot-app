@@ -89,15 +89,27 @@ export type HotspotSetupStackParamList = {
   }
   AntennaSetupScreen: {
     hotspotType: HotspotType
-    addGatewayTxn?: string
     hotspotAddress: string
+    gatewayAction: GatewayAction
+    addGatewayTxn?: string
     coords?: number[]
     locationName?: string
     hotspot?: Hotspot
   }
   HotspotSetupConfirmLocationScreen: {
-    addGatewayTxn?: string
     hotspotAddress: string
+    gatewayAction: GatewayAction
+    addGatewayTxn?: string
+    elevation?: number
+    gain?: number
+    coords?: number[]
+    locationName?: string
+    hotspot?: Hotspot
+  }
+  HotspotSetupConfirmAntennaScreen: {
+    hotspotAddress: string
+    gatewayAction?: GatewayAction
+    addGatewayTxn?: string
     elevation?: number
     gain?: number
     coords?: number[]

@@ -52,16 +52,27 @@ const AntennaSetupScreen = () => {
 
   const navNext = useCallback(async () => {
     if (!antenna) return
-    console.log('AntennaSetupScreen::navNext', elevation, {
-      ...params,
-      gain,
-      elevation,
-    })
-    navigation.navigate('HotspotSetupConfirmLocationScreen', {
-      ...params,
-      gain,
-      elevation,
-    })
+    // console.log('AntennaSetupScreen::navNext:', elevation, {
+    //   ...params,
+    //   gain,
+    //   elevation,
+    // })
+    if (params.gatewayAction === 'assertAntenna') {
+      if (params.coords && params.locationName) {
+        navigation.navigate('HotspotSetupConfirmAntennaScreen', {
+          ...params,
+          gain,
+          elevation,
+        })
+      } else {
+      }
+    } else {
+      navigation.navigate('HotspotSetupConfirmLocationScreen', {
+        ...params,
+        gain,
+        elevation,
+      })
+    }
   }, [antenna, elevation, gain, navigation, params])
 
   return (

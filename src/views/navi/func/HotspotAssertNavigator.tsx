@@ -2,7 +2,7 @@ import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useRoute } from '@react-navigation/native'
 import HotspotSetupPickLocationScreen from '../../func/setup/HotspotSetupPickLocationScreen'
-import HotspotSetupConfirmLocationScreen from '../../func/setup/HotspotSetupConfirmLocationScreen'
+import HotspotSetupConfirmAntennaScreen from '../../func/setup/HotspotSetupConfirmAntennaScreen'
 import AntennaSetupScreen from '../../func/others/AntennaSetupScreen'
 import HotspotTxnsProgressScreen from '../../func/txns/HotspotTxnsProgressScreen'
 import HotspotTxnsSubmitScreen from '../../func/txns/HotspotTxnsSubmitScreen'
@@ -12,11 +12,16 @@ import defaultScreenOptions from '../../defaultScreenOptions'
 const HotspotAssertStack = createStackNavigator()
 
 const HotspotAssert = () => {
-  const { params } = useRoute()
+  const { params } = useRoute() as any
   return (
     <HotspotAssertStack.Navigator
       headerMode="none"
       screenOptions={{ ...defaultScreenOptions }}
+      initialRouteName={
+        params.gatewayAction === 'assertAntenna'
+          ? 'AntennaSetupScreen'
+          : 'HotspotSetupPickLocationScreen'
+      }
     >
       <HotspotAssertStack.Screen
         name="HotspotSetupPickLocationScreen"
@@ -28,12 +33,17 @@ const HotspotAssert = () => {
         }}
       />
       <HotspotAssertStack.Screen
-        name="HotspotSetupConfirmLocationScreen"
-        component={HotspotSetupConfirmLocationScreen}
-      />
-      <HotspotAssertStack.Screen
         name="AntennaSetupScreen"
         component={AntennaSetupScreen}
+        initialParams={{
+          hotspotType: 'HUMMINGBIRD_H500',
+          gatewayAction: 'assertLocation',
+          ...params,
+        }}
+      />
+      <HotspotAssertStack.Screen
+        name="HotspotSetupConfirmAntennaScreen"
+        component={HotspotSetupConfirmAntennaScreen}
       />
       <HotspotAssertStack.Screen
         name="HotspotTxnsProgressScreen"

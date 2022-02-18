@@ -185,8 +185,8 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const { surfaceContrast } = useColors()
 
   const assertLocation = useCallback(async () => {
-    setIsVisible(false)
     if (!hotspot) return
+    setIsVisible(false)
     await checkLocation()
     navigation.push('HotspotAssert', {
       hotspot,
@@ -198,25 +198,29 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   }, [hotspot, navigation, checkLocation])
   const assertAntenna = async () => {
     console.log('HotspotDetailScreen::assertAntenna::hotspot:', hotspot)
-    setIsVisible(false)
-    if (!hotspot) return
-    await checkLocation()
-    const { address, lng, lat, geocode, location } = hotspot
-    const { longStreet, longCity } = geocode
-    const locationName =
-      longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...'
-    navigation.push('HotspotAssert', {
-      hotspot,
-      hotspotAddress: address,
-      locationName,
-      coords: [lng, lat],
-      currentLocation: location,
-      gatewayAction: 'assertAntenna',
-    })
+    if (hotspot) {
+      const { address, lng, lat, geocode, location } = hotspot
+      if (lng && lat) {
+        setIsVisible(false)
+        await checkLocation()
+        const { longStreet, longCity } = geocode
+        const locationName =
+          longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...'
+        navigation.push('HotspotAssert', {
+          hotspot,
+          hotspotAddress: address,
+          locationName,
+          coords: [lng, lat],
+          currentLocation: location,
+          gatewayAction: 'assertAntenna',
+        })
+      } else {
+      }
+    }
   }
   const setWiFi = async () => {
-    setIsVisible(false)
     if (!hotspot) return
+    setIsVisible(false)
     await checkBluetooth()
     navigation.push('HotspotSetWiFi', {
       hotspotAddress: hotspot.address,
