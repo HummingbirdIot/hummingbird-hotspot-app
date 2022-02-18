@@ -1,11 +1,10 @@
-import { Hotspot } from '@helium/http'
 import React, { memo, useState } from 'react'
 import { Avatar, ListItem, Text } from 'react-native-elements'
 // import Role from '@helium/http/build/models/Role'
 import { getTxnIconPath, getTxnTypeColor, getTxnTypeName } from '../utils/txns'
 import { getHotspotActivityList } from '../utils/appDataClient'
 import useMount from '../utils/useMount'
-import Box from './Box'
+import Box from '../components/Box'
 
 /**
  * 获取两经纬度之间的距离
@@ -61,24 +60,32 @@ const getDuration = (t: number) => {
   return 'now'
 }
 
-const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
+const ActivitiesList = ({
+  address,
+  lng,
+  lat,
+}: {
+  address: string
+  lng: number
+  lat: number
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [activities, setActivitiesList] = useState<Array<any>>([])
   useMount(() => {
     async function fetchActivitiesList() {
       const { cursor, data } = (await getHotspotActivityList(
-        hotspot.address,
+        address,
         'all',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       )) as any
       const full = (await getHotspotActivityList(
-        hotspot.address,
+        address,
         'all',
         cursor,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       )) as any
-      console.log('ActivitiesList::fetchActivitiesList::preview:', data)
-      console.log('ActivitiesList::fetchActivitiesList::all:', full)
+      // console.log('ActivitiesList::fetchActivitiesList::preview:', data)
+      // console.log('ActivitiesList::fetchActivitiesList::all:', full)
       // console.log(
       //   'ActivitiesList::fetchActivitiesList::firstData::single:',
       //   data[0].type,
@@ -109,7 +116,7 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
         .filter(
           (activity) =>
             activity &&
-            (activity.challenger !== hotspot.address ||
+            (activity.challenger !== address ||
               activity.type === 'poc_request_v1' ||
               activity.type === 'assert_location_v2'),
         )
@@ -130,15 +137,15 @@ const ActivitiesList = ({ hotspot }: { hotspot: Hotspot }) => {
             } HNT`
             // console.log('balance:', desc)
           } else if (
-            activity.challenger !== hotspot.address &&
+            activity.challenger !== address &&
             activity.challengerLon !== undefined &&
             activity.challengerLat !== undefined
           ) {
             const dist = getDistance(
               activity.challengerLon || 0,
               activity.challengerLat || 0,
-              hotspot.lng || 0,
-              hotspot.lat || 0,
+              lng || 0,
+              lat || 0,
               // activity.path[0].challengeeLon || 0,
               // activity.path[0].challengeeLat || 0,
             )

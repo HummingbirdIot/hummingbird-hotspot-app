@@ -4,20 +4,20 @@ import { sumBy } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useAsync } from 'react-async-hook'
 import { addMinutes, startOfYear, startOfYesterday, subDays } from 'date-fns'
-import { ChartData } from '../../../../components/BarChart/types'
-import Box from '../../../../components/Box'
-import Text from '../../../../components/Text'
-import ChartContainer from '../../../../components/BarChart/ChartContainer'
-import { useBorderRadii, useColors } from '../../../../theme/themeHooks'
-import animateTransition from '../../../../utils/animateTransition'
-import { locale } from '../../../../utils/i18n'
-import DateModule from '../../../../utils/DateModule'
+import { ChartData } from '../../components/BarChart/types'
+import Box from '../../components/Box'
+import Text from '../../components/Text'
+import ChartContainer from '../../components/BarChart/ChartContainer'
+import { useBorderRadii, useColors } from '../../theme/themeHooks'
+import animateTransition from '../../utils/animateTransition'
+import { locale } from '../../utils/i18n'
+import DateModule from '../../utils/DateModule'
 // eslint-disable-next-line import/extensions
 import TimelinePicker from './TimelinePicker'
 import {
   ChartTimelineValue,
   NetworkHotspotEarnings,
-} from '../../../../store/rewards/rewardsSlice'
+} from '../../store/rewards/rewardsSlice'
 
 type Props = {
   title: string

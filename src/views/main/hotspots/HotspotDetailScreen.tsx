@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import {
@@ -23,7 +23,7 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
-import ActivitiesList from '../../../components/ActivitiesList'
+import ActivitiesList from '../../../widgets/ActivitiesList'
 import { useColors } from '../../../theme/themeHooks'
 import { getLocationPermission } from '../../../store/location/locationSlice'
 import { RootState } from '../../../store/rootReducer'
@@ -31,8 +31,10 @@ import usePermissionManager from '../../../utils/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/useAlert'
 import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
+import HotspotStatistics from '../../../widgets/HotspotStatistics'
 
 const truncateAddress = (address: string, startWith = 10) => {
+  // console.log('truncateAddress::address:', address)
   const start = address.slice(0, startWith)
   const end = address.slice(address.length - 7)
   return `${start}...${end}`
@@ -51,15 +53,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const { permissionResponse, locationBlocked } = useSelector(
     (state: RootState) => state.location,
   )
-
-  let { hotspot } = routes[index].params
-  useAsync(async () => {
-    if (hotspot) {
-      await setSecureItem('currentHotspot', hotspot)
-    } else {
-      hotspot = await getSecureItem('currentHotspot')
-    }
-  }, [hotspot])
+  const [hotspot, setHotspot] = useState(routes[index].params.hotspot)
 
   // console.log('Root::SafeAreaInsets:', insets)
   // console.log(
@@ -76,6 +70,19 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   // console.log('HotspotDetailScreen::hotspot:', hotspot)
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
+
+  useAsync(async () => {
+    if (hotspot) {
+      await setSecureItem('currentHotspot', hotspot)
+    } else {
+      const h = await getSecureItem('currentHotspot')
+      console.log(
+        'HotspotDetailScreen::getSecureItem::currentHotspot::hotspot:',
+        hotspot,
+      )
+      setHotspot(h)
+    }
+  }, [hotspot])
 
   useEffect(() => {
     getState()
@@ -141,8 +148,39 @@ const HotspotDetailScreen = ({ navigation }: any) => {
 
   const [mapArea, setMapArea] = useState(<Box />)
 
-  const [selectedIndex, updateIndex] = useState(1)
+  const [selectedIndex, updateIndex] = useState(0)
   const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
+  const Statistics = useMemo(
+    () => <HotspotStatistics hotspot={hotspot} />,
+    [hotspot],
+  )
+  const Activity = useMemo(
+    () => (
+      <ActivitiesList
+        address={hotspot.address}
+        lng={hotspot.lng}
+        lat={hotspot.lat}
+      />
+    ),
+    [hotspot.address, hotspot.lng, hotspot.lat],
+  )
+  const Empty = useMemo(
+    () => (
+      <Box
+        style={{
+          backgroundColor: '#f6f6f6',
+          paddingVertical: 20,
+          borderRadius: 5,
+        }}
+      >
+        <ThemedText textAlign="center" color="gray">
+          Empty
+        </ThemedText>
+      </Box>
+    ),
+    [],
+  )
+  const widgets = [Statistics, Activity, Empty]
 
   const { surfaceContrast } = useColors()
 
@@ -344,12 +382,12 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           </Box>
         </Box>
         <Box flex={1}>
-          {/* <ButtonGroup
+          <ButtonGroup
             onPress={updateIndex}
             selectedIndex={selectedIndex}
             buttons={buttons}
             containerStyle={{ height: 30 }}
-          /> */}
+          />
           <ScrollView
             style={{
               flex: 1,
@@ -357,12 +395,13 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           >
             <Box
               style={{
+                paddingTop: 5,
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingBottom: insets.bottom,
               }}
             >
-              <ActivitiesList hotspot={hotspot} />
+              {widgets[selectedIndex] || null}
             </Box>
           </ScrollView>
         </Box>

@@ -3,12 +3,12 @@ import { BoxProps } from '@shopify/restyle'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import HeliumSelect from '../../../../components/HeliumSelect'
-import { HeliumSelectItemType } from '../../../../components/HeliumSelectItem'
-import { ChartTimelineValue } from '../../../../store/rewards/rewardsSlice'
-import { RootState } from '../../../../store/rootReducer'
-import { Theme } from '../../../../theme/theme'
-import { useSpacing } from '../../../../theme/themeHooks'
+import HeliumSelect from '../../components/HeliumSelect'
+import { HeliumSelectItemType } from '../../components/HeliumSelectItem'
+import { ChartTimelineValue } from '../../store/rewards/rewardsSlice'
+import { RootState } from '../../store/rootReducer'
+import { Theme } from '../../theme/theme'
+import { useSpacing } from '../../theme/themeHooks'
 
 type Props = Omit<BoxProps<Theme>, 'backgroundColor'> & {
   index?: number
