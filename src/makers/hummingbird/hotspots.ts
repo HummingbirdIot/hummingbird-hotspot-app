@@ -2,7 +2,7 @@ import HotspotIcon from './hummingbird.svg'
 import { MakerHotspot } from '../hotspotMakerTypes'
 import ANTENNAS from './antennas'
 
-const ExampleHotspotBLE = {
+const HUMMINGBIRD_H500 = {
   name: 'Hummingbird H500',
   icon: HotspotIcon,
   onboardType: 'BLE',
@@ -35,4 +35,4 @@ const ExampleHotspotBLE = {
   },
 } as MakerHotspot
 
-export default { ExampleHotspotBLE }
+export default { HUMMINGBIRD_H500 }

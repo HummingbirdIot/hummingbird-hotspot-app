@@ -106,10 +106,6 @@ const HotspotSetupBluetoothSuccess = () => {
         if (!onboardingRecord) return
 
         // navigate to next screen
-        // console.log(
-        //   'HotspotSetupBluetoothSuccess::gatewayAction:',
-        //   gatewayAction,
-        // )
         if (gatewayAction === 'addGateway' || gatewayAction === 'setWiFi') {
           navigation.replace('HotspotSetupPickWifiScreen', {
             gatewayAction,
@@ -120,6 +116,7 @@ const HotspotSetupBluetoothSuccess = () => {
           })
         }
       } catch (e) {
+        console.log('HotspotSetupBluetoothSuccess::configureHotspot::error:', e)
         handleError(e)
       }
     }

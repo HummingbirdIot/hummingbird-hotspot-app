@@ -31,6 +31,7 @@ const formatHotspotName = (name: string) => {
 const formatHotspotTitle = (name: string) => {
   return name
     .split('-')
+    .filter((s, i) => i !== 1)
     .map((str) => {
       return str[0].toLocaleUpperCase()
     })
@@ -107,6 +108,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
               <Avatar
                 rounded
                 title={formatHotspotTitle(hotspot.name || '')}
+                titleStyle={{ fontSize: 18 }}
                 // containerStyle={}
                 // onPress={() => console.log('Works!')}
               />
@@ -148,7 +150,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     // color={isHidden ? colors.grayLightText : colors.grayText}
                   />
                   <ThemedText
-                    flex={7}
+                    flex={8}
                     variant="body2"
                     // color={isHidden ? 'grayLightText' : 'grayText'}
                     marginLeft="xs"
@@ -162,7 +164,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     // color={isHidden ? colors.grayLightText : colors.grayText}
                   />
                   <ThemedText
-                    flex={2}
+                    flex={3}
                     variant="body2"
                     // color={isHidden ? 'grayLightText' : 'grayText'}
                     marginLeft="xs"

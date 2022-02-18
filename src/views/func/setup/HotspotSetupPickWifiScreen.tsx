@@ -127,15 +127,21 @@ const HotspotSetupPickWifiScreen = () => {
         }
       } catch (error) {
         console.log(
-          'HotspotSetupLocationInfoScreen::getHotspotDetails::error:',
+          'HotspotSetupPickWifiScreen::getHotspotDetails::error:',
           hotspotAddress,
           error,
         )
-        navigation.navigate('HotspotTxnsProgressScreen', {
+        navigation.navigate('HotspotSetupLocationInfoScreen', {
           hotspotAddress,
           addGatewayTxn,
-          // hotspotType,
+          hotspotType,
+          gatewayAction,
         })
+        // navigation.navigate('HotspotTxnsProgressScreen', {
+        //   hotspotAddress,
+        //   addGatewayTxn,
+        //   // hotspotType,
+        // })
       }
     }
   }, [

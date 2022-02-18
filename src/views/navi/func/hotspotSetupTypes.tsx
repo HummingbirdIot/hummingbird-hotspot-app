@@ -1,3 +1,4 @@
+import { Hotspot } from '@helium/http'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { HotspotType } from '../../../makers'
 
@@ -84,6 +85,7 @@ export type HotspotSetupStackParamList = {
     addGatewayTxn?: string
     hotspotAddress: string
     gatewayAction: GatewayAction
+    hotspot?: Hotspot
   }
   AntennaSetupScreen: {
     hotspotType: HotspotType
@@ -91,6 +93,7 @@ export type HotspotSetupStackParamList = {
     hotspotAddress: string
     coords?: number[]
     locationName?: string
+    hotspot?: Hotspot
   }
   HotspotSetupConfirmLocationScreen: {
     addGatewayTxn?: string
@@ -99,6 +102,7 @@ export type HotspotSetupStackParamList = {
     gain?: number
     coords?: number[]
     locationName?: string
+    hotspot?: Hotspot
   }
   HotspotSetupSkipLocationScreen: {
     addGatewayTxn?: string

@@ -45,9 +45,12 @@ const HotspotSetupConfirmLocationScreen = () => {
     totalStakingAmountDC: Balance<DataCredits>
     totalStakingAmountUsd: Balance<USDollars>
   }>()
+  const [fetchFeeDataError, setFetchFeeDataError] = useState<unknown>(null)
   const { params } = useRoute<Route>()
-  const { elevation, gain, coords } = params
+  const { elevation, gain, coords, hotspot } = params
   const { getOnboardingRecord } = useOnboarding()
+
+  console.log('HotspotSetupConfirmLocationScreen::routeParams:', params)
 
   useAsync(async () => {
     const address = await getAddress()
@@ -63,33 +66,65 @@ const HotspotSetupConfirmLocationScreen = () => {
   }, [ownerAddress])
   // console.log('HotspotSetupConfirmLocationScreen::account', account)
 
-  useAsync(async () => {
-    try {
-      const onboardingRecord = await getOnboardingRecord(params.hotspotAddress)
-      // console.log(
-      //   'HotspotSetupConfirmLocationScreen::onboardingRecord',
-      //   onboardingRecord,
-      // )
-      // console.log('HotspotSetupConfirmLocationScreen::account', account)
-      if (!onboardingRecord || !ownerAddress || !account?.balance) {
-        return
-      }
+  useEffect(() => {
+    setFetchFeeDataError(null)
+    getOnboardingRecord(params.hotspotAddress)
+      .then((onboardingRecord) => {
+        // console.log(
+        //   'HotspotSetupConfirmLocationScreen::onboardingRecord',
+        //   onboardingRecord,
+        // )
+        // console.log('HotspotSetupConfirmLocationScreen::account', account)
+        if (!onboardingRecord || !ownerAddress || !account?.balance) {
+          return
+        }
 
-      Location.loadLocationFeeData({
-        nonce: 0,
-        accountIntegerBalance: account.balance.integerBalance,
-        dataOnly: false,
-        owner: ownerAddress,
-        locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
-        makerAddress: onboardingRecord.maker.address,
-      }).then(setFeeData)
-    } catch (error) {
-      console.log(
-        'HotspotSetupConfirmLocationScreen:: GettingFee::error:',
-        error,
-      )
-    }
-  }, [ownerAddress, account, getOnboardingRecord, params.hotspotAddress])
+        console.log(
+          'HotspotSetupConfirmLocationScreen::loadLocationFeeData::params:',
+          {
+            nonce: hotspot?.nonce || 0,
+            accountIntegerBalance: account.balance.integerBalance,
+            dataOnly: hotspot?.mode === 'dataonly',
+            owner: ownerAddress,
+            locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
+            makerAddress: onboardingRecord.maker.address,
+          },
+        )
+        Location.loadLocationFeeData({
+          nonce: hotspot?.nonce || 0,
+          accountIntegerBalance: account.balance.integerBalance,
+          dataOnly: hotspot?.mode === 'dataonly',
+          owner: ownerAddress,
+          locationNonceLimit: onboardingRecord.maker.locationNonceLimit,
+          makerAddress: onboardingRecord.maker.address,
+        })
+          .then(setFeeData)
+          .then(() => {
+            setFetchFeeDataError(null)
+          })
+          .catch((error) => {
+            console.log(
+              'HotspotSetupConfirmLocationScreen::GettingFee::error:',
+              error,
+            )
+            setFetchFeeDataError(error)
+          })
+      })
+      .catch((error) => {
+        console.log(
+          'HotspotSetupConfirmLocationScreen::getOnboardingRecord::error:',
+          error,
+        )
+        setFetchFeeDataError(error)
+      })
+  }, [
+    ownerAddress,
+    account,
+    getOnboardingRecord,
+    params.hotspotAddress,
+    hotspot?.nonce,
+    hotspot?.mode,
+  ])
 
   const navNext = useCallback(async () => {
     console.log('HotspotTxnsProgressScreen::navNextParams', params)
@@ -98,12 +133,32 @@ const HotspotSetupConfirmLocationScreen = () => {
 
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
 
+  if (fetchFeeDataError) {
+    return (
+      <BackScreen onClose={handleClose}>
+        <Box flex={1} justifyContent="center" paddingBottom="xxl">
+          <Text textAlign="center" fontSize={30}>
+            Ooooops!
+          </Text>
+          <Text
+            textAlign="center"
+            fontSize={16}
+            marginTop="xl"
+            marginBottom="xxl"
+          >
+            Getting Fee Data Failed({})
+          </Text>
+        </Box>
+      </BackScreen>
+    )
+  }
+
   if (!feeData) {
     return (
       <BackScreen onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <ActivityIndicator color="#687A8C" />
-          <Text textAlign="center" marginTop="m">
+          <Text textAlign="center" fontSize={16} marginTop="m">
             Getting Fee Data
           </Text>
         </Box>
@@ -119,7 +174,7 @@ const HotspotSetupConfirmLocationScreen = () => {
     totalStakingAmount,
     feeData,
   )
-  console.log('HotspotSetupConfirmLocationScreen::coords', coords, params)
+  // console.log('HotspotSetupConfirmLocationScreen::coords:', coords, params)
 
   return (
     <BackScreen onClose={handleClose}>

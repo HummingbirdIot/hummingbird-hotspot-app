@@ -83,12 +83,7 @@ const HotspotSetupWifiConnectingScreen = () => {
             hotspotType,
             addGatewayTxn,
           )
-          // navigation.replace('HotspotSetupLocationInfoScreen', {
-          //   hotspotAddress,
-          //   addGatewayTxn,
-          //   hotspotType,
-          // })
-          navigation.navigate('HotspotTxnsProgressScreen', {
+          navigation.replace('HotspotTxnsProgressScreen', {
             hotspotAddress,
             addGatewayTxn,
             // hotspotType,

@@ -24,6 +24,11 @@ const AntennaSetupScreen = () => {
   const navigation = useNavigation<HotspotSetupNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const { params } = useRoute<Route>()
+  // console.log(
+  //   'AntennaSetupScreen::navNext::params:',
+  //   params.hotspot.elevation,
+  //   params,
+  // )
 
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
 
@@ -47,9 +52,11 @@ const AntennaSetupScreen = () => {
 
   const navNext = useCallback(async () => {
     if (!antenna) return
-
-    console.log('AntennaSetupScreen::navNext::params:', params)
-    console.log('AntennaSetupScreen::navNext::elevation:', elevation)
+    console.log('AntennaSetupScreen::navNext', elevation, {
+      ...params,
+      gain,
+      elevation,
+    })
     navigation.navigate('HotspotSetupConfirmLocationScreen', {
       ...params,
       gain,
