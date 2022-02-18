@@ -20,17 +20,24 @@ import { RootState } from '../../../../store/rootReducer'
 import { useAppDispatch } from '../../../../store/store'
 import appSlice from '../../../../store/user/appSlice'
 import { MoreNavigationProp, MoreStackParamList } from '../moreTypes'
-import {
-  RootNavigationProp,
-  RootStackParamList,
-} from '../../../../navigation/main/tabTypes'
+import { RootNavigationProp, RootStackParamList } from '../../../navi/naviTypes'
 import MoreListItem, { MoreListItemType } from './MoreListItem'
 import useAuthIntervals from './useAuthIntervals'
 import { useSpacing } from '../../../../theme/themeHooks'
 import Box from '../../../../components/Box'
 // import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
 // import { useLanguageContext } from '../../../../providers/LanguageProvider'
+import { EXPLORER_BASE_URL } from '../../../../utils/config'
 import { getSecureItem } from '../../../../utils/secureAccount'
+import { clearMapCache } from '../../../../utils/mapUtils'
+import Articles from '../../../../constants/articles'
+import useAlert from '../../../../utils/useAlert'
+import Security from '../../../../assets/images/security.svg'
+import Learn from '../../../../assets/images/learn.svg'
+// import Contact from '../../../../assets/images/account.svg'
+import Account from '../../../../assets/images/account.svg'
+
+const Contact = Account
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
 const MoreScreen = () => {
@@ -43,6 +50,7 @@ const MoreScreen = () => {
   const spacing = useSpacing()
   // const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
+  const { showOKCancelAlert } = useAlert()
 
   useAsync(async () => {
     const token = await getSecureItem('walletLinkToken')
@@ -125,6 +133,15 @@ const MoreScreen = () => {
     [dispatch],
   )
 
+  const handleClearMapCache = useCallback(async () => {
+    const decision = await showOKCancelAlert({
+      titleKey: 'more.sections.app.clearMapCacheAlert.title',
+      messageKey: 'more.sections.app.clearMapCacheAlert.body',
+    })
+    if (!decision) return
+    await clearMapCache()
+  }, [showOKCancelAlert])
+
   const SectionData = useMemo(() => {
     let pin: MoreListItemType[] = [
       {
@@ -155,10 +172,54 @@ const MoreScreen = () => {
     return [
       {
         title: t('more.sections.security.title'),
+        icon: <Security />,
         data: pin,
       },
       {
+        title: t('more.sections.learn.title'),
+        icon: <Learn />,
+        data: [
+          {
+            title: t('more.sections.learn.tokenEarnings'),
+            openUrl: Articles.Token_Earnings,
+          },
+          {
+            title: t('more.sections.learn.heliumtoken'),
+            openUrl: Articles.Helium_Token,
+          },
+          {
+            title: t('more.sections.learn.coverage'),
+            openUrl: `${EXPLORER_BASE_URL}/coverage`,
+          },
+          {
+            title: t('more.sections.learn.troubleshooting'),
+            openUrl: Articles.Docs_Root,
+          },
+        ] as MoreListItemType[],
+        // footer: <DiscordItem />,
+      },
+
+      {
+        title: 'Contact Us',
+        icon: <Contact />,
+        data: [
+          {
+            title: 'Twitter',
+            openUrl: 'https://twitter.com/hummingbird_66',
+          },
+          {
+            title: 'Telegram',
+            openUrl: 'https://t.me/HummingbirdCommunity',
+          },
+          {
+            title: 'Discord',
+            openUrl: 'https://discord.com/invite/XVR7fRKaDd',
+          },
+        ],
+      },
+      {
         title: t('more.sections.app.title'),
+        icon: <Account />,
         data: [
           // {
           //   title: t('more.sections.app.language'),
@@ -168,6 +229,10 @@ const MoreScreen = () => {
           //     onValueSelect: handleLanguageChange,
           //   },
           // },
+          {
+            title: t('more.sections.app.clearMapCache'),
+            onPress: handleClearMapCache,
+          },
           {
             title: t('more.sections.app.signOutWithLink', { address }),
             onPress: handleSignOut,
@@ -186,6 +251,7 @@ const MoreScreen = () => {
     authIntervals,
     handleIntervalSelected,
     handleResetPin,
+    handleClearMapCache,
   ])
 
   const contentContainer = useMemo(

@@ -385,6 +385,11 @@ export default {
           title: 'Warning!',
         },
         title: 'App',
+        clearMapCache: 'Clear Map Cache',
+        clearMapCacheAlert: {
+          title: 'Clear Map Cache?',
+          body: 'This will clear your map cache which may help resolve map issues.',
+        },
       },
       security: {
         authIntervals: {
@@ -399,6 +404,16 @@ export default {
         requirePin: 'Require PIN',
         resetPin: 'Reset PIN',
         title: 'Security',
+      },
+      learn: {
+        title: 'Learn',
+        tokenEarnings: 'Token Earnings',
+        heliumtoken: 'Helium Token',
+        coverage: 'Network Coverage',
+        hotspotPlacement: 'Hotspot Placement',
+        support: 'Support',
+        troubleshooting: 'Troubleshooting',
+        joinDiscord: 'Join Helium Discord',
       },
     },
     title: 'Settings',

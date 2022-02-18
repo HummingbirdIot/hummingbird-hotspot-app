@@ -1,4 +1,5 @@
 import { Hotspot } from '@helium/http'
+import MapboxGL from '@react-native-mapbox-gl/maps'
 import { Feature, Position } from 'geojson'
 import { isFinite } from 'lodash'
 
@@ -14,6 +15,10 @@ export const hotspotsToFeatures = (hotspots: Hotspot[]): Feature[] =>
           id: h.address,
         } as Feature),
     )
+
+export const clearMapCache = async () => {
+  return MapboxGL.offlineManager.invalidateAmbientCache()
+}
 
 export type MapBounds = {
   ne: number[]
