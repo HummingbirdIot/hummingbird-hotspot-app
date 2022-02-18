@@ -1,9 +1,9 @@
 import React, { useState, memo, useCallback, useMemo } from 'react'
-import Box from '../../../components/Box'
-import { DebouncedTouchableHighlightBox } from '../../../components/TouchableHighlightBox'
-import { useColors } from '../../../theme/themeHooks'
-import Text from '../../../components/Text'
-import { HotspotMakerModels, HotspotType } from '../../../makers'
+import Box from '../../components/Box'
+import { DebouncedTouchableHighlightBox } from '../../components/TouchableHighlightBox'
+import { useColors } from '../../theme/themeHooks'
+import Text from '../../components/Text'
+import { HotspotMakerModels, HotspotType } from '../../makers'
 
 type Props = {
   isFirst: boolean

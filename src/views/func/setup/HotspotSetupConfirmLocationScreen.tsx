@@ -24,7 +24,7 @@ import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
 import { RootNavigationProp } from '../../navi/naviTypes'
 import { getAddress } from '../../../utils/secureAccount'
 import { getAccount } from '../../../utils/appDataClient'
-import HotspotLocationPreview from '../elements/HotspotLocationPreview'
+import HotspotLocationPreview from '../../../widgets/func/HotspotLocationPreview'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,

@@ -10,7 +10,7 @@ import usePermissionManager from '../../../utils/usePermissionManager'
 import BackScreen from '../../../components/BackScreen'
 import Box from '../../../components/Box'
 import Text from '../../../components/Text'
-import HotspotSetupSelectionListItem from '../elements/HotspotSetupSelectionListItem'
+import HotspotSetupSelectionListItem from '../../../widgets/func/HotspotSetupSelectionListItem'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,

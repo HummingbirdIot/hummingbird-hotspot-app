@@ -1,13 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Box from '../../../components/Box'
-import { DebouncedButton } from '../../../components/Button'
-import Text from '../../../components/Text'
+import Box from '../../components/Box'
+import { DebouncedButton } from '../../components/Button'
+import Text from '../../components/Text'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
-} from '../../navi/func/hotspotSetupTypes'
+} from '../../views/navi/func/hotspotSetupTypes'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,

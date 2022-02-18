@@ -30,7 +30,7 @@ import SafeAreaBox from '../../../components/SafeAreaBox'
 import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
 import { useColors, useSpacing } from '../../../theme/themeHooks'
 import BSHandle from '../../../components/BSHandle'
-import AddressSearchModal from '../elements/AddressSearchModal'
+import AddressSearchModal from '../../../widgets/func/AddressSearchModal'
 import { PlaceGeography } from '../../../utils/googlePlaces'
 
 type Route = RouteProp<

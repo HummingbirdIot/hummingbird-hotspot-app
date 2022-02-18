@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Text from '../../../components/Text'
+import Text from '../../components/Text'
 
 const HotspotSetupScanWifiError = () => {
   const { t } = useTranslation()
