@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getWallet } from '../../utils/walletClient'
+import { createSlice } from '@reduxjs/toolkit'
+// import { getWallet } from '../../utils/walletClient'
 
 export type FeaturesState = {
   fleetModeLowerLimit?: number
@@ -16,7 +16,7 @@ export type FeaturesState = {
     enabled: boolean
     message: string
   }
-  ytdEarningsEnabled: boolean
+  // ytdEarningsEnabled: boolean
 }
 
 const initialState: FeaturesState = {
@@ -34,43 +34,43 @@ const initialState: FeaturesState = {
     enabled: false,
     message: '',
   },
-  ytdEarningsEnabled: false,
+  // ytdEarningsEnabled: false,
 }
 
 // if this call fails we load the app with default settings and retry every 30 seconds
-export const fetchFeatures = createAsyncThunk<FeaturesState>(
-  'features/get',
-  async () => getWallet('features'),
-)
+// export const fetchFeatures = createAsyncThunk<FeaturesState>(
+//   'features/get',
+//   async () => getWallet('features'),
+// )
 
 // This slice contains data related optional features within the app
 const featuresSlice = createSlice({
   name: 'features',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(fetchFeatures.fulfilled, (state, { payload }) => {
-      state.fleetModeLowerLimit = payload.fleetModeLowerLimit
-      state.hotspotSyncBuffer = payload.hotspotSyncBuffer
-      state.walletChartEnabled = payload.walletChartEnabled
-      state.proxyEnabled = payload.proxyEnabled
-      state.checklistEnabled = payload.checklistEnabled
-      if (payload.tileServerRes8Url) {
-        state.tileServerRes8Url = payload.tileServerRes8Url
-      }
-      if (payload.tileServerPointsUrl) {
-        state.tileServerPointsUrl = payload.tileServerPointsUrl
-      }
-      state.featuresLoaded = true
-      state.fetchFeaturesFailed = false
-      state.discovery = payload.discovery || initialState.discovery
-      state.ytdEarningsEnabled = payload.ytdEarningsEnabled
-    })
-    builder.addCase(fetchFeatures.rejected, (state) => {
-      state.featuresLoaded = true
-      state.fetchFeaturesFailed = true
-    })
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(fetchFeatures.fulfilled, (state, { payload }) => {
+  //     state.fleetModeLowerLimit = payload.fleetModeLowerLimit
+  //     state.hotspotSyncBuffer = payload.hotspotSyncBuffer
+  //     state.walletChartEnabled = payload.walletChartEnabled
+  //     state.proxyEnabled = payload.proxyEnabled
+  //     state.checklistEnabled = payload.checklistEnabled
+  //     if (payload.tileServerRes8Url) {
+  //       state.tileServerRes8Url = payload.tileServerRes8Url
+  //     }
+  //     if (payload.tileServerPointsUrl) {
+  //       state.tileServerPointsUrl = payload.tileServerPointsUrl
+  //     }
+  //     state.featuresLoaded = true
+  //     state.fetchFeaturesFailed = false
+  //     state.discovery = payload.discovery || initialState.discovery
+  //     state.ytdEarningsEnabled = payload.ytdEarningsEnabled
+  //   })
+  //   builder.addCase(fetchFeatures.rejected, (state) => {
+  //     state.featuresLoaded = true
+  //     state.fetchFeaturesFailed = true
+  //   })
+  // },
 })
 
 export default featuresSlice

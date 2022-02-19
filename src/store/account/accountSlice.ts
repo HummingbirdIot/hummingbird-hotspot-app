@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Account } from '@helium/http'
 import { getAccount } from '../../utils/appDataClient'
-import { getWallet, postWallet } from '../../utils/walletClient'
+// import { getWallet, postWallet } from '../../utils/walletClient'
 import { ChartData, ChartRange } from '../../components/BarChart/types'
 import { FilterType } from '../../components/BarChart/walletTypes'
 // eslint-disable-next-line import/extensions
@@ -123,9 +123,20 @@ export const fetchAccountRewards = createAsyncThunk(
     if (hasValidCache(sum)) {
       return sum
     }
-    return getWallet('accounts/rewards/sum') as Promise<
-      CacheRecord<WalletReward>
-    >
+    // return getWallet('accounts/rewards/sum') as Promise<
+    //   CacheRecord<WalletReward>
+    // >
+    return {
+      avg: 1,
+      gateway: '',
+      max: 1,
+      median: 1,
+      min: 1,
+      stddev: 1,
+      sum: 1,
+      total: 1,
+      updated_at: '',
+    }
   },
 )
 
@@ -156,7 +167,8 @@ export const updateSetting = createAsyncThunk<
     key,
     value: String(value),
   }
-  return postWallet('accounts/settings', setting)
+  // return postWallet('accounts/settings', setting)
+  return Promise.resolve([setting])
 })
 
 // This slice contains data related to the user account

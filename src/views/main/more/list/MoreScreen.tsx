@@ -25,8 +25,8 @@ import MoreListItem, { MoreListItemType } from './MoreListItem'
 import useAuthIntervals from './useAuthIntervals'
 import { useSpacing } from '../../../../theme/themeHooks'
 import Box from '../../../../components/Box'
-// import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
-// import { useLanguageContext } from '../../../../providers/LanguageProvider'
+import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
+import { useLanguageContext } from '../../../../providers/LanguageProvider'
 import { EXPLORER_BASE_URL } from '../../../../utils/config'
 import { getSecureItem } from '../../../../utils/secureAccount'
 import { clearMapCache } from '../../../../utils/mapUtils'
@@ -36,6 +36,8 @@ import Security from '../../../../assets/images/security.svg'
 import Learn from '../../../../assets/images/learn.svg'
 // import Contact from '../../../../assets/images/account.svg'
 import Account from '../../../../assets/images/account.svg'
+import { SUPPORTED_CURRENCIES } from '../../../../utils/useCurrency'
+import { updateSetting } from '../../../../store/account/accountSlice'
 
 const Contact = Account
 
@@ -48,9 +50,10 @@ const MoreScreen = () => {
   const authIntervals = useAuthIntervals()
   const navigation = useNavigation<MoreNavigationProp & RootNavigationProp>()
   const spacing = useSpacing()
-  // const { changeLanguage, language } = useLanguageContext()
+  const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
   const { showOKCancelAlert } = useAlert()
+  const account = useSelector((state: RootState) => state.account, isEqual)
 
   useAsync(async () => {
     const token = await getSecureItem('walletLinkToken')
@@ -79,12 +82,24 @@ const MoreScreen = () => {
     }
   }, [dispatch, params, navigation])
 
-  // const handleLanguageChange = useCallback(
-  //   (lng: string) => {
-  //     changeLanguage(lng)
-  //   },
-  //   [changeLanguage],
-  // )
+  const handleLanguageChange = useCallback(
+    (lng: string) => {
+      changeLanguage(lng)
+    },
+    [changeLanguage],
+  )
+
+  const handleCurrencyTypeChange = useCallback(
+    (currencyType: string) => {
+      dispatch(
+        updateSetting({
+          key: 'currencyType',
+          value: currencyType,
+        }),
+      )
+    },
+    [dispatch],
+  )
 
   const handlePinRequired = useCallback(
     (value?: boolean) => {
@@ -221,14 +236,28 @@ const MoreScreen = () => {
         title: t('more.sections.app.title'),
         icon: <Account />,
         data: [
-          // {
-          //   title: t('more.sections.app.language'),
-          //   value: language,
-          //   select: {
-          //     items: SUPPORTED_LANGUAGUES,
-          //     onValueSelect: handleLanguageChange,
-          //   },
-          // },
+          {
+            title: t('more.sections.app.language'),
+            value: language,
+            select: {
+              items: SUPPORTED_LANGUAGUES,
+              onValueSelect: handleLanguageChange,
+            },
+          },
+          {
+            title: t('more.sections.app.currency'),
+            value: account.settings.currencyType || 'USD',
+            select: {
+              items: Object.keys(SUPPORTED_CURRENCIES).map((p) => {
+                return {
+                  label: `${p}  ${SUPPORTED_CURRENCIES[p]}`,
+                  labelShort: p,
+                  value: p,
+                }
+              }),
+              onValueSelect: handleCurrencyTypeChange,
+            },
+          },
           {
             title: t('more.sections.app.clearMapCache'),
             onPress: handleClearMapCache,
@@ -246,12 +275,16 @@ const MoreScreen = () => {
     handlePinRequired,
     app.isPinRequired,
     app.authInterval,
+    language,
+    handleLanguageChange,
+    account.settings.currencyType,
+    handleCurrencyTypeChange,
+    handleClearMapCache,
     address,
     handleSignOut,
     authIntervals,
     handleIntervalSelected,
     handleResetPin,
-    handleClearMapCache,
   ])
 
   const contentContainer = useMemo(

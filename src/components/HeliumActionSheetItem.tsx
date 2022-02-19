@@ -6,6 +6,7 @@ import TouchableOpacityBox from './TouchableOpacityBox'
 
 export type HeliumActionSheetItemType = {
   label: string
+  labelShort?: string
   value: string | number
   Icon?: React.FC<SvgProps>
   action?: () => void
@@ -15,7 +16,7 @@ type Props = HeliumActionSheetItemType & {
   selected: boolean
 }
 
-export const HeliumActionSheetItemHeight = 50
+export const HeliumActionSheetItemHeight = 40
 
 const HeliumActionSheetItem = ({ label, onPress, selected, Icon }: Props) => {
   const { primary, secondary } = useColors()

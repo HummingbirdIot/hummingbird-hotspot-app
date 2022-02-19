@@ -93,7 +93,7 @@ export const getWalletApiToken = async () => {
   if (!address) return
 
   const apiToken = await makeWalletApiToken(address)
-  console.log('apiToken', apiToken)
+  // console.log('apiToken', apiToken)
   await setSecureItem('walletApiToken', apiToken)
   return apiToken
 }

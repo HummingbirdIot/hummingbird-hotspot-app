@@ -23,7 +23,7 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
-import ActivitiesList from '../../../widgets/ActivitiesList'
+import ActivitiesList from '../../../widgets/detail/ActivitiesList'
 import { useColors } from '../../../theme/themeHooks'
 import { getLocationPermission } from '../../../store/location/locationSlice'
 import { RootState } from '../../../store/rootReducer'
@@ -31,7 +31,7 @@ import usePermissionManager from '../../../utils/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/useAlert'
 import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
-import HotspotStatistics from '../../../widgets/HotspotStatistics'
+import HotspotStatistics from '../../../widgets/detail/HotspotStatistics'
 
 const truncateAddress = (address: string, startWith = 10) => {
   // console.log('truncateAddress::address:', address)
@@ -197,7 +197,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     })
   }, [hotspot, navigation, checkLocation])
   const assertAntenna = async () => {
-    console.log('HotspotDetailScreen::assertAntenna::hotspot:', hotspot)
+    // console.log('HotspotDetailScreen::assertAntenna::hotspot:', hotspot)
     if (hotspot) {
       const { address, lng, lat, geocode, location } = hotspot
       if (lng && lat) {
@@ -396,7 +396,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             onPress={updateIndex}
             selectedIndex={selectedIndex}
             buttons={buttons}
-            containerStyle={{ height: 30 }}
+            containerStyle={{ height: 36 }}
           />
           <ScrollView
             style={{

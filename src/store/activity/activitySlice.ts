@@ -1,11 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { differenceBy, unionBy, uniqBy } from 'lodash'
 import {
-  Filters,
+  differenceBy,
+  // unionBy,
+  uniqBy,
+} from 'lodash'
+import {
+  // Filters,
   FilterType,
   TxnType,
-} from '../../features/wallet/root/walletTypes'
-import { getWallet } from '../../utils/walletClient'
+} from '../../components/BarChart/walletTypes'
+// import { getWallet } from '../../utils/walletClient'
 
 export type HttpReward = {
   account: string
@@ -154,28 +158,32 @@ export const fetchMoreTxns = createAsyncThunk<
     throw new Error(`Cannot fetch more for filter ${filter} - no cursor`)
   }
 
-  const params = { cursor, filter: Filters[filter].join(',') }
+  // const params = { cursor, filter: Filters[filter].join(',') }
 
-  return getWallet('accounts/activity', params, {
-    camelCase: true,
-    showCursor: true,
-  })
-})
-
-export const fetchTxnsHead = createAsyncThunk<
-  AccountTransactions | HttpPendingTransaction[],
-  { filter: FilterType }
->('activity/fetchTxnsHead', async ({ filter }) => {
-  const params = { filter: Filters[filter].join(',') }
-
-  if (filter === 'pending') {
-    return getWallet('accounts/activity/pending', null, { camelCase: true })
+  // return getWallet('accounts/activity', params, {
+  //   camelCase: true,
+  //   showCursor: true,
+  // })
+  return {
+    cursor: null,
+    data: [],
   }
-  return getWallet('accounts/activity', params, {
-    camelCase: true,
-    showCursor: true,
-  })
 })
+
+// export const fetchTxnsHead = createAsyncThunk<
+//   AccountTransactions | HttpPendingTransaction[],
+//   { filter: FilterType }
+// >('activity/fetchTxnsHead', async ({ filter }) => {
+//   const params = { filter: Filters[filter].join(',') }
+
+//   if (filter === 'pending') {
+//     return getWallet('accounts/activity/pending', null, { camelCase: true })
+//   }
+//   return getWallet('accounts/activity', params, {
+//     camelCase: true,
+//     showCursor: true,
+//   })
+// })
 
 const activitySlice = createSlice({
   name: 'activity',
@@ -268,71 +276,71 @@ const activitySlice = createSlice({
       },
     )
 
-    builder.addCase(
-      fetchTxnsHead.pending,
-      (
-        state,
-        {
-          meta: {
-            arg: { filter },
-          },
-        },
-      ) => {
-        state.txns[filter].status = 'pending'
-      },
-    )
-    builder.addCase(
-      fetchTxnsHead.rejected,
-      (
-        state,
-        {
-          meta: {
-            arg: { filter },
-          },
-        },
-      ) => {
-        if (!state.txns[filter].hasInitialLoad) {
-          state.txns[filter].hasInitialLoad = true
-        }
-        state.txns[filter].status = 'rejected'
-      },
-    )
-    builder.addCase(
-      fetchTxnsHead.fulfilled,
-      (
-        state,
-        {
-          payload,
-          meta: {
-            arg: { filter },
-          },
-        },
-      ) => {
-        state.txns[filter].status = 'fulfilled'
-        state.txns[filter].hasInitialLoad = true
-        if (filter === 'pending') {
-          const pending = payload as HttpPendingTransaction[]
-          const existingPending = state.txns.pending.data
-          const newPending = unionBy(pending, existingPending, 'hash')
-          state.txns.pending.data = newPending.filter(
-            (txn) => txn.status === 'pending',
-          )
-        } else {
-          const txns = payload as AccountTransactions
-          state.txns[filter].cursor = txns.cursor
+    // builder.addCase(
+    //   fetchTxnsHead.pending,
+    //   (
+    //     state,
+    //     {
+    //       meta: {
+    //         arg: { filter },
+    //       },
+    //     },
+    //   ) => {
+    //     state.txns[filter].status = 'pending'
+    //   },
+    // )
+    // builder.addCase(
+    //   fetchTxnsHead.rejected,
+    //   (
+    //     state,
+    //     {
+    //       meta: {
+    //         arg: { filter },
+    //       },
+    //     },
+    //   ) => {
+    //     if (!state.txns[filter].hasInitialLoad) {
+    //       state.txns[filter].hasInitialLoad = true
+    //     }
+    //     state.txns[filter].status = 'rejected'
+    //   },
+    // )
+    // builder.addCase(
+    //   fetchTxnsHead.fulfilled,
+    //   (
+    //     state,
+    //     {
+    //       payload,
+    //       meta: {
+    //         arg: { filter },
+    //       },
+    //     },
+    //   ) => {
+    //     state.txns[filter].status = 'fulfilled'
+    //     state.txns[filter].hasInitialLoad = true
+    //     if (filter === 'pending') {
+    //       const pending = payload as HttpPendingTransaction[]
+    //       const existingPending = state.txns.pending.data
+    //       const newPending = unionBy(pending, existingPending, 'hash')
+    //       state.txns.pending.data = newPending.filter(
+    //         (txn) => txn.status === 'pending',
+    //       )
+    //     } else {
+    //       const txns = payload as AccountTransactions
+    //       state.txns[filter].cursor = txns.cursor
 
-          const nextTxns = txns.data.sort((a, b) => b.time - a.time)
-          state.txns[filter].data = nextTxns
+    //       const nextTxns = txns.data.sort((a, b) => b.time - a.time)
+    //       state.txns[filter].data = nextTxns
 
-          // remove any pending txns with the same hash
-          state.txns.pending.data = differenceBy(
-            state.txns.pending.data,
-            nextTxns,
-            'hash',
-          )
-        }
-      },
-    )
+    //       // remove any pending txns with the same hash
+    //       state.txns.pending.data = differenceBy(
+    //         state.txns.pending.data,
+    //         nextTxns,
+    //         'hash',
+    //       )
+    //     }
+    //   },
+    // )
   },
 })
 

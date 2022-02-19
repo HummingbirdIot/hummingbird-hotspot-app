@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 // eslint-disable-next-line import/extensions
 import { getIncidents } from '../../utils/StatusClient'
 import { Incident, StatusInfo } from './StatusTypes'
-import { getWallet } from '../../utils/walletClient'
+// import { getWallet } from '../../utils/walletClient'
 
 const STATUS_KEY = 'statusKey'
 type StoredIncident = {
@@ -22,18 +22,19 @@ const initialState: HeliumStatusState = {
   incidents: [],
 }
 
-export const fetchStatusConfig = createAsyncThunk<StatusConfig>(
-  'status/getConfig',
-  async () => getWallet('status', null, { camelCase: true }),
-)
+// export const fetchStatusConfig = createAsyncThunk<StatusConfig>(
+//   'status/getConfig',
+//   async () => getWallet('status', null, { camelCase: true }),
+// )
 
 export const fetchIncidents = createAsyncThunk(
   'heliumStatus/fetchIncidents',
   async (_, { getState }) => {
     const { status } = (await getState()) as { status: HeliumStatusState }
-    let { config } = status
+    const { config } = status
     if (!config) {
-      config = await getWallet('status', null, { camelCase: true })
+      return
+      // config = await getWallet('status', null, { camelCase: true })
     }
 
     let storedIncidents: StoredIncident[] = []
@@ -59,6 +60,7 @@ const heliumStatusSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchIncidents.fulfilled, (state, { payload }) => {
+      if (!payload) return
       state.config = payload.config
 
       const componentIds = state.config?.components || []

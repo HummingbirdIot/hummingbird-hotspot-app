@@ -3,6 +3,7 @@ import Client, {
   Hotspot,
   // NaturalDate,
   Network,
+  PocReceiptsV1,
   // PocReceiptsV1,
   // Validator,
 } from '@helium/http'
@@ -11,11 +12,13 @@ import { heliumHttpClient } from '@helium/react-native-sdk'
 // import { getVersion } from 'react-native-device-info'
 import { subDays } from 'date-fns'
 // import { Transaction } from '@helium/transactions'
+import { Transaction } from '@helium/transactions'
 import { getAddress } from './secureAccount'
 import {
   HotspotActivityFilters,
   HotspotActivityType,
 } from '../views/main/hotspots/hotspotTypes'
+import { fromNow } from './timeUtils'
 
 const MAX = 100000
 // const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
@@ -42,6 +45,11 @@ export const submitTxn = async (txn: string) => {
 
 export const getHotspotDetails = async (address: string): Promise<Hotspot> => {
   return heliumHttpClient.hotspots.get(address)
+}
+
+export const configChainVars = async () => {
+  const vars = await client.vars.getTransactionVars()
+  Transaction.config(vars)
 }
 
 export const getAccount = async (address?: string) => {
@@ -166,4 +174,29 @@ export const getWitnessedHotspots = async (address: string) => {
   console.log('getWitnessedHotspots', breadcrumbOpts)
   const list = await client.hotspot(address).witnesses.list()
   return list.take(MAX)
+}
+
+export const getChainVars = async (keys?: string[]) => {
+  return heliumHttpClient.vars.get(keys)
+}
+
+export const getHotspotsLastChallengeActivity = async (
+  gatewayAddress: string,
+) => {
+  const hotspotActivityList = await heliumHttpClient
+    .hotspot(gatewayAddress)
+    .activity.list({
+      filterTypes: ['poc_receipts_v1', 'poc_request_v1'],
+    })
+  const [lastHotspotActivity] = hotspotActivityList
+    ? await hotspotActivityList?.take(1)
+    : []
+  if (lastHotspotActivity && lastHotspotActivity.time) {
+    const dateLastActive = new Date(lastHotspotActivity.time * 1000)
+    return {
+      block: (lastHotspotActivity as PocReceiptsV1).height,
+      text: fromNow(dateLastActive)?.toUpperCase(),
+    }
+  }
+  return {}
 }

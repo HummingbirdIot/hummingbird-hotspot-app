@@ -2,11 +2,11 @@
 import { BoxProps } from '@shopify/restyle'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import HeliumSelect from '../../components/HeliumSelect'
 import { HeliumSelectItemType } from '../../components/HeliumSelectItem'
 import { ChartTimelineValue } from '../../store/rewards/rewardsSlice'
-import { RootState } from '../../store/rootReducer'
+// import { RootState } from '../../store/rootReducer'
 import { Theme } from '../../theme/theme'
 import { useSpacing } from '../../theme/themeHooks'
 
@@ -22,15 +22,15 @@ const TimelinePicker = ({
 }: Props) => {
   const { t } = useTranslation()
   const spacing = useSpacing()
-  const ytdEnabled = useSelector(
-    (state: RootState) => state.features.ytdEarningsEnabled,
-  )
+  // const ytdEnabled = useSelector(
+  //   (state: RootState) => state.features.ytdEarningsEnabled,
+  // )
 
   const data = useMemo(() => {
     const values: ChartTimelineValue[] = [7, 14, 30]
-    if (ytdEnabled) {
-      values.push('YTD')
-    }
+    // if (ytdEnabled) {
+    //   values.push('YTD')
+    // }
 
     return values
       .map(
@@ -42,7 +42,7 @@ const TimelinePicker = ({
           } as HeliumSelectItemType),
       )
       .reverse()
-  }, [t, ytdEnabled])
+  }, [t])
 
   const [selectedOption, setSelectedOption] = useState(data[index])
 

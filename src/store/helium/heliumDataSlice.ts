@@ -53,6 +53,7 @@ export const fetchInitialData = createAsyncThunk<HeliumDataState>(
       getMakers(),
       getBlockHeight(),
     ])
+    console.log('heliumData/fetchInitialData:', vals)
     const [
       currentOraclePrice,
       predictedOraclePrices,
@@ -68,6 +69,11 @@ export const fetchInitialData = createAsyncThunk<HeliumDataState>(
       blockHeight,
     }
   },
+)
+
+export const fetchCurrentPrices = createAsyncThunk(
+  'heliumData/fetchCurrentPrices',
+  async () => getCurrentPrices(),
 )
 
 // This slice contains global helium data not specifically related to the current user
@@ -103,6 +109,12 @@ const heliumDataSlice = createSlice({
     //   state.hotspotCount = statCounts.hotspots
     //   state.blockTime = blockStats.lastDay.avg
     // })
+    builder.addCase(fetchCurrentPrices.fulfilled, (state, { payload }) => {
+      state.currentPrices = payload
+    })
+    builder.addCase(fetchCurrentPrices.rejected, (state, error) => {
+      console.log('fetchCurrentPrices::error:', error)
+    })
   },
 })
 

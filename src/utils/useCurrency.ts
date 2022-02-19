@@ -29,6 +29,7 @@ export const SUPPORTED_CURRENCIES = {
   CAD: 'Canadian Dollar',
   CHF: 'Swiss Franc',
   CLP: 'Chilean Peso',
+  CNY: 'Chinese Yuan',
   CZK: 'Czech Koruna',
   DKK: 'Danish Krone',
   EUR: 'Euro',

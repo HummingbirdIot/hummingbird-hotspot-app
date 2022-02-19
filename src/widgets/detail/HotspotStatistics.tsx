@@ -2,18 +2,18 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Hotspot } from '@helium/http'
-import Box from '../components/Box'
+import Box from '../../components/Box'
 
-import { useAppDispatch } from '../store/store'
-import { RootState } from '../store/rootReducer'
-import { getRewardChartData } from './HotspotDetailChart/RewardsHelper'
+import { useAppDispatch } from '../../store/store'
+import { RootState } from '../../store/rootReducer'
+import { getRewardChartData } from '../charts/RewardsHelper'
 import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
-} from '../store/rewards/rewardsSlice'
-import usePrevious from '../utils/usePrevious'
-import { fetchHotspotData } from '../store/hotspotDetails/hotspotDetailsSlice'
-import HotspotDetailChart from './HotspotDetailChart/HotspotDetailChart'
+} from '../../store/rewards/rewardsSlice'
+import usePrevious from '../../utils/usePrevious'
+import { fetchHotspotData } from '../../store/hotspotDetails/hotspotDetailsSlice'
+import HotspotDetailChart from '../charts/HotspotDetailChart'
 
 const HotspotStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
   const { t } = useTranslation()

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Sum } from '@helium/http'
 import Balance, { CurrencyType, NetworkTokens } from '@helium/currency'
-import { getDayOfYear } from 'date-fns'
+// import { getDayOfYear } from 'date-fns'
 import {
   getAccountRewards,
   getHotspotRewards,
@@ -15,7 +15,7 @@ import {
   handleCacheFulfilled,
   hasValidCache,
 } from '../../utils/cacheUtils'
-import { getWallet, getWalletExt } from '../../utils/walletClient'
+import { getWalletExt } from '../../utils/walletClient'
 
 export type WalletReward = {
   avg: number
@@ -29,7 +29,7 @@ export type WalletReward = {
   updated_at: string
 }
 
-export type ChartTimelineValue = number | 'YTD'
+export type ChartTimelineValue = number // | 'YTD'
 
 type FetchDetailsParams = {
   address: string
@@ -101,19 +101,19 @@ export const fetchChartData = createAsyncThunk<
       return details
     }
 
-    if (numDays === 'YTD') {
-      const response: WalletReward[] = await getWallet(`${resource}/rewards`, {
-        addresses: address,
-        dayRange: getDayOfYear(new Date()) - 1,
-      })
-      const selectedBalance = Balance.fromFloat(
-        response[0].total,
-        CurrencyType.networkToken,
-      )
-      return {
-        rewardSum: selectedBalance,
-      }
-    }
+    // if (numDays === 'YTD') {
+    //   const response: WalletReward[] = await getWallet(`${resource}/rewards`, {
+    //     addresses: address,
+    //     dayRange: getDayOfYear(new Date()) - 1,
+    //   })
+    //   const selectedBalance = Balance.fromFloat(
+    //     response[0].total,
+    //     CurrencyType.networkToken,
+    //   )
+    //   return {
+    //     rewardSum: selectedBalance,
+    //   }
+    // }
 
     const startDate = new Date()
     const endDate = new Date(startDate)

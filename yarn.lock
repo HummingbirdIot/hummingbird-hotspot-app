@@ -1370,7 +1370,7 @@
     create-hash "^1.2.0"
     libsodium-wrappers "^0.7.6"
 
-"@helium/currency@^3.25.1", "@helium/currency@^3.52.0":
+"@helium/currency@^3.52.0":
   version "3.52.0"
   resolved "https://registry.npmmirror.com/@helium/currency/-/currency-3.52.0.tgz#68b8ec1c2db73b7c88f54c1b59686a5ade148986"
   integrity sha512-L91EKuzO+X4v45df8fgr9ihR1WTzThTQIx3Uh2bQwpwkDjxvxdI6xq43VEhz0+y7JN2XGRl3tX4ljQST+Azw4Q==
@@ -1398,10 +1398,10 @@
     axios "^0.24.0"
     qs "^6.10.3"
 
-"@helium/proto-ble@3.10.0":
-  version "3.10.0"
-  resolved "https://registry.npmmirror.com/@helium/proto-ble/-/proto-ble-3.10.0.tgz#bbcef53ffeb2b9e1d458a51c702dacb3bd06b0b6"
-  integrity sha512-6A8HejKJPWm5ABNmb8Le44VjrsSeo0NiddoukYUoqAW5Zinnn7bydOOQClkK1SS1HnnQHTjdEpqsiORY4X/m0g==
+"@helium/proto-ble@^3.37.0":
+  version "3.37.0"
+  resolved "https://registry.yarnpkg.com/@helium/proto-ble/-/proto-ble-3.37.0.tgz#ec660a03815997b4cc62a5c52ad65cbf6e1f6684"
+  integrity sha512-/DJTKG7IbuWxErVcC6ZbJZPFc3oSd7RGkNsNGDMRrsqApCjFjyQpDOo/cbB9UWixT/fAdAU3jdjwgjFMiaFSZw==
   dependencies:
     protobufjs "^6.8.9"
 
@@ -1412,14 +1412,14 @@
   dependencies:
     protobufjs "^6.8.9"
 
-"@helium/react-native-sdk@^0.1.4":
-  version "0.1.6"
-  resolved "https://registry.npmmirror.com/@helium/react-native-sdk/-/react-native-sdk-0.1.6.tgz#4fbb4d0d2a0e479be11b8bcbe6ef13bd0d3b58a9"
-  integrity sha512-ow6kl54kzKinTq11yqTGR0J4gXZdd9FAzMLZtTMKH83+cOAf5Wa4AXl5il1kFk1E4YkCVQWHTFyMq4mVe6MqCQ==
+"@helium/react-native-sdk@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@helium/react-native-sdk/-/react-native-sdk-0.2.1.tgz#326e6c5f593ca8aa7ecd25b703442eb4c6ab01aa"
+  integrity sha512-sU1TC/YlchEAe5RqxxhUb2Nz0OoEIDEuNgAb1qqkgJc56XOhmiULsuyqg6cpaiKeadAthTfpGRvGqGfbA69B/g==
 
-"@helium/transactions@^3.34.0":
+"@helium/transactions@^3.62.0":
   version "3.62.0"
-  resolved "https://registry.npmmirror.com/@helium/transactions/-/transactions-3.62.0.tgz#f201b3e502f65b0d0eb400d931064fc850246793"
+  resolved "https://registry.yarnpkg.com/@helium/transactions/-/transactions-3.62.0.tgz#f201b3e502f65b0d0eb400d931064fc850246793"
   integrity sha512-akmgI7GjW2WLMrT97HJCwSPn9Pz7Rj7p7OoDgoh3XVHLMhTHQbo23yT8lVvVrfNEh9KR3HJXsutOy5xn957yhQ==
   dependencies:
     "@helium/crypto" "^3.60.0"
@@ -10028,6 +10028,11 @@ react-native-config@^1.4.1:
   version "1.4.5"
   resolved "https://registry.npmmirror.com/react-native-config/-/react-native-config-1.4.5.tgz#6fe5895410b75e44fe4f4bf00caaf894a0981f3a"
   integrity sha512-5oiAsoW88SOYDg/0cleJ2vJDqv98FJUbFQYEnH4sdMtEn3AAT3lb7BkTGW8HO/t3Vk9VOruwxUUnO4tzuxzCsw==
+
+react-native-currency-format@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/react-native-currency-format/-/react-native-currency-format-1.0.19.tgz#4fe2dd65eb3dc3c69ebce7c4f4c531ab673642c8"
+  integrity sha512-iFRrP9YoQxJnbHRgTv6faSyV7fDjRz4fC7mKf0lmB2zkU9lbxw+gvgMLcZiEkxMEuJXMkNtDHJbsXj2i5/cZ+w==
 
 react-native-device-info@^8.4.4:
   version "8.4.9"

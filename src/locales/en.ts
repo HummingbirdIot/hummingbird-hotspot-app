@@ -378,6 +378,7 @@ export default {
     sections: {
       app: {
         language: 'Language',
+        currency: 'Currency',
         signOut: 'Sign Out',
         signOutWithLink: 'Sign Out - Linked as: {{address}}',
         signOutAlert: {

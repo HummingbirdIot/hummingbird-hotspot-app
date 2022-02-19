@@ -3,12 +3,18 @@ import QRCode from 'react-qr-code'
 import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 import { getAddress } from '../../../utils/secureAccount'
 import { useSpacing } from '../../../theme/themeHooks'
 import { Spacing } from '../../../theme/theme'
 import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/appDataClient'
 import Text from '../../../components/Text'
+import useCurrency from '../../../utils/useCurrency'
+import { RootState } from '../../../store/rootReducer'
+import { fetchCurrentPrices } from '../../../store/helium/heliumDataSlice'
+import { useAppDispatch } from '../../../store/store'
+import { updateSetting } from '../../../store/account/accountSlice'
 
 const QR_CONTAINER_SIZE = 146
 
@@ -17,17 +23,59 @@ const OverviewScreen = () => {
   const padding = useMemo(() => 'm' as Spacing, [])
   const [accountAddress, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
+  const dispatch = useAppDispatch()
 
-  // console.log('Root::account:', account)
+  const {
+    hntBalanceToDisplayVal,
+    hntToDisplayVal,
+    networkTokensToDataCredits,
+    toggleConvertHntToCurrency,
+  } = useCurrency()
+
+  const currentPrices = useSelector(
+    (state: RootState) => state.heliumData.currentPrices,
+  )
+
+  useAsync(async () => {
+    // console.log('OverviewScreen::account:', account)
+    if (account?.balance) {
+      console.log(
+        'OverviewScreen::currency::funcs:',
+        await hntToDisplayVal(account.balance.floatBalance),
+        await hntBalanceToDisplayVal(account.balance),
+        await networkTokensToDataCredits(account.balance),
+        (await networkTokensToDataCredits(account.balance)).toString(),
+        (
+          (await networkTokensToDataCredits(account.balance)).floatBalance /
+          100000
+        ).toFixed(2),
+      )
+    }
+  }, [account])
 
   useEffect(() => {
     getAccount(accountAddress).then(setAccount)
-  }, [accountAddress])
+    dispatch(fetchCurrentPrices()).then(() => {
+      toggleConvertHntToCurrency().then(() => {
+        toggleConvertHntToCurrency()
+        dispatch(
+          updateSetting({
+            key: 'currencyType',
+            value: 'CNY',
+          }),
+        )
+      })
+    })
+  }, [accountAddress, dispatch, toggleConvertHntToCurrency])
+
+  useEffect(() => {
+    // console.log('OverviewScreen::currentPrices:', currentPrices)
+  }, [currentPrices])
 
   useAsync(async () => {
-    const aa = await getAddress()
-    // console.log('MyLOG::accountAddress:', typeof account, account)
-    setAccountAddress(aa || '')
+    const aacc = await getAddress()
+    // console.log('OverviewScreen::accountAddress:', aacc)
+    setAccountAddress(aacc || '')
   }, [])
 
   return (

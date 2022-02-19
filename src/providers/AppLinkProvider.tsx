@@ -98,7 +98,12 @@ const useAppLink = () => {
           const hotspotLink = record as HotspotLink
           if (hotspotLink.status === 'success') {
             console.log('navToAppLink::sign_hotspot::hotspotLink:', hotspotLink)
-            navigator.submitGatewayTxns(hotspotLink)
+            // navigator.submitGatewayTxns(hotspotLink)
+            if (hotspotLink.transferTxn !== undefined) {
+              navigator.submitTransferTxn(hotspotLink)
+            } else {
+              navigator.submitGatewayTxns(hotspotLink)
+            }
           } else if (hotspotLink.status === 'user_cancelled') {
             navigator.goToMainTabs()
           } else {

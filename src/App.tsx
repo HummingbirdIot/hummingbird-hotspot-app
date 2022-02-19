@@ -35,6 +35,7 @@ import { navigationRef } from './views/navi/navigator'
 import RootNavigator from './views/navi/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
+import { configChainVars } from './utils/appDataClient'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */
@@ -102,7 +103,7 @@ const App = () => {
     if (!isBackedUp || !settingsLoaded || !featuresLoaded) return
 
     dispatch(fetchInitialData())
-    // configChainVars() // 当前版本SDK没有对应的接口
+    configChainVars() // 当前版本SDK没有对应的接口
   })
 
   useEffect(() => {

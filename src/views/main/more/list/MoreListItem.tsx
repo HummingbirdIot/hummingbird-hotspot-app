@@ -1,5 +1,9 @@
 import React, { memo, ReactText, useMemo } from 'react'
 import { Linking, Switch } from 'react-native'
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context'
 import Text, { TextProps } from '../../../../components/Text'
 import TouchableOpacityBox from '../../../../components/TouchableOpacityBox'
 import { useColors } from '../../../../theme/themeHooks'
@@ -61,6 +65,9 @@ const MoreListItem = ({
     [],
   )
 
+  const { top } = useSafeAreaInsets()
+  const { y, height } = useSafeAreaFrame()
+
   return (
     <TouchableOpacityBox
       flexDirection="row"
@@ -103,6 +110,7 @@ const MoreListItem = ({
           title={title}
           textProps={actionSheetTextProps}
           iconVariant="none"
+          maxModalHeight={height - y - top}
         />
       )}
     </TouchableOpacityBox>

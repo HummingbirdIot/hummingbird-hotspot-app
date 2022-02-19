@@ -1,10 +1,14 @@
 import React, { memo, useState } from 'react'
 import { Avatar, ListItem, Text } from 'react-native-elements'
 // import Role from '@helium/http/build/models/Role'
-import { getTxnIconPath, getTxnTypeColor, getTxnTypeName } from '../utils/txns'
-import { getHotspotActivityList } from '../utils/appDataClient'
-import useMount from '../utils/useMount'
-import Box from '../components/Box'
+import {
+  getTxnIconPath,
+  getTxnTypeColor,
+  getTxnTypeName,
+} from '../../utils/txns'
+import { getHotspotActivityList } from '../../utils/appDataClient'
+import useMount from '../../utils/useMount'
+import Box from '../../components/Box'
 
 /**
  * 获取两经纬度之间的距离
@@ -113,17 +117,19 @@ const ActivitiesList = ({
   return (
     <>
       {activities
-        .filter(
-          (activity) =>
-            activity &&
-            (activity.challenger !== address ||
-              activity.type === 'poc_request_v1' ||
-              activity.type === 'assert_location_v2'),
-        )
+        // .filter(
+        //   (activity) =>
+        //     activity &&
+        //     (activity.challenger !== address ||
+        //       activity.type === 'poc_request_v1' ||
+        //       activity.type === 'assert_location_v1' ||
+        //       activity.type === 'assert_location_v2'),
+        // )
+        .filter((activity) => activity !== undefined)
         .map((activity) => {
           const icon = getTxnIconPath(activity)
           const color = getTxnTypeColor(activity.type)
-          let desc = `Height: ${activity.height}`
+          let desc = ''
           if (activity.fee) {
             desc = `- ${
               (
@@ -190,7 +196,9 @@ const ActivitiesList = ({
                     <Text style={{ fontSize: 16, fontWeight: '500' }}>
                       {getTxnTypeName(activity.type, 'hotspot')}
                     </Text>
-                    <Text style={{ fontSize: 12, color }}>{desc}</Text>
+                    {desc ? (
+                      <Text style={{ fontSize: 12, color }}>{desc}</Text>
+                    ) : null}
                   </Box>
                   <Box flexDirection="column" justifyContent="center">
                     <Text style={{ fontSize: 12, color }}>
