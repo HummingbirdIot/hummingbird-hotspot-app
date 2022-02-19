@@ -1,21 +1,42 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Hotspot } from '@helium/http'
+import { Hotspot, Sum } from '@helium/http'
+import { addMinutes } from 'date-fns'
 import Box from '../../components/Box'
 
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
-import { getRewardChartData } from '../charts/RewardsHelper'
 import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
-} from '../../store/rewards/rewardsSlice'
+} from '../../store/user/rewardsSlice'
 import usePrevious from '../../utils/hooks/usePrevious'
-import { fetchHotspotData } from '../../store/hotspotDetails/hotspotDetailsSlice'
-import HotspotDetailChart from '../charts/HotspotDetailChart'
+import { fetchHotspotData } from '../../store/user/hotspotsSlice'
+import HotspotDetailChart from '../StatisticsChart/Chart'
 
-const HotspotStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
+export const getRewardChartData = (
+  rewardData: Sum[] | undefined,
+  numDays: number | undefined,
+) => {
+  if (!rewardData || !numDays) return []
+
+  return rewardData
+    .map((r) => {
+      const utcOffset = new Date().getTimezoneOffset()
+      const offsetDate = addMinutes(new Date(r.timestamp), utcOffset)
+      return {
+        up: parseFloat(r.total.toFixed(2)),
+        down: 0,
+        label: offsetDate.toISOString(),
+        showTime: false,
+        id: `reward-${r.timestamp}`,
+      }
+    })
+    .reverse()
+}
+
+const RewardsStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
@@ -79,7 +100,7 @@ const HotspotStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
       fetchChartData({
         address,
         numDays: timelineValue,
-        resource: 'accounts',
+        resource: 'hotspots',
       }),
     )
   }, [address, dispatch, listIndex, prevListIndex, timelineValue])
@@ -103,4 +124,4 @@ const HotspotStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
   )
 }
 
-export default memo(HotspotStatistics)
+export default memo(RewardsStatistics)

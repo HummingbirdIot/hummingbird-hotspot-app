@@ -101,70 +101,19 @@ export const fetchChartData = createAsyncThunk<
       return details
     }
 
-    // if (numDays === 'YTD') {
-    //   const response: WalletReward[] = await getWallet(`${resource}/rewards`, {
-    //     addresses: address,
-    //     dayRange: getDayOfYear(new Date()) - 1,
-    //   })
-    //   const selectedBalance = Balance.fromFloat(
-    //     response[0].total,
-    //     CurrencyType.networkToken,
-    //   )
-    //   return {
-    //     rewardSum: selectedBalance,
-    //   }
-    // }
-
     const startDate = new Date()
     const endDate = new Date(startDate)
     endDate.setDate(endDate.getDate() - numDays)
-    const data: [/* WalletReward[], WalletReward[], */ Sum[]] =
-      await Promise.all([
-        // getWallet(`${resource}/rewards`, {
-        //   addresses: address,
-        //   dayRange: numDays,
-        // }),
-        // getWallet(`${resource}/rewards`, {
-        //   addresses: address,
-        //   dayRange: numDays * 2,
-        // }),
-        // eslint-disable-next-line no-nested-ternary
-        resource === 'accounts'
-          ? getAccountRewards(address, numDays)
-          : resource === 'hotspots'
-          ? getHotspotRewards(address, numDays)
-          : getValidatorRewards(address, numDays),
-      ])
-    const [/* selectedRange, fullRange, */ rewards] = data
+    const [rewards]: [Sum[]] = await Promise.all([
+      // eslint-disable-next-line no-nested-ternary
+      resource === 'accounts'
+        ? getAccountRewards(address, numDays)
+        : resource === 'hotspots'
+        ? getHotspotRewards(address, numDays)
+        : getValidatorRewards(address, numDays),
+    ])
     const rewardsChange = 0
     const selectedBalance = Balance.fromFloat(0, CurrencyType.networkToken)
-    // if (
-    //   selectedRange &&
-    //   selectedRange.length &&
-    //   fullRange &&
-    //   fullRange.length
-    // ) {
-    //   selectedBalance = Balance.fromFloat(
-    //     selectedRange[0].total,
-    //     CurrencyType.networkToken,
-    //   )
-    //   const fullBalance = Balance.fromFloat(
-    //     fullRange[0].total,
-    //     CurrencyType.networkToken,
-    //   )
-    //   const previousBalance: Balance<NetworkTokens> =
-    //     fullBalance.minus(selectedBalance)
-    //   if (
-    //     previousBalance.integerBalance > 0 &&
-    //     selectedBalance.integerBalance > 0
-    //   ) {
-    //     rewardsChange =
-    //       ((selectedBalance.bigInteger.toNumber() -
-    //         previousBalance.bigInteger.toNumber()) /
-    //         previousBalance.bigInteger.toNumber()) *
-    //       100
-    //   }
-    // }
 
     return {
       rewardSum: selectedBalance,

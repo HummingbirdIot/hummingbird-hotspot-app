@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { OraclePrice } from '@helium/http'
 import {
   getBlockHeight,
-  // getBlockStats,
+  getBlockStats,
   getCurrentOraclePrice,
   getPredictedOraclePrice,
-  // getStatCounts,
+  getStatCounts,
 } from '../../utils/clients/appDataClient'
 import { getCurrentPrices } from '../../utils/clients/coinGeckoClient'
 import { getMakers, Maker } from '../../utils/clients/stakingClient'
@@ -25,26 +25,26 @@ const initialState: HeliumDataState = {
 }
 
 export const fetchBlockHeight = createAsyncThunk<number>(
-  'heliumData/blockHeight',
+  'helium/blockHeight',
   async () => getBlockHeight(),
 )
 
 export const fetchCurrentOraclePrice = createAsyncThunk<OraclePrice>(
-  'heliumData/currentOraclePrice',
+  'helium/currentOraclePrice',
   async () => getCurrentOraclePrice(),
 )
 
 export const fetchPredictedOraclePrice = createAsyncThunk<OraclePrice[]>(
-  'heliumData/predictedOraclePrice',
+  'helium/predictedOraclePrice',
   async () => getPredictedOraclePrice(),
 )
 
-// export const fetchStats = createAsyncThunk('heliumData/stats', async () =>
-//   Promise.all([getStatCounts(), getBlockStats()]),
-// )
+export const fetchStats = createAsyncThunk('helium/stats', async () =>
+  Promise.all([getStatCounts(), getBlockStats()]),
+)
 
 export const fetchInitialData = createAsyncThunk<HeliumDataState>(
-  'heliumData/fetchInitialData',
+  'helium/fetchInitialData',
   async () => {
     const vals = await Promise.all([
       getCurrentOraclePrice(),
@@ -53,7 +53,7 @@ export const fetchInitialData = createAsyncThunk<HeliumDataState>(
       getMakers(),
       getBlockHeight(),
     ])
-    console.log('heliumData/fetchInitialData:', vals)
+    console.log('helium/fetchInitialData:', vals)
     const [
       currentOraclePrice,
       predictedOraclePrices,
@@ -72,13 +72,13 @@ export const fetchInitialData = createAsyncThunk<HeliumDataState>(
 )
 
 export const fetchCurrentPrices = createAsyncThunk(
-  'heliumData/fetchCurrentPrices',
+  'helium/fetchCurrentPrices',
   async () => getCurrentPrices(),
 )
 
 // This slice contains global helium data not specifically related to the current user
-const heliumDataSlice = createSlice({
-  name: 'heliumData',
+const heliumSlice = createSlice({
+  name: 'helium',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -104,11 +104,11 @@ const heliumDataSlice = createSlice({
         state.predictedOraclePrices = payload
       },
     )
-    // builder.addCase(fetchStats.fulfilled, (state, { payload }) => {
-    //   const [statCounts, blockStats] = payload
-    //   state.hotspotCount = statCounts.hotspots
-    //   state.blockTime = blockStats.lastDay.avg
-    // })
+    builder.addCase(fetchStats.fulfilled, (state, { payload }) => {
+      const [statCounts, blockStats] = payload
+      state.hotspotCount = statCounts.hotspots
+      state.blockTime = blockStats.lastDay.avg
+    })
     builder.addCase(fetchCurrentPrices.fulfilled, (state, { payload }) => {
       state.currentPrices = payload
     })
@@ -118,4 +118,4 @@ const heliumDataSlice = createSlice({
   },
 })
 
-export default heliumDataSlice
+export default heliumSlice

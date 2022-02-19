@@ -23,7 +23,7 @@ import {
 import { useBorderRadii } from '../../../theme/themeHooks'
 import useAlert from '../../../utils/hooks/useAlert'
 import { RootState } from '../../../store/rootReducer'
-import { getLocationPermission } from '../../../store/location/locationSlice'
+import { getLocationPermission } from '../../../store/app/locationSlice'
 import { useAppDispatch } from '../../../store/store'
 
 const ItemSeparatorComponent = () => (

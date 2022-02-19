@@ -9,7 +9,6 @@ const stringKeys = [
   'authInterval',
   'language',
   'walletLinkToken',
-  'walletApiToken',
   'address',
   'keypair',
   'currentHotspot',
@@ -35,10 +34,13 @@ export async function getSecureItem(key: AccountStoreKey) {
 }
 
 export const getAddress = async () => {
+  const address = await getSecureItem('address')
+  if (address) return address
   const token = await getSecureItem('walletLinkToken')
   if (!token) return null
   const parsed = WalletLink.parseWalletLinkToken(token)
   if (!parsed?.address) return null
+  await setSecureItem('address', parsed.address)
   return parsed.address
 }
 
@@ -57,43 +59,4 @@ export const getKeypair = async (): Promise<Keypair | undefined> => {
     const keypairRaw = JSON.parse(keypairStr)
     return new Keypair(keypairRaw)
   }
-}
-
-const makeSignature = async (token: { address: string; time: number }) => {
-  const stringifiedToken = JSON.stringify(token)
-  const keypair = await getKeypair()
-  if (!keypair) return
-  const buffer = await keypair.sign(stringifiedToken)
-
-  return buffer.toString('base64')
-}
-
-const makeWalletApiToken = async (address: string) => {
-  const time = Math.floor(Date.now() / 1000)
-
-  const token = {
-    address,
-    time,
-  }
-
-  const signature = await makeSignature(token)
-
-  const signedToken = { ...token, signature }
-  return Buffer.from(JSON.stringify(signedToken)).toString('base64')
-}
-
-export const getWalletApiToken = async () => {
-  const existingToken = await getSecureItem('walletApiToken')
-  if (existingToken) return existingToken
-
-  let address = await getSecureItem('address')
-  if (!address) {
-    address = await getAddress()
-  }
-  if (!address) return
-
-  const apiToken = await makeWalletApiToken(address)
-  // console.log('apiToken', apiToken)
-  await setSecureItem('walletApiToken', apiToken)
-  return apiToken
 }

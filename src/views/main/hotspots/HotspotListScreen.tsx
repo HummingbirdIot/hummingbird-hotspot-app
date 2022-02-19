@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import ThemedText from '../../../components/Text'
 import Box from '../../../components/Box'
 import { useAppDispatch } from '../../../store/store'
-import { fetchHotspotsData } from '../../../store/hotspots/hotspotsSlice'
+import { fetchHotspotsData } from '../../../store/user/hotspotsSlice'
 import { RootState } from '../../../store/rootReducer'
 import useMount from '../../../utils/hooks/useMount'
 import { useColors } from '../../../theme/themeHooks'
@@ -58,7 +58,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
   const { surfaceContrast } = useColors()
   // console.log('HotspotsListScreen::surfaceContrast:', surfaceContrast)
 
-  const makers = useSelector((state: RootState) => state.heliumData.makers)
+  const makers = useSelector((state: RootState) => state.helium.makers)
   // console.log('MyLOG::HotspotsListScreen::makers:', makers)
 
   const hotspots = useSelector(

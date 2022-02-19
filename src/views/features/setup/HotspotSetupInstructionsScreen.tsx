@@ -16,7 +16,7 @@ import Box from '../../../components/Box'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import useAlert from '../../../utils/hooks/useAlert'
 import { useAppDispatch } from '../../../store/store'
-import { getLocationPermission } from '../../../store/location/locationSlice'
+import { getLocationPermission } from '../../../store/app/locationSlice'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { RootState } from '../../../store/rootReducer'
 

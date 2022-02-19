@@ -23,15 +23,15 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
-import ActivitiesList from '../../../widgets/detail/ActivitiesList'
+import ActivitiesList from '../../../widgets/main/ActivitiesList'
 import { useColors } from '../../../theme/themeHooks'
-import { getLocationPermission } from '../../../store/location/locationSlice'
+import { getLocationPermission } from '../../../store/app/locationSlice'
 import { RootState } from '../../../store/rootReducer'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/hooks/useAlert'
 import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
-import HotspotStatistics from '../../../widgets/detail/HotspotStatistics'
+import HotspotStatistics from '../../../widgets/main/RewardsStatistics'
 
 const truncateAddress = (address: string, startWith = 10) => {
   // console.log('truncateAddress::address:', address)

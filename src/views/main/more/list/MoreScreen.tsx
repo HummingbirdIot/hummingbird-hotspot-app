@@ -19,7 +19,7 @@ import SafeAreaBox from '../../../../components/SafeAreaBox'
 import Text from '../../../../components/Text'
 import { RootState } from '../../../../store/rootReducer'
 import { useAppDispatch } from '../../../../store/store'
-import appSlice from '../../../../store/user/appSlice'
+import appSlice, { updateSetting } from '../../../../store/app/appSlice'
 import { MoreNavigationProp, MoreStackParamList } from '../moreTypes'
 import {
   RootNavigationProp,
@@ -40,7 +40,6 @@ import Learn from '../../../../assets/images/learn.svg'
 // import Contact from '../../../../assets/images/account.svg'
 import Account from '../../../../assets/images/account.svg'
 import { SUPPORTED_CURRENCIES } from '../../../../utils/hooks/useCurrency'
-import { updateSetting } from '../../../../store/account/accountSlice'
 
 const Contact = Account
 
@@ -56,7 +55,6 @@ const MoreScreen = () => {
   const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
   const { showOKCancelAlert } = useAlert()
-  const account = useSelector((state: RootState) => state.account, isEqual)
 
   useAsync(async () => {
     const token = await getSecureItem('walletLinkToken')
@@ -249,7 +247,7 @@ const MoreScreen = () => {
           },
           {
             title: t('more.sections.app.currency'),
-            value: account.settings.currencyType || 'USD',
+            value: app.settings.currencyType || 'USD',
             select: {
               items: Object.keys(SUPPORTED_CURRENCIES).map((p) => {
                 return {
@@ -277,10 +275,10 @@ const MoreScreen = () => {
     t,
     handlePinRequired,
     app.isPinRequired,
+    app.settings.currencyType,
     app.authInterval,
     language,
     handleLanguageChange,
-    account.settings.currencyType,
     handleCurrencyTypeChange,
     handleClearMapCache,
     address,

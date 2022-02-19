@@ -1,8 +1,8 @@
 import { LOCATION_FOREGROUND, askAsync, PermissionType } from 'expo-permissions'
 import { useCallback } from 'react'
-import locationSlice from '../../store/location/locationSlice'
+import locationSlice from '../../store/app/locationSlice'
 import { useAppDispatch } from '../../store/store'
-import appSlice from '../../store/user/appSlice'
+import appSlice from '../../store/app/appSlice'
 import useAlert from './useAlert'
 
 const usePermissionManager = () => {

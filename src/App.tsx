@@ -28,9 +28,9 @@ import { theme, darkThemeColors, lightThemeColors } from './theme/theme'
 import SecurityScreen from './views/splash/SecurityScreen'
 import { useAppDispatch } from './store/store'
 import { RootState } from './store/rootReducer'
-import appSlice, { restoreAppSettings } from './store/user/appSlice'
+import appSlice, { restoreAppSettings } from './store/app/appSlice'
 import useMount from './utils/hooks/useMount'
-import { fetchInitialData } from './store/helium/heliumDataSlice'
+import { fetchInitialData } from './store/helium/heliumSlice'
 import { navigationRef } from './views/navigation/navigator'
 import RootNavigator from './views/navigation/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
@@ -87,12 +87,6 @@ const App = () => {
     isRequestingPermission,
     isLocked,
   } = useSelector((state: RootState) => state.app)
-  const settingsLoaded = useSelector(
-    (state: RootState) => state.account.settingsLoaded,
-  )
-  const featuresLoaded = useSelector(
-    (state: RootState) => state.features.featuresLoaded,
-  )
 
   useMount(() => {
     dispatch(restoreAppSettings())
@@ -100,7 +94,7 @@ const App = () => {
 
   // 获取和更新初始信息
   useEffect(() => {
-    if (!isBackedUp || !settingsLoaded || !featuresLoaded) return
+    if (!isBackedUp) return
 
     dispatch(fetchInitialData())
     configChainVars() // 当前版本SDK没有对应的接口

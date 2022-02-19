@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native'
 import { MoreNavigationProp, MoreStackParamList } from '../moreTypes'
-import appSlice from '../../../../store/user/appSlice'
+import appSlice from '../../../../store/app/appSlice'
 import { useAppDispatch } from '../../../../store/store'
 import ConfirmPinView from '../../../../components/ConfirmPinView'
 

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 import CurrencyFormatter from 'react-native-currency-format'
 import { OraclePrice } from '@helium/http'
-import { fetchCurrentOraclePrice } from '../../store/helium/heliumDataSlice'
+import { fetchCurrentOraclePrice } from '../../store/helium/heliumSlice'
 import { RootState } from '../../store/rootReducer'
 import { useAppDispatch } from '../../store/store'
 import {
@@ -16,7 +16,7 @@ import {
   locale,
 } from '../i18n'
 // eslint-disable-next-line import/extensions
-import { updateSetting } from '../../store/account/accountSlice'
+import { updateSetting } from '../../store/app/appSlice'
 
 export const SUPPORTED_CURRENCIES = {
   AED: 'United Arab Emirates Dirham',
@@ -66,15 +66,15 @@ const useCurrency = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const currentPrices = useSelector(
-    (state: RootState) => state.heliumData.currentPrices,
+    (state: RootState) => state.helium.currentPrices,
     isEqual,
   )
   const currencyType =
-    useSelector((state: RootState) => state.account.settings.currencyType) ||
+    useSelector((state: RootState) => state.app.settings.currencyType) ||
     defaultCurrencyType
 
   const convert = useSelector(
-    (state: RootState) => state.account.settings.convertHntToCurrency,
+    (state: RootState) => state.app.settings.convertHntToCurrency,
   )
 
   const toggle = useCallback(

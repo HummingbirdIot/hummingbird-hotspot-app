@@ -12,9 +12,9 @@ import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
 import useCurrency from '../../../utils/hooks/useCurrency'
 import { RootState } from '../../../store/rootReducer'
-import { fetchCurrentPrices } from '../../../store/helium/heliumDataSlice'
+import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
 import { useAppDispatch } from '../../../store/store'
-import { updateSetting } from '../../../store/account/accountSlice'
+import { updateSetting } from '../../../store/app/appSlice'
 
 const QR_CONTAINER_SIZE = 146
 
@@ -33,7 +33,7 @@ const OverviewScreen = () => {
   } = useCurrency()
 
   const currentPrices = useSelector(
-    (state: RootState) => state.heliumData.currentPrices,
+    (state: RootState) => state.helium.currentPrices,
   )
 
   useAsync(async () => {

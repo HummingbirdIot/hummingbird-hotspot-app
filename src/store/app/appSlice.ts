@@ -1,4 +1,7 @@
+import { Account } from '@helium/http'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getAccount } from '../../utils/clients/appDataClient'
+import { currencyType } from '../../utils/i18n'
 import {
   deleteSecureItem,
   getSecureItem,
@@ -6,9 +9,22 @@ import {
   signOut,
 } from '../../utils/secureAccount'
 import { Intervals } from '../../views/main/more/list/useAuthIntervals'
+import { Loading } from '../user/txnsTypes'
 // import OneSignal from 'react-native-onesignal'
 
+const boolKeys = ['convertHntToCurrency'] as const
+type BooleanKey = typeof boolKeys[number]
+const stringKeys = ['currencyType'] as const
+type StringKey = typeof stringKeys[number]
+type SettingsBag = Array<{ key: string; value: string }>
+
+type AccountData = {
+  account?: Account
+}
+
 export type AppState = {
+  account?: Account
+  fetchAccountStatus: Loading
   isBackedUp: boolean
   isSettingUpHotspot: boolean
   isRestored: boolean
@@ -18,6 +34,15 @@ export type AppState = {
   isLocked: boolean
   isRequestingPermission: boolean
   walletLinkToken?: string
+  settings: {
+    // isFleetModeEnabled?: boolean
+    // hasFleetModeAutoEnabled?: boolean
+    convertHntToCurrency?: boolean
+    // showHiddenHotspots?: boolean
+    // hiddenAddresses?: string
+    // network?: string
+    currencyType?: string
+  }
 }
 const initialState: AppState = {
   isBackedUp: false,
@@ -28,6 +53,8 @@ const initialState: AppState = {
   lastIdle: null,
   isLocked: false,
   isRequestingPermission: false,
+  settings: { currencyType },
+  fetchAccountStatus: 'idle',
 }
 
 type Restore = {
@@ -66,6 +93,28 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
     } as Restore
   },
 )
+
+export const fetchAccount = createAsyncThunk<AccountData>(
+  'app/fetchAccount',
+  async () => {
+    const data = await getAccount()
+    return {
+      account: data,
+    }
+  },
+)
+
+export const updateSetting = createAsyncThunk<
+  SettingsBag,
+  { key: BooleanKey | StringKey; value: boolean | string }
+>('app/updateSetting', async ({ key, value }) => {
+  const setting = {
+    key,
+    value: String(value),
+  }
+  // return postWallet('accounts/settings', setting)
+  return Promise.resolve([setting])
+})
 
 // This slice contains data related to the state of the app
 const appSlice = createSlice({
@@ -116,6 +165,33 @@ const appSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(restoreAppSettings.fulfilled, (state, { payload }) => {
       return { ...state, ...payload, isRestored: true }
+    })
+    builder.addCase(
+      updateSetting.pending,
+      (
+        state,
+        {
+          meta: {
+            arg: { key, value },
+          },
+        },
+      ) => {
+        if (boolKeys.includes(key as BooleanKey)) {
+          state.settings[key as BooleanKey] = value as boolean
+        } else if (stringKeys.includes(key as StringKey)) {
+          state.settings[key as StringKey] = value as string
+        }
+      },
+    )
+    builder.addCase(fetchAccount.pending, (state, _action) => {
+      state.fetchAccountStatus = 'pending'
+    })
+    builder.addCase(fetchAccount.fulfilled, (state, { payload }) => {
+      state.fetchAccountStatus = 'fulfilled'
+      state.account = payload.account
+    })
+    builder.addCase(fetchAccount.rejected, (state, _action) => {
+      state.fetchAccountStatus = 'rejected'
     })
   },
 })

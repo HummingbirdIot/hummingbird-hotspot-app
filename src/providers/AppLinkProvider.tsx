@@ -22,7 +22,7 @@ import {
   HotspotLink,
 } from './appLinkTypes'
 import { useAppDispatch } from '../store/store'
-import appSlice from '../store/user/appSlice'
+import appSlice from '../store/app/appSlice'
 
 export const APP_LINK_PROTOCOL = 'hummingbirdscheme://'
 

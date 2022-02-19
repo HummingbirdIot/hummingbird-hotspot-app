@@ -1,43 +1,25 @@
-import Client, {
-  Bucket,
-  Hotspot,
-  // NaturalDate,
-  Network,
-  PocReceiptsV1,
-  // PocReceiptsV1,
-  // Validator,
-} from '@helium/http'
+import Client, { Bucket, Hotspot, Network, PocReceiptsV1 } from '@helium/http'
 import { heliumHttpClient } from '@helium/react-native-sdk'
-// import { Platform } from 'react-native'
-// import { getVersion } from 'react-native-device-info'
+import { Platform } from 'react-native'
+import { getVersion } from 'react-native-device-info'
 import { subDays } from 'date-fns'
-// import { Transaction } from '@helium/transactions'
 import { Transaction } from '@helium/transactions'
 import { getAddress } from '../secureAccount'
-import {
-  HotspotActivityFilters,
-  HotspotActivityType,
-} from '../../views/main/hotspots/hotspotTypes'
 import { fromNow } from '../timeUtils'
+import { HotspotFilters, HotspotFilterType } from '../../store/user/txnsTypes'
 
 const MAX = 100000
-// const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
-//   Platform.OS
-// }-js-client`
+const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
+  Platform.OS
+}-js-client`
 
 const client = new Client(Network.production, {
   retry: 1,
-  // name: userAgent,
-  // userAgent,
+  name: userAgent,
+  userAgent,
 })
 
 const breadcrumbOpts = { type: 'HTTP Request', category: 'appDataClient' }
-
-// export const configChainVars = async () => {
-//   console.log('configChainVars', breadcrumbOpts)
-//   const vars = await client.vars.getTransactionVars()
-//   Transaction.config(vars)
-// }
 
 export const submitTxn = async (txn: string) => {
   return heliumHttpClient.transactions.submit(txn)
@@ -63,6 +45,14 @@ export const getBlockHeight = (params?: { maxTime?: string }) => {
   return heliumHttpClient.blocks.getHeight(params)
 }
 
+export const getBlockStats = () => {
+  return client.blocks.stats()
+}
+
+export const getStatCounts = () => {
+  return client.stats.counts()
+}
+
 export const getCurrentOraclePrice = async () => {
   return heliumHttpClient.oracle.getCurrentPrice()
 }
@@ -79,11 +69,6 @@ export const hotspotOnChain = async (address: string) => {
     return false
   }
 }
-
-// export const getAddress = async () => {
-//   console.log('getAddress', breadcrumbOpts)
-//   return getSecureItem('address')
-// }
 
 export const getHotspots = async () => {
   // console.log('MyLOG::getHotspots', breadcrumbOpts)
@@ -152,22 +137,28 @@ export const getValidatorRewards = async (
 
 export const getHotspotActivityList = async (
   gateway: string,
-  filterType: HotspotActivityType,
+  filterType: HotspotFilterType,
   cursor: string | undefined = undefined,
 ) => {
   console.log('getHotspotActivityList', breadcrumbOpts)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const { cursor, data } = (await client
-  //   .hotspot(gateway)
-  //   .activity.list()) as any
-  // console.log('getHotspotActivityList::cursor:', cursor)
-  // console.log('getHotspotActivityList::data[0]:', data[0])
   const params = {
-    filterTypes: HotspotActivityFilters[filterType],
+    filterTypes: HotspotFilters[filterType],
     cursor,
   }
   return client.hotspot(gateway).activity.list(params)
-  // return client.hotspot(gateway).roles.list(params)
+}
+
+export const getHotspotRolesList = async (
+  gateway: string,
+  filterType: HotspotFilterType,
+  cursor: string | undefined = undefined,
+) => {
+  console.log('getHotspotActivityList', breadcrumbOpts)
+  const params = {
+    filterTypes: HotspotFilters[filterType],
+    cursor,
+  }
+  return client.hotspot(gateway).roles.list(params)
 }
 
 export const getWitnessedHotspots = async (address: string) => {

@@ -1,20 +1,18 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { createMigrate, persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage'
-import appSlice from './user/appSlice'
-import locationSlice from './location/locationSlice'
-import heliumDataSlice from './helium/heliumDataSlice'
-import hotspotsSlice, {
-  hotspotsSliceMigrations,
-} from './hotspots/hotspotsSlice'
-import rewardsSlice from './rewards/rewardsSlice'
-import featuresSlice from './features/featuresSlice'
-import accountSlice from './account/accountSlice'
+import appSlice from './app/appSlice'
+import locationSlice from './app/locationSlice'
+import heliumSlice from './helium/heliumSlice'
+import hotspotsSlice, { hotspotsSliceMigrations } from './user/hotspotsSlice'
+import rewardsSlice from './user/rewardsSlice'
 
-const accountConfig = {
-  key: accountSlice.name,
-  storage: AsyncStorage,
-  blacklist: ['rewardsSum'],
+const config = {
+  app: {
+    key: appSlice.name,
+    storage: AsyncStorage,
+    blacklist: [],
+  },
 }
 
 const hotspotsConfig = {
@@ -26,13 +24,12 @@ const hotspotsConfig = {
 }
 
 const rootReducer = combineReducers({
-  app: appSlice.reducer,
-  account: persistReducer(accountConfig, accountSlice.reducer),
-  location: locationSlice.reducer,
+  app: persistReducer(config.app, appSlice.reducer),
   hotspots: persistReducer(hotspotsConfig, hotspotsSlice.reducer),
-  heliumData: heliumDataSlice.reducer,
+
+  location: locationSlice.reducer,
+  helium: heliumSlice.reducer,
   rewards: rewardsSlice.reducer,
-  features: featuresSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

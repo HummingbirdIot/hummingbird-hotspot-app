@@ -11,7 +11,7 @@ import Box from '../../components/Box'
 import SafeAreaBox from '../../components/SafeAreaBox'
 import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 import { useAppDispatch } from '../../store/store'
-import appSlice from '../../store/user/appSlice'
+import appSlice from '../../store/app/appSlice'
 
 const usingSimulator = true
 

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import {
   getLocation,
   getLocationPermission,
-} from '../../store/location/locationSlice'
+} from '../../store/app/locationSlice'
 import { RootState } from '../../store/rootReducer'
 import { useAppDispatch } from '../../store/store'
 import { LocationCoords } from '../location'
