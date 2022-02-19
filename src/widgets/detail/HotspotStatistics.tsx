@@ -11,7 +11,7 @@ import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
 } from '../../store/rewards/rewardsSlice'
-import usePrevious from '../../utils/usePrevious'
+import usePrevious from '../../utils/hooks/usePrevious'
 import { fetchHotspotData } from '../../store/hotspotDetails/hotspotDetailsSlice'
 import HotspotDetailChart from '../charts/HotspotDetailChart'
 

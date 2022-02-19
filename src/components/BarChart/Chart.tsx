@@ -6,10 +6,10 @@ import {
   PanGestureHandlerEventPayload,
 } from 'react-native-gesture-handler'
 import { Animated, GestureResponderEvent } from 'react-native'
-import useHaptic from '../../utils/useHaptic'
+import useHaptic from '../../utils/hooks/useHaptic'
 import { ChartData } from './types'
 import { useColors } from '../../theme/themeHooks'
-import usePrevious from '../../utils/usePrevious'
+import usePrevious from '../../utils/hooks/usePrevious'
 import ChartBar from './ChartBar'
 
 type Props = {

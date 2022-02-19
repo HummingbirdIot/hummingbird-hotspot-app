@@ -2,7 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Hotspot } from '@helium/http'
 import Balance, { NetworkTokens } from '@helium/currency'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getHotspotDetails, getHotspots } from '../../utils/appDataClient'
+import {
+  // getHotspotDetails,
+  getHotspots,
+} from '../../utils/clients/appDataClient'
 import { LocationCoords } from '../../utils/location'
 // eslint-disable-next-line import/extensions
 // import { getWallet, deleteWallet, postWallet } from '../../utils/walletClient'

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Account } from '@helium/http'
-import { getAccount } from '../../utils/appDataClient'
+import { getAccount } from '../../utils/clients/appDataClient'
 // import { getWallet, postWallet } from '../../utils/walletClient'
 import { ChartData, ChartRange } from '../../components/BarChart/types'
 import { FilterType } from '../../components/BarChart/walletTypes'

@@ -35,4 +35,4 @@ const HUMMINGBIRD_H500 = {
   },
 } as MakerHotspot
 
-export default { HUMMINGBIRD_H500 }
+export default { HUMMINGBIRD_H500, HUMMINGBIRD_H500C: HUMMINGBIRD_H500 }

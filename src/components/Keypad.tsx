@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import useHaptic from '../utils/useHaptic'
+import useHaptic from '../utils/hooks/useHaptic'
 import Box from './Box'
 import Text from './Text'
 import TouchableCircle from './TouchableCircle'

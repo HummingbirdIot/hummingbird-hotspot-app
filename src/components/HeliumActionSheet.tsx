@@ -24,7 +24,7 @@ import Box from './Box'
 import TouchableOpacityBox from './TouchableOpacityBox'
 import BlurBox from './BlurBox'
 import { ReAnimatedBox } from './AnimatedBox'
-import useVisible from '../utils/useVisible'
+import useVisible from '../utils/hooks/useVisible'
 
 type Props = BoxProps<Theme> & {
   data: Array<HeliumActionSheetItemType>

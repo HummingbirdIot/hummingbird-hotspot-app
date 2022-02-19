@@ -3,7 +3,7 @@ import { Hotspot, Witness } from '@helium/http'
 import {
   getHotspotDetails,
   getWitnessedHotspots,
-} from '../../utils/appDataClient'
+} from '../../utils/clients/appDataClient'
 import {
   CacheRecord,
   handleCacheRejected,

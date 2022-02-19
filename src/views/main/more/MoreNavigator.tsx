@@ -8,7 +8,7 @@ import DefaultScreenOptions from '../../defaultScreenOptions'
 import MoreScreen from './list/MoreScreen'
 import AccountCreatePinScreen from './pin/AccountCreatePinScreen'
 import AccountConfirmPinScreen from './pin/AccountConfirmPinScreen'
-import { RootStackParamList } from '../../navi/naviTypes'
+import { RootStackParamList } from '../../navigation/naviTypes'
 
 const MoreStack = createStackNavigator<MoreStackParamList>()
 

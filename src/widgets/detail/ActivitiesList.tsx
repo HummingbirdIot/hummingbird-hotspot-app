@@ -6,8 +6,8 @@ import {
   getTxnTypeColor,
   getTxnTypeName,
 } from '../../utils/txns'
-import { getHotspotActivityList } from '../../utils/appDataClient'
-import useMount from '../../utils/useMount'
+import { getHotspotActivityList } from '../../utils/clients/appDataClient'
+import useMount from '../../utils/hooks/useMount'
 import Box from '../../components/Box'
 
 /**

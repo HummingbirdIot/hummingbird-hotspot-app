@@ -6,9 +6,9 @@ import {
   getCurrentOraclePrice,
   getPredictedOraclePrice,
   // getStatCounts,
-} from '../../utils/appDataClient'
-import { getCurrentPrices } from '../../utils/coinGeckoClient'
-import { getMakers, Maker } from '../../utils/stakingClient'
+} from '../../utils/clients/appDataClient'
+import { getCurrentPrices } from '../../utils/clients/coinGeckoClient'
+import { getMakers, Maker } from '../../utils/clients/stakingClient'
 
 export type HeliumDataState = {
   blockHeight?: number

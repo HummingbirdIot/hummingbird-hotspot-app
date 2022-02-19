@@ -47,30 +47,6 @@ export const useFees = () => {
 const emptyB58Address = () =>
   Address.fromB58('13PuqyWXzPYeXcF1B9ZRx7RLkEygeL374ZABiQdwRSNzASdA1sn')
 
-// export const calculatePaymentTxnFee = async (
-//   paymentDetails: Array<SendDetails>,
-//   nonce: number,
-// ) => {
-//   const keypair = await getKeypair()
-//   if (!keypair) throw new Error('missing keypair')
-
-//   const paymentTxn = new PaymentV2({
-//     payer: keypair.address,
-//     payments: paymentDetails.map(({ address, balanceAmount, memo }) => ({
-//       // if a payee address isn't supplied, we use a dummy address
-//       payee:
-//         address && Address.isValid(address)
-//           ? Address.fromB58(address)
-//           : emptyB58Address(),
-//       amount: balanceAmount.integerBalance,
-//       memo: encodeMemoString(memo),
-//     })),
-//     nonce,
-//   })
-
-//   return new Balance(paymentTxn.fee || 0, CurrencyType.dataCredit)
-// }
-
 export const calculateAddGatewayFee = (ownerB58: string, payerB58: string) => {
   const owner = Address.fromB58(ownerB58)
   const payer = Address.fromB58(payerB58)

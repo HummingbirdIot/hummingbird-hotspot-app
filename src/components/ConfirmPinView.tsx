@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Text from './Text'
 import PinDisplay from './PinDisplay'
 import Keypad from './Keypad'
-import useHaptic from '../utils/useHaptic'
+import useHaptic from '../utils/hooks/useHaptic'
 import Box from './Box'
 import TouchableOpacityBox from './TouchableOpacityBox'
 

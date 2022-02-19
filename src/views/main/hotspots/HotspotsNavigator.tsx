@@ -5,7 +5,7 @@ import { Platform } from 'react-native'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 // import { HotspotStackParamList } from './hotspotTypes'
 import DefaultScreenOptions from '../../defaultScreenOptions'
-import { RootStackParamList } from '../../navi/naviTypes'
+import { RootStackParamList } from '../../navigation/naviTypes'
 import HotspotDetailScreen from './HotspotDetailScreen'
 import HotspotListScreen from './HotspotListScreen'
 

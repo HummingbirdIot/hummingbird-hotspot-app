@@ -7,7 +7,7 @@ import {
   getHotspotRewards,
   // eslint-disable-next-line import/named
   getValidatorRewards,
-} from '../../utils/appDataClient'
+} from '../../utils/clients/appDataClient'
 import {
   CacheRecord,
   handleCacheRejected,
@@ -15,7 +15,7 @@ import {
   handleCacheFulfilled,
   hasValidCache,
 } from '../../utils/cacheUtils'
-import { getWalletExt } from '../../utils/walletClient'
+import { getWalletExt } from '../../utils/clients/walletClient'
 
 export type WalletReward = {
   avg: number

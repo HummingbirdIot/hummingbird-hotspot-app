@@ -14,29 +14,32 @@ import { isEqual } from 'lodash'
 import { Edge } from 'react-native-safe-area-context'
 import { WalletLink } from '@helium/react-native-sdk'
 import { useAsync } from 'react-async-hook'
+import Config from 'react-native-config'
 import SafeAreaBox from '../../../../components/SafeAreaBox'
 import Text from '../../../../components/Text'
 import { RootState } from '../../../../store/rootReducer'
 import { useAppDispatch } from '../../../../store/store'
 import appSlice from '../../../../store/user/appSlice'
 import { MoreNavigationProp, MoreStackParamList } from '../moreTypes'
-import { RootNavigationProp, RootStackParamList } from '../../../navi/naviTypes'
+import {
+  RootNavigationProp,
+  RootStackParamList,
+} from '../../../navigation/naviTypes'
 import MoreListItem, { MoreListItemType } from './MoreListItem'
 import useAuthIntervals from './useAuthIntervals'
 import { useSpacing } from '../../../../theme/themeHooks'
 import Box from '../../../../components/Box'
 import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
 import { useLanguageContext } from '../../../../providers/LanguageProvider'
-import { EXPLORER_BASE_URL } from '../../../../utils/config'
 import { getSecureItem } from '../../../../utils/secureAccount'
 import { clearMapCache } from '../../../../utils/mapUtils'
 import Articles from '../../../../constants/articles'
-import useAlert from '../../../../utils/useAlert'
+import useAlert from '../../../../utils/hooks/useAlert'
 import Security from '../../../../assets/images/security.svg'
 import Learn from '../../../../assets/images/learn.svg'
 // import Contact from '../../../../assets/images/account.svg'
 import Account from '../../../../assets/images/account.svg'
-import { SUPPORTED_CURRENCIES } from '../../../../utils/useCurrency'
+import { SUPPORTED_CURRENCIES } from '../../../../utils/hooks/useCurrency'
 import { updateSetting } from '../../../../store/account/accountSlice'
 
 const Contact = Account
@@ -204,7 +207,7 @@ const MoreScreen = () => {
           },
           {
             title: t('more.sections.learn.coverage'),
-            openUrl: `${EXPLORER_BASE_URL}/coverage`,
+            openUrl: `${Config.EXPLORER_BASE_URL}/coverage`,
           },
           {
             title: t('more.sections.learn.troubleshooting'),

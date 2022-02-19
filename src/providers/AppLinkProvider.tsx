@@ -10,9 +10,9 @@ import { Linking } from 'react-native'
 import queryString from 'query-string'
 import { BarCodeScannerResult } from 'expo-barcode-scanner'
 import { useSelector } from 'react-redux'
-import useMount from '../utils/useMount'
+import useMount from '../utils/hooks/useMount'
 import { RootState } from '../store/rootReducer'
-import navigator from '../views/navi/navigator'
+import navigator from '../views/navigation/navigator'
 import {
   AppLink,
   AppLinkFields,
