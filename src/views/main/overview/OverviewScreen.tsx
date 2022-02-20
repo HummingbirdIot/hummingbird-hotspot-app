@@ -3,7 +3,7 @@ import QRCode from 'react-qr-code'
 import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import { getAddress } from '../../../utils/secureAccount'
 import { useSpacing } from '../../../theme/themeHooks'
 import { Spacing } from '../../../theme/theme'
@@ -11,10 +11,11 @@ import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
 import useCurrency from '../../../utils/hooks/useCurrency'
-import { RootState } from '../../../store/rootReducer'
+// import { RootState } from '../../../store/rootReducer'
 import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
 import { useAppDispatch } from '../../../store/store'
 import { updateSetting } from '../../../store/app/appSlice'
+import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
 
 const QR_CONTAINER_SIZE = 146
 
@@ -32,9 +33,14 @@ const OverviewScreen = () => {
     toggleConvertHntToCurrency,
   } = useCurrency()
 
-  const currentPrices = useSelector(
-    (state: RootState) => state.helium.currentPrices,
-  )
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const currentPrices = useSelector(
+  //   (state: RootState) => state.helium.currentPrices,
+  // )
+
+  // const pendingTransactions = useSelector(
+  //   (state: RootState) => state.txns.pendingAndFailded,
+  // )
 
   useAsync(async () => {
     // console.log('OverviewScreen::account:', account)
@@ -54,23 +60,30 @@ const OverviewScreen = () => {
   }, [account])
 
   useEffect(() => {
-    getAccount(accountAddress).then(setAccount)
-    dispatch(fetchCurrentPrices()).then(() => {
-      toggleConvertHntToCurrency().then(() => {
-        toggleConvertHntToCurrency()
+    getAccount(accountAddress)
+      .then(setAccount)
+      .then(() => dispatch(fetchCurrentPrices()))
+      .then(toggleConvertHntToCurrency)
+      .then(toggleConvertHntToCurrency)
+      .then(() =>
         dispatch(
           updateSetting({
             key: 'currencyType',
             value: 'CNY',
           }),
-        )
-      })
-    })
+        ),
+      )
   }, [accountAddress, dispatch, toggleConvertHntToCurrency])
 
   useEffect(() => {
-    // console.log('OverviewScreen::currentPrices:', currentPrices)
-  }, [currentPrices])
+    dispatch(fetchTxnsPending(accountAddress)).catch((error) =>
+      console.error(error),
+    )
+  }, [accountAddress, dispatch])
+
+  // useEffect(() => {
+  //   console.log('pendingTransactions', pendingTransactions)
+  // }, [pendingTransactions])
 
   useAsync(async () => {
     const aacc = await getAddress()

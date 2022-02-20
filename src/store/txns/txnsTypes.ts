@@ -15,6 +15,8 @@ import {
   TokenBurnV1,
   StakeValidatorV1,
   PocReceiptsV1,
+  AnyTransaction,
+  StateChannelCloseV1,
 } from '@helium/http/build/models/Transaction'
 
 export type Loading =
@@ -99,7 +101,7 @@ export const Filters = {
 }
 export type AddressType = keyof typeof Filters
 
-export declare type HttpTransaction = PaymentV1 &
+export type HttpTransaction = PaymentV1 &
   PaymentV2 &
   RewardsV1 &
   RewardsV2 &
@@ -113,11 +115,19 @@ export declare type HttpTransaction = PaymentV1 &
   UnstakeValidatorV1 &
   TransferValidatorStakeV1 &
   SecurityExchangeV1 &
-  UnknownTransaction
+  UnknownTransaction &
+  StateChannelCloseV1
 
-export type AccountTransactions = {
+export type TransactionList = {
   cursor: string | null
-  data: HttpTransaction[]
+  data: AnyTransaction[]
+  hasInitialLoad?: boolean
+}
+
+export type RolesList = {
+  cursor: string | null
+  data: Role[]
+  hasInitialLoad?: boolean
 }
 
 export type Result<T> = {
@@ -137,7 +147,6 @@ export type AccountRecord<T> = {
     validator: T
   }
   filter: FilterType
-  requestMore: boolean
 }
 
 export type HotspotRecord<T> = {
@@ -150,7 +159,6 @@ export type HotspotRecord<T> = {
     consensus_group: T
   }
   filter: FilterType
-  requestMore: boolean
 }
 
 export type AccountActivityRecord = AccountRecord<Result<HttpTransaction>>
@@ -160,3 +168,18 @@ export type HotspotActivityRecord = HotspotRecord<Result<HttpTransaction>>
 export type AccountRolesRecord = AccountRecord<Result<Role>>
 
 export type HotspotRolesRecord = HotspotRecord<Result<Role>>
+
+export type B58Address = string
+export type AddressIndexed<T> = Record<B58Address, T>
+
+export type HeadArgs = {
+  address: B58Address
+  filter?: FilterType
+  addressType?: AddressType
+}
+
+export type MoreArgs = {
+  address: B58Address
+  filter?: Exclude<FilterType, 'pending'>
+  addressType?: AddressType
+}

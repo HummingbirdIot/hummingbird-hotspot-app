@@ -6,7 +6,12 @@ import { subDays } from 'date-fns'
 import { Transaction } from '@helium/transactions'
 import { getAddress } from '../secureAccount'
 import { fromNow } from '../timeUtils'
-import { HotspotFilters, HotspotFilterType } from '../../store/user/txnsTypes'
+import {
+  AccountFilters,
+  AccountFilterType,
+  HotspotFilters,
+  HotspotFilterType,
+} from '../../store/txns/txnsTypes'
 
 const MAX = 100000
 const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
@@ -135,6 +140,37 @@ export const getValidatorRewards = async (
   return list.take(MAX)
 }
 
+export const getPendingTransactions = async (gateway: string) => {
+  console.log('getPendingTransactions', breadcrumbOpts)
+  return (await client.account(gateway).pendingTransactions.list()).data
+}
+
+export const getAccountActivityList = async (
+  gateway: string,
+  filterType: AccountFilterType,
+  cursor: string | undefined = undefined,
+) => {
+  console.log('getAccountActivityList', breadcrumbOpts)
+  const params = {
+    filterTypes: AccountFilters[filterType],
+    cursor,
+  }
+  return client.account(gateway).activity.list(params)
+}
+
+export const getAccountRolesList = async (
+  gateway: string,
+  filterType: AccountFilterType,
+  cursor: string | undefined = undefined,
+) => {
+  console.log('getAccountRolesList', breadcrumbOpts)
+  const params = {
+    filterTypes: AccountFilters[filterType],
+    cursor,
+  }
+  return client.account(gateway).roles.list(params)
+}
+
 export const getHotspotActivityList = async (
   gateway: string,
   filterType: HotspotFilterType,
@@ -153,7 +189,7 @@ export const getHotspotRolesList = async (
   filterType: HotspotFilterType,
   cursor: string | undefined = undefined,
 ) => {
-  console.log('getHotspotActivityList', breadcrumbOpts)
+  console.log('getHotspotRolesList', breadcrumbOpts)
   const params = {
     filterTypes: HotspotFilters[filterType],
     cursor,

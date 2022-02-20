@@ -9,7 +9,7 @@ import {
   signOut,
 } from '../../utils/secureAccount'
 import { Intervals } from '../../views/main/more/list/useAuthIntervals'
-import { Loading } from '../user/txnsTypes'
+import { Loading } from '../txns/txnsTypes'
 // import OneSignal from 'react-native-onesignal'
 
 const boolKeys = ['convertHntToCurrency'] as const

@@ -17,7 +17,7 @@ import TimelinePicker from './TimelinePicker'
 import {
   ChartTimelineValue,
   NetworkHotspotEarnings,
-} from '../../store/user/rewardsSlice'
+} from '../../store/data/rewardsSlice'
 
 type Props = {
   title: string

@@ -149,7 +149,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const [mapArea, setMapArea] = useState(<Box />)
 
   const [selectedIndex, updateIndex] = useState(0)
-  const buttons = ['Statistics', 'Activity', 'Witnessed', 'Nearby']
+  const buttons = ['Statistics', 'Activity', 'Witnessed']
   const Statistics = useMemo(
     () => <HotspotStatistics hotspot={hotspot} />,
     [hotspot],

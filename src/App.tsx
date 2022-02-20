@@ -65,6 +65,7 @@ const appConfig = () => {
     'expo-permissions is now',
     "Can't perform a React state update on an unmounted component.",
     'Sending `onAnimatedValueUpdate` with no listeners registered.',
+    'Possible Unhandled Promise Rejection',
   ])
 }
 

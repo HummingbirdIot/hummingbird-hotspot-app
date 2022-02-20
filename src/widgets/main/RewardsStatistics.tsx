@@ -10,9 +10,9 @@ import { RootState } from '../../store/rootReducer'
 import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
-} from '../../store/user/rewardsSlice'
+} from '../../store/data/rewardsSlice'
 import usePrevious from '../../utils/hooks/usePrevious'
-import { fetchHotspotData } from '../../store/user/hotspotsSlice'
+import { fetchHotspotData } from '../../store/data/hotspotsSlice'
 import HotspotDetailChart from '../StatisticsChart/Chart'
 
 export const getRewardChartData = (
