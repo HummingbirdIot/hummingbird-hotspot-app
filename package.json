@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "prebuild": "react-native run-android --variant=release",
     "ios": "react-native run-ios",
-    "iphone": "react-native run-ios  --simulator=\"Ivan's Phone\"",
+    "iphone": "react-native run-ios",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc",
     "prettier": "prettier --write *.ts*",
     "start": "react-native start",

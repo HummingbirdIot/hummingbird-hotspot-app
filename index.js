@@ -17,4 +17,5 @@ const render = () => {
   )
 }
 
+// AppRegistry.registerHeadlessTask('SomeTaskName', () => require('SomeTaskName'))
 AppRegistry.registerComponent(appName, () => render)
