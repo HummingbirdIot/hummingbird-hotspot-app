@@ -23,7 +23,7 @@ const QR_CONTAINER_SIZE = 146
 const OverviewScreen = () => {
   const spacing = useSpacing()
   const padding = useMemo(() => 'm' as Spacing, [])
-  const [accountAddress, setAccountAddress] = useState('')
+  const [address, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
   const dispatch = useAppDispatch()
 
@@ -61,7 +61,7 @@ const OverviewScreen = () => {
   }, [account])
 
   useEffect(() => {
-    getAccount(accountAddress)
+    getAccount(address)
       .then(setAccount)
       .then(() => dispatch(fetchCurrentPrices()))
       .then(toggleConvertHntToCurrency)
@@ -74,13 +74,11 @@ const OverviewScreen = () => {
           }),
         ),
       )
-  }, [accountAddress, dispatch, toggleConvertHntToCurrency])
+  }, [address, dispatch, toggleConvertHntToCurrency])
 
   useEffect(() => {
-    dispatch(fetchTxnsPending(accountAddress)).catch((error) =>
-      console.error(error),
-    )
-  }, [accountAddress, dispatch])
+    dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
+  }, [address, dispatch])
 
   // useEffect(() => {
   //   console.log('pendingTransactions', pendingTransactions)
@@ -88,7 +86,7 @@ const OverviewScreen = () => {
 
   useAsync(async () => {
     const aacc = await getAddress()
-    // console.log('OverviewScreen::accountAddress:', aacc)
+    // console.log('OverviewScreen::address:', aacc)
     setAccountAddress(aacc || '')
   }, [])
 
@@ -96,7 +94,7 @@ const OverviewScreen = () => {
     <Box flex={1}>
       <SafeAreaView style={{ flex: 1 }}>
         <Box flex={1} padding="l">
-          <Text>address: {accountAddress}</Text>
+          <Text>address: {address}</Text>
           <Text>
             balance: {account?.balance?.floatBalance || '0'}{' '}
             {account?.balance?.type.ticker}
@@ -115,16 +113,15 @@ const OverviewScreen = () => {
         <Box flex={1} flexDirection="row" justifyContent="center">
           <QRCode
             size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
-            value={accountAddress}
+            value={address}
           />
         </Box>
         <Box flex={2} padding="l">
           <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
-            {accountAddress ? (
-              <RewardsStatistics address={accountAddress} resource="accounts" />
+            {address ? (
+              <RewardsStatistics address={address} resource="accounts" />
             ) : null}
           </Box>
-          <Text>hotspotCount: {account?.hotspotCount || 0}</Text>
         </Box>
       </SafeAreaView>
     </Box>

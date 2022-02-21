@@ -138,8 +138,10 @@ const txnsSlice = createSlice({
           [...obj.data, ...payload.data],
           (t) => (t as { hash: string }).hash,
         ).sort((a, b) => b.time - a.time)
-        obj.data = nextTxns as HttpTransaction[]
-        obj.cursor = payload.cursor
+        obj.data = nextTxns.filter(
+          (txn) => txn !== undefined,
+        ) as HttpTransaction[]
+        // obj.cursor = payload.cursor
         obj.status = 'fulfilled'
         obj.hasInitialLoad = true
         record.txns[filter] = handleCacheFulfilled(obj)
@@ -225,7 +227,7 @@ const txnsSlice = createSlice({
           state.pending.status = 'fulfilled'
           state.pending.hasInitialLoad = true
           state.pending.data = newPending.filter(
-            (txn) => txn.status === 'pending',
+            (txn) => txn !== undefined && txn.status === 'pending',
           )
         } else {
           const record = getActivityRecord(
@@ -239,7 +241,9 @@ const txnsSlice = createSlice({
             return
           }
           const txns = payload as TransactionList
-          const nextTxns = txns.data.sort((a, b) => b.time - a.time)
+          const nextTxns = txns.data
+            .filter((txn) => txn !== undefined)
+            .sort((a, b) => b.time - a.time)
 
           obj.data = nextTxns as HttpTransaction[]
           obj.cursor = txns.cursor

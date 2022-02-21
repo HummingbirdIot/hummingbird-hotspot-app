@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
-  LOCATION,
+  // LOCATION,
   getAsync,
   PermissionResponse,
   PermissionStatus,
+  LOCATION_FOREGROUND,
 } from 'expo-permissions'
 import { getCurrentPosition, LocationCoords } from '../../utils/location'
 
@@ -32,7 +33,7 @@ export const getLocation = createAsyncThunk(
 
 export const getLocationPermission = createAsyncThunk(
   'location/getLocationPermission',
-  async () => getAsync(LOCATION),
+  async () => getAsync(LOCATION_FOREGROUND),
 )
 
 export const hasLocationPermission = (status?: PermissionStatus) =>

@@ -14,6 +14,7 @@ import OverviewScreen from '../../main/overview/OverviewScreen'
 import HotspotsNavigator from '../../main/hotspots/HotspotsNavigator'
 // import ExplorerScreen from '../../main/explorer/ExplorerScreen'
 import MoreNavigator from '../../main/more/MoreNavigator'
+import ActivityScreen from '../../main/overview/ActivityScreen'
 
 const MainTab = createBottomTabNavigator()
 
@@ -79,6 +80,7 @@ const MainTabs = () => {
       screenOptions={screenOptions}
     >
       <MainTab.Screen name="Overview" component={OverviewScreen} />
+      <MainTab.Screen name="Activity" component={ActivityScreen} />
       <MainTab.Screen name="Hotspots" component={HotspotsNavigator} />
       {/* <MainTab.Screen name="Explorer" component={ExplorerScreen} /> */}
       <MainTab.Screen name="More" component={MoreNavigator} />

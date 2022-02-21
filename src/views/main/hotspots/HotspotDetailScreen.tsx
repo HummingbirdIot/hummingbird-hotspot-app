@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useHotspotBle } from '@helium/react-native-sdk'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
 import { useAsync } from 'react-async-hook'
+import { Hotspot } from '@helium/http'
 import Box from '../../../components/Box'
 import Map from '../../../components/Map'
 import ThemedText from '../../../components/Text'
@@ -23,17 +24,18 @@ import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
 import { locale } from '../../../utils/i18n'
-import ActivitiesList from '../../../widgets/main/ActivitiesList'
+import ActivitiesList from '../../../widgets/main/ActivitiesList/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
 import { getLocationPermission } from '../../../store/app/locationSlice'
 import { RootState } from '../../../store/rootReducer'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/hooks/useAlert'
-import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
+// import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 import HotspotLocationView from '../../../widgets/main/HotspotLocationView'
 import { fetchHotspotData } from '../../../store/data/hotspotsSlice'
+import { reverseGeocode } from '../../../utils/location'
 
 const truncateAddress = (address: string, startWith = 10) => {
   // console.log('truncateAddress::address:', address)
@@ -55,37 +57,46 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const { permissionResponse, locationBlocked } = useSelector(
     (state: RootState) => state.location,
   )
-  const [hotspot, setHotspot] = useState(routes[index].params.hotspot)
+  const [hotspot, setHotspot] = useState<Hotspot>(routes[index].params.hotspot)
   const [selectedIndex, updateIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [locationName, setLocationName] = useState('')
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
-  useEffect(() => {
+  useAsync(async () => {
     // console.log('HotspotDetailScreen::hotspot:', hotspot)
     dispatch(fetchHotspotData(hotspot.address))
-    if (hotspot.locationName) {
-      setLocationName(hotspot.locationName)
+    if ((hotspot as unknown as { locationName: string }).locationName) {
+      setLocationName(
+        (hotspot as unknown as { locationName: string }).locationName,
+      )
     } else if (hotspot.geocode) {
       const { longStreet, longCity } = hotspot.geocode
       setLocationName(
         longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...',
       )
+      const { lat, lng } = hotspot
+      if (lat && lng) {
+        const [{ street, city }] = await reverseGeocode(lat, lng)
+        if (street && city) {
+        }
+        setLocationName(`${street}, ${city}`)
+      }
     }
   }, [dispatch, hotspot])
 
-  useAsync(async () => {
-    if (hotspot) {
-      await setSecureItem('currentHotspot', hotspot)
-    } else {
-      const h = await getSecureItem('currentHotspot')
-      console.log(
-        'HotspotDetailScreen::getSecureItem::currentHotspot::hotspot:',
-        hotspot,
-      )
-      setHotspot(h)
-    }
-  }, [hotspot])
+  // useAsync(async () => {
+  //   if (hotspot) {
+  //     await setSecureItem('currentHotspot', hotspot)
+  //   } else {
+  //     const h = await getSecureItem('currentHotspot')
+  //     console.log(
+  //       'HotspotDetailScreen::getSecureItem::currentHotspot::hotspot:',
+  //       hotspot,
+  //     )
+  //     setHotspot(h)
+  //   }
+  // }, [hotspot])
 
   useEffect(() => {
     getState()
@@ -167,8 +178,9 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     () => (
       <ActivitiesList
         address={hotspot.address}
-        lng={hotspot.lng}
-        lat={hotspot.lat}
+        addressType="hotspot"
+        lng={hotspot.lng || 0}
+        lat={hotspot.lat || 0}
       />
     ),
     [hotspot.address, hotspot.lng, hotspot.lat],
@@ -283,7 +295,9 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       />
       <Box flex={6}>
         <HotspotLocationView
-          mapCenter={hotspot.location ? [hotspot.lng, hotspot.lat] : undefined}
+          mapCenter={
+            hotspot.location ? [hotspot.lng || 0, hotspot.lat || 0] : undefined
+          }
           locationName={locationName}
           assertLocation={assertLocation}
         />
@@ -327,7 +341,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             </ThemedText>
             <IconAccount width={10} height={10} />
             <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-              {truncateAddress(hotspot.owner)}
+              {truncateAddress(hotspot.owner || 'UnknownOwner')}
             </ThemedText>
           </Box>
           <Box

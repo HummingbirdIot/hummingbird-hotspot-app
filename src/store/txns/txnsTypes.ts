@@ -47,15 +47,15 @@ export const AccountFilterKeys = [
   'all',
   'mining',
   'payment',
+  'pending',
   'hotspot',
   'burn',
   'validator',
-  'pending',
 ] as const
 export type AccountFilterType = typeof AccountFilterKeys[number]
 
 export const AccountFilters = {
-  all: ['all'],
+  all: [],
   mining: ['rewards_v1', 'rewards_v2'],
   payment: ['payment_v1', 'payment_v2'],
   hotspot: [
