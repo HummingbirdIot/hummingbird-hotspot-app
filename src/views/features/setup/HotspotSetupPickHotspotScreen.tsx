@@ -16,12 +16,6 @@ const HotspotSetupPickHotspotScreen = () => {
     [scannedDevices.length],
   )
 
-  console.log(
-    'HotspotSetupPickHotspotScreen::hotspotsFound',
-    scannedDevices.length,
-    hotspotsFound,
-  )
-
   if (hotspotsFound) {
     return (
       <BackScreen

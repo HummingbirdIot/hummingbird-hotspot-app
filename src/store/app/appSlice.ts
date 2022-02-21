@@ -34,6 +34,7 @@ export type AppState = {
   isLocked: boolean
   isRequestingPermission: boolean
   walletLinkToken?: string
+  connectedHotspotId: string
   settings: {
     // isFleetModeEnabled?: boolean
     // hasFleetModeAutoEnabled?: boolean
@@ -53,6 +54,7 @@ const initialState: AppState = {
   lastIdle: null,
   isLocked: false,
   isRequestingPermission: false,
+  connectedHotspotId: '',
   settings: { currencyType },
   fetchAccountStatus: 'idle',
 }
@@ -160,6 +162,9 @@ const appSlice = createSlice({
     },
     requestingPermission: (state, action: PayloadAction<boolean>) => {
       state.isRequestingPermission = action.payload
+    },
+    setConnectedHotspotId: (state, action: PayloadAction<string>) => {
+      state.connectedHotspotId = action.payload
     },
   },
   extraReducers: (builder) => {

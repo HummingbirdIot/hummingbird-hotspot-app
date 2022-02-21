@@ -18,7 +18,7 @@ const HotspotPairingList = ({
   hotspots: Device[]
   onPress: (hotspot: Device) => void
   disabled?: boolean
-  connect: boolean | string
+  connect: { status: boolean | string; hotspotId: string }
 }) => {
   const spacing = useSpacing()
 
@@ -63,7 +63,7 @@ const HotspotPairingItem = ({
   isBottom?: boolean
   onPress: (hotspot: Device) => void
   disabled: boolean
-  connect: string | boolean
+  connect: { status: boolean | string; hotspotId: string }
 }) => {
   const colors = useColors()
   const [mac, setMac] = useState('')
@@ -147,7 +147,7 @@ const HotspotPairingItem = ({
             {mac}
           </Text>
         </Box>
-        {connect === hotspot.id || connect === true ? (
+        {connect.hotspotId === hotspot.id ? (
           <ActivityIndicator color={colors.secondary} />
         ) : (
           <CarotRight color={colors.secondary} />

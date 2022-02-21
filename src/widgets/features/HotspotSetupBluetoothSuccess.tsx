@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { BleError, Device } from 'react-native-ble-plx'
 import { useHotspotBle, useOnboarding } from '@helium/react-native-sdk'
 import { uniq } from 'lodash'
+import { useSelector } from 'react-redux'
 import Box from '../../components/Box'
 import HotspotPairingList from '../../components/HotspotPairingList'
 import Text from '../../components/Text'
@@ -12,6 +13,9 @@ import {
   HotspotSetupStackParamList,
 } from '../../views/navigation/features/hotspotSetupTypes'
 import useAlert from '../../utils/hooks/useAlert'
+import appSlice from '../../store/app/appSlice'
+import { useAppDispatch } from '../../store/store'
+import { RootState } from '../../store/rootReducer'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -19,7 +23,9 @@ type Route = RouteProp<
 >
 const HotspotSetupBluetoothSuccess = () => {
   const { t } = useTranslation()
-  const [connectStatus, setConnectStatus] = useState<string | boolean>(false)
+  const [connectStatus, setConnectStatus] = useState<boolean>(false)
+  const [connectingHotspotId, setConnectingHotspotId] = useState<string>('')
+
   const {
     params: { hotspotType, gatewayAction },
   } = useRoute<Route>()
@@ -31,12 +37,20 @@ const HotspotSetupBluetoothSuccess = () => {
     checkFirmwareCurrent,
     readWifiNetworks,
     getOnboardingAddress,
+    // getDiagnosticInfo,
   } = useHotspotBle()
   const { getMinFirmware, getOnboardingRecord } = useOnboarding()
   const { showOKAlert } = useAlert()
+  const dispatch = useAppDispatch()
+  const {
+    app: { connectedHotspotId },
+  } = useSelector((state: RootState) => state)
 
   const handleError = useCallback(
     async (e: unknown) => {
+      setConnectStatus(false)
+      setConnectingHotspotId('')
+      dispatch(appSlice.actions.setConnectedHotspotId(''))
       const titleKey = 'generic.error'
       if ((e as BleError).toString !== undefined) {
         await showOKAlert({
@@ -45,33 +59,49 @@ const HotspotSetupBluetoothSuccess = () => {
         })
       }
     },
-    [showOKAlert],
+    [dispatch, showOKAlert],
   )
 
   const handleConnect = useCallback(
     async (hotspot: Device) => {
+      if (connectingHotspotId) return
       console.log(
         'HotspotSetupBluetoothSuccess::handleConnect::hotspot:',
         connectStatus,
         hotspot.localName,
         hotspot.id,
-        hotspot,
+        // hotspot,
       )
-      if (connectStatus === 'connecting') return
 
-      setConnectStatus(hotspot.id)
+      setConnectingHotspotId(hotspot.id)
       try {
         const connected = await isConnected()
         if (!connected) {
           await connect(hotspot)
+        } else if (hotspot.id !== connectedHotspotId) {
+          console.log(
+            'HotspotSetupBluetoothSuccess::handleConnect::hotspotIds:',
+            hotspot.id,
+            connectedHotspotId,
+          )
+          await connect(hotspot)
         }
+        dispatch(appSlice.actions.setConnectedHotspotId(hotspot.id))
         setConnectStatus(true)
       } catch (e) {
-        setConnectStatus(false)
+        console.log('HotspotSetupBluetoothSuccess::handleConnect::error:', e)
         handleError(e)
       }
     },
-    [connect, connectStatus, handleError, isConnected],
+    [
+      connectingHotspotId,
+      connectStatus,
+      isConnected,
+      connectedHotspotId,
+      dispatch,
+      connect,
+      handleError,
+    ],
   )
 
   useEffect(() => {
@@ -83,10 +113,10 @@ const HotspotSetupBluetoothSuccess = () => {
         const minFirmware = await getMinFirmware()
         if (!minFirmware) return
         const firmwareDetails = await checkFirmwareCurrent(minFirmware)
-        console.log(
-          'HotspotSetupBluetoothSuccess::firmwareDetails:',
-          firmwareDetails,
-        )
+        // console.log(
+        //   'HotspotSetupBluetoothSuccess::firmwareDetails:',
+        //   firmwareDetails,
+        // )
         if (!firmwareDetails.current) {
           navigation.navigate('FirmwareUpdateNeededScreen', firmwareDetails)
           return
@@ -107,6 +137,7 @@ const HotspotSetupBluetoothSuccess = () => {
 
         // navigate to next screen
         if (gatewayAction === 'addGateway' || gatewayAction === 'setWiFi') {
+          setConnectingHotspotId('')
           navigation.replace('HotspotSetupPickWifiScreen', {
             gatewayAction,
             networks,
@@ -159,7 +190,7 @@ const HotspotSetupBluetoothSuccess = () => {
         <HotspotPairingList
           hotspots={scannedDevices}
           onPress={handleConnect}
-          connect={connectStatus}
+          connect={{ status: connectStatus, hotspotId: connectingHotspotId }}
         />
       </Box>
     </Box>

@@ -67,7 +67,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   //     index,
   //     routes[index].params,
   //   )
-  // console.log('HotspotDetailScreen::hotspot:', hotspot)
+  console.log('HotspotDetailScreen::hotspot:', hotspot)
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
 
