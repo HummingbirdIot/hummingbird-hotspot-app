@@ -31,7 +31,9 @@ import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/hooks/useAlert'
 import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
-import HotspotStatistics from '../../../widgets/main/RewardsStatistics'
+import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
+import HotspotLocationView from '../../../widgets/main/HotspotLocationView'
+import { fetchHotspotData } from '../../../store/data/hotspotsSlice'
 
 const truncateAddress = (address: string, startWith = 10) => {
   // console.log('truncateAddress::address:', address)
@@ -54,22 +56,23 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     (state: RootState) => state.location,
   )
   const [hotspot, setHotspot] = useState(routes[index].params.hotspot)
-
-  // console.log('Root::SafeAreaInsets:', insets)
-  // console.log(
-  //   'HotspotDetailScreen::navigation::route:',
-  //   index,
-  //   routes,
-  //   navigation,
-  // )
-  //   console.log(
-  //     'HotspotDetailScreen::navigation::routeParams:',
-  //     index,
-  //     routes[index].params,
-  //   )
-  console.log('HotspotDetailScreen::hotspot:', hotspot)
+  const [selectedIndex, updateIndex] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const [locationName, setLocationName] = useState('')
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
+  useEffect(() => {
+    // console.log('HotspotDetailScreen::hotspot:', hotspot)
+    dispatch(fetchHotspotData(hotspot.address))
+    if (hotspot.locationName) {
+      setLocationName(hotspot.locationName)
+    } else if (hotspot.geocode) {
+      const { longStreet, longCity } = hotspot.geocode
+      setLocationName(
+        longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...',
+      )
+    }
+  }, [dispatch, hotspot])
 
   useAsync(async () => {
     if (hotspot) {
@@ -146,12 +149,18 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     showOKCancelAlert,
   ])
 
-  const [mapArea, setMapArea] = useState(<Box />)
-
-  const [selectedIndex, updateIndex] = useState(0)
   const buttons = ['Statistics', 'Activity', 'Witnessed']
   const Statistics = useMemo(
-    () => <HotspotStatistics hotspot={hotspot} />,
+    () => (
+      <Box
+        width="100%"
+        minHeight={280}
+        backgroundColor="grayBoxLight"
+        borderRadius="l"
+      >
+        <RewardsStatistics address={hotspot.address} resource="hotspots" />
+      </Box>
+    ),
     [hotspot],
   )
   const Activity = useMemo(
@@ -203,9 +212,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       if (lng && lat) {
         setIsVisible(false)
         await checkLocation()
-        const { longStreet, longCity } = geocode
-        const locationName =
-          longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...'
+
         navigation.push('HotspotAssert', {
           hotspot,
           hotspotAddress: address,
@@ -226,7 +233,6 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       hotspotAddress: hotspot.address,
     })
   }
-  const [isVisible, setIsVisible] = useState(false)
   const list = [
     {
       title: 'Assert Location And Antenna',
@@ -249,38 +255,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       onPress: () => setIsVisible(false),
     },
   ]
-
-  useEffect(() => {
-    const { lng, lat } = hotspot
-    if (lng && lat) {
-      const el = (
-        <Map
-          maxZoomLevel={12}
-          mapCenter={[lng, lat]}
-          //   onDidFinishLoadingMap={onDidFinishLoadingMap}
-          markerLocation={[lng, lat]}
-          currentLocationEnabled
-        />
-      )
-      setMapArea(el)
-    } else {
-      const el = (
-        <Box flex={1} justifyContent="center">
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 16,
-              color: 'white',
-            }}
-          >
-            This Hotspot haven&apos;t been asserted location yet
-          </Text>
-          <Button title="Assert Location" onPress={assertLocation} />
-        </Box>
-      )
-      setMapArea(el)
-    }
-  }, [hotspot, navigation, assertLocation])
+  // const { lng, lat } = hotspot
 
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
@@ -306,8 +281,14 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           },
         }}
       />
-      <Box flex={6}>{mapArea}</Box>
-      <Box flex={9} backgroundColor="primaryBackground">
+      <Box flex={6}>
+        <HotspotLocationView
+          mapCenter={hotspot.location ? [hotspot.lng, hotspot.lat] : undefined}
+          locationName={locationName}
+          assertLocation={assertLocation}
+        />
+      </Box>
+      <Box flex={10} backgroundColor="primaryBackground">
         <Box
           style={{
             padding: 10,
@@ -404,6 +385,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             }}
           >
             <Box
+              flex={1}
               style={{
                 paddingTop: 5,
                 paddingLeft: 10,

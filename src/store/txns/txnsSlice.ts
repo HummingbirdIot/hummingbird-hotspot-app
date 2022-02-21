@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { differenceBy, unionBy, uniqBy } from 'lodash'
 import { PendingTransaction } from '@helium/http'
-import Role from '@helium/http/build/models/Role'
+
 import {
   Result,
   AccountActivityRecord,
@@ -13,6 +13,7 @@ import {
   HotspotRolesRecord,
   AddressIndexed,
   HeadArgs,
+  Role,
 } from './txnsTypes'
 import {
   fetchMoreRoles,

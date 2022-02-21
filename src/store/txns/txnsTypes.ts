@@ -1,4 +1,3 @@
-import Role from '@helium/http/build/models/Role'
 import {
   PaymentV1,
   PaymentV2,
@@ -7,7 +6,7 @@ import {
   AddGatewayV1,
   AssertLocationV1,
   UnknownTransaction,
-  SecurityExchangeV1,
+  // SecurityExchangeV1,
   TransferValidatorStakeV1,
   UnstakeValidatorV1,
   TransferHotspotV2,
@@ -16,8 +15,9 @@ import {
   StakeValidatorV1,
   PocReceiptsV1,
   AnyTransaction,
-  StateChannelCloseV1,
-} from '@helium/http/build/models/Transaction'
+  // StateChannelCloseV1,
+} from '@helium/http'
+import { StateChannelCloseV1 } from '@helium/http/build/models/Transaction'
 
 export type Loading =
   | 'idle'
@@ -114,9 +114,17 @@ export type HttpTransaction = PaymentV1 &
   StakeValidatorV1 &
   UnstakeValidatorV1 &
   TransferValidatorStakeV1 &
-  SecurityExchangeV1 &
+  // SecurityExchangeV1 &
   UnknownTransaction &
   StateChannelCloseV1
+
+export type Role = {
+  type: string
+  time: number
+  role: string
+  height: number
+  hash: string
+}
 
 export type TransactionList = {
   cursor: string | null

@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { PendingTransaction } from '@helium/http'
-// import PendingTransactions from '@helium/http/build/resources/PendingTransactions'
 import { WritableDraft } from 'immer/dist/internal'
 import {
   AccountFilterType,

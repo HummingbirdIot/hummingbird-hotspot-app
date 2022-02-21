@@ -50,23 +50,22 @@ const appConfig = () => {
   }
 
   // 设置应忽略的警报信息
-  // LogBox.ignoreLogs(['new NativeEventEmitter']) // Ignore log notification by message
-  LogBox.ignoreAllLogs() // Ignore all log notifications
-  // LogBox.ignoreLogs([
-  //   "Accessing the 'state' property of the 'route' object is not supported.",
-  //   'Setting a timer',
-  //   'Calling getNode() on the ref of an Animated component',
-  //   'Native splash screen is already hidden',
-  //   'No Native splash screen',
-  //   'RCTBridge required dispatch_sync to load',
-  //   'Require cycle',
-  //   'new NativeEventEmitter',
-  //   'EventEmitter.removeListener(',
-  //   'expo-permissions is now',
-  //   "Can't perform a React state update on an unmounted component.",
-  //   'Sending `onAnimatedValueUpdate` with no listeners registered.',
-  //   'Possible Unhandled Promise Rejection',
-  // ])
+  // LogBox.ignoreAllLogs(true) // Ignore all log notifications
+  LogBox.ignoreLogs([
+    "Accessing the 'state' property of the 'route' object is not supported.",
+    'Setting a timer',
+    'Calling getNode() on the ref of an Animated component',
+    'Native splash screen is already hidden',
+    'No Native splash screen',
+    'RCTBridge required dispatch_sync to load',
+    'Require cycle',
+    'new NativeEventEmitter',
+    'EventEmitter.removeListener(',
+    'expo-permissions is now',
+    "Can't perform a React state update on an unmounted component.",
+    'Sending `onAnimatedValueUpdate` with no listeners registered.',
+    'Possible Unhandled Promise Rejection',
+  ]) // Ignore log notification by message
 }
 
 const App = () => {

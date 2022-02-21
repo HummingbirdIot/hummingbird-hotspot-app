@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import { Avatar, ListItem, Text } from 'react-native-elements'
 import { useSelector } from 'react-redux'
+import { ActivityIndicator } from 'react-native'
 import {
   getTxnIconPath,
   getTxnTypeColor,
@@ -114,11 +115,10 @@ const ActivitiesList = ({
     <>
       {state[address]?.txns.all.status === 'pending' && (
         <Box justifyContent="center">
-          <Text
-            style={{ fontSize: 16, fontWeight: '500', textAlign: 'center' }}
-          >
-            Loading...
-          </Text>
+          <ActivityIndicator
+            color="#687A8C"
+            size={activities && activities.length ? 30 : 100}
+          />
         </Box>
       )}
       <>

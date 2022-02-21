@@ -22,7 +22,7 @@ import {
 type Props = {
   title: string
   number?: string
-  change?: number
+  // change?: number
   data: ChartData[]
   networkHotspotEarnings: NetworkHotspotEarnings[]
   loading?: boolean
@@ -31,10 +31,10 @@ type Props = {
   onTimelineChanged: (value: ChartTimelineValue, index: number) => void
 }
 
-const HotspotDetailChart = ({
+const RewardsChart = ({
   title,
   number,
-  change = 0,
+  // change = 0,
   data,
   networkHotspotEarnings,
   loading: propsLoading,
@@ -72,13 +72,6 @@ const HotspotDetailChart = ({
     [data, findNetworkEarningForData],
   )
 
-  // useEffect(() => {
-  //   const jan1 = startOfYear(new Date()).toISOString()
-  //   if (DateModule) {
-  //     DateModule.formatDate(jan1, 'MMM d YYYY').then(setStartOfYearStr)
-  //   }
-  // }, [])
-
   useAsync(async () => {
     // if (timelineValue === 'YTD') return
 
@@ -108,7 +101,7 @@ const HotspotDetailChart = ({
   useEffect(() => {
     if (propsLoading === loading) return
 
-    animateTransition('HotspotDetailChart.LoadingChange', {
+    animateTransition('RewardsChart.LoadingChange', {
       enabledOnAndroid: false,
     })
 
@@ -117,7 +110,7 @@ const HotspotDetailChart = ({
 
   const onFocus = useCallback(
     async (chartData: ChartData | null, stackedChartData: ChartData | null) => {
-      animateTransition('HotspotDetailChart.OnFocus', {
+      animateTransition('RewardsChart.OnFocus', {
         enabledOnAndroid: false,
       })
 
@@ -151,38 +144,15 @@ const HotspotDetailChart = ({
       return (
         <SkeletonPlaceholder>
           <SkeletonPlaceholder.Item
-            height={400}
+            height="100%"
             width="100%"
             borderRadius={l}
           />
         </SkeletonPlaceholder>
       )
 
-    // if (timelineValue === 'YTD') {
-    //   return (
-    //     <>
-    //       <Box backgroundColor="grayBoxDark" marginBottom="l">
-    //         <Text
-    //           variant="body3"
-    //           color="purpleMediumText"
-    //           fontSize={15}
-    //           maxFontSizeMultiplier={1.1}
-    //           textAlign="center"
-    //           padding="l"
-    //         >
-    //           {t('hotspot_details.ytd', { number, date: startOfYearStr })}
-    //         </Text>
-    //       </Box>
-    //       <TimelinePicker
-    //         index={timelineIndex}
-    //         onTimelineChanged={onTimelineChanged}
-    //       />
-    //     </>
-    //   )
-    // }
-
     return (
-      <Box>
+      <Box paddingTop="xl" paddingBottom="l">
         <Box
           paddingVertical="s"
           backgroundColor={focusedData ? 'grayBoxDark' : undefined}
@@ -290,7 +260,7 @@ const HotspotDetailChart = ({
         </Box>
 
         <Box flexDirection="row" paddingHorizontal="l" alignItems="center">
-          {change !== undefined && !focusedData && (
+          {/* {change !== undefined && !focusedData && (
             <Text
               color="purpleMain"
               variant="regular"
@@ -302,7 +272,7 @@ const HotspotDetailChart = ({
                 minimumFractionDigits: 2,
               })}%`}
             </Text>
-          )}
+          )} */}
           <TimelinePicker
             index={timelineIndex}
             onTimelineChanged={onTimelineChanged}
@@ -312,7 +282,6 @@ const HotspotDetailChart = ({
     )
   }, [
     black,
-    change,
     currentFocusedNetworkAvg,
     data,
     focusedData,
@@ -332,11 +301,7 @@ const HotspotDetailChart = ({
     title,
   ])
 
-  return (
-    <Box backgroundColor="grayBoxLight" paddingTop="xl" paddingBottom="l">
-      {body}
-    </Box>
-  )
+  return <Box>{body}</Box>
 }
 
-export default HotspotDetailChart
+export default RewardsChart

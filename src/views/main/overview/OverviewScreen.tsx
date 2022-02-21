@@ -16,6 +16,7 @@ import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
 import { useAppDispatch } from '../../../store/store'
 import { updateSetting } from '../../../store/app/appSlice'
 import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
+import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 
 const QR_CONTAINER_SIZE = 146
 
@@ -117,7 +118,14 @@ const OverviewScreen = () => {
             value={accountAddress}
           />
         </Box>
-        <Box flex={2} justifyContent="center" alignItems="center" padding="l" />
+        <Box flex={2} padding="l">
+          <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
+            {accountAddress ? (
+              <RewardsStatistics address={accountAddress} resource="accounts" />
+            ) : null}
+          </Box>
+          <Text>hotspotCount: {account?.hotspotCount || 0}</Text>
+        </Box>
       </SafeAreaView>
     </Box>
   )

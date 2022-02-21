@@ -17,30 +17,31 @@ import {
 } from '../../utils/cacheUtils'
 import { getWalletExt } from '../../utils/clients/walletClient'
 
-export type WalletReward = {
-  avg: number
-  gateway: string
-  max: number
-  median: number
-  min: number
-  stddev: number
-  sum: number
-  total: number
-  updated_at: string
-}
+// export type WalletReward = {
+//   avg: number
+//   gateway: string
+//   max: number
+//   median: number
+//   min: number
+//   stddev: number
+//   sum: number
+//   total: number
+//   updated_at: string
+// }
 
 export type ChartTimelineValue = number // | 'YTD'
+export type RewardsResource = 'accounts' | 'validators' | 'hotspots'
 
 type FetchDetailsParams = {
   address: string
   numDays: ChartTimelineValue
-  resource: 'accounts' | 'validators' | 'hotspots'
+  resource: RewardsResource
 }
 
 type GatewayChartData = {
   rewardSum?: Balance<NetworkTokens>
   rewards?: Sum[]
-  rewardsChange?: number
+  // rewardsChange?: number
 }
 
 export type NetworkHotspotEarnings = {
@@ -59,12 +60,16 @@ export type GatewayIndex<T> = Record<GatewayAddress, T>
 
 type RewardsState = {
   chartData: GatewayIndex<GatewayChartRecord>
+  accountEarnings: CacheRecord<{ data: NetworkHotspotEarnings[] }>
+  accountEarningsLoaded: boolean
   networkHotspotEarnings: CacheRecord<{ data: NetworkHotspotEarnings[] }>
   networkHotspotEarningsLoaded: boolean
 }
 const initialState: RewardsState = {
   chartData: {},
   networkHotspotEarnings: { lastFetchedTimestamp: 0, loading: false, data: [] },
+  accountEarnings: { lastFetchedTimestamp: 0, loading: false, data: [] },
+  accountEarningsLoaded: false,
   networkHotspotEarningsLoaded: false,
 }
 
@@ -112,13 +117,18 @@ export const fetchChartData = createAsyncThunk<
         ? getHotspotRewards(address, numDays)
         : getValidatorRewards(address, numDays),
     ])
-    const rewardsChange = 0
-    const selectedBalance = Balance.fromFloat(0, CurrencyType.networkToken)
+    // console.log('rewardsrewardsrewardsrewardsrewardsrewards', rewards)
+
+    // const rewardsChange = 0
+    const selectedBalance = Balance.fromFloat(
+      rewards.reduce((p, c) => p + c.total, 0),
+      CurrencyType.networkToken,
+    )
 
     return {
       rewardSum: selectedBalance,
       rewards,
-      rewardsChange,
+      // rewardsChange,
     }
   },
 )

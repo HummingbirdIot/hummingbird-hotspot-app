@@ -16,8 +16,8 @@ export const updateNetwork = (nextNetwork: string) => {
 export const getWalletExt = async (url: string) => {
   // console.log(`walletClient::getWalletExt::httpRequest GET ${url}`, breadcrumbOpts)
   try {
-    const baseUrl = Config.WALLET_API_BASE_URL.replace('/api', '/ext/api')
-    const route = [baseUrl, url].join('/')
+    const extUrl = Config.WALLET_API_EXT_URL
+    const route = [extUrl, url].join('/')
 
     const response = await fetch(route, {
       method: 'GET',

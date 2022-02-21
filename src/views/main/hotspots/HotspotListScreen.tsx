@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { ScrollView } from 'react-native'
 import { Avatar, Header, ListItem, Text } from 'react-native-elements'
 import { useSelector } from 'react-redux'
-import { HotspotData } from '@helium/http/build/models/Hotspot'
+import { Hotspot } from '@helium/http'
 import { Maker } from '@helium/onboarding'
 import { useTranslation } from 'react-i18next'
 import ThemedText from '../../../components/Text'
@@ -38,7 +38,7 @@ const formatHotspotTitle = (name: string) => {
     .join('')
 }
 
-const getMakerName = (hotspot: HotspotData, makers: Maker[] | undefined) => {
+const getMakerName = (hotspot: Hotspot, makers: Maker[] | undefined) => {
   if (hotspot?.payer === HUMMINGBIRD_MAKER_ADDRESS) {
     return 'Hummingbird'
   }

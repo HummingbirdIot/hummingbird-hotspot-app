@@ -1,19 +1,19 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Hotspot, Sum } from '@helium/http'
+import { Sum } from '@helium/http'
 import { addMinutes } from 'date-fns'
-import Box from '../../components/Box'
+// import Box from '../../components/Box'
 
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
 import {
   fetchChartData,
   fetchNetworkHotspotEarnings,
+  RewardsResource,
 } from '../../store/data/rewardsSlice'
 import usePrevious from '../../utils/hooks/usePrevious'
-import { fetchHotspotData } from '../../store/data/hotspotsSlice'
-import HotspotDetailChart from '../StatisticsChart/Chart'
+import RewardsChart from '../StatisticsChart/RewardsChart'
 
 export const getRewardChartData = (
   rewardData: Sum[] | undefined,
@@ -36,21 +36,28 @@ export const getRewardChartData = (
     .reverse()
 }
 
-const RewardsStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
+const RewardsStatistics = ({
+  address,
+  resource,
+}: {
+  address: string
+  resource: RewardsResource
+}) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
-  const { address } = hotspot
-  const hotspotChartData =
+  const chartData =
     useSelector((state: RootState) => state.rewards.chartData[address]) || {}
+
   const [timelineValue, setTimelineValue] = useState(7)
   const [timelineIndex, setTimelineIndex] = useState(2)
+
   const {
     rewards,
     rewardSum,
-    rewardsChange,
+    // rewardsChange,
     loading = true,
-  } = hotspotChartData[timelineValue] || {}
+  } = chartData[timelineValue] || {}
   const rewardChartData = useMemo(() => {
     const data = getRewardChartData(rewards, timelineValue)
     return data || []
@@ -71,11 +78,11 @@ const RewardsStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
         fetchChartData({
           address,
           numDays: value,
-          resource: 'accounts',
+          resource,
         }),
       )
     },
-    [address, dispatch],
+    [address, dispatch, resource],
   )
 
   // console.log('Root::rewardChartData:', rewardChartData)
@@ -93,34 +100,30 @@ const RewardsStatistics = ({ hotspot }: { hotspot: Hotspot }) => {
     ) {
       return
     }
-    dispatch(fetchHotspotData(address))
+
     dispatch(fetchNetworkHotspotEarnings())
 
     dispatch(
       fetchChartData({
         address,
         numDays: timelineValue,
-        resource: 'hotspots',
+        resource,
       }),
     )
-  }, [address, dispatch, listIndex, prevListIndex, timelineValue])
+  }, [address, dispatch, listIndex, prevListIndex, resource, timelineValue])
 
   return (
-    <Box flex={1}>
-      <Box flex={2} justifyContent="center" alignItems="center">
-        <HotspotDetailChart
-          title={t('hotspot_details.reward_title')}
-          number={rewardSum?.floatBalance.toFixed(2)}
-          change={rewardsChange}
-          data={rewardChartData}
-          networkHotspotEarnings={networkHotspotEarnings}
-          loading={loading || !networkHotspotEarningsLoaded}
-          onTimelineChanged={onTimelineChanged}
-          timelineIndex={timelineIndex}
-          timelineValue={timelineValue}
-        />
-      </Box>
-    </Box>
+    <RewardsChart
+      title={t('hotspot_details.reward_title')}
+      number={rewardSum?.floatBalance.toFixed(2)}
+      // change={rewardsChange}
+      data={rewardChartData}
+      networkHotspotEarnings={networkHotspotEarnings}
+      loading={loading || !networkHotspotEarningsLoaded}
+      onTimelineChanged={onTimelineChanged}
+      timelineIndex={timelineIndex}
+      timelineValue={timelineValue}
+    />
   )
 }
 
