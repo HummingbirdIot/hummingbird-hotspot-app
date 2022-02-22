@@ -18,12 +18,14 @@ import { RouteProp, useRoute } from '@react-navigation/native'
 import Box from '../../../components/Box'
 // import Map from '../../../components/Map'
 import ThemedText from '../../../components/Text'
-import Location from '../../../assets/images/location.svg'
+import IconLocation from '../../../assets/images/location.svg'
 import IconMaker from '../../../assets/images/maker.svg'
 import IconElevation from '../../../assets/images/gain.svg'
 import IconGain from '../../../assets/images/elevation.svg'
 import IconAddress from '../../../assets/images/address-symbol.svg'
 import IconAccount from '../../../assets/images/account-green.svg'
+import IconRewardsScale from '../../../assets/images/rewardsScale.svg'
+import IconBlcok from '../../../assets/images/data.svg'
 import { locale } from '../../../utils/i18n'
 import ActivitiesList from '../../../widgets/main/ActivitiesList/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
@@ -377,6 +379,26 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               alignItems="center"
               marginTop="xs"
             >
+              <IconLocation width={10} height={10} color="#3c82f7" />
+              <ThemedText
+                flex={1}
+                variant="body2"
+                marginLeft="xs"
+                marginRight="m"
+              >
+                {locationName}
+              </ThemedText>
+              <IconRewardsScale width={10} height={10} />
+              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
+                {hotspotData.rewardScale?.toFixed(5) || '0.00'}
+              </ThemedText>
+            </Box>
+            <Box
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              marginTop="xs"
+            >
               <IconMaker width={10} height={10} />
               <ThemedText
                 flex={1}
@@ -397,36 +419,21 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               alignItems="center"
               marginTop="xs"
             >
-              <Location
-                width={10}
-                height={10}
-                // color={isHidden ? colors.grayLightText : colors.grayText}
-              />
+              <IconBlcok width={10} height={10} />
               <ThemedText
                 flex={1}
                 variant="body2"
-                // color={isHidden ? 'grayLightText' : 'grayText'}
                 marginLeft="xs"
                 marginRight="m"
               >
-                {`${hotspotData?.geocode?.longCity}, ${hotspotData?.geocode?.shortCountry}`}
+                {hotspotData.block} (+{hotspotData.blockAdded || 0})
               </ThemedText>
               <IconElevation width={10} height={10} />
-              <ThemedText
-                variant="body2"
-                // color={isHidden ? 'grayLightText' : 'grayText'}
-                marginLeft="xs"
-                marginRight="m"
-              >
+              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
                 {t('generic.meters', { distance: hotspotData?.elevation || 0 })}
               </ThemedText>
               <IconGain width={10} height={10} />
-              <ThemedText
-                variant="body2"
-                // color={isHidden ? 'grayLightText' : 'grayText'}
-                marginLeft="xs"
-                marginRight="m"
-              >
+              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
                 {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
                   maximumFractionDigits: 1,
                 }) + t('antennas.onboarding.dbi')}

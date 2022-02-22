@@ -1,10 +1,12 @@
-import React, { memo } from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { ComponentClass, memo } from 'react'
 import {
   Avatar,
   ListItem as ListItemComponent,
   Text,
 } from 'react-native-elements'
 import { PendingTransaction } from '@helium/http'
+import { Image, Platform } from 'react-native'
 import {
   getTxnIconPath,
   getTxnTypeColor,
@@ -13,6 +15,7 @@ import {
 import Box from '../../../components/Box'
 import { AddressType, HttpTransaction } from '../../../store/txns/txnsTypes'
 import { getDuration, useDescription } from './itemFormatter'
+import icons from './icons'
 
 const ListItem = ({
   address,
@@ -39,16 +42,22 @@ const ListItem = ({
     <ListItemComponent bottomDivider>
       <Avatar
         rounded
-        source={{
-          uri: icon || '',
-          //   Platform.OS === 'ios'
-          //     ? icon || ''
-          //     : `asset:/icons/activity/${icon}.svg` || '',
-        }}
+        // source={{
+        //   uri:
+        //     Platform.OS === 'ios'
+        //       ? icon || ''
+        //       : 'asset:/images/add_hotspot.svg',
+        // }}
         containerStyle={{
-          backgroundColor: 'white',
+          width: 31,
+          height: 31,
+          backgroundColor: 'transparent',
         }}
+        ImageComponent={icons[icon || ''] || null}
+        avatarStyle={{ width: 40, height: 40 }}
+        iconStyle={{ width: 40, height: 40 }}
       />
+
       <ListItemComponent.Content>
         <Box flexDirection="row">
           <Box flex={1}>
@@ -63,7 +72,7 @@ const ListItem = ({
             ) : null}
           </Box>
           <Box flexDirection="column" justifyContent="center">
-            <Text style={{ fontSize: 12, color }}>
+            <Text style={{ fontSize: 14, color }}>
               {getDuration(activity.time)}
             </Text>
           </Box>
