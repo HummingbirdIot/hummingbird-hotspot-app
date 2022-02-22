@@ -36,3 +36,14 @@ export const getMakerName = (
   }
   return makers?.find((m) => m.address === payer)?.name || 'Unknown Maker'
 }
+
+export const truncateAddress = (
+  address: string,
+  startKeep = 10,
+  endKeep = 7,
+) => {
+  // console.log('truncateAddress::address:', address)
+  const start = address.slice(0, startKeep)
+  const end = address.slice(address.length - endKeep)
+  return `${start}...${end}`
+}

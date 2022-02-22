@@ -36,13 +36,7 @@ import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 import HotspotLocationView from '../../../widgets/main/HotspotLocationView'
 import { fetchHotspotData } from '../../../store/data/hotspotsSlice'
 import { reverseGeocode } from '../../../utils/location'
-
-const truncateAddress = (address: string, startWith = 10) => {
-  // console.log('truncateAddress::address:', address)
-  const start = address.slice(0, startWith)
-  const end = address.slice(address.length - 7)
-  return `${start}...${end}`
-}
+import { truncateAddress } from '../../../utils/formatter'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotDetailScreen = ({ navigation }: any) => {

@@ -189,20 +189,20 @@ export const fetchTxnsHead = createAsyncThunk<
     }
     if (addressType === 'account') {
       const filterType = filter as Exclude<AccountFilterType, 'pending'>
-      const { hasInitialLoad, cursor, data } = (
-        (
-          getState() as {
-            txns: TxnsState
-          }
-        ).txns.activities[address] as AccountActivityRecord
-      ).txns[filterType] as TransactionList
+      // const { hasInitialLoad, cursor, data } = (
+      //   (
+      //     getState() as {
+      //       txns: TxnsState
+      //     }
+      //   ).txns.activities[address] as AccountActivityRecord
+      // ).txns[filterType] as TransactionList
 
-      if (hasInitialLoad) {
-        return {
-          cursor,
-          data,
-        }
-      }
+      // if (hasInitialLoad) {
+      //   return {
+      //     cursor,
+      //     data,
+      //   }
+      // }
       return getAccountActivityList(
         address,
         filterType,

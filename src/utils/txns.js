@@ -82,7 +82,7 @@ const CONFIG = {
   assert_location_v2: {
     color: '#93D30B',
     name: 'Assert Location',
-    hotspotContextName: 'Asserted Location',
+    hotspotContextName: 'Updated Hotspot',
     tooltip: 'Assert Location Transaction (v2)',
   },
   add_gateway_v1: {

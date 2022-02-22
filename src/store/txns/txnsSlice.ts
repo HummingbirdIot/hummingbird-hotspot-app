@@ -137,10 +137,10 @@ const txnsSlice = createSlice({
         const nextTxns = uniqBy(
           [...obj.data, ...payload.data],
           (t) => (t as { hash: string }).hash,
-        ).sort((a, b) => b.time - a.time)
-        obj.data = nextTxns.filter(
-          (txn) => txn !== undefined,
-        ) as HttpTransaction[]
+        )
+          .filter((txn) => txn !== undefined)
+          .sort((a, b) => b.time - a.time) as HttpTransaction[]
+        obj.data = nextTxns
         // obj.cursor = payload.cursor
         obj.status = 'fulfilled'
         obj.hasInitialLoad = true
@@ -223,11 +223,14 @@ const txnsSlice = createSlice({
           const pending = payload as unknown as PendingTransaction[]
           const existingPending = state.pending.data
           const newPending = unionBy(pending, existingPending, 'hash')
-          state.pendingAndFailded = newPending
+
           state.pending.status = 'fulfilled'
           state.pending.hasInitialLoad = true
           state.pending.data = newPending.filter(
             (txn) => txn !== undefined && txn.status === 'pending',
+          )
+          state.pendingAndFailded = newPending.filter(
+            (txn) => txn !== undefined && txn.status !== 'cleared',
           )
         } else {
           const record = getActivityRecord(
@@ -241,7 +244,10 @@ const txnsSlice = createSlice({
             return
           }
           const txns = payload as TransactionList
-          const nextTxns = txns.data
+          const nextTxns = uniqBy(
+            [...obj.data, ...txns.data],
+            (t) => (t as { hash: string }).hash,
+          )
             .filter((txn) => txn !== undefined)
             .sort((a, b) => b.time - a.time)
 

@@ -13,6 +13,7 @@ import {
 } from '../../../utils/txns'
 import Box from '../../../components/Box'
 import { AddressType, HttpTransaction } from '../../../store/txns/txnsTypes'
+import { useDescription } from './itemFormatter'
 
 /**
  * 获取两经纬度之间的距离
@@ -72,8 +73,7 @@ const ListItem = ({ activity }: { activity: PendingTransaction }) => {
   const { hash, createdAt, txn, type } = activity
   const icon = getTxnIconPath(activity)
   const color = getTxnTypeColor(type)
-  let desc = ''
-  desc = txn.payer
+  const { description, feeOrAmount } = useDescription('', txn, {})
 
   return (
     <ListItemComponent bottomDivider>
@@ -95,7 +95,12 @@ const ListItem = ({ activity }: { activity: PendingTransaction }) => {
             <Text style={{ fontSize: 16, fontWeight: '500' }}>
               {getTxnTypeName(activity.type, 'hotspot')}
             </Text>
-            {desc ? <Text style={{ fontSize: 12, color }}>{desc}</Text> : null}
+            {description ? (
+              <Text style={{ fontSize: 12, color: 'gray' }}>{description}</Text>
+            ) : null}
+            {feeOrAmount ? (
+              <Text style={{ fontSize: 12, color }}>{feeOrAmount}</Text>
+            ) : null}
           </Box>
           <Box flexDirection="column" justifyContent="center">
             <Text style={{ fontSize: 12, color }}>
