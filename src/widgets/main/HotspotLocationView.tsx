@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { Button, Text } from 'react-native'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 import Config from 'react-native-config'
@@ -18,6 +18,13 @@ const HotspotLocationView = ({
   assertLocation: () => Promise<void>
 }) => {
   // console.log('HotspotLocationView::locationName:', locationName)
+  const [isWaiting, setWaiting] = useState<boolean>(true)
+  useEffect(() => {
+    // Hide splash after 5 seconds, deal with the consequences?
+    const timeout = setTimeout(() => setWaiting(false), 500)
+    return () => clearInterval(timeout)
+  }, [])
+
   if (!mapCenter) {
     return (
       <Box flex={1} justifyContent="center">
@@ -33,6 +40,10 @@ const HotspotLocationView = ({
         <Button title="Assert Location" onPress={assertLocation} />
       </Box>
     )
+  }
+
+  if (isWaiting) {
+    return <Box flex={1} justifyContent="center" />
   }
 
   return (

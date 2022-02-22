@@ -35,7 +35,6 @@ const HotspotsListScreen = ({ navigation }: any) => {
   const dispatch = useAppDispatch()
 
   const [addresses, setAddrresses] = useState<string[]>(hotspots.data || [])
-  console.log('HotspotsListScreen::hotspotAddresses:', addresses)
 
   useEffect(() => {
     setAddrresses(hotspots.data)

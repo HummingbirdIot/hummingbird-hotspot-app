@@ -85,11 +85,11 @@ const HotspotAssertPickLocationScreen = () => {
   }, [locationName, markerCenter, navigation, params])
 
   const navNext = useCallback(() => {
-    console.log('HotspotAssertPickLocationScreen::navNext', {
-      ...params,
-      coords: markerCenter,
-      locationName,
-    })
+    // console.log('HotspotAssertPickLocationScreen::navNext:', {
+    //   ...params,
+    //   coords: markerCenter,
+    //   locationName,
+    // })
     navigation.navigate('HotspotAssertConfirmLocationScreen', {
       ...params,
       coords: markerCenter,

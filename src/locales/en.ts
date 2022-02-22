@@ -285,6 +285,15 @@ export default {
       subtitle_free: 'Your Location Fee ($10) has been prepaid.',
       title: 'Location Fee',
     },
+    antenna_fee: {
+      title_error: 'Ooooops!',
+      subtitle_error: 'Something Wrong',
+      calculating_fee: 'Calculating Fee Data',
+      title: 'Update Antenna Fee',
+      subtitle_fee:
+        'You need to pay an Updating Fee (in DC) to confirm this update.',
+      next: 'Pay Fee & Update Hotspot',
+    },
     not_owner: {
       contact_manufacturer:
         'If you think you are the Hotspot Owner (i.e. you bought it) contact the Hotspot manufacturer.',
@@ -321,7 +330,7 @@ export default {
       title: 'Power Up',
     },
     progress: {
-      next: 'Go to Wallet',
+      next: 'View Activity',
       subtitle:
         'This can take a few minutes so feel free to close this screen.',
       title: 'REGISTERING HOTSPOT',

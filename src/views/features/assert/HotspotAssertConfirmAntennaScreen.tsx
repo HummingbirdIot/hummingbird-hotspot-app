@@ -32,17 +32,28 @@ type Route = RouteProp<
 
 const HotspotAssertConfirmAntennaScreen = () => {
   const { t } = useTranslation()
+  const { getOnboardingRecord } = useOnboarding()
+  const { params } = useRoute<Route>()
   const navigation = useNavigation<HotspotSetupNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const [account, setAccount] = useState<Account>()
   const [ownerAddress, setOwnerAddress] = useState<string | null>(null)
+
+  /**
+   * 0: 未请求
+   * 1: 请求OnboardingRecord
+   * 2: 请求FeeData
+   * 3: 错误
+   * 4: 请求完成
+   */
+  const [fetchFeeDataStatus, setFetchFeeDataStatus] = useState<number>(0)
+  const [fetchFeeDataError, setFetchFeeDataError] =
+    useState<{ type: string; error: Error }>()
   const [feeData, setFeeData] =
     useState<{ totalStakingAmount: Balance<DataCredits> }>()
-  const { params } = useRoute<Route>()
-  const { elevation, gain, hotspot } = params
-  const { getOnboardingRecord } = useOnboarding()
 
   // console.log('HotspotAssertConfirmAntennaScreen::routeParams:', params)
+  const { elevation, gain, hotspot } = params
 
   useAsync(async () => {
     const address = await getAddress()
@@ -55,10 +66,19 @@ const HotspotAssertConfirmAntennaScreen = () => {
 
     getAccount(ownerAddress).then(setAccount)
   }, [ownerAddress])
-  // console.log('HotspotAssertConfirmAntennaScreen::account', account)
 
   useEffect(() => {
-    if (!ownerAddress || !account?.balance) {
+    if (!ownerAddress) return
+    if (!account) return
+    if (fetchFeeDataStatus) return
+    if (!account.balance) {
+      setFetchFeeDataStatus(3)
+      setFetchFeeDataError({
+        type: 'Load_Fee_Data_Error',
+        error: new Error(
+          'Your wallet account not exists or the wallet has no balance',
+        ),
+      })
       return
     }
     const addr = Address.fromB58(params.hotspotAddress)
@@ -73,6 +93,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
     })
     const totalStakingAmount = new Balance(fee, CurrencyType.dataCredit)
     setFeeData({ totalStakingAmount })
+    setFetchFeeDataStatus(4)
   }, [
     ownerAddress,
     account,
@@ -81,6 +102,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
     gain,
     elevation,
     hotspot?.nonce,
+    fetchFeeDataStatus,
   ])
 
   const navNext = useCallback(async () => {
@@ -90,13 +112,42 @@ const HotspotAssertConfirmAntennaScreen = () => {
 
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
 
-  if (!feeData) {
+  if (fetchFeeDataError) {
+    return (
+      <BackScreen onClose={handleClose}>
+        <Box flex={1} justifyContent="center" paddingBottom="xxl">
+          <Text textAlign="center" fontSize={30}>
+            {t('hotspot_setup.antenna_fee.title_error')}
+          </Text>
+          <Text
+            textAlign="center"
+            fontSize={16}
+            marginTop="xs"
+            marginBottom="xxl"
+          >
+            {t('hotspot_setup.antenna_fee.subtitle_error')}
+          </Text>
+
+          <Box backgroundColor="grayExtraLight" borderRadius="m" padding="xl">
+            <Text textAlign="center" fontSize={16}>
+              {fetchFeeDataError.type}
+            </Text>
+            <Text textAlign="center" fontSize={16} marginTop="xl">
+              {fetchFeeDataError.error.toString()}
+            </Text>
+          </Box>
+        </Box>
+      </BackScreen>
+    )
+  }
+
+  if (!feeData || fetchFeeDataStatus < 4) {
     return (
       <BackScreen onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <ActivityIndicator color="#687A8C" size={54} />
           <Text textAlign="center" fontSize={16} marginTop="m">
-            Getting Fee Data
+            {t('hotspot_setup.antenna_fee.calculating_fee')}
           </Text>
         </Box>
       </BackScreen>
@@ -108,13 +159,13 @@ const HotspotAssertConfirmAntennaScreen = () => {
       <ScrollView>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <Text variant="h1" marginBottom="l" maxFontSizeMultiplier={1}>
-            {t('hotspot_setup.location_fee.title')}
+            {t('hotspot_setup.antenna_fee.title')}
           </Text>
           <Text
             variant="subtitle1"
             marginBottom={{ phone: 'l', smallPhone: 'ms' }}
           >
-            {t('hotspot_setup.location_fee.subtitle_fee')}
+            {t('hotspot_setup.antenna_fee.subtitle_fee')}
           </Text>
           <Box
             flexDirection="row"
@@ -174,7 +225,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
       </ScrollView>
       <Box>
         <DebouncedButton
-          title={t('hotspot_setup.location_fee.fee_next')}
+          title={t('hotspot_setup.antenna_fee.next')}
           mode="contained"
           variant="secondary"
           onPress={navNext}

@@ -91,16 +91,23 @@ export const useDescription = (
     challenger,
     challengerLon,
     challengerLat,
+    rewards,
     path,
     gateway,
   } = txn
   let description = ''
   let feeOrAmount = ''
-  if (gateway) {
+
+  if (rewards && rewards[0]) {
+    description = formatHotspotNameArray(
+      gateways[rewards[0].gateway]?.hotspot.name || '',
+    ).join(' ')
+  } else if (gateway) {
     description = formatHotspotNameArray(
       gateways[gateway]?.hotspot.name || '',
     ).join(' ')
   }
+
   if (payments) {
     let symbol = '+'
     if (payer === address) {

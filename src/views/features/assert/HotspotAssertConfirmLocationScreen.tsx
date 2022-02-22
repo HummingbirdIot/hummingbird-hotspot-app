@@ -33,10 +33,23 @@ type Route = RouteProp<
 
 const HotspotAssertConfirmLocationScreen = () => {
   const { t } = useTranslation()
+  const { getOnboardingRecord } = useOnboarding()
+  const { params } = useRoute<Route>()
   const navigation = useNavigation<HotspotSetupNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const [account, setAccount] = useState<Account>()
   const [ownerAddress, setOwnerAddress] = useState<string | null>(null)
+
+  /**
+   * 0: 未请求
+   * 1: 请求OnboardingRecord
+   * 2: 请求FeeData
+   * 3: 错误
+   * 4: 请求完成
+   */
+  const [fetchFeeDataStatus, setFetchFeeDataStatus] = useState<number>(0)
+  const [fetchFeeDataError, setFetchFeeDataError] =
+    useState<{ type: string; error: Error }>()
   const [feeData, setFeeData] = useState<{
     isFree: boolean
     hasSufficientBalance: boolean
@@ -45,12 +58,9 @@ const HotspotAssertConfirmLocationScreen = () => {
     totalStakingAmountDC: Balance<DataCredits>
     totalStakingAmountUsd: Balance<USDollars>
   }>()
-  const { params } = useRoute<Route>()
-  const { elevation, gain, coords, hotspot } = params
-  const [fetchFeeDataError, setFetchFeeDataError] = useState<unknown>(null)
-  const { getOnboardingRecord } = useOnboarding()
 
   // console.log('HotspotAssertConfirmLocationScreen::routeParams:', params)
+  const { elevation, gain, coords, hotspot } = params
 
   useAsync(async () => {
     const address = await getAddress()
@@ -67,17 +77,39 @@ const HotspotAssertConfirmLocationScreen = () => {
   // console.log('HotspotAssertConfirmLocationScreen::account', account)
 
   useEffect(() => {
-    setFetchFeeDataError(null)
+    if (!ownerAddress) return
+    if (!account) return
+    if (fetchFeeDataStatus) return
+    setFetchFeeDataStatus(1)
+    setFetchFeeDataError(undefined)
     getOnboardingRecord(params.hotspotAddress)
       .then((onboardingRecord) => {
-        // console.log(
-        //   'HotspotAssertConfirmLocationScreen::onboardingRecord',
-        //   onboardingRecord,
-        // )
-        // console.log('HotspotAssertConfirmLocationScreen::account', account)
-        if (!onboardingRecord || !ownerAddress || !account?.balance) {
+        console.log(
+          'HotspotAssertConfirmLocationScreen::onboardingRecord',
+          ownerAddress,
+          onboardingRecord,
+        )
+        if (!onboardingRecord) {
+          setFetchFeeDataStatus(3)
+          setFetchFeeDataError({
+            type: 'Load_Fee_Data_Error',
+            error: new Error(
+              "Your hotspots haven't been recorded on the sever",
+            ),
+          })
           return
         }
+        if (!account.balance) {
+          setFetchFeeDataStatus(3)
+          setFetchFeeDataError({
+            type: 'Load_Fee_Data_Error',
+            error: new Error(
+              'Your wallet account not exists or the wallet has no balance',
+            ),
+          })
+          return
+        }
+        setFetchFeeDataStatus(2)
 
         Location.loadLocationFeeData({
           nonce: hotspot?.nonce || 0,
@@ -88,20 +120,21 @@ const HotspotAssertConfirmLocationScreen = () => {
           makerAddress: onboardingRecord.maker.address,
         })
           .then(setFeeData)
+          .then(() => setFetchFeeDataStatus(4))
           .catch((error) => {
-            console.log(
-              'HotspotAssertConfirmLocationScreen::GettingFee::error:',
+            setFetchFeeDataStatus(3)
+            setFetchFeeDataError({
+              type: 'Load_Fee_Data_Error',
               error,
-            )
-            setFetchFeeDataError(error)
+            })
           })
       })
       .catch((error) => {
-        console.log(
-          'HotspotAssertConfirmLocationScreen::getOnboardingRecord::error:',
+        setFetchFeeDataStatus(3)
+        setFetchFeeDataError({
+          type: 'Get_Onboarding_Record_Error',
           error,
-        )
-        setFetchFeeDataError(error)
+        })
       })
   }, [
     ownerAddress,
@@ -110,6 +143,8 @@ const HotspotAssertConfirmLocationScreen = () => {
     params.hotspotAddress,
     hotspot?.nonce,
     hotspot?.mode,
+    fetchFeeDataStatus,
+    fetchFeeDataError,
   ])
 
   const navNext = useCallback(async () => {
@@ -129,17 +164,26 @@ const HotspotAssertConfirmLocationScreen = () => {
           <Text
             textAlign="center"
             fontSize={16}
-            marginTop="xl"
+            marginTop="xs"
             marginBottom="xxl"
           >
-            Getting Fee Data Failed({})
+            Getting Fee Data Failed
           </Text>
+
+          <Box backgroundColor="grayExtraLight" borderRadius="m" padding="xl">
+            <Text textAlign="center" fontSize={16}>
+              {fetchFeeDataError.type}
+            </Text>
+            <Text textAlign="center" fontSize={16} marginTop="xl">
+              {fetchFeeDataError.error.toString()}
+            </Text>
+          </Box>
         </Box>
       </BackScreen>
     )
   }
 
-  if (!feeData) {
+  if (!feeData || fetchFeeDataStatus < 4) {
     return (
       <BackScreen onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
@@ -153,15 +197,6 @@ const HotspotAssertConfirmLocationScreen = () => {
   }
 
   const { isFree, hasSufficientBalance, totalStakingAmount } = feeData
-  // console.log(
-  //   'HotspotAssertConfirmLocationScreen::feeData:',
-  //   isFree,
-  //   hasSufficientBalance,
-  //   totalStakingAmount,
-  //   totalStakingAmount?.toString(),
-  //   feeData,
-  // )
-  // console.log('HotspotAssertConfirmLocationScreen::coords:', coords, params)
 
   return (
     <BackScreen onClose={handleClose}>

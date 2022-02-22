@@ -15,6 +15,7 @@ import HotspotSetWiFiNavigator from './features/HotspotSetWiFiNavigator'
 import WelcomeScreen from '../link/WelcomeScreen'
 import CreateAccountScreen from '../link/CreateAccountScreen'
 import { OnboardingStackParamList } from '../link/onboardingTypes'
+import ActivityScreen from '../main/overview/ActivityScreen'
 
 const OnboardingStack = createStackNavigator<OnboardingStackParamList>()
 const MainStack = createStackNavigator()
@@ -68,6 +69,7 @@ const RootNavigator = () => {
         options={{ headerShown: false }}
         component={MainTabs}
       />
+
       <MainStack.Group>
         <MainStack.Screen
           name="HotspotSetup"
@@ -85,6 +87,7 @@ const RootNavigator = () => {
           component={HotspotSetWiFiNavigator}
         />
       </MainStack.Group>
+      <MainStack.Screen name="Activity" component={ActivityScreen} />
       <MainStack.Screen name="LockScreen" component={DetailsScreen} />
     </MainStack.Navigator>
   )

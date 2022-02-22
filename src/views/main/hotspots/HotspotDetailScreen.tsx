@@ -298,14 +298,6 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       onPress: () => setIsVisible(false),
     },
   ]
-  // const { lng, lat } = hotspot
-  if (!hotspotData) {
-    return (
-      <Box>
-        <Text>Loading...</Text>
-      </Box>
-    )
-  }
 
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
@@ -334,7 +326,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       <Box flex={6}>
         <HotspotLocationView
           mapCenter={
-            hotspotData.location
+            hotspotData?.location
               ? [hotspotData.lng || 0, hotspotData.lat || 0]
               : undefined
           }
@@ -342,116 +334,126 @@ const HotspotDetailScreen = ({ navigation }: any) => {
           assertLocation={assertLocation}
         />
       </Box>
-      <Box flex={10} backgroundColor="primaryBackground">
-        <Box
-          style={{
-            padding: 10,
-            paddingBottom: 5,
-          }}
-        >
+      {hotspotData ? (
+        <Box flex={10} backgroundColor="primaryBackground">
           <Box
-            flexDirection="row"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
-            <IconAddress width={20} height={20} />
-            <ThemedText
-              style={{
-                fontSize: 20,
-                color: '#474DFF',
-              }}
-            >
-              {truncateAddress(address, 16)}
-            </ThemedText>
-          </Box>
-          <Box
-            flexDirection="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            marginTop="xs"
-          >
-            <IconMaker width={10} height={10} />
-            <ThemedText
-              flex={1}
-              variant="body2"
-              marginLeft="xs"
-              marginRight="m"
-            >
-              {makerName}
-            </ThemedText>
-            <IconAccount width={10} height={10} />
-            <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-              {truncateAddress(hotspotData.owner || 'UnknownOwner')}
-            </ThemedText>
-          </Box>
-          <Box
-            flexDirection="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            marginTop="xs"
-          >
-            <Location
-              width={10}
-              height={10}
-              // color={isHidden ? colors.grayLightText : colors.grayText}
-            />
-            <ThemedText
-              flex={1}
-              variant="body2"
-              // color={isHidden ? 'grayLightText' : 'grayText'}
-              marginLeft="xs"
-              marginRight="m"
-            >
-              {`${hotspotData?.geocode?.longCity}, ${hotspotData?.geocode?.shortCountry}`}
-            </ThemedText>
-            <IconElevation width={10} height={10} />
-            <ThemedText
-              variant="body2"
-              // color={isHidden ? 'grayLightText' : 'grayText'}
-              marginLeft="xs"
-              marginRight="m"
-            >
-              {t('generic.meters', { distance: hotspotData?.elevation || 0 })}
-            </ThemedText>
-            <IconGain width={10} height={10} />
-            <ThemedText
-              variant="body2"
-              // color={isHidden ? 'grayLightText' : 'grayText'}
-              marginLeft="xs"
-              marginRight="m"
-            >
-              {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
-                maximumFractionDigits: 1,
-              }) + t('antennas.onboarding.dbi')}
-            </ThemedText>
-          </Box>
-        </Box>
-        <Box flex={1}>
-          <ButtonGroup
-            onPress={updateIndex}
-            selectedIndex={selectedIndex}
-            buttons={buttons}
-            containerStyle={{ height: 36 }}
-          />
-          <ScrollView
             style={{
-              flex: 1,
+              padding: 10,
+              paddingBottom: 5,
             }}
           >
             <Box
-              flex={1}
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <IconAddress width={20} height={20} />
+              <ThemedText
+                style={{
+                  fontSize: 20,
+                  color: '#474DFF',
+                }}
+              >
+                {truncateAddress(address, 16)}
+              </ThemedText>
+            </Box>
+            <Box
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              marginTop="xs"
+            >
+              <IconMaker width={10} height={10} />
+              <ThemedText
+                flex={1}
+                variant="body2"
+                marginLeft="xs"
+                marginRight="m"
+              >
+                {makerName}
+              </ThemedText>
+              <IconAccount width={10} height={10} />
+              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
+                {truncateAddress(hotspotData.owner || 'UnknownOwner')}
+              </ThemedText>
+            </Box>
+            <Box
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              marginTop="xs"
+            >
+              <Location
+                width={10}
+                height={10}
+                // color={isHidden ? colors.grayLightText : colors.grayText}
+              />
+              <ThemedText
+                flex={1}
+                variant="body2"
+                // color={isHidden ? 'grayLightText' : 'grayText'}
+                marginLeft="xs"
+                marginRight="m"
+              >
+                {`${hotspotData?.geocode?.longCity}, ${hotspotData?.geocode?.shortCountry}`}
+              </ThemedText>
+              <IconElevation width={10} height={10} />
+              <ThemedText
+                variant="body2"
+                // color={isHidden ? 'grayLightText' : 'grayText'}
+                marginLeft="xs"
+                marginRight="m"
+              >
+                {t('generic.meters', { distance: hotspotData?.elevation || 0 })}
+              </ThemedText>
+              <IconGain width={10} height={10} />
+              <ThemedText
+                variant="body2"
+                // color={isHidden ? 'grayLightText' : 'grayText'}
+                marginLeft="xs"
+                marginRight="m"
+              >
+                {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
+                  maximumFractionDigits: 1,
+                }) + t('antennas.onboarding.dbi')}
+              </ThemedText>
+            </Box>
+          </Box>
+          <Box flex={1}>
+            <ButtonGroup
+              onPress={updateIndex}
+              selectedIndex={selectedIndex}
+              buttons={buttons}
+              containerStyle={{ height: 36 }}
+            />
+            <ScrollView
               style={{
-                paddingTop: 5,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingBottom: insets.bottom,
+                flex: 1,
               }}
             >
-              {widgets[selectedIndex] || null}
-            </Box>
-          </ScrollView>
+              <Box
+                flex={1}
+                style={{
+                  paddingTop: 5,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: insets.bottom,
+                }}
+              >
+                {widgets[selectedIndex] || null}
+              </Box>
+            </ScrollView>
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box
+          flex={10}
+          backgroundColor="primaryBackground"
+          justifyContent="center"
+        >
+          <Text style={{ textAlign: 'center' }}>Loading...</Text>
+        </Box>
+      )}
       <BottomSheet
         isVisible={isVisible}
         containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
