@@ -150,7 +150,7 @@ export const getAccountActivityList = async (
   filterType: AccountFilterType,
   cursor: string | undefined = undefined,
 ) => {
-  console.log('getAccountActivityList', breadcrumbOpts)
+  console.log('getAccountActivityList', breadcrumbOpts, !cursor)
   const params = {
     filterTypes: AccountFilters[filterType],
     cursor,

@@ -98,10 +98,10 @@ export const useDescription = (
     let symbol = '+'
     if (payer === address) {
       symbol = '-'
-      description = `To: ${truncateAddress(payments[0].payee)}`
+      description = `To @${truncateAddress(payments[0].payee, 16)}`
     } else {
       description = ''
-      description = `From: ${truncateAddress(address, 16)}`
+      description = `From @${truncateAddress(payer, 16)}`
     }
     feeOrAmount = `${symbol} ${payments[0].amount}`
   } else if (fee) {
@@ -109,9 +109,15 @@ export const useDescription = (
     // if (payer === address) {
     //   symbol = '-'
     // }
-    feeOrAmount = `${symbol} ${
-      (Number(stakingFee || 0) + (fee || 0)).toString() || '0'
-    } DC`
+    if (fee.floatBalance) {
+      feeOrAmount = `${symbol} ${
+        ((stakingFee?.floatBalance || 0) + fee.floatBalance).toString() || '0'
+      } DC`
+    } else {
+      feeOrAmount = `${symbol} ${
+        (Number(stakingFee || 0) + fee).toString() || '0'
+      } DC`
+    }
     // console.log('balance:', feeOrAmount)
   } else if (totalAmount) {
     feeOrAmount = `+ ${totalAmount.floatBalance.toString() || '0'} HNT`

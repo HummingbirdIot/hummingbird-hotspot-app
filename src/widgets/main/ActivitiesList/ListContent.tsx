@@ -24,11 +24,11 @@ const ListContent = ({
   status: Loading
   address: string
   addressType: AddressType
-  lng: number | undefined
-  lat: number | undefined
+  lng?: number
+  lat?: number
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [count, setCount] = useState<number>(12)
+  const [count, setCount] = useState<number>(20)
   const [activityList, setActivityList] = useState<
     Array<HttpTransaction & PendingTransaction>
   >(activities ? activities.slice(0, count) : [])
