@@ -47,8 +47,8 @@ export const AccountFilterKeys = [
   'all',
   'mining',
   'payment',
-  'pending',
   'hotspot',
+  'pending',
   'burn',
   'validator',
 ] as const

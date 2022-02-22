@@ -2,8 +2,6 @@ import React, { memo } from 'react'
 import { ScrollView } from 'react-native'
 import { Avatar, Header, ListItem, Text } from 'react-native-elements'
 import { useSelector } from 'react-redux'
-import { Hotspot } from '@helium/http'
-import { Maker } from '@helium/onboarding'
 import { useTranslation } from 'react-i18next'
 import ThemedText from '../../../components/Text'
 import Box from '../../../components/Box'
@@ -15,41 +13,11 @@ import { useColors } from '../../../theme/themeHooks'
 import Location from '../../../assets/images/location.svg'
 import Signal from '../../../assets/images/signal.svg'
 import { locale } from '../../../utils/i18n'
-
-export const HELIUM_OLD_MAKER_ADDRESS =
-  '14fzfjFcHpDR1rTH8BNPvSi5dKBbgxaDnmsVPbCjuq9ENjpZbxh'
-
-export const HUMMINGBIRD_MAKER_ADDRESS =
-  '14DdSjvEkBQ46xQ24LAtHwQkAeoUUZHfGCosgJe33nRQ6rZwPG3'
-
-const formatHotspotName = (name: string) => {
-  return name.split('-').map((str) => {
-    return str.replace(/^\w/, (c) => c.toLocaleUpperCase())
-  })
-}
-
-const formatHotspotTitle = (name: string) => {
-  return name
-    .split('-')
-    .filter((s, i) => i !== 1)
-    .map((str) => {
-      return str[0].toLocaleUpperCase()
-    })
-    .join('')
-}
-
-const getMakerName = (hotspot: Hotspot, makers: Maker[] | undefined) => {
-  if (hotspot?.payer === HUMMINGBIRD_MAKER_ADDRESS) {
-    return 'Hummingbird'
-  }
-  if (hotspot?.payer === HELIUM_OLD_MAKER_ADDRESS) {
-    // special case for old Helium Hotspots
-    return 'Helium'
-  }
-  return (
-    makers?.find((m) => m.address === hotspot?.payer)?.name || 'Unknown Maker'
-  )
-}
+import {
+  formatHotspotName,
+  formatHotspotTitle,
+  getMakerName,
+} from '../../../utils/formatter'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotsListScreen = ({ navigation }: any) => {
@@ -100,7 +68,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                 navigation.navigate('HotspotDetailScreen', {
                   // screen: 'HotspotDetail',
                   title: formatHotspotName(hotspot.name || '').join(' '),
-                  makerName: getMakerName(hotspot, makers),
+                  makerName: getMakerName(hotspot?.payer, makers),
                   hotspot,
                 })
               }
@@ -134,7 +102,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     )
                   })}
                 </ListItem.Title>
-                <Text>{getMakerName(hotspot, makers)}</Text>
+                <Text>{getMakerName(hotspot.payer, makers)}</Text>
                 <Box
                   flexDirection="row"
                   justifyContent="flex-start"

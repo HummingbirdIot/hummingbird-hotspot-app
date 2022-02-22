@@ -77,8 +77,8 @@ const ActivityScreen = ({ navigation }: any) => {
   //   requestLocationPermission,
   //   showOKCancelAlert,
   // ])
-  const [all, mining, payment, pending] = AccountFilterKeys
-  const buttons = [all, mining, payment, pending]
+  const [all, mining, payment, hotspot, pending] = AccountFilterKeys
+  const buttons = [all, mining, payment, hotspot, pending]
 
   const { surfaceContrast } = useColors()
 
