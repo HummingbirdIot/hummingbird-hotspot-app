@@ -165,12 +165,20 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const Statistics = useMemo(
     () => (
       <Box
-        width="100%"
-        minHeight={280}
-        backgroundColor="grayBoxLight"
-        borderRadius="l"
+        flex={1}
+        style={{
+          paddingLeft: 10,
+          paddingRight: 10,
+        }}
       >
-        <RewardsStatistics address={address} resource="hotspots" />
+        <Box
+          width="100%"
+          minHeight={280}
+          backgroundColor="grayBoxLight"
+          borderRadius="l"
+        >
+          <RewardsStatistics address={address} resource="hotspots" />
+        </Box>
       </Box>
     ),
     [address],
@@ -190,31 +198,37 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const Empty = useMemo(
     () =>
       witnessedData && witnessedData.length ? (
-        <Box
+        <ScrollView
           style={{
-            backgroundColor: '#f6f6f6',
-            paddingVertical: 20,
-            borderRadius: 5,
+            flex: 1,
           }}
         >
-          {witnessedData.map((witness) => (
-            <Box key={witness.address}>
-              <ThemedText textAlign="center" color="gray">
-                {formatHotspotName(witness.name || 'unknow-hotspot-name')}
-              </ThemedText>
-              <ThemedText textAlign="center" color="gray">
-                Location: {witness.geocode?.longStreet},{' '}
-                {witness.geocode?.longCity}, {witness.geocode?.shortCountry}
-              </ThemedText>
-              <ThemedText textAlign="center" color="gray">
-                RewardScale: {witness.rewardScale}
-              </ThemedText>
-              <ThemedText textAlign="center" color="gray">
-                --------------------------------------
-              </ThemedText>
-            </Box>
-          ))}
-        </Box>
+          <Box
+            style={{
+              backgroundColor: '#f6f6f6',
+              paddingVertical: 20,
+              borderRadius: 5,
+            }}
+          >
+            {witnessedData.map((witness) => (
+              <Box key={witness.address}>
+                <ThemedText textAlign="center" color="gray">
+                  {formatHotspotName(witness.name || 'unknow-hotspot-name')}
+                </ThemedText>
+                <ThemedText textAlign="center" color="gray">
+                  Location: {witness.geocode?.longStreet},{' '}
+                  {witness.geocode?.longCity}, {witness.geocode?.shortCountry}
+                </ThemedText>
+                <ThemedText textAlign="center" color="gray">
+                  RewardScale: {witness.rewardScale}
+                </ThemedText>
+                <ThemedText textAlign="center" color="gray">
+                  --------------------------------------
+                </ThemedText>
+              </Box>
+            ))}
+          </Box>
+        </ScrollView>
       ) : (
         <Box
           style={{
@@ -426,23 +440,15 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               buttons={buttons}
               containerStyle={{ height: 36 }}
             />
-            <ScrollView
+            <Box
+              flex={1}
               style={{
-                flex: 1,
+                paddingTop: 5,
+                paddingBottom: insets.bottom,
               }}
             >
-              <Box
-                flex={1}
-                style={{
-                  paddingTop: 5,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  paddingBottom: insets.bottom,
-                }}
-              >
-                {widgets[selectedIndex] || null}
-              </Box>
-            </ScrollView>
+              {widgets[selectedIndex] || null}
+            </Box>
           </Box>
         </Box>
       ) : (

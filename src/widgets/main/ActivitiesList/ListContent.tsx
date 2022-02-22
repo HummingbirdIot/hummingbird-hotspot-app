@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 // import { Avatar, ListItem, Text } from 'react-native-elements'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, FlatList } from 'react-native'
 import { PendingTransaction } from '@helium/http'
 import Box from '../../../components/Box'
 import {
@@ -66,24 +66,49 @@ const ListContent = ({
     )
   }
 
+  const renderItem = ({
+    item: activity,
+  }: {
+    item: HttpTransaction & PendingTransaction
+  }) =>
+    activity.status === 'pending' ? (
+      <PendingListItem
+        // key={activity.hash}
+        activity={activity}
+      />
+    ) : (
+      <ListItem
+        // key={activity.hash}
+        activity={activity}
+        address={address}
+        addressType={addressType}
+        lng={lng}
+        lat={lat}
+      />
+    )
+
   return (
-    <>
-      {activityList.map((activity: HttpTransaction & PendingTransaction) => {
-        if (activity.status === 'pending') {
-          return <PendingListItem key={activity.hash} activity={activity} />
-        }
-        return (
-          <ListItem
-            key={activity.hash}
-            activity={activity}
-            address={address}
-            addressType={addressType}
-            lng={lng}
-            lat={lat}
-          />
-        )
-      })}
-    </>
+    <FlatList
+      data={activityList}
+      renderItem={renderItem}
+      keyExtractor={(activity) => activity.hash}
+    />
+    //   {activityList.map((activity: HttpTransaction & PendingTransaction) => {
+    //     if (activity.status === 'pending') {
+    //       return <PendingListItem key={activity.hash} activity={activity} />
+    //     }
+    //     return (
+    //       <ListItem
+    //         key={activity.hash}
+    //         activity={activity}
+    //         address={address}
+    //         addressType={addressType}
+    //         lng={lng}
+    //         lat={lat}
+    //       />
+    //     )
+    //   })}
+    // </>
   )
 }
 

@@ -109,29 +109,24 @@ const ActivityScreen = ({ navigation }: any) => {
           buttons={buttons}
           containerStyle={{ height: 36 }}
         />
-        <ScrollView
+
+        <Box
+          flex={1}
           style={{
-            flex: 1,
+            paddingTop: 5,
+            // paddingLeft: 10,
+            // paddingRight: 10,
+            paddingBottom: insets.bottom,
           }}
         >
-          <Box
-            flex={1}
-            style={{
-              paddingTop: 5,
-              paddingLeft: 10,
-              paddingRight: 10,
-              paddingBottom: insets.bottom,
-            }}
-          >
-            <ActivitiesList
-              address={address}
-              filter={buttons[selectedIndex]}
-              addressType="account"
-              // lng={coords.longitude}
-              // lat={coords.latitude}
-            />
-          </Box>
-        </ScrollView>
+          <ActivitiesList
+            address={address}
+            filter={buttons[selectedIndex]}
+            addressType="account"
+            // lng={coords.longitude}
+            // lat={coords.latitude}
+          />
+        </Box>
       </Box>
     </Box>
   )
