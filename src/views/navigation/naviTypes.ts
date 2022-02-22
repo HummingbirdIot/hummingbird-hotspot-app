@@ -1,5 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import { B58Address } from 'src/store/txns/txnsTypes'
 
 export type MainTabType = 'Overview' | 'Hotspots' | 'Explorer' | 'More'
 
@@ -25,6 +26,11 @@ export type RootStackParamList = {
   HotspotSetup: undefined
   HotspotAssert: undefined
   ScanStack: undefined
+  HotspotDetailScreen: {
+    address: B58Address
+    title: string
+    makerName: string
+  }
 }
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList>

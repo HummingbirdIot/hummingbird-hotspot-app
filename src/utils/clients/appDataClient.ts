@@ -14,11 +14,15 @@ import {
 } from '../../store/txns/txnsTypes'
 
 const MAX = 100000
-const userAgent = `hummingbird-hotspot-app-${getVersion()}-${
-  Platform.OS
-}-js-client`
+const userAgent = `helium-hotspot-app-${getVersion()}-${Platform.OS}-js-client`
 
-const client = new Client(Network.production, {
+// let network = networkName === 'helium' ? Network.production : Network.stakejoy
+
+const network = new Network({
+  baseURL: 'https://helium-api.stakejoy.com',
+  version: 1,
+})
+const client = new Client(network, {
   retry: 1,
   name: userAgent,
   userAgent,
@@ -76,21 +80,17 @@ export const hotspotOnChain = async (address: string) => {
 }
 
 export const getHotspots = async () => {
-  // console.log('MyLOG::getHotspots', breadcrumbOpts)
+  console.log('getHotspots', breadcrumbOpts)
   const address = await getAddress()
   if (!address) return []
-  // console.log('MyLOG::getHotspots::address:', address)
+  // console.log('getHotspots::address:', address)
 
   try {
-    const newClient = client.account(address)
-    // console.log('MyLOG::getHotspots::newClient:', newClient)
-    const newHotspots = newClient.hotspots
-    // console.log('MyLOG::getHotspots::newHotspots:', newHotspots)
-    const newHotspotList = await newHotspots.list()
-    // console.log('MyLOG::getHotspots::newHotspotList:', newHotspotList)
+    const newHotspotList = await client.account(address).hotspots.list()
+    // console.log('getHotspots::newHotspotList:', newHotspotList)
     return newHotspotList.takeJSON(MAX)
   } catch (error) {
-    console.log('MyLOG::getHotspots::newHotspotList::error', error)
+    console.log('getHotspots::newHotspotList::error', error)
   }
 }
 
@@ -197,9 +197,15 @@ export const getHotspotRolesList = async (
   return client.hotspot(gateway).roles.list(params)
 }
 
-export const getWitnessedHotspots = async (address: string) => {
+export const getWitnessesHotspots = async (address: string) => {
   console.log('getWitnessedHotspots', breadcrumbOpts)
   const list = await client.hotspot(address).witnesses.list()
+  return list.take(MAX)
+}
+
+export const getWitnessedHotspots = async (address: string) => {
+  console.log('getWitnessedHotspots', breadcrumbOpts)
+  const list = await client.hotspot(address).witnessed.list()
   return list.take(MAX)
 }
 

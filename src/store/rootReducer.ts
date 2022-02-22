@@ -17,7 +17,15 @@ const config = {
   hotspots: {
     key: hotspotsSlice.name,
     storage: AsyncStorage,
-    blacklist: ['rewards'],
+    blacklist: [
+      'hotspotsObj',
+      'loadingRewards',
+      'hotspotsLoaded',
+      'failure',
+      'syncStatuses',
+      'rewards',
+      'failure',
+    ],
     version: 0,
     migrate: createMigrate(hotspotsSliceMigrations, { debug: false }),
   },

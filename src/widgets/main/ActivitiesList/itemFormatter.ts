@@ -1,5 +1,8 @@
 import { useSelector } from 'react-redux'
-import { formatHotspotName, truncateAddress } from '../../../utils/formatter'
+import {
+  formatHotspotNameArray,
+  truncateAddress,
+} from '../../../utils/formatter'
 import {
   AddressType,
   B58Address,
@@ -74,7 +77,9 @@ export const useDescription = (
     lat?: number
   },
 ) => {
-  const gateways = useSelector((state: RootState) => state.hotspots.hotspotsObj)
+  const gateways = useSelector(
+    (state: RootState) => state.hotspots.hotspotsData,
+  )
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     hash,
@@ -92,7 +97,9 @@ export const useDescription = (
   let description = ''
   let feeOrAmount = ''
   if (gateway) {
-    description = formatHotspotName(gateways[gateway]?.name || '').join(' ')
+    description = formatHotspotNameArray(
+      gateways[gateway]?.hotspot.name || '',
+    ).join(' ')
   }
   if (payments) {
     let symbol = '+'

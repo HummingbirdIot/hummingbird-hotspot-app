@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
 import { Avatar, Header, ListItem, Text } from 'react-native-elements'
 import { useSelector } from 'react-redux'
@@ -14,8 +14,8 @@ import Location from '../../../assets/images/location.svg'
 import Signal from '../../../assets/images/signal.svg'
 import { locale } from '../../../utils/i18n'
 import {
-  formatHotspotName,
-  formatHotspotTitle,
+  formatHotspotNameArray,
+  formatHotspotShortName,
   getMakerName,
 } from '../../../utils/formatter'
 
@@ -27,16 +27,25 @@ const HotspotsListScreen = ({ navigation }: any) => {
   // console.log('HotspotsListScreen::surfaceContrast:', surfaceContrast)
 
   const makers = useSelector((state: RootState) => state.helium.makers)
-  // console.log('MyLOG::HotspotsListScreen::makers:', makers)
+  // console.log('HotspotsListScreen::makers:', makers)
 
-  const hotspots = useSelector(
-    (state: RootState) => state.hotspots.hotspots.data,
+  const { hotspots, hotspotsData } = useSelector(
+    (state: RootState) => state.hotspots,
   )
-  // console.log('HotspotsListScreen::hotspots:', hotspots)
   const dispatch = useAppDispatch()
 
+  const [addresses, setAddrresses] = useState<string[]>(hotspots.data || [])
+  console.log('HotspotsListScreen::hotspotAddresses:', addresses)
+
+  useEffect(() => {
+    setAddrresses(hotspots.data)
+    // console.log('HotspotsListScreen::hotspotAddresses:', hotspots.data)
+  }, [hotspots.data])
+
   useMount(() => {
-    dispatch(fetchHotspotsData())
+    dispatch(fetchHotspotsData()).catch((error) =>
+      console.log('HotspotsListScreen::fetchHotspotsData:werror:', error),
+    )
     // maybeGetLocation(false)
   })
 
@@ -60,102 +69,112 @@ const HotspotsListScreen = ({ navigation }: any) => {
       />
       <Box flex={1}>
         <ScrollView>
-          {hotspots.map((hotspot) => (
-            <ListItem
-              key={hotspot.address}
-              bottomDivider
-              onPress={() =>
-                navigation.navigate('HotspotDetailScreen', {
-                  // screen: 'HotspotDetail',
-                  title: formatHotspotName(hotspot.name || '').join(' '),
-                  makerName: getMakerName(hotspot?.payer, makers),
-                  hotspot,
-                })
-              }
-            >
-              <Avatar
-                rounded
-                title={formatHotspotTitle(hotspot.name || '')}
-                titleStyle={{ fontSize: 18 }}
-                // containerStyle={}
-                // onPress={() => console.log('Works!')}
-              />
-              <ListItem.Content>
-                <ListItem.Title>
-                  {formatHotspotName(hotspot.name || '').map((str, j) => {
-                    if (j === 2) {
-                      return (
-                        <Text
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={j}
-                          style={{ fontSize: 22, fontWeight: '500' }}
-                        >
-                          {str}
-                        </Text>
-                      )
-                    }
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <Text key={j} style={{ fontSize: 22, fontWeight: '200' }}>
-                        {str}{' '}
-                      </Text>
-                    )
-                  })}
-                </ListItem.Title>
-                <Text>{getMakerName(hotspot.payer, makers)}</Text>
-                <Box
-                  flexDirection="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  marginTop="xs"
-                  // marginBottom="m"
-                  // marginLeft="m"
-                  opacity={hotspot.address === undefined ? 0 : 100}
-                >
-                  <Location
-                    width={10}
-                    height={10}
-                    // color={isHidden ? colors.grayLightText : colors.grayText}
-                  />
-                  <ThemedText
-                    flex={8}
-                    variant="body2"
-                    // color={isHidden ? 'grayLightText' : 'grayText'}
-                    marginLeft="xs"
-                    marginRight="m"
+          {addresses.map((address) => {
+            const { hotspot } = hotspotsData[address]
+            return (
+              <ListItem
+                key={address}
+                bottomDivider
+                onPress={() =>
+                  navigation.navigate('HotspotDetailScreen', {
+                    // screen: 'HotspotDetail',
+                    title: formatHotspotNameArray(hotspot.name || '').join(' '),
+                    makerName: getMakerName(hotspot?.payer, makers),
+                    address: hotspot.address,
+                  })
+                }
+              >
+                <Avatar
+                  rounded
+                  title={formatHotspotShortName(hotspot.name || '')}
+                  titleStyle={{ fontSize: 18 }}
+                  // containerStyle={}
+                  // onPress={() => console.log('Works!')}
+                />
+                <ListItem.Content>
+                  <ListItem.Title>
+                    {formatHotspotNameArray(hotspot.name || '').map(
+                      (str, j) => {
+                        if (j === 2) {
+                          return (
+                            <Text
+                              // eslint-disable-next-line react/no-array-index-key
+                              key={j}
+                              style={{ fontSize: 22, fontWeight: '500' }}
+                            >
+                              {str}
+                            </Text>
+                          )
+                        }
+                        return (
+                          <Text
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={j}
+                            style={{ fontSize: 22, fontWeight: '200' }}
+                          >
+                            {str}{' '}
+                          </Text>
+                        )
+                      },
+                    )}
+                  </ListItem.Title>
+                  <Text>{getMakerName(hotspot.payer, makers)}</Text>
+                  <Box
+                    flexDirection="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    marginTop="xs"
+                    // marginBottom="m"
+                    // marginLeft="m"
+                    opacity={hotspot.address === undefined ? 0 : 100}
                   >
-                    {`${hotspot?.geocode?.longCity}, ${hotspot?.geocode?.shortCountry}`}
-                  </ThemedText>
-                  <Signal
-                    width={10}
-                    height={10}
-                    // color={isHidden ? colors.grayLightText : colors.grayText}
-                  />
-                  <ThemedText
-                    flex={3}
-                    variant="body2"
-                    // color={isHidden ? 'grayLightText' : 'grayText'}
-                    marginLeft="xs"
-                  >
-                    {t('generic.meters', { distance: hotspot?.elevation || 0 })}
-                  </ThemedText>
-                  <ThemedText
-                    flex={3}
-                    variant="body2"
-                    // color={isHidden ? 'grayLightText' : 'grayText'}
-                    marginLeft="xs"
-                    style={{
-                      textAlign: 'right',
-                    }}
-                  >
-                    {((hotspot?.gain || 0) / 10).toLocaleString(locale, {
-                      maximumFractionDigits: 1,
-                    }) + t('antennas.onboarding.dbi')}
-                  </ThemedText>
-                </Box>
-              </ListItem.Content>
-            </ListItem>
-          ))}
+                    <Location
+                      width={10}
+                      height={10}
+                      // color={isHidden ? colors.grayLightText : colors.grayText}
+                    />
+                    <ThemedText
+                      flex={8}
+                      variant="body2"
+                      // color={isHidden ? 'grayLightText' : 'grayText'}
+                      marginLeft="xs"
+                      marginRight="m"
+                    >
+                      {`${hotspot?.geocode?.longCity}, ${hotspot?.geocode?.shortCountry}`}
+                    </ThemedText>
+                    <Signal
+                      width={10}
+                      height={10}
+                      // color={isHidden ? colors.grayLightText : colors.grayText}
+                    />
+                    <ThemedText
+                      flex={3}
+                      variant="body2"
+                      // color={isHidden ? 'grayLightText' : 'grayText'}
+                      marginLeft="xs"
+                    >
+                      {t('generic.meters', {
+                        distance: hotspot?.elevation || 0,
+                      })}
+                    </ThemedText>
+                    <ThemedText
+                      flex={3}
+                      variant="body2"
+                      // color={isHidden ? 'grayLightText' : 'grayText'}
+                      marginLeft="xs"
+                      style={{
+                        textAlign: 'right',
+                      }}
+                    >
+                      {((hotspot?.gain || 0) / 10).toLocaleString(locale, {
+                        maximumFractionDigits: 1,
+                      }) + t('antennas.onboarding.dbi')}
+                    </ThemedText>
+                  </Box>
+                </ListItem.Content>
+              </ListItem>
+            )
+          })}
         </ScrollView>
       </Box>
     </Box>

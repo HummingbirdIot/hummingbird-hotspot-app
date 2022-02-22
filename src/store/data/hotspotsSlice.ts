@@ -6,6 +6,7 @@ import {
   getHotspotRewards,
   getHotspots,
   getWitnessedHotspots,
+  // getWitnessesHotspots,
 } from '../../utils/clients/appDataClient'
 import { LocationCoords } from '../../utils/location'
 import {
@@ -16,41 +17,76 @@ import {
   hasValidCache,
 } from '../../utils/cacheUtils'
 import { HotspotSyncStatus } from '../../views/main/hotspots/hotspotTypes'
+import { B58Address } from '../txns/txnsTypes'
+// import { getSecureItem } from '../../utils/secureAccount'
 
 export type Rewards = Record<string, Array<Balance<NetworkTokens>>>
 
-type HotspotData = {
+type HotspotDetail = {
+  hotspot: Hotspot
+  witnessed: Witness[]
   witnesses?: Witness[]
-  hotspot?: Hotspot
 }
-export type HotspotDetailCache = CacheRecord<HotspotData>
+export type HotspotDetailCache = CacheRecord<HotspotDetail>
 export type HotspotAddress = string
 export type HotspotIndexed<T> = Record<HotspotAddress, T>
 
 export type HotspotsSliceState = {
-  hotspots: CacheRecord<{ data: Hotspot[] }>
-  hotspotsObj: Record<string, Hotspot>
+  hotspots: CacheRecord<{ data: B58Address[] }>
+  // hotspotsObj: Record<string, Hotspot>
   location?: LocationCoords
   loadingRewards: boolean
   hotspotsLoaded: boolean
   failure: boolean
   syncStatuses: Record<string, CacheRecord<{ status: HotspotSyncStatus }>>
   rewards: Rewards
-  hotspotData: HotspotIndexed<HotspotDetailCache>
-  hotspotAddr: HotspotAddress
+  hotspotsData: HotspotIndexed<HotspotDetailCache>
 }
 
 const initialState: HotspotsSliceState = {
   hotspots: { lastFetchedTimestamp: 0, loading: false, data: [] },
-  hotspotsObj: {},
+  // hotspotsObj: {},
   loadingRewards: false,
   hotspotsLoaded: false,
   failure: false,
   syncStatuses: {},
   rewards: {},
-  hotspotData: {},
-  hotspotAddr: '',
+  hotspotsData: {},
 }
+
+// type Restore = {
+//   hotspots: boolean
+//   isPinRequired: boolean
+//   authInterval: number
+//   isLocked: boolean
+//   walletLinkToken?: string
+// }
+
+// export const restoreAppSettings = createAsyncThunk<Restore>(
+//   'app/restoreAppSettings',
+//   async () => {
+//     const [isBackedUp, isPinRequired, authInterval, walletLinkToken, address] =
+//       await Promise.all([
+//         getSecureItem('hotspots'),
+//         getSecureItem('hotspotsData'),
+//       ])
+//     if (isBackedUp && address) {
+//       // 推送
+//       console.log('OneSignal.sendTags:', { address })
+//       // OneSignal.sendTags({ address })
+//       // Logger.setUser(address)
+//     }
+//     return {
+//       isBackedUp,
+//       isPinRequired,
+//       authInterval: authInterval
+//         ? parseInt(authInterval, 10)
+//         : Intervals.IMMEDIATELY,
+//       isLocked: isPinRequired,
+//       walletLinkToken,
+//     } as Restore
+//   },
+// )
 
 export const fetchRewards = createAsyncThunk<
   Rewards,
@@ -71,25 +107,28 @@ export const fetchRewards = createAsyncThunk<
   }
 })
 
-export const fetchHotspotData = createAsyncThunk<HotspotData, string>(
-  'hotspots/fetchHotspotData',
+export const fetchHotspotDetail = createAsyncThunk<HotspotDetail, string>(
+  'hotspots/fetchHotspotDetail',
   async (address: string, { getState }) => {
     const state = (
       (await getState()) as {
         hotspots: HotspotsSliceState
       }
     ).hotspots
-    const hotspotData = state.hotspotData[address] || {}
-    if (hasValidCache(hotspotData)) {
-      return hotspotData
-    }
-
-    const hotspot = state.hotspotsObj[address] || {}
+    const hotspotsData = state.hotspotsData[address] || {}
+    const { hotspot, witnessed } = hotspotsData
     if (hasValidCache(hotspot)) {
-      const witnesses = await getWitnessedHotspots(address)
+      if (witnessed) {
+        return {
+          hotspot,
+          witnesses: [],
+          witnessed,
+        }
+      }
       return {
         hotspot,
-        witnesses,
+        witnesses: [],
+        witnessed: await getWitnessedHotspots(address),
       }
     }
     const data = await Promise.all([
@@ -98,7 +137,8 @@ export const fetchHotspotData = createAsyncThunk<HotspotData, string>(
     ])
     return {
       hotspot: data[0],
-      witnesses: data[1],
+      witnesses: [],
+      witnessed: data[1],
     }
   },
 )
@@ -109,25 +149,33 @@ export const fetchHotspotsData = createAsyncThunk(
   async (_arg, { getState }) => {
     const state = ((await getState()) as { hotspots: HotspotsSliceState })
       .hotspots
-    if (hasValidCache(state.hotspots)) {
+    if (hasValidCache(state.hotspots) && state.hotspots.data?.length) {
       return {
-        hotspots: state.hotspots.data,
+        data: state.hotspots.data,
       }
     }
-
+    const hotspots = (await getHotspots()) || []
     return {
-      hotspots: await getHotspots(),
+      hotspots,
+      data: hotspots.map((hotspot) => hotspot.address),
     }
   },
 )
 
-const hotspotsToObj = (hotspots: Hotspot[]) =>
+const hotspotsToObj = (
+  hotspots: Hotspot[],
+  stored: HotspotIndexed<HotspotDetailCache>,
+) =>
   hotspots.reduce((obj, hotspot) => {
     return {
       ...obj,
-      [hotspot.address]: handleCacheFulfilled(hotspot),
+      [hotspot.address]: handleCacheFulfilled({
+        hotspot,
+        witnesses: [],
+        witnessed: obj[hotspot.address]?.witnessed || undefined,
+      }),
     }
-  }, {})
+  }, stored || {})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const hotspotsSliceMigrations: any = {
@@ -154,11 +202,14 @@ const hotspotsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchHotspotsData.fulfilled, (state, action) => {
-      const hotspots = action.payload.hotspots || []
-      state.hotspotsObj = hotspotsToObj(hotspots)
-      state.hotspots = handleCacheFulfilled({
-        data: hotspots,
-      })
+      const { hotspots, data } = action.payload
+      if (hotspots) {
+        state.hotspotsData = hotspotsToObj(
+          hotspots || [],
+          state.hotspotsData as HotspotIndexed<HotspotDetailCache>,
+        )
+      }
+      state.hotspots = handleCacheFulfilled({ data })
       state.hotspotsLoaded = true
       state.failure = false
     })
@@ -180,25 +231,25 @@ const hotspotsSlice = createSlice({
       }
       state.loadingRewards = false
     })
-    builder.addCase(fetchHotspotData.pending, (state, action) => {
+    builder.addCase(fetchHotspotDetail.pending, (state, action) => {
       const address = action.meta.arg
-      const prevState = state.hotspotData[address] || {}
+      const prevState = state.hotspotsData[address] || {}
       const nextState = handleCachePending(prevState)
-      state.hotspotData[address] = {
-        ...state.hotspotData[address],
+      state.hotspotsData[address] = {
+        ...state.hotspotsData[address],
         ...nextState,
       }
     })
-    builder.addCase(fetchHotspotData.fulfilled, (state, action) => {
+    builder.addCase(fetchHotspotDetail.fulfilled, (state, action) => {
       const address = action.meta.arg
-      state.hotspotData[address] = handleCacheFulfilled(action.payload)
+      state.hotspotsData[address] = handleCacheFulfilled(action.payload)
     })
-    builder.addCase(fetchHotspotData.rejected, (state, action) => {
+    builder.addCase(fetchHotspotDetail.rejected, (state, action) => {
       const address = action.meta.arg
-      const prevState = state.hotspotData[address] || {}
+      const prevState = state.hotspotsData[address] || {}
       const nextState = handleCacheRejected(prevState)
-      state.hotspotData[address] = {
-        ...state.hotspotData[address],
+      state.hotspotsData[address] = {
+        ...state.hotspotsData[address],
         ...nextState,
       }
     })

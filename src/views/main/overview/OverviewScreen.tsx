@@ -14,7 +14,7 @@ import useCurrency from '../../../utils/hooks/useCurrency'
 // import { RootState } from '../../../store/rootReducer'
 import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
 import { useAppDispatch } from '../../../store/store'
-import { updateSetting } from '../../../store/app/appSlice'
+// import { updateSetting } from '../../../store/app/appSlice'
 import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 
@@ -25,12 +25,13 @@ const OverviewScreen = () => {
   const padding = useMemo(() => 'm' as Spacing, [])
   const [address, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
+  const [fiat, setFiat] = useState<string>('loading...')
   const dispatch = useAppDispatch()
 
   const {
     hntBalanceToDisplayVal,
-    hntToDisplayVal,
-    networkTokensToDataCredits,
+    // hntToDisplayVal,
+    // networkTokensToDataCredits,
     toggleConvertHntToCurrency,
   } = useCurrency()
 
@@ -46,17 +47,18 @@ const OverviewScreen = () => {
   useAsync(async () => {
     // console.log('OverviewScreen::account:', account)
     if (account?.balance) {
-      console.log(
-        'OverviewScreen::currency::funcs:',
-        await hntToDisplayVal(account.balance.floatBalance),
-        await hntBalanceToDisplayVal(account.balance),
-        await networkTokensToDataCredits(account.balance),
-        (await networkTokensToDataCredits(account.balance)).toString(),
-        (
-          (await networkTokensToDataCredits(account.balance)).floatBalance /
-          100000
-        ).toFixed(2),
-      )
+      // console.log(
+      //   'OverviewScreen::currency::funcs:',
+      //   await hntToDisplayVal(account.balance.floatBalance),
+      //   await hntBalanceToDisplayVal(account.balance),
+      //   await networkTokensToDataCredits(account.balance),
+      //   (await networkTokensToDataCredits(account.balance)).toString(),
+      //   (
+      //     (await networkTokensToDataCredits(account.balance)).floatBalance /
+      //     100000
+      //   ).toFixed(2),
+      // )
+      setFiat((await hntBalanceToDisplayVal(account.balance)).toString())
     }
   }, [account])
 
@@ -64,16 +66,16 @@ const OverviewScreen = () => {
     getAccount(address)
       .then(setAccount)
       .then(() => dispatch(fetchCurrentPrices()))
-      .then(toggleConvertHntToCurrency)
-      .then(toggleConvertHntToCurrency)
-      .then(() =>
-        dispatch(
-          updateSetting({
-            key: 'currencyType',
-            value: 'CNY',
-          }),
-        ),
-      )
+    // .then(toggleConvertHntToCurrency)
+    // .then(toggleConvertHntToCurrency)
+    // .then(() =>
+    //   dispatch(
+    //     updateSetting({
+    //       key: 'currencyType',
+    //       value: 'CNY',
+    //     }),
+    //   ),
+    // )
   }, [address, dispatch, toggleConvertHntToCurrency])
 
   useEffect(() => {
@@ -97,7 +99,7 @@ const OverviewScreen = () => {
           <Text>address: {address}</Text>
           <Text>
             balance: {account?.balance?.floatBalance || '0'}{' '}
-            {account?.balance?.type.ticker}
+            {account?.balance?.type.ticker}({fiat})
           </Text>
           <Text>
             dcBalance: {account?.dcBalance?.floatBalance || 0}{' '}

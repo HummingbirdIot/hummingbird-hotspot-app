@@ -37,12 +37,12 @@ export type Maker = {
 const breadcrumbOpts = { type: 'HTTP Request', category: 'stakingClient' }
 
 const makeRequest = async (url: string, opts: RequestInit = {}) => {
-  // console.log(`MyLOG::httpRequest ${opts.method} ${url}`, breadcrumbOpts)
+  // console.log(`httpRequest ${opts.method} ${url}`, breadcrumbOpts)
   try {
     // const baseUrl = Config.STAKING_API_BASE_URL
     const baseUrl = 'https://onboarding.dewi.org/api/v2'
     const route = [baseUrl, url].join('/')
-    console.log('MyLOG::makeStakingRequest::route:', route)
+    console.log('makeStakingRequest::route:', route)
 
     const response = await fetch(route, {
       ...opts,

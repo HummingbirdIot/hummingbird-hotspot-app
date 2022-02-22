@@ -19,6 +19,7 @@ const ListContent = ({
   addressType,
   lng,
   lat,
+  initCount = 20,
 }: {
   activities: Array<HttpTransaction & PendingTransaction>
   status: Loading
@@ -26,9 +27,10 @@ const ListContent = ({
   addressType: AddressType
   lng?: number
   lat?: number
+  initCount?: number
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [count, setCount] = useState<number>(20)
+  const [count, setCount] = useState<number>(initCount || 20)
   const [activityList, setActivityList] = useState<
     Array<HttpTransaction & PendingTransaction>
   >(activities ? activities.slice(0, count) : [])

@@ -13,9 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useHotspotBle } from '@helium/react-native-sdk'
 // import SafeAreaBox from '../../../components/SafeAreaBox'
 import { useAsync } from 'react-async-hook'
-import { Hotspot } from '@helium/http'
+import { Hotspot, Witness } from '@helium/http'
+import { RouteProp, useRoute } from '@react-navigation/native'
 import Box from '../../../components/Box'
-import Map from '../../../components/Map'
+// import Map from '../../../components/Map'
 import ThemedText from '../../../components/Text'
 import Location from '../../../assets/images/location.svg'
 import IconMaker from '../../../assets/images/maker.svg'
@@ -34,16 +35,18 @@ import useAlert from '../../../utils/hooks/useAlert'
 // import { getSecureItem, setSecureItem } from '../../../utils/secureAccount'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 import HotspotLocationView from '../../../widgets/main/HotspotLocationView'
-import { fetchHotspotData } from '../../../store/data/hotspotsSlice'
+import { fetchHotspotDetail } from '../../../store/data/hotspotsSlice'
 import { reverseGeocode } from '../../../utils/location'
-import { truncateAddress } from '../../../utils/formatter'
+import { formatHotspotName, truncateAddress } from '../../../utils/formatter'
+import { RootStackParamList } from '../../navigation/naviTypes'
+
+type Route = RouteProp<RootStackParamList, 'HotspotDetailScreen'>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotDetailScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
-  const { index, routes } = navigation.getState()
-  const { title, makerName } = routes[index].params
+  const { title, makerName, address } = useRoute<Route>().params
   const { enable, getState } = useHotspotBle()
   const { showOKCancelAlert } = useAlert()
   const dispatch = useAppDispatch()
@@ -51,51 +54,55 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const { permissionResponse, locationBlocked } = useSelector(
     (state: RootState) => state.location,
   )
-  const [hotspot, setHotspot] = useState<Hotspot>(routes[index].params.hotspot)
+  const { hotspotsData } = useSelector((state: RootState) => state.hotspots)
+  const [hotspotData, setHotspotData] = useState<Hotspot>(
+    hotspotsData[address]?.hotspot || undefined,
+  )
+  const [witnessedData, setWitnessedData] = useState<Witness[]>([])
   const [selectedIndex, updateIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [locationName, setLocationName] = useState('')
 
   // useEffect(() => navigation.setOptions({ title }), [navigation, title])
-  useAsync(async () => {
-    // console.log('HotspotDetailScreen::hotspot:', hotspot)
-    dispatch(fetchHotspotData(hotspot.address))
-    if ((hotspot as unknown as { locationName: string }).locationName) {
-      setLocationName(
-        (hotspot as unknown as { locationName: string }).locationName,
-      )
-    } else if (hotspot.geocode) {
-      const { longStreet, longCity } = hotspot.geocode
-      setLocationName(
-        longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...',
-      )
-      const { lat, lng } = hotspot
-      if (lat && lng) {
-        const [{ street, city }] = await reverseGeocode(lat, lng)
-        if (street && city) {
-        }
-        setLocationName(`${street}, ${city}`)
-      }
-    }
-  }, [dispatch, hotspot])
-
-  // useAsync(async () => {
-  //   if (hotspot) {
-  //     await setSecureItem('currentHotspot', hotspot)
-  //   } else {
-  //     const h = await getSecureItem('currentHotspot')
-  //     console.log(
-  //       'HotspotDetailScreen::getSecureItem::currentHotspot::hotspot:',
-  //       hotspot,
-  //     )
-  //     setHotspot(h)
-  //   }
-  // }, [hotspot])
-
   useEffect(() => {
     getState()
     dispatch(getLocationPermission())
-  }, [dispatch, getState])
+    dispatch(fetchHotspotDetail(address))
+  }, [address, dispatch, getState])
+
+  useEffect(() => {
+    if (hotspotsData[address]) {
+      const { hotspot, witnessed } = hotspotsData[address]
+      // console.log('HotspotDetailScreen::witnessed:', witnessed)
+      setHotspotData(hotspot)
+      setWitnessedData(witnessed)
+    }
+  }, [address, hotspotsData])
+
+  useAsync(async () => {
+    if (hotspotData) {
+      const hotspot = hotspotData as unknown as Hotspot & {
+        locationName: string
+      }
+      if ((hotspot as unknown as { locationName: string }).locationName) {
+        setLocationName(
+          (hotspot as unknown as { locationName: string }).locationName,
+        )
+      } else if (hotspot.geocode) {
+        const { longStreet, longCity } = hotspot.geocode
+        setLocationName(
+          longStreet && longCity ? `${longStreet}, ${longCity}` : 'Loading...',
+        )
+        const { lat, lng } = hotspot
+        if (lat && lng) {
+          const [{ street, city }] = await reverseGeocode(lat, lng)
+          if (street && city) {
+          }
+          setLocationName(`${street}, ${city}`)
+        }
+      }
+    }
+  }, [hotspotData])
 
   const checkBluetooth = useCallback(async () => {
     const state = await getState()
@@ -163,64 +170,93 @@ const HotspotDetailScreen = ({ navigation }: any) => {
         backgroundColor="grayBoxLight"
         borderRadius="l"
       >
-        <RewardsStatistics address={hotspot.address} resource="hotspots" />
+        <RewardsStatistics address={address} resource="hotspots" />
       </Box>
     ),
-    [hotspot],
+    [address],
   )
   const Activity = useMemo(
-    () => (
-      <ActivitiesList
-        address={hotspot.address}
-        addressType="hotspot"
-        lng={hotspot.lng || 0}
-        lat={hotspot.lat || 0}
-      />
-    ),
-    [hotspot.address, hotspot.lng, hotspot.lat],
+    () =>
+      hotspotData ? (
+        <ActivitiesList
+          address={address}
+          addressType="hotspot"
+          lng={hotspotData.lng || 0}
+          lat={hotspotData.lat || 0}
+        />
+      ) : null,
+    [hotspotData, address],
   )
   const Empty = useMemo(
-    () => (
-      <Box
-        style={{
-          backgroundColor: '#f6f6f6',
-          paddingVertical: 20,
-          borderRadius: 5,
-        }}
-      >
-        <ThemedText textAlign="center" color="gray">
-          Empty
-        </ThemedText>
-      </Box>
-    ),
-    [],
+    () =>
+      witnessedData && witnessedData.length ? (
+        <Box
+          style={{
+            backgroundColor: '#f6f6f6',
+            paddingVertical: 20,
+            borderRadius: 5,
+          }}
+        >
+          {witnessedData.map((witness) => (
+            <Box key={witness.address}>
+              <ThemedText textAlign="center" color="gray">
+                {formatHotspotName(witness.name || 'unknow-hotspot-name')}
+              </ThemedText>
+              <ThemedText textAlign="center" color="gray">
+                Location: {witness.geocode?.longStreet},{' '}
+                {witness.geocode?.longCity}, {witness.geocode?.shortCountry}
+              </ThemedText>
+              <ThemedText textAlign="center" color="gray">
+                RewardScale: {witness.rewardScale}
+              </ThemedText>
+              <ThemedText textAlign="center" color="gray">
+                --------------------------------------
+              </ThemedText>
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        <Box
+          style={{
+            backgroundColor: '#f6f6f6',
+            paddingVertical: 20,
+            borderRadius: 5,
+          }}
+        >
+          <ThemedText textAlign="center" color="gray">
+            Empty
+          </ThemedText>
+        </Box>
+      ),
+    [witnessedData],
   )
   const widgets = [Statistics, Activity, Empty]
 
   const { surfaceContrast } = useColors()
 
   const assertLocation = useCallback(async () => {
-    if (!hotspot) return
+    if (!hotspotData) return
     setIsVisible(false)
     await checkLocation()
     navigation.push('HotspotAssert', {
-      hotspot,
-      hotspotAddress: hotspot.address,
+      hotspotData,
+      hotspotAddress: address,
       gatewayAction: 'assertLocation',
-      gain: hotspot.gain ? hotspot.gain / 10 : 1.2,
-      elevation: hotspot.elevation || 0,
+      gain: hotspotData.gain ? hotspotData.gain / 10 : 1.2,
+      elevation: hotspotData.elevation || 0,
     })
-  }, [hotspot, navigation, checkLocation])
+  }, [hotspotData, checkLocation, navigation, address])
+
   const assertAntenna = async () => {
     // console.log('HotspotDetailScreen::assertAntenna::hotspot:', hotspot)
-    if (hotspot) {
-      const { address, lng, lat, geocode, location } = hotspot
+    if (hotspotData) {
+      const { lng, lat, geocode, location } = hotspotData
       if (lng && lat) {
         setIsVisible(false)
         await checkLocation()
 
         navigation.push('HotspotAssert', {
-          hotspot,
+          hotspot: hotspotData,
           hotspotAddress: address,
           locationName,
           coords: [lng, lat],
@@ -231,12 +267,13 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       }
     }
   }
+
   const setWiFi = async () => {
-    if (!hotspot) return
+    if (!hotspotData) return
     setIsVisible(false)
     await checkBluetooth()
     navigation.push('HotspotSetWiFi', {
-      hotspotAddress: hotspot.address,
+      hotspotAddress: address,
     })
   }
   const list = [
@@ -262,6 +299,13 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     },
   ]
   // const { lng, lat } = hotspot
+  if (!hotspotData) {
+    return (
+      <Box>
+        <Text>Loading...</Text>
+      </Box>
+    )
+  }
 
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
@@ -290,7 +334,9 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       <Box flex={6}>
         <HotspotLocationView
           mapCenter={
-            hotspot.location ? [hotspot.lng || 0, hotspot.lat || 0] : undefined
+            hotspotData.location
+              ? [hotspotData.lng || 0, hotspotData.lat || 0]
+              : undefined
           }
           locationName={locationName}
           assertLocation={assertLocation}
@@ -315,7 +361,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
                 color: '#474DFF',
               }}
             >
-              {truncateAddress(hotspot.address, 16)}
+              {truncateAddress(address, 16)}
             </ThemedText>
           </Box>
           <Box
@@ -335,7 +381,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             </ThemedText>
             <IconAccount width={10} height={10} />
             <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-              {truncateAddress(hotspot.owner || 'UnknownOwner')}
+              {truncateAddress(hotspotData.owner || 'UnknownOwner')}
             </ThemedText>
           </Box>
           <Box
@@ -356,7 +402,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               marginLeft="xs"
               marginRight="m"
             >
-              {`${hotspot?.geocode?.longCity}, ${hotspot?.geocode?.shortCountry}`}
+              {`${hotspotData?.geocode?.longCity}, ${hotspotData?.geocode?.shortCountry}`}
             </ThemedText>
             <IconElevation width={10} height={10} />
             <ThemedText
@@ -365,7 +411,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               marginLeft="xs"
               marginRight="m"
             >
-              {t('generic.meters', { distance: hotspot?.elevation || 0 })}
+              {t('generic.meters', { distance: hotspotData?.elevation || 0 })}
             </ThemedText>
             <IconGain width={10} height={10} />
             <ThemedText
@@ -374,7 +420,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               marginLeft="xs"
               marginRight="m"
             >
-              {((hotspot?.gain || 0) / 10).toLocaleString(locale, {
+              {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
                 maximumFractionDigits: 1,
               }) + t('antennas.onboarding.dbi')}
             </ThemedText>

@@ -7,13 +7,13 @@ export const HELIUM_OLD_MAKER_ADDRESS =
 export const HUMMINGBIRD_MAKER_ADDRESS =
   '14DdSjvEkBQ46xQ24LAtHwQkAeoUUZHfGCosgJe33nRQ6rZwPG3'
 
-export const formatHotspotName = (name: string) => {
+export const formatHotspotNameArray = (name: string) => {
   return name.split('-').map((str) => {
     return str.replace(/^\w/, (c) => c.toLocaleUpperCase())
   })
 }
 
-export const formatHotspotTitle = (name: string) => {
+export const formatHotspotShortName = (name: string) => {
   return name
     .split('-')
     .filter((s, i) => i !== 1)
@@ -21,6 +21,10 @@ export const formatHotspotTitle = (name: string) => {
       return str[0].toLocaleUpperCase()
     })
     .join('')
+}
+
+export const formatHotspotName = (name: string) => {
+  return formatHotspotNameArray(name).join(' ')
 }
 
 export const getMakerName = (

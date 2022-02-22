@@ -91,7 +91,7 @@ const HotspotSetupPickWifiScreen = () => {
       rootNav.navigate('MainTabs')
       // rootNav.navigate('HotspotDetail', {
       //   // screen: 'HotspotDetail',
-      //   title: formatHotspotName(hotspot.name || '').join(' '),
+      //   title: formatHotspotNameArray(hotspot.name || '').join(' '),
       //   makerName: getMakerName(hotspot, makers),
       //   hotspot,
       // })

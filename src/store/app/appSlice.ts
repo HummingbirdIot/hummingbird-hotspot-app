@@ -55,7 +55,7 @@ const initialState: AppState = {
   isLocked: false,
   isRequestingPermission: false,
   connectedHotspotId: '',
-  settings: { currencyType },
+  settings: { currencyType, convertHntToCurrency: true },
   fetchAccountStatus: 'idle',
 }
 
