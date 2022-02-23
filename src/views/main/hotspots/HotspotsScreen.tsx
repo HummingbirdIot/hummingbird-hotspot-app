@@ -14,7 +14,7 @@ import { locale } from '../../../utils/i18n'
 import {
   formatHotspotNameArray,
   formatHotspotShortName,
-  getMakerName,
+  useMaker,
 } from '../../../utils/formatter'
 
 import Maker from '../../../assets/images/maker.svg'
@@ -30,7 +30,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
   const { surfaceContrast } = useColors()
   // console.log('HotspotsListScreen::surfaceContrast:', surfaceContrast)
 
-  const makers = useSelector((state: RootState) => state.helium.makers)
+  const { getMakerName } = useMaker()
   // console.log('HotspotsListScreen::makers:', makers)
 
   const { hotspots, hotspotsData } = useSelector(
@@ -79,10 +79,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                 key={address}
                 bottomDivider
                 onPress={() =>
-                  navigation.navigate('HotspotDetailScreen', {
-                    // screen: 'HotspotDetail',
-                    title: formatHotspotNameArray(hotspot.name || '').join(' '),
-                    makerName: getMakerName(hotspot?.payer, makers),
+                  navigation.navigate('HotspotScreen', {
                     address: hotspot.address,
                   })
                 }
@@ -131,7 +128,7 @@ const HotspotsListScreen = ({ navigation }: any) => {
                     <Box flex={1} flexDirection="row" alignItems="center">
                       <Maker width={10} height={10} />
                       <ThemedText marginLeft="s">
-                        {getMakerName(hotspot.payer, makers)}
+                        {getMakerName(hotspot.payer)}
                       </ThemedText>
                     </Box>
                     <Box

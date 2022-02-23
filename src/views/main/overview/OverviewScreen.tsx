@@ -4,6 +4,8 @@ import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { SafeAreaView } from 'react-native-safe-area-context'
 // import { useSelector } from 'react-redux'
+import { useDebouncedCallback } from 'use-debounce/lib'
+import { Button } from 'react-native-elements/dist/buttons/Button'
 import { getAddress } from '../../../utils/secureAccount'
 import { useSpacing } from '../../../theme/themeHooks'
 import { Spacing } from '../../../theme/theme'
@@ -20,7 +22,7 @@ import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 
 const QR_CONTAINER_SIZE = 146
 
-const OverviewScreen = () => {
+const OverviewScreen = ({ navigation }: any) => {
   const spacing = useSpacing()
   const padding = useMemo(() => 'm' as Spacing, [])
   const [address, setAccountAddress] = useState('')
@@ -32,7 +34,7 @@ const OverviewScreen = () => {
     hntBalanceToDisplayVal,
     // hntToDisplayVal,
     // networkTokensToDataCredits,
-    toggleConvertHntToCurrency,
+    // toggleConvertHntToCurrency,
   } = useCurrency()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,8 +68,6 @@ const OverviewScreen = () => {
     getAccount(address)
       .then(setAccount)
       .then(() => dispatch(fetchCurrentPrices()))
-    // .then(toggleConvertHntToCurrency)
-    // .then(toggleConvertHntToCurrency)
     // .then(() =>
     //   dispatch(
     //     updateSetting({
@@ -76,7 +76,7 @@ const OverviewScreen = () => {
     //     }),
     //   ),
     // )
-  }, [address, dispatch, toggleConvertHntToCurrency])
+  }, [address, dispatch])
 
   useEffect(() => {
     dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
@@ -91,6 +91,9 @@ const OverviewScreen = () => {
     // console.log('OverviewScreen::address:', aacc)
     setAccountAddress(aacc || '')
   }, [])
+
+  const naviToActivityScreen = () => navigation.navigate('ActvityScreen')
+  const gotoActivityScreen = useDebouncedCallback(naviToActivityScreen, 700, {})
 
   return (
     <Box flex={1}>
@@ -119,6 +122,14 @@ const OverviewScreen = () => {
           />
         </Box>
         <Box flex={2} padding="l">
+          <Button
+            onPress={gotoActivityScreen.callback}
+            buttonStyle={{
+              backgroundColor: 'blue',
+              marginBottom: 10,
+            }}
+            title="View Activity"
+          />
           <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
             {address ? (
               <RewardsStatistics address={address} resource="accounts" />

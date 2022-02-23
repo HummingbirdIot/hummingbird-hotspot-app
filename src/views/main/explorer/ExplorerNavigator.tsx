@@ -6,8 +6,8 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 // import { HotspotStackParamList } from './hotspotTypes'
 import DefaultScreenOptions from '../../defaultScreenOptions'
 import { RootStackParamList } from '../../navigation/naviTypes'
-import HotspotDetailScreen from './HotspotDetailScreen'
-import HotspotListScreen from './HotspotListScreen'
+import HotspotDetailScreen from '../hotspots/HotspotScreen'
+import HotspotListScreen from '../hotspots/HotspotsScreen'
 
 const HotspotStack = createStackNavigator()
 

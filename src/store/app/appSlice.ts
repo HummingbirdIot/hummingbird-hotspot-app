@@ -12,7 +12,7 @@ import { Intervals } from '../../views/main/more/list/useAuthIntervals'
 import { Loading } from '../txns/txnsTypes'
 // import OneSignal from 'react-native-onesignal'
 
-const boolKeys = ['convertHntToCurrency'] as const
+const boolKeys = [] as const
 type BooleanKey = typeof boolKeys[number]
 const stringKeys = ['currencyType'] as const
 type StringKey = typeof stringKeys[number]
@@ -38,7 +38,7 @@ export type AppState = {
   settings: {
     // isFleetModeEnabled?: boolean
     // hasFleetModeAutoEnabled?: boolean
-    convertHntToCurrency?: boolean
+    // convertHntToCurrency?: boolean
     // showHiddenHotspots?: boolean
     // hiddenAddresses?: string
     // network?: string
@@ -55,7 +55,7 @@ const initialState: AppState = {
   isLocked: false,
   isRequestingPermission: false,
   connectedHotspotId: '',
-  settings: { currencyType, convertHntToCurrency: true },
+  settings: { currencyType },
   fetchAccountStatus: 'idle',
 }
 
@@ -182,7 +182,7 @@ const appSlice = createSlice({
         },
       ) => {
         if (boolKeys.includes(key as BooleanKey)) {
-          state.settings[key as BooleanKey] = value as boolean
+          // state.settings[key as BooleanKey] = value as boolean
         } else if (stringKeys.includes(key as StringKey)) {
           state.settings[key as StringKey] = value as string
         }

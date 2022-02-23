@@ -39,7 +39,12 @@ import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 import HotspotLocationView from '../../../widgets/main/HotspotLocationView'
 import { fetchHotspotDetail } from '../../../store/data/hotspotsSlice'
 import { reverseGeocode } from '../../../utils/location'
-import { formatHotspotName, truncateAddress } from '../../../utils/formatter'
+import {
+  formatHotspotName,
+  formatHotspotNameArray,
+  truncateAddress,
+  useMaker,
+} from '../../../utils/formatter'
 import { RootStackParamList } from '../../navigation/naviTypes'
 
 type Route = RouteProp<RootStackParamList, 'HotspotDetailScreen'>
@@ -48,11 +53,12 @@ type Route = RouteProp<RootStackParamList, 'HotspotDetailScreen'>
 const HotspotDetailScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
-  const { title, makerName, address } = useRoute<Route>().params
+  const { address } = useRoute<Route>().params
   const { enable, getState } = useHotspotBle()
   const { showOKCancelAlert } = useAlert()
   const dispatch = useAppDispatch()
   const { requestLocationPermission } = usePermissionManager()
+  const { getMakerName } = useMaker()
   const { permissionResponse, locationBlocked } = useSelector(
     (state: RootState) => state.location,
   )
@@ -315,12 +321,15 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     },
   ]
 
+  // title: formatHotspotNameArray(hotspot.name || '').join(' '),
+  //                   makerName: getMakerName(hotspot?.payer, makers),
+
   return (
     <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
       <Header
         backgroundColor={surfaceContrast}
         centerComponent={{
-          text: title,
+          text: formatHotspotNameArray(hotspotData.name || '').join(' '),
           // style: { fontSize: 20, color: '#fff' },
         }}
         leftComponent={{
@@ -406,7 +415,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
                 marginLeft="xs"
                 marginRight="m"
               >
-                {makerName}
+                {getMakerName(hotspotData.payer)}
               </ThemedText>
               <IconAccount width={10} height={10} />
               <ThemedText variant="body2" marginLeft="xs" marginRight="m">

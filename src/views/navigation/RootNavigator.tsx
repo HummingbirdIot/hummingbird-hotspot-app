@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Platform } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { useSelector } from 'react-redux'
@@ -16,16 +16,12 @@ import WelcomeScreen from '../link/WelcomeScreen'
 import CreateAccountScreen from '../link/CreateAccountScreen'
 import { OnboardingStackParamList } from '../link/onboardingTypes'
 import ActivityScreen from '../main/overview/ActivityScreen'
+import LockScreen from '../lock/LockScreen'
+import HotspotScreen from '../main/hotspots/HotspotScreen'
 
 const OnboardingStack = createStackNavigator<OnboardingStackParamList>()
 const MainStack = createStackNavigator()
 // const MainStack = createNativeStackNavigator()
-
-const DetailsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Details Screen</Text>
-  </View>
-)
 
 const RootNavigator = () => {
   const { walletLinkToken } = useSelector((state: RootState) => state.app)
@@ -70,25 +66,25 @@ const RootNavigator = () => {
         component={MainTabs}
       />
 
-      <MainStack.Group>
+      <MainStack.Group screenOptions={{ headerShown: false }}>
         <MainStack.Screen
           name="HotspotSetup"
-          options={{ headerShown: false }}
           component={HotspotSetupNavigator}
         />
         <MainStack.Screen
           name="HotspotAssert"
-          options={{ headerShown: false }}
           component={HotspotAssertLocationNavigator}
         />
         <MainStack.Screen
           name="HotspotSetWiFi"
-          options={{ headerShown: false }}
           component={HotspotSetWiFiNavigator}
         />
       </MainStack.Group>
-      <MainStack.Screen name="Activity" component={ActivityScreen} />
-      <MainStack.Screen name="LockScreen" component={DetailsScreen} />
+      <MainStack.Group screenOptions={{ headerShown: false }}>
+        <MainStack.Screen name="ActvityScreen" component={ActivityScreen} />
+        <MainStack.Screen name="HotspotScreen" component={HotspotScreen} />
+        <MainStack.Screen name="LockScreen" component={LockScreen} />
+      </MainStack.Group>
     </MainStack.Navigator>
   )
 }

@@ -1,4 +1,5 @@
-import { Maker } from '@helium/onboarding'
+import { useSelector } from 'react-redux'
+import { RootState } from 'src/store/rootReducer'
 import { B58Address } from 'src/store/txns/txnsTypes'
 
 export const HELIUM_OLD_MAKER_ADDRESS =
@@ -27,18 +28,23 @@ export const formatHotspotName = (name: string) => {
   return formatHotspotNameArray(name).join(' ')
 }
 
-export const getMakerName = (
-  payer: B58Address | undefined,
-  makers: Maker[] | undefined,
-) => {
-  if (payer === HUMMINGBIRD_MAKER_ADDRESS) {
-    return 'Hummingbird'
+export const useMaker = () => {
+  const makers = useSelector((state: RootState) => state.helium.makers)
+  const getMakerName = (payer: B58Address | undefined) => {
+    if (payer === HUMMINGBIRD_MAKER_ADDRESS) {
+      return 'Hummingbird'
+    }
+    if (payer === HELIUM_OLD_MAKER_ADDRESS) {
+      // special case for old Helium Hotspots
+      return 'Helium'
+    }
+    return makers?.find((m) => m.address === payer)?.name || 'Unknown Maker'
   }
-  if (payer === HELIUM_OLD_MAKER_ADDRESS) {
-    // special case for old Helium Hotspots
-    return 'Helium'
+
+  return {
+    makers,
+    getMakerName,
   }
-  return makers?.find((m) => m.address === payer)?.name || 'Unknown Maker'
 }
 
 export const truncateAddress = (

@@ -1,9 +1,9 @@
-import Balance, { CurrencyType, NetworkTokens } from '@helium/currency'
-import { isEqual, round } from 'lodash'
+import Balance, { NetworkTokens } from '@helium/currency'
+import { isEqual } from 'lodash'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { useDebouncedCallback } from 'use-debounce'
+// import { useDebouncedCallback } from 'use-debounce'
 import CurrencyFormatter from 'react-native-currency-format'
 import { OraclePrice } from '@helium/http'
 import { fetchCurrentOraclePrice } from '../../store/helium/heliumSlice'
@@ -11,12 +11,12 @@ import { RootState } from '../../store/rootReducer'
 import { useAppDispatch } from '../../store/store'
 import {
   currencyType as defaultCurrencyType,
-  decimalSeparator,
-  groupSeparator,
-  locale,
+  // decimalSeparator,
+  // groupSeparator,
+  // locale,
 } from '../i18n'
 // eslint-disable-next-line import/extensions
-import { updateSetting } from '../../store/app/appSlice'
+// import { updateSetting } from '../../store/app/appSlice'
 
 export const SUPPORTED_CURRENCIES = {
   AED: 'United Arab Emirates Dirham',
@@ -73,15 +73,15 @@ const useCurrency = () => {
     useSelector((state: RootState) => state.app.settings.currencyType) ||
     defaultCurrencyType
 
-  const convert = useSelector(
-    (state: RootState) => state.app.settings.convertHntToCurrency,
-  )
+  // const convert = useSelector(
+  //   (state: RootState) => state.app.settings.convertHntToCurrency,
+  // )
 
-  const toggle = useCallback(
-    () =>
-      dispatch(updateSetting({ key: 'convertHntToCurrency', value: !convert })),
-    [convert, dispatch],
-  )
+  // const toggle = useCallback(
+  //   () =>
+  //     dispatch(updateSetting({ key: 'convertHntToCurrency', value: !convert })),
+  //   [convert, dispatch],
+  // )
 
   const formatCurrency = useCallback(
     async (value: number) => {
@@ -94,10 +94,10 @@ const useCurrency = () => {
     [currencyType],
   )
 
-  const toggleConvertHntToCurrency = useDebouncedCallback(toggle, 700, {
-    leading: true,
-    trailing: false,
-  }).callback
+  // const toggleConvertHntToCurrency = useDebouncedCallback(toggle, 700, {
+  //   leading: true,
+  //   trailing: false,
+  // }).callback
 
   const networkTokensToDataCredits = useCallback(
     async (amount: Balance<NetworkTokens>) => {
@@ -109,18 +109,18 @@ const useCurrency = () => {
   )
 
   const hntToDisplayVal = useCallback(
-    async (amount: number, maxDecimalPlaces = 2) => {
+    async (amount: number, _maxDecimalPlaces = 2) => {
       const multiplier = currentPrices?.[currencyType.toLowerCase()] || 0
-      const showAsHnt = !convert || !multiplier
+      // const showAsHnt = !convert || !multiplier
 
-      if (showAsHnt) {
-        return round(amount, maxDecimalPlaces).toLocaleString(locale)
-      }
+      // if (showAsHnt) {
+      //   return round(amount, maxDecimalPlaces).toLocaleString(locale)
+      // }
 
       const convertedValue = multiplier * amount
       return formatCurrency(convertedValue)
     },
-    [convert, currencyType, currentPrices, formatCurrency],
+    [currencyType, currentPrices, formatCurrency],
   )
 
   type StringReturn = (
@@ -137,50 +137,50 @@ const useCurrency = () => {
     async (
       balance: Balance<NetworkTokens>,
       split?: boolean,
-      maxDecimalPlaces = 2,
+      // maxDecimalPlaces = 2,
     ) => {
       const multiplier = currentPrices?.[currencyType.toLowerCase()] || 0
 
-      const showAsHnt = !convert || !multiplier
+      // const showAsHnt = !convert || !multiplier
 
-      if (showAsHnt) {
-        if (split) {
-          let [intStr, decStr] = balance
-            .toString(undefined, {
-              decimalSeparator,
-              groupSeparator,
-              showTicker: false,
-            })
-            .split(decimalSeparator)
+      // if (showAsHnt) {
+      //   if (split) {
+      //     let [intStr, decStr] = balance
+      //       .toString(undefined, {
+      //         decimalSeparator,
+      //         groupSeparator,
+      //         showTicker: false,
+      //       })
+      //       .split(decimalSeparator)
 
-          // when there is no network the toString method from helium js may not work properly
-          if (intStr === '[object Object]') {
-            const balString = balance?.floatBalance?.toString()
-            const [intPart, decPart] = balString.split('.')
-            intStr = intPart
-            decStr = decPart
-          }
+      //     // when there is no network the toString method from helium js may not work properly
+      //     if (intStr === '[object Object]') {
+      //       const balString = balance?.floatBalance?.toString()
+      //       const [intPart, decPart] = balString.split('.')
+      //       intStr = intPart
+      //       decStr = decPart
+      //     }
 
-          const decimalPart = [
-            decimalSeparator,
-            decStr,
-            ' ',
-            CurrencyType.networkToken.ticker,
-          ].join('')
+      //     const decimalPart = [
+      //       decimalSeparator,
+      //       decStr,
+      //       ' ',
+      //       CurrencyType.networkToken.ticker,
+      //     ].join('')
 
-          return { integerPart: intStr, decimalPart }
-        }
+      //     return { integerPart: intStr, decimalPart }
+      //   }
 
-        // when there is no network the toString method from helium js may not work properly
-        const stringBalance = balance.toString(maxDecimalPlaces, {
-          groupSeparator,
-          decimalSeparator,
-        })
+      //   // when there is no network the toString method from helium js may not work properly
+      //   const stringBalance = balance.toString(maxDecimalPlaces, {
+      //     groupSeparator,
+      //     decimalSeparator,
+      //   })
 
-        return stringBalance === '[object Object]'
-          ? `${balance?.floatBalance?.toFixed(2)} HNT`
-          : stringBalance
-      }
+      //   return stringBalance === '[object Object]'
+      //     ? `${balance?.floatBalance?.toFixed(2)} HNT`
+      //     : stringBalance
+      // }
 
       try {
         const convertedValue = multiplier * balance.floatBalance
@@ -195,13 +195,13 @@ const useCurrency = () => {
         return ''
       }
     },
-    [convert, currencyType, currentPrices, formatCurrency, t],
+    [currencyType, currentPrices, formatCurrency, t],
   ) as StringReturn & PartsReturn
 
   return {
     networkTokensToDataCredits,
     hntBalanceToDisplayVal,
-    toggleConvertHntToCurrency,
+    // toggleConvertHntToCurrency,
     hntToDisplayVal,
   }
 }
