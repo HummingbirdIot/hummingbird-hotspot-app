@@ -38,6 +38,7 @@ const HotspotTxnsSubmitScreen = () => {
    * 4.22: post transaction error (assert txn)
    * 4.3: 全部或部分广播失败
    * 5. 完成广播
+   * 6. 用户取消
    */
   const [status, setStatus] = useState<number>(0)
   const [errorInof, setErrorInof] =
@@ -50,6 +51,10 @@ const HotspotTxnsSubmitScreen = () => {
     // console.log('HotspotTxnsSubmitScreen::useAsync::routeParams:', params)
 
     try {
+      if (params.cancelled) {
+        setStatus(6)
+        return
+      }
       if (!params.gatewayAddress) {
         setStatus(4.1)
         throw new Error('Gateway address not found')
@@ -131,7 +136,9 @@ const HotspotTxnsSubmitScreen = () => {
   let messageBox = (
     <Box flex={1} justifyContent="center">
       <ActivityIndicator color={primaryText} />
-      <Text>Preparing for Sending Transactions (step: {status})</Text>
+      <Text textAlign="center">
+        Preparing for Sending Transactions (step: {status})
+      </Text>
     </Box>
   )
 
@@ -140,14 +147,16 @@ const HotspotTxnsSubmitScreen = () => {
       messageBox =
         results.length === taskCount ? (
           <Box>
-            <Text>{taskCount} Transactions Sent</Text>
+            <Text textAlign="center">{taskCount} Transactions Sent</Text>
             {results.map((result) => (
-              <Text key={result.hash}>{result.hash}</Text>
+              <Text key={result.hash} textAlign="center">
+                {result.hash}
+              </Text>
             ))}
           </Box>
         ) : (
           <Box flex={1} justifyContent="center">
-            <Text>Unknow Sumbitting Error.</Text>
+            <Text textAlign="center">Unknow Sumbitting Error.</Text>
           </Box>
         )
     } else if (status > 4) {
@@ -164,10 +173,16 @@ const HotspotTxnsSubmitScreen = () => {
       messageBox = (
         <Box flex={1} justifyContent="center">
           <ActivityIndicator color={primaryText} />
-          <Text>Submitting {taskCount} Transactions</Text>
+          <Text textAlign="center">Submitting {taskCount} Transactions</Text>
         </Box>
       )
     }
+  } else if (status === 6) {
+    messageBox = (
+      <Box flex={1} justifyContent="center">
+        <Text textAlign="center">You cancelled this Submitting</Text>
+      </Box>
+    )
   }
 
   return (
@@ -189,11 +204,19 @@ const HotspotTxnsSubmitScreen = () => {
       </Box>
       <Box flex={1}>{messageBox}</Box>
       <DebouncedButton
-        onPress={() => navigation.navigate('MainTabs')}
+        onPress={() => {
+          if (status === 5 || status === 4.3)
+            navigation.navigate('ActivityScreen')
+          else navigation.navigate('MainTabs')
+        }}
         variant="primary"
         width="100%"
         mode="contained"
-        title={t('hotspot_setup.progress.next')}
+        title={
+          status === 5 || status === 4.3
+            ? t('hotspot_setup.progress.next')
+            : t('hotspot_setup.progress.back')
+        }
       />
     </SafeAreaBox>
   )

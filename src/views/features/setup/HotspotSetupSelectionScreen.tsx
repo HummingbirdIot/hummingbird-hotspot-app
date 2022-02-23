@@ -114,11 +114,11 @@ const HotspotSetupSelectionScreen = () => {
   const handlePress = useCallback(
     (hotspotType: HotspotType) => async () => {
       const { onboardType } = HotspotMakerModels[hotspotType]
-      console.log(
-        'HotspotSetupSelectionScreen::onboardType:',
-        hotspotType,
-        onboardType,
-      )
+      // console.log(
+      //   'HotspotSetupSelectionScreen::onboardType:',
+      //   hotspotType,
+      //   onboardType,
+      // )
       if (onboardType === 'BLE') {
         // navigation.push('HotspotSetupEducationScreen', {
         //   hotspotType,

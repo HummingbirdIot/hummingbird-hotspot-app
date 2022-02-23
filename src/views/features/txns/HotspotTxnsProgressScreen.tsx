@@ -33,6 +33,12 @@ const HotspotTxnsProgressScreen = () => {
   const { getOnboardingRecord } = useOnboarding()
   const { primaryText } = useColors()
 
+  const {
+    hotspotAddress,
+    addGatewayTxn: qrAddGatewayTxn,
+    gatewayAction,
+  } = params
+
   const handleError = async (error: unknown) => {
     // eslint-disable-next-line no-console
     console.error(error)
@@ -61,8 +67,6 @@ const HotspotTxnsProgressScreen = () => {
 
     const { address: ownerAddress } = parsed
 
-    const { hotspotAddress, addGatewayTxn: qrAddGatewayTxn } = params
-
     if (!hotspotAddress) {
       if (qrAddGatewayTxn) {
         throw new Error('Hotspot not found')
@@ -78,6 +82,7 @@ const HotspotTxnsProgressScreen = () => {
     try {
       // check if add gateway needed
       const isOnChain = await hotspotOnChain(hotspotAddress)
+      console.log('HotspotTxnsProgressScreen::isOnChain:', isOnChain)
       const onboardingRecord = await getOnboardingRecord(hotspotAddress)
       if (!onboardingRecord) return
       if (!isOnChain) {
@@ -151,7 +156,9 @@ const HotspotTxnsProgressScreen = () => {
     >
       <Box flex={1} alignItems="center" paddingTop="xxl">
         <Text variant="subtitle1" marginBottom="l">
-          {t('hotspot_setup.progress.title')}
+          {gatewayAction === 'addGateway'
+            ? t('hotspot_setup.progress.title_add')
+            : t('hotspot_setup.progress.title_assert')}
         </Text>
         <Box flex={1} justifyContent="center">
           <ActivityIndicator color={primaryText} />

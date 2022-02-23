@@ -71,6 +71,16 @@ const HotspotAssertConfirmAntennaScreen = () => {
     if (!ownerAddress) return
     if (!account) return
     if (fetchFeeDataStatus) return
+    if (!hotspot) {
+      setFetchFeeDataStatus(3)
+      setFetchFeeDataError({
+        type: 'Check_Hotspot_Data_Error',
+        error: new Error(
+          "Something wrong with your opration, there seems that you didn't pass a hotspot parameter to this screen.",
+        ),
+      })
+      return
+    }
     if (!account.balance) {
       setFetchFeeDataStatus(3)
       setFetchFeeDataError({
@@ -101,8 +111,8 @@ const HotspotAssertConfirmAntennaScreen = () => {
     params.hotspotAddress,
     gain,
     elevation,
-    hotspot?.nonce,
     fetchFeeDataStatus,
+    hotspot,
   ])
 
   const navNext = useCallback(async () => {

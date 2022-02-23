@@ -60,7 +60,7 @@ const HotspotAssertConfirmLocationScreen = () => {
   }>()
 
   // console.log('HotspotAssertConfirmLocationScreen::routeParams:', params)
-  const { elevation, gain, coords, hotspot } = params
+  const { elevation, gain, coords, gatewayAction, hotspot } = params
 
   useAsync(async () => {
     const address = await getAddress()
@@ -80,15 +80,25 @@ const HotspotAssertConfirmLocationScreen = () => {
     if (!ownerAddress) return
     if (!account) return
     if (fetchFeeDataStatus) return
+    if (gatewayAction === 'assertLocation' && !hotspot) {
+      setFetchFeeDataStatus(3)
+      setFetchFeeDataError({
+        type: 'Check_Hotspot_Data_Error',
+        error: new Error(
+          "Something wrong with your opration, there seems that you didn't pass a hotspot parameter to this screen.",
+        ),
+      })
+      return
+    }
     setFetchFeeDataStatus(1)
     setFetchFeeDataError(undefined)
     getOnboardingRecord(params.hotspotAddress)
       .then((onboardingRecord) => {
-        console.log(
-          'HotspotAssertConfirmLocationScreen::onboardingRecord',
-          ownerAddress,
-          onboardingRecord,
-        )
+        // console.log(
+        //   'HotspotAssertConfirmLocationScreen::onboardingRecord:',
+        //   ownerAddress,
+        //   onboardingRecord,
+        // )
         if (!onboardingRecord) {
           setFetchFeeDataStatus(3)
           setFetchFeeDataError({
@@ -141,10 +151,10 @@ const HotspotAssertConfirmLocationScreen = () => {
     account,
     getOnboardingRecord,
     params.hotspotAddress,
-    hotspot?.nonce,
-    hotspot?.mode,
     fetchFeeDataStatus,
     fetchFeeDataError,
+    hotspot,
+    gatewayAction,
   ])
 
   const navNext = useCallback(async () => {
@@ -197,6 +207,14 @@ const HotspotAssertConfirmLocationScreen = () => {
   }
 
   const { isFree, hasSufficientBalance, totalStakingAmount } = feeData
+
+  // console.log(
+  //   'HotspotTxnsProgressScreen::feeData::isFree:',
+  //   isFree,
+  //   hotspot?.nonce,
+  //   hotspot?.mode,
+  //   totalStakingAmount,
+  // )
 
   return (
     <BackScreen onClose={handleClose}>

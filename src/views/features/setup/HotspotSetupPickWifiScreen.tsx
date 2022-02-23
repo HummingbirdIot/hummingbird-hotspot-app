@@ -81,20 +81,28 @@ const HotspotSetupPickWifiScreen = () => {
 
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
 
+  // console.log(
+  //   'HotspotSetupPickWifiScreen::wifiNetworks:',
+  //   wifiNetworks,
+  //   connectedWifiNetworks,
+  // )
+
   const hasNetworks = useMemo(() => {
     if (!wifiNetworks?.length) return false
     return wifiNetworks.length > 0
   }, [wifiNetworks])
 
   const navSkip = useCallback(async () => {
+    console.log(
+      'gatewayActiongatewayActiongatewayActiongatewayAction',
+      gatewayAction,
+    )
     if (gatewayAction === 'setWiFi') {
-      rootNav.navigate('MainTabs')
-      // rootNav.navigate('HotspotDetail', {
-      //   // screen: 'HotspotDetail',
-      //   title: formatHotspotNameArray(hotspot.name || '').join(' '),
-      //   makerName: getMakerName(hotspot, makers),
-      //   hotspot,
-      // })
+      if (rootNav.canGoBack()) {
+        rootNav.goBack()
+      } else {
+        rootNav.navigate('MainTabs')
+      }
     } else {
       const token = await getSecureItem('walletLinkToken')
       console.log('HotspotSetupPickWifiScreen::navSkip::token:', token)
@@ -120,6 +128,7 @@ const HotspotSetupPickWifiScreen = () => {
             addGatewayTxn,
           )
           navigation.navigate('HotspotTxnsProgressScreen', {
+            gatewayAction,
             hotspotAddress,
             addGatewayTxn,
             // hotspotType,
@@ -131,17 +140,18 @@ const HotspotSetupPickWifiScreen = () => {
           hotspotAddress,
           error,
         )
-        navigation.navigate('HotspotSetupEnableLocationScreen', {
-          hotspotAddress,
-          addGatewayTxn,
-          hotspotType,
-          gatewayAction,
-        })
-        // navigation.navigate('HotspotTxnsProgressScreen', {
+        // navigation.navigate('HotspotSetupEnableLocationScreen', {
         //   hotspotAddress,
         //   addGatewayTxn,
-        //   // hotspotType,
+        //   hotspotType,
+        //   gatewayAction,
         // })
+        navigation.navigate('HotspotTxnsProgressScreen', {
+          gatewayAction,
+          hotspotAddress,
+          addGatewayTxn,
+          // hotspotType,
+        })
       }
     }
   }, [
@@ -154,11 +164,6 @@ const HotspotSetupPickWifiScreen = () => {
   ])
 
   const navNext = (network: string) => {
-    console.log('HotspotSetupPickWifiScreen::navSkip::network:', network)
-    console.log(
-      'HotspotSetupPickWifiScreen::navSkip::hotspotAddress:',
-      hotspotAddress,
-    )
     navigation.navigate('HotspotSetupWifiFormScreen', {
       gatewayAction,
       network,

@@ -26,10 +26,11 @@ export type RootStackParamList = {
   HotspotSetup: undefined
   HotspotAssert: undefined
   ScanStack: undefined
-  HotspotDetailScreen: {
+  ActivityScreen: undefined
+  HotspotScreen: {
     address: B58Address
-    title: string
-    makerName: string
+    // title: string
+    // makerName: string
   }
 }
 

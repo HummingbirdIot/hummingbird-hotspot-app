@@ -22,6 +22,7 @@ import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 
 const QR_CONTAINER_SIZE = 146
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const OverviewScreen = ({ navigation }: any) => {
   const spacing = useSpacing()
   const padding = useMemo(() => 'm' as Spacing, [])

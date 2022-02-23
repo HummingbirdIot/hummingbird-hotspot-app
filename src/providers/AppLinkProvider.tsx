@@ -105,7 +105,11 @@ const useAppLink = () => {
               navigator.submitGatewayTxns(hotspotLink)
             }
           } else if (hotspotLink.status === 'user_cancelled') {
-            navigator.goToMainTabs()
+            // navigator.goToMainTabs()
+            navigator.submitGatewayTxns({
+              ...hotspotLink,
+              cancelled: 1,
+            })
           } else {
             // TODO: handle failure status codes
             // eslint-disable-next-line no-console

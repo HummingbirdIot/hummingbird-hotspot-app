@@ -47,7 +47,7 @@ import {
 } from '../../../utils/formatter'
 import { RootStackParamList } from '../../navigation/naviTypes'
 
-type Route = RouteProp<RootStackParamList, 'HotspotDetailScreen'>
+type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotDetailScreen = ({ navigation }: any) => {
@@ -261,7 +261,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     setIsVisible(false)
     await checkLocation()
     navigation.push('HotspotAssert', {
-      hotspotData,
+      hotspot: hotspotData,
       hotspotAddress: address,
       gatewayAction: 'assertLocation',
       gain: hotspotData.gain ? hotspotData.gain / 10 : 1.2,
@@ -296,6 +296,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     await checkBluetooth()
     navigation.push('HotspotSetWiFi', {
       hotspotAddress: address,
+      gatewayAction: 'setWiFi',
     })
   }
   const list = [
@@ -329,7 +330,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
       <Header
         backgroundColor={surfaceContrast}
         centerComponent={{
-          text: formatHotspotNameArray(hotspotData.name || '').join(' '),
+          text: formatHotspotNameArray(hotspotData?.name || '').join(' '),
           // style: { fontSize: 20, color: '#fff' },
         }}
         leftComponent={{

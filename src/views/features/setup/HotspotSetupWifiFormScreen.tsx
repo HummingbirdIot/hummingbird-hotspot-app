@@ -35,7 +35,18 @@ const HotspotSetupWifiFormScreen = () => {
     setSecureTextEntry(!secureTextEntry)
   }, [secureTextEntry])
 
-  const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
+  const handleClose = useCallback(() => {
+    // console.log(
+    //   'gatewayActiongatewayActiongatewayActiongatewayAction',
+    //   gatewayAction,
+    // )
+    // if (gatewayAction === 'addGateway') {
+    //   rootNav.navigate('MainTabs')
+    // } else {
+    //   rootNav.pop()
+    // }
+    rootNav.pop()
+  }, [rootNav])
 
   const navNext = async () => {
     navigation.replace('HotspotSetupWifiConnectingScreen', {

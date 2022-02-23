@@ -123,6 +123,7 @@ export type HotspotSetupStackParamList = {
     gain?: number
   }
   HotspotTxnsProgressScreen: {
+    gatewayAction?: GatewayAction
     addGatewayTxn?: string
     hotspotAddress: string
     elevation?: number
@@ -137,6 +138,7 @@ export type HotspotSetupStackParamList = {
     assertTxn?: string
     gatewayTxn?: string
     gatewayAddress?: string
+    cancelled?: number
   }
 }
 

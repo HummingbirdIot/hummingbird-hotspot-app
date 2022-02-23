@@ -3,7 +3,8 @@ import { uniq } from 'lodash'
 import { useAsync } from 'react-async-hook'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { BleError, useHotspotBle } from '@helium/react-native-sdk'
+import { useHotspotBle } from '@helium/react-native-sdk'
+import { ActivityIndicator } from 'react-native'
 import useAlert from '../../../utils/hooks/useAlert'
 import {
   HotspotSetupNavigationProp,
@@ -15,6 +16,7 @@ import SafeAreaBox from '../../../components/SafeAreaBox'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
 import { getAddress } from '../../../utils/secureAccount'
 import { RootNavigationProp } from '../../navigation/naviTypes'
+import { useColors } from '../../../theme/themeHooks'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -40,17 +42,24 @@ const HotspotSetupWifiConnectingScreen = () => {
   const { readWifiNetworks, setWifi, removeConfiguredWifi } = useHotspotBle()
 
   const { showOKAlert } = useAlert()
+  const { primaryText } = useColors()
 
   const handleError = useCallback(
-    async (err: unknown) => {
-      let msg = ''
+    async (messageKey: string, err: unknown) => {
+      console.log(
+        'HotspotSetupWifiConnectingScreen::handleError',
+        messageKey,
+        err,
+      )
 
-      if ((err as BleError).toString !== undefined) {
-        msg = (err as BleError).toString()
-      } else {
-        msg = err as string
-      }
-      await showOKAlert({ titleKey: 'generic.error', messageKey: msg })
+      await showOKAlert({ titleKey: 'generic.error', messageKey }).catch(
+        (e) => {
+          console.log(
+            'HotspotSetupWifiConnectingScreen::showOKAlert::error:',
+            e,
+          )
+        },
+      )
       navigation.goBack()
     },
     [navigation, showOKAlert],
@@ -58,21 +67,31 @@ const HotspotSetupWifiConnectingScreen = () => {
 
   const goToNextStep = useCallback(async () => {
     if (gatewayAction === 'setWiFi') {
-      console.log('HotspotSetupWifiConnectingScreen::Set WiFi Success!')
-      rootNav.navigate('MainTabs')
+      // console.log('HotspotSetupWifiConnectingScreen::SetWiFiSuccess!')
+      await showOKAlert({
+        titleKey: 'Success',
+        messageKey: 'Set WiFi Successfully!',
+      })
+      if (hotspotAddress) {
+        rootNav.navigate('HotspotScreen', {
+          address: hotspotAddress,
+        })
+      } else {
+        rootNav.navigate('MainTabs')
+      }
     } else {
       const address = await getAddress()
-      console.log(
-        'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
-        address,
-      )
+      // console.log(
+      //   'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
+      //   address,
+      // )
       try {
         const hotspot = await getHotspotDetails(hotspotAddress)
-        console.log(
-          'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
-          hotspotAddress,
-          hotspot,
-        )
+        // console.log(
+        //   'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
+        //   hotspotAddress,
+        //   hotspot,
+        // )
         if (hotspot && hotspot.owner === address) {
           navigation.replace('OwnedHotspotErrorScreen')
         } else if (hotspot && hotspot.owner !== address) {
@@ -109,6 +128,7 @@ const HotspotSetupWifiConnectingScreen = () => {
     hotspotType,
     navigation,
     rootNav,
+    showOKAlert,
   ])
 
   const connectToWifi = useCallback(async () => {
@@ -120,56 +140,47 @@ const HotspotSetupWifiConnectingScreen = () => {
     try {
       const response = await setWifi(network, password)
       console.log(
-        'HotspotSetupWifiConnectingScreen::connectToWifi::response:',
+        'HotspotSetupWifiConnectingScreen::setWifi::response:',
         response,
       )
       if (response === 'not_found') {
-        showOKAlert({
-          titleKey: 'generic.error',
-          messageKey: 'generic.something_went_wrong',
-        })
-        navigation.goBack()
+        handleError('generic.something_went_wrong', 'not_found')
       } else if (response === 'invalid') {
-        showOKAlert({
-          titleKey: 'generic.error',
-          messageKey: 'generic.invalid_password',
-        })
-        navigation.goBack()
+        handleError('generic.invalid_password', null)
       } else {
         goToNextStep()
       }
     } catch (error) {
-      console.log('HotspotSetupWifiConnectingScreen::setWifi::error:', error)
-      navigation.goBack()
+      handleError('generic.something_went_wrong', error)
     }
-  }, [goToNextStep, navigation, network, password, setWifi, showOKAlert])
+  }, [goToNextStep, handleError, network, password, setWifi])
 
   const forgetWifi = async () => {
     try {
       const connectedNetworks = uniq((await readWifiNetworks(true)) || [])
-      console.log(
-        'HotspotSetupWifiConnectingScreen::forgetWifi::connectedNetworks:',
-        connectedNetworks.length,
-        connectedNetworks,
-      )
-      if (connectedNetworks.length > 0) {
-        await removeConfiguredWifi(connectedNetworks[0])
+      // console.log(
+      //   'HotspotSetupWifiConnectingScreen::connectedNetworks',
+      //   connectedNetworks.length,
+      //   connectedNetworks,
+      // )
+      if (connectedNetworks.length > 0 && connectedNetworks.includes(network)) {
+        await removeConfiguredWifi(network)
       }
     } catch (e) {
-      console.log('HotspotSetupWifiConnectingScreen::forgetWifi::error:', e)
-      handleError(e)
+      handleError('forget_wifi_error', e)
     }
   }
 
   useAsync(async () => {
     await forgetWifi()
     connectToWifi()
-  }, [])
+  }, [network, password])
 
   return (
     <SafeAreaBox flex={1} backgroundColor="primaryBackground">
       <Box flex={1} justifyContent="center" paddingBottom="xxl">
         <Box marginTop="xl">
+          <ActivityIndicator color={primaryText} />
           <Text variant="body1" textAlign="center">
             {t('hotspot_setup.wifi_password.connecting').toUpperCase()}
           </Text>

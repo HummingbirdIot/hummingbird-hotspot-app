@@ -275,10 +275,10 @@ export default {
       elevation_label: 'Height:',
       elevation_plural: '{{count}} meters',
       fee: 'Fee:',
-      fee_next: 'Pay Fee & Register Hotspot',
+      fee_next: 'Pay Fee & Update Hotspot',
       gain: '{{gain}} dBi',
       gain_label: 'TX / RX Gain:',
-      next: 'Register Hotspot',
+      next: 'Update Hotspot',
       no_funds: 'There is insufficient HNT in your account balance',
       subtitle_fee:
         'You need to pay a $10 Location Fee (in DC) to confirm this location.',
@@ -330,10 +330,13 @@ export default {
       title: 'Power Up',
     },
     progress: {
-      next: 'View Activity',
+      next: 'Goto Activity',
+      back: 'Goto Hotspots',
       subtitle:
         'This can take a few minutes so feel free to close this screen.',
-      title: 'REGISTERING HOTSPOT',
+      title_add: 'REGISTERING HOTSPOT',
+      title_assert: 'UPDATING HOTSPOT',
+      title: 'SUBMITTING TRANSACTIONS',
     },
     selection: {
       subtitle: 'Add your new Hummingbird Hotspot.',
@@ -343,6 +346,7 @@ export default {
       subtitle_1: 'You have decided to assert location later.',
       subtitle_2: 'Update your location later from settings.',
       title: 'Add Hotspot',
+      next: 'Add Hotspot',
     },
     wifi_password: {
       connecting: 'Connecting to Network',

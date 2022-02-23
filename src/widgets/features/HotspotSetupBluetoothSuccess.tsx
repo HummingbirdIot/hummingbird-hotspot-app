@@ -79,11 +79,11 @@ const HotspotSetupBluetoothSuccess = () => {
         if (!connected) {
           await connect(hotspot)
         } else if (hotspot.id !== connectedHotspotId) {
-          console.log(
-            'HotspotSetupBluetoothSuccess::handleConnect::hotspotIds:',
-            hotspot.id,
-            connectedHotspotId,
-          )
+          // console.log(
+          //   'HotspotSetupBluetoothSuccess::handleConnect::hotspotIds:',
+          //   hotspot.id,
+          //   connectedHotspotId,
+          // )
           await connect(hotspot)
         }
         dispatch(appSlice.actions.setConnectedHotspotId(hotspot.id))
