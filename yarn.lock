@@ -1350,9 +1350,9 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@helium/crypto-react-native@^3.9.0":
+"@helium/crypto-react-native@3.60.0":
   version "3.60.0"
-  resolved "https://registry.npmmirror.com/@helium/crypto-react-native/-/crypto-react-native-3.60.0.tgz#f43e1abc74e560fa24686a42c26b36451157efb3"
+  resolved "https://registry.yarnpkg.com/@helium/crypto-react-native/-/crypto-react-native-3.60.0.tgz#f43e1abc74e560fa24686a42c26b36451157efb3"
   integrity sha512-gb9p+qqJXx4wpaZk51z3P701TEqc78GJNCx4Ev4xRAmkUEtYdTywdalK1AaSN78VRVQAJkt1F/QYFJp4fwIeYA==
   dependencies:
     bs58 "^4.0.1"
@@ -2122,9 +2122,9 @@
   resolved "https://registry.npmmirror.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
-"@react-native-mapbox-gl/maps@^8.2.0-beta2":
+"@react-native-mapbox-gl/maps@^8.5.0":
   version "8.5.0"
-  resolved "https://registry.npmmirror.com/@react-native-mapbox-gl/maps/-/maps-8.5.0.tgz#b11ffc4f2a83ead4d524a75a7824318a3878e604"
+  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.5.0.tgz#b11ffc4f2a83ead4d524a75a7824318a3878e604"
   integrity sha512-vfEB03NfN7ANSoNj5WqFDS67Np9+/VWaQ4u7akIEBi/wJ48NcftEXcbL5IsjRRE/swam+L0vyfGSaApDdAevng==
   dependencies:
     "@expo/config-plugins" "^4.0.3"
@@ -5729,12 +5729,10 @@ expo-modules-core@~0.4.10, expo-modules-core@~0.4.4, expo-modules-core@~0.4.7:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-permissions@~13.0.3:
-  version "13.0.3"
-  resolved "https://registry.npmmirror.com/expo-permissions/-/expo-permissions-13.0.3.tgz#93d4395658d9967d257faa31bbec096551654aaf"
-  integrity sha512-bVjdnhYDZy06jX0J+0fGuXzEJ7r+ibl9yCAsumd3S/ELrs1wbR8/zOkQBaSyoYk0z9MiGCC4ul6UB10wEiMPmw==
-  dependencies:
-    expo-modules-core "~0.4.4"
+expo-permissions@^13.0.3:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-13.1.1.tgz#67414ea027d0e7db61f1bfa83a98ef6af512b59e"
+  integrity sha512-vo2sDlxDJE+THLhUO7G8kMHYnNJoMvYjurFNRvHjEvZAUvFmRgulejr8HlzCpb820brXNg+QWalZCtyA5oQkqg==
 
 expo-secure-store@~11.0.3:
   version "11.0.3"
@@ -10005,10 +10003,10 @@ react-native-appstate-hook@^1.0.5:
   resolved "https://registry.npmmirror.com/react-native-appstate-hook/-/react-native-appstate-hook-1.0.6.tgz#cbc16e7b89cfaea034cabd999f00e99053cabd06"
   integrity sha512-0hPVyf5yLxCSVrrNEuGqN1ZnSSj3Ye2gZex0NtcK/AHYwMc0rXWFNZjBKOoZSouspqu3hXBbQ6NOUSTzrME1AQ==
 
-react-native-ble-plx@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npmmirror.com/react-native-ble-plx/-/react-native-ble-plx-2.0.3.tgz#b0a746f33389dbf7fd7b158513330d487d5d0fbb"
-  integrity sha512-62LRDBPf/03K7sge+qq2ZuF8PWCGB782G+SBrpgNm5fA5Hs3FCY1ExTJZ1G0tB5ZhBPYEXcKRxPLuFegcDFrqA==
+react-native-ble-plx@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-2.0.2.tgz#0912c50d4d807ed279a2a1043362c96318518154"
+  integrity sha512-NjUl5H7bMgNfMma6i+W+wCsfQjOrUxSnLdmYgb8LSas4UZmmsakhEVK4C9/qHm2oxKB+SLR87zD6upZfD/R3sw==
 
 react-native-cli-bump-version@^1.1.0:
   version "1.4.0"

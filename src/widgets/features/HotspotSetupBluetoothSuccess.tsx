@@ -16,6 +16,7 @@ import useAlert from '../../utils/hooks/useAlert'
 import appSlice from '../../store/app/appSlice'
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
+// import useHotspot from '../../utils/useHotspot'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -37,8 +38,16 @@ const HotspotSetupBluetoothSuccess = () => {
     checkFirmwareCurrent,
     readWifiNetworks,
     getOnboardingAddress,
-    // getDiagnosticInfo,
+    getDiagnosticInfo,
   } = useHotspotBle()
+
+  // const {
+  //   // availableHotspots,
+  //   connectAndConfigHotspot,
+  //   scanForWifiNetworks,
+  //   // checkFirmwareCurrent,
+  // } = useHotspot()
+
   const { getMinFirmware, getOnboardingRecord } = useOnboarding()
   const { showOKAlert } = useAlert()
   const dispatch = useAppDispatch()
@@ -73,17 +82,13 @@ const HotspotSetupBluetoothSuccess = () => {
         // hotspot,
       )
 
+      // connectAndConfigHotspot(hotspot)
       setConnectingHotspotId(hotspot.id)
       try {
         const connected = await isConnected()
         if (!connected) {
           await connect(hotspot)
         } else if (hotspot.id !== connectedHotspotId) {
-          // console.log(
-          //   'HotspotSetupBluetoothSuccess::handleConnect::hotspotIds:',
-          //   hotspot.id,
-          //   connectedHotspotId,
-          // )
           await connect(hotspot)
         }
         dispatch(appSlice.actions.setConnectedHotspotId(hotspot.id))
@@ -125,13 +130,30 @@ const HotspotSetupBluetoothSuccess = () => {
         // scan for wifi networks
         const networks = uniq((await readWifiNetworks(false)) || [])
         const connectedNetworks = uniq((await readWifiNetworks(true)) || [])
+        // scan for wifi networks
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        // const networks_2 = uniq((await scanForWifiNetworks()) || [])
+        // // eslint-disable-next-line @typescript-eslint/naming-convention
+        // const connectedNetworks_2 = uniq(
+        //   (await scanForWifiNetworks(true)) || [],
+        // )
+
         const hotspotAddress = await getOnboardingAddress()
+        // console.log(
+        //   'HotspotSetupBluetoothSuccess::hotspotAddress:',
+        //   hotspotType,
+        //   hotspotAddress,
+        //   firmwareDetails,
+        // )
         console.log(
-          'HotspotSetupBluetoothSuccess::hotspotAddress:',
-          hotspotType,
-          hotspotAddress,
-          firmwareDetails,
+          'HotspotSetupBluetoothSuccess::getDiagnosticInfo:',
+          getDiagnosticInfo(),
         )
+        // console.log(
+        //   'networks_2, connectedNetworks_2,',
+        //   networks_2,
+        //   connectedNetworks_2,
+        // )
         const onboardingRecord = await getOnboardingRecord(hotspotAddress)
         if (!onboardingRecord) return
 
@@ -156,6 +178,7 @@ const HotspotSetupBluetoothSuccess = () => {
     checkFirmwareCurrent,
     connectStatus,
     gatewayAction,
+    getDiagnosticInfo,
     getMinFirmware,
     getOnboardingAddress,
     getOnboardingRecord,

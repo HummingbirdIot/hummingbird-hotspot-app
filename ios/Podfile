@@ -16,6 +16,9 @@ target 'Hummingbird' do
     :hermes_enabled => podfile_properties['expo.jsEngine'] == 'hermes'
   )
 
+  # temp fix for xcode 13 until https://github.com/dotintent/react-native-ble-plx/pull/900 merges
+  pod 'MultiplatformBleAdapter', :git => 'https://github.com/below/MultiPlatformBleAdapter', :tag => '0.1.9'
+
   target 'HummingbirdTests' do
     inherit! :complete
     # Pods for testing

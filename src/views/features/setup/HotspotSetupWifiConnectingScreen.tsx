@@ -115,6 +115,7 @@ const HotspotSetupWifiConnectingScreen = () => {
           error,
         )
         navigation.replace('HotspotTxnsProgressScreen', {
+          gatewayAction,
           hotspotAddress,
           addGatewayTxn,
           // hotspotType,
@@ -158,13 +159,21 @@ const HotspotSetupWifiConnectingScreen = () => {
   const forgetWifi = async () => {
     try {
       const connectedNetworks = uniq((await readWifiNetworks(true)) || [])
-      // console.log(
-      //   'HotspotSetupWifiConnectingScreen::connectedNetworks',
-      //   connectedNetworks.length,
-      //   connectedNetworks,
-      // )
-      if (connectedNetworks.length > 0 && connectedNetworks.includes(network)) {
-        await removeConfiguredWifi(network)
+      console.log(
+        'HotspotSetupWifiConnectingScreen::connectedNetworks',
+        connectedNetworks.length,
+        connectedNetworks,
+      )
+      if (connectedNetworks.length > 0) {
+        await removeConfiguredWifi('nanchao-2_5G')
+        if (connectedNetworks[0] === network) {
+          await removeConfiguredWifi(network)
+        } else {
+          await removeConfiguredWifi(connectedNetworks[0])
+          if (connectedNetworks.includes(network)) {
+            await removeConfiguredWifi(network)
+          }
+        }
       }
     } catch (e) {
       handleError('forget_wifi_error', e)
@@ -180,7 +189,7 @@ const HotspotSetupWifiConnectingScreen = () => {
     <SafeAreaBox flex={1} backgroundColor="primaryBackground">
       <Box flex={1} justifyContent="center" paddingBottom="xxl">
         <Box marginTop="xl">
-          <ActivityIndicator color={primaryText} />
+          <ActivityIndicator color={primaryText} size={100} />
           <Text variant="body1" textAlign="center">
             {t('hotspot_setup.wifi_password.connecting').toUpperCase()}
           </Text>

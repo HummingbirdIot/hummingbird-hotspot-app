@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo } from 'react'
 // import { Platform } from 'react-native'
 import { LogBox, Platform, StatusBar, UIManager } from 'react-native'
@@ -145,9 +146,11 @@ const App = () => {
   const colorAdaptedTheme = useMemo(
     () => ({
       ...theme,
-      colors: colorScheme === 'light' ? lightThemeColors : darkThemeColors,
+      // colors: colorScheme === 'light' ? lightThemeColors : darkThemeColors,
+      colors: lightThemeColors,
     }),
-    [colorScheme],
+    [],
+    // [colorScheme],
   )
 
   const elementsTheme = useElementsTheme()

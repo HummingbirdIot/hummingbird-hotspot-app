@@ -32,7 +32,7 @@ PODS:
   - EXLocation (14.0.2):
     - ExpoModulesCore
     - UMTaskManagerInterface
-  - EXPermissions (13.0.3):
+  - EXPermissions (13.1.1):
     - ExpoModulesCore
   - Expo (43.0.5):
     - ExpoModulesCore
@@ -441,6 +441,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - "helium-react-native-sdk (from `../node_modules/@helium/react-native-sdk`)"
+  - MultiplatformBleAdapter (from `https://github.com/below/MultiPlatformBleAdapter`, tag `0.1.9`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -491,11 +492,10 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - fmt
     - Mapbox-iOS-SDK
     - MapboxMobileEvents
-    - MultiplatformBleAdapter
     - Toast
     - ZXingObjC
 
@@ -548,6 +548,9 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   helium-react-native-sdk:
     :path: "../node_modules/@helium/react-native-sdk"
+  MultiplatformBleAdapter:
+    :git: https://github.com/below/MultiPlatformBleAdapter
+    :tag: 0.1.9
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -641,6 +644,11 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  MultiplatformBleAdapter:
+    :git: https://github.com/below/MultiPlatformBleAdapter
+    :tag: 0.1.9
+
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
@@ -657,7 +665,7 @@ SPEC CHECKSUMS:
   EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
   EXLocalAuthentication: c0ec9379a81c3c823a362382b6a2145e880d9840
   EXLocation: 013b5d07cca26c2d15d998766322e70b7a228b57
-  EXPermissions: 7696f4c16e89981f84c04d96327f7e1e592373c0
+  EXPermissions: 2f8db9cfb1919d6c6776f462bb2c5a903e423b2a
   Expo: d9588796cd19999da4d440d87bf7eb7ae4dbd608
   ExpoModulesCore: c9438f6add0fb7b04b7c64eb97a833d2752a7834
   EXSecureStore: 919bf7c28472862020d2cd7b59b69aae160b5d40
@@ -719,6 +727,6 @@ SPEC CHECKSUMS:
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: fcf28d9414ec083213be45b3539f0f219debef66
+PODFILE CHECKSUM: 9e92bbcfeff4226bfc551d11deec593dad3e7949
 
 COCOAPODS: 1.11.2
