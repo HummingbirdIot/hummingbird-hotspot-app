@@ -3,17 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { WalletLink } from '@helium/react-native-sdk'
 import { Linking, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import SafeAreaBox from '../../components/SafeAreaBox'
+// import SafeAreaBox from '../../components/SafeAreaBox'
 import Text from '../../components/Text'
 import Box from '../../components/Box'
 import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 import { locale } from '../../utils/i18n'
+import BackScreen from '../../components/BackScreen'
+import { RootNavigationProp } from '../navigation/naviTypes'
 
 const CreateAccount = () => {
   const { t } = useTranslation()
   const { delegateApps } = WalletLink
   const [delegateApp] = delegateApps
-  const nav = useNavigation()
+  const nav = useNavigation<RootNavigationProp>()
 
   const handleAppSelection = useCallback(
     (app: WalletLink.DelegateApp) => async () => {
@@ -29,8 +31,17 @@ const CreateAccount = () => {
     [nav],
   )
 
+  const handleClose = useCallback(() => {
+    nav.pop()
+  }, [nav])
+
   return (
-    <SafeAreaBox flex={1} backgroundColor="primaryBackground" padding="xl">
+    <BackScreen
+      flex={1}
+      backgroundColor="primaryBackground"
+      padding="xl"
+      onClose={handleClose}
+    >
       <Text variant="subtitle1" marginBottom="l">
         {t('account_setup.linkAccount.stepOne')}
       </Text>
@@ -54,7 +65,7 @@ const CreateAccount = () => {
       <Text variant="subtitle1" marginBottom="l">
         {t('account_setup.linkAccount.stepThree')}
       </Text>
-    </SafeAreaBox>
+    </BackScreen>
   )
 }
 

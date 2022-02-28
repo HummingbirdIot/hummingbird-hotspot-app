@@ -2,7 +2,8 @@ import { StackNavigationProp } from '@react-navigation/stack'
 
 export type OnboardingStackParamList = {
   Welcome: undefined
-  CreateAccount: undefined
+  TypeInExplorationCode: undefined
+  CreateHeliumAccount: undefined
 }
 
 export type OnboardingNavigationProp =

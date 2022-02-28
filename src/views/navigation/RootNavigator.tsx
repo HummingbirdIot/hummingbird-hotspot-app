@@ -13,7 +13,8 @@ import HotspotAssertLocationNavigator from './features/HotspotAssertNavigator'
 import HotspotSetupNavigator from './features/HotspotSetupNavigator'
 import HotspotSetWiFiNavigator from './features/HotspotSetWiFiNavigator'
 import WelcomeScreen from '../link/WelcomeScreen'
-import CreateAccountScreen from '../link/CreateAccountScreen'
+import CreateHeliumAccountScreen from '../link/CreateHeliumAccountScreen'
+import EnterExplorationCodeScreen from '../link/EnterExplorationCodeScreen'
 import { OnboardingStackParamList } from '../link/onboardingTypes'
 import ActivityScreen from '../main/overview/ActivityScreen'
 import LockScreen from '../lock/LockScreen'
@@ -41,8 +42,12 @@ const RootNavigator = () => {
       >
         <OnboardingStack.Screen name="Welcome" component={WelcomeScreen} />
         <OnboardingStack.Screen
-          name="CreateAccount"
-          component={CreateAccountScreen}
+          name="TypeInExplorationCode"
+          component={EnterExplorationCodeScreen}
+        />
+        <OnboardingStack.Screen
+          name="CreateHeliumAccount"
+          component={CreateHeliumAccountScreen}
         />
       </OnboardingStack.Navigator>
     )
