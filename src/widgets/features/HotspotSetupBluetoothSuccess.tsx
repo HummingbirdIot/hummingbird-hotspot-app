@@ -145,15 +145,16 @@ const HotspotSetupBluetoothSuccess = () => {
         //   hotspotAddress,
         //   firmwareDetails,
         // )
-        console.log(
-          'HotspotSetupBluetoothSuccess::getDiagnosticInfo:',
-          getDiagnosticInfo(),
-        )
+        // console.log(
+        //   'HotspotSetupBluetoothSuccess::getDiagnosticInfo:',
+        //   getDiagnosticInfo(),
+        // )
         // console.log(
         //   'networks_2, connectedNetworks_2,',
         //   networks_2,
         //   connectedNetworks_2,
         // )
+        console.log('networks,', networks, connectedNetworks)
         const onboardingRecord = await getOnboardingRecord(hotspotAddress)
         if (!onboardingRecord) return
 

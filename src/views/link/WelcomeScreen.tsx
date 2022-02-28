@@ -4,10 +4,11 @@ import { WalletLink } from '@helium/react-native-sdk'
 import { Linking, Platform } from 'react-native'
 import { getBundleId } from 'react-native-device-info'
 import { useNavigation } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Text from '../../components/Text'
 import { OnboardingNavigationProp } from './onboardingTypes'
 import Box from '../../components/Box'
-// import TextTransform from '../../../components/TextTransform'
+import TextTransform from '../../components/TextTransform'
 import SafeAreaBox from '../../components/SafeAreaBox'
 import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 import { useAppDispatch } from '../../store/store'
@@ -16,6 +17,8 @@ import appSlice from '../../store/app/appSlice'
 const WelcomeScreen = () => {
   const { t } = useTranslation()
   const { delegateApps } = WalletLink
+  const [delegateApp] = delegateApps
+  const insets = useSafeAreaInsets()
   const navigation = useNavigation<OnboardingNavigationProp>()
   const dispatch = useAppDispatch()
 
@@ -56,60 +59,81 @@ const WelcomeScreen = () => {
   )
 
   return (
-    <SafeAreaBox
-      backgroundColor="primaryBackground"
-      flex={1}
-      paddingHorizontal="l"
-      alignItems="center"
-      paddingTop="xxxl"
-    >
-      <Box>
-        <Text variant="h1" alignContent="center">
-          {t('account_setup.welcome.title')}
-        </Text>
-        {/* <TextTransform
-          variant="subtitle1"
-          marginVertical="xxl"
-          i18nKey="account_setup.welcome.subtitle"
-        /> */}
-        <Box flex={1} />
-
-        <Box flex={2} width="100%" padding="l">
-          <Text variant="body1">
-            {t('account_setup.welcome.login_with_helium')}
+    <SafeAreaBox flex={1}>
+      <Box flex={1} alignItems="center">
+        <Box
+          backgroundColor="surface"
+          style={{
+            width: 1000,
+            height: 1000,
+            borderRadius: 500,
+            marginTop: -800 + insets.top * 2,
+            paddingTop: 820,
+          }}
+        >
+          <Text variant="h1" textAlign="center" textTransform="uppercase">
+            {t('account_setup.welcome.title')}
           </Text>
-          <Box flexDirection="row" marginBottom="l">
-            {delegateApps.map((app) => (
-              <TouchableOpacityBox
-                key={
-                  Platform.OS === 'android'
-                    ? app.androidPackage
-                    : app.iosBundleId
-                }
-                backgroundColor="surface"
-                padding="s"
-                paddingHorizontal="m"
-                borderRadius="l"
-                onPress={handleAppSelection(app)}
-              >
-                <Text variant="h4">{app.name}</Text>
-              </TouchableOpacityBox>
-            ))}
-          </Box>
-          <Box flexDirection="row" marginBottom="l">
-            <Box>
-              <Text variant="h4" onPress={handlePreview}>
-                体验
+
+          <TextTransform
+            variant="subtitle1"
+            marginVertical="xl"
+            i18nKey="account_setup.welcome.subtitle"
+          />
+        </Box>
+        <Box flex={1} width="100%" padding="xl">
+          <Box flex={1} flexDirection="row" justifyContent="center">
+            <TouchableOpacityBox
+              key={
+                Platform.OS === 'android'
+                  ? delegateApp.androidPackage
+                  : delegateApp.iosBundleId
+              }
+              backgroundColor="surface"
+              marginVertical="xl"
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 75,
+                paddingVertical: 53,
+              }}
+              onPress={handleAppSelection(delegateApp)}
+            >
+              <Text variant="h5" textAlign="center">
+                Link with
               </Text>
-            </Box>
+              <Text variant="h5" textAlign="center">
+                {delegateApp.name}
+              </Text>
+            </TouchableOpacityBox>
+          </Box>
+          <Box flexDirection="row" justifyContent="center">
+            <Text
+              variant="h6"
+              textAlign="center"
+              color="white"
+              onPress={handlePreview}
+            >
+              Type in Exploration Code
+            </Text>
+            <Text
+              variant="h6"
+              marginHorizontal="m"
+              color="gray"
+              textAlign="center"
+            >
+              |
+            </Text>
+            <Text
+              variant="h6"
+              textAlign="center"
+              color="white"
+              onPress={createAccount}
+            >
+              Instructions
+            </Text>
           </Box>
         </Box>
-
-        <TouchableOpacityBox onPress={createAccount} width="100%" padding="l">
-          <Text variant="body1">
-            {t('account_setup.welcome.create_account')}
-          </Text>
-        </TouchableOpacityBox>
       </Box>
     </SafeAreaBox>
   )

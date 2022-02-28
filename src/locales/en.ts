@@ -1,25 +1,12 @@
 export default {
-  account_import: {
-    alert: {
-      body: "This seed phrase doesn't correspond to an account",
-      title: 'Error',
-    },
-    complete: {
-      title: 'Recovering Account...',
-    },
-    confirm: {
-      next: 'Submit Seed Phrase',
-      subtitle:
-        'Here are the 12 words you’ve entered. Tap on any of them if you need to edit.',
-      title: 'Please Confirm\nSeed Phrase',
-    },
-    word_entry: {
-      placeholder: '{{ordinal}} word',
-      subtitle: 'Recovery Seed Phrases are not\ncase-sensitive',
-      title: 'Enter Recovery\nSeed Phrase',
-    },
-  },
   account_setup: {
+    welcome: {
+      title: 'Hummingbird',
+      subtitle: "Hey, Let's Humming!!",
+      create_account: 'Create an account on the Helium Network',
+      login_with_helium: 'Already have a Helium Wallet?\nTap to get started.',
+    },
+
     confirm: {
       forgot: 'I forgot my words',
       subtitle:
@@ -47,13 +34,7 @@ export default {
         'Accounts are protected by\n<b><errorText>12 unique words</errorText></b>, that act as\na password for signing in or\nrecovering accounts.',
       title: 'Creating\nSecure Account.',
     },
-    welcome: {
-      create_account: 'Create an account on the Helium Network',
-      login_with_helium: 'Already have a Helium Wallet?\nTap to get started.',
-      subtitle:
-        'Lorem ipsum <b><errorText>$HNT</errorText></b> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      title: 'Welcome to\nHummingbird',
-    },
+
     linkAccount: {
       stepOne: '1. Download a supported Wallet App',
       stepTwo: '2. Create account',
@@ -63,6 +44,28 @@ export default {
       signInWith: 'Sign in with:',
     },
   },
+
+  account_import: {
+    alert: {
+      body: "This seed phrase doesn't correspond to an account",
+      title: 'Error',
+    },
+    complete: {
+      title: 'Recovering Account...',
+    },
+    confirm: {
+      next: 'Submit Seed Phrase',
+      subtitle:
+        'Here are the 12 words you’ve entered. Tap on any of them if you need to edit.',
+      title: 'Please Confirm\nSeed Phrase',
+    },
+    word_entry: {
+      placeholder: '{{ordinal}} word',
+      subtitle: 'Recovery Seed Phrases are not\ncase-sensitive',
+      title: 'Enter Recovery\nSeed Phrase',
+    },
+  },
+
   antennas: {
     elevation_info: {
       desc: 'Estimate how high the antenna is placed relative to the ground. An antenna located on the roof of a single-story house is typically 5 meters.',

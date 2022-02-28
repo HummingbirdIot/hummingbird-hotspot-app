@@ -67,7 +67,7 @@ const HotspotSetupWifiConnectingScreen = () => {
 
   const goToNextStep = useCallback(async () => {
     if (gatewayAction === 'setWiFi') {
-      // console.log('HotspotSetupWifiConnectingScreen::SetWiFiSuccess!')
+      console.log('HotspotSetupWifiConnectingScreen::SetWiFiSuccess!')
       await showOKAlert({
         titleKey: 'Success',
         messageKey: 'Set WiFi Successfully!',
@@ -165,7 +165,7 @@ const HotspotSetupWifiConnectingScreen = () => {
         connectedNetworks,
       )
       if (connectedNetworks.length > 0) {
-        await removeConfiguredWifi('nanchao-2_5G')
+        // await removeConfiguredWifi('nanchao-2_5G')
         if (connectedNetworks[0] === network) {
           await removeConfiguredWifi(network)
         } else {

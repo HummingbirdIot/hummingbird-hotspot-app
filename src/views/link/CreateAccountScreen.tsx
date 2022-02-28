@@ -12,6 +12,7 @@ import { locale } from '../../utils/i18n'
 const CreateAccount = () => {
   const { t } = useTranslation()
   const { delegateApps } = WalletLink
+  const [delegateApp] = delegateApps
   const nav = useNavigation()
 
   const handleAppSelection = useCallback(
@@ -35,18 +36,16 @@ const CreateAccount = () => {
       </Text>
 
       <Box flexDirection="row" marginBottom="l">
-        {delegateApps.map((app) => (
-          <TouchableOpacityBox
-            key={app.name}
-            backgroundColor="surface"
-            padding="s"
-            paddingHorizontal="m"
-            borderRadius="l"
-            onPress={handleAppSelection(app)}
-          >
-            <Text variant="h4">{app.name}</Text>
-          </TouchableOpacityBox>
-        ))}
+        <TouchableOpacityBox
+          // key={delegateApp.name}
+          backgroundColor="surface"
+          padding="s"
+          paddingHorizontal="m"
+          borderRadius="l"
+          onPress={handleAppSelection(delegateApp)}
+        >
+          <Text variant="h4">{delegateApp.name}</Text>
+        </TouchableOpacityBox>
       </Box>
 
       <Text variant="subtitle1" marginBottom="l">

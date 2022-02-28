@@ -146,11 +146,11 @@ const App = () => {
   const colorAdaptedTheme = useMemo(
     () => ({
       ...theme,
-      // colors: colorScheme === 'light' ? lightThemeColors : darkThemeColors,
-      colors: lightThemeColors,
+      colors: colorScheme === 'light' ? lightThemeColors : darkThemeColors,
+      // colors: lightThemeColors,
     }),
-    [],
-    // [colorScheme],
+    // [],
+    [colorScheme],
   )
 
   const elementsTheme = useElementsTheme()

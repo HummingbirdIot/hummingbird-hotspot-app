@@ -37,8 +37,10 @@ const textVariants = {
   },
   subtitle1: {
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: '300',
     color: 'primaryText',
+    textAlign: 'center',
+    letterSpacing: 3,
   },
   subtitle2: {
     fontSize: 17,
