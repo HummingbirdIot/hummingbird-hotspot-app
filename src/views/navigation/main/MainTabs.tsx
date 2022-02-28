@@ -18,7 +18,7 @@ import MoreNavigator from '../../main/more/MoreNavigator'
 const MainTab = createBottomTabNavigator()
 
 const MainTabs = () => {
-  const { surfaceContrast } = useColors()
+  const { primaryBackground } = useColors()
   const navigation = useNavigation<RootNavigationProp>()
   const {
     app: { isLocked, isSettingUpHotspot },
@@ -44,15 +44,18 @@ const MainTabs = () => {
     [isLocked],
   )
 
+  // console.log('surfaceContrast', surfaceContrast)
+
   const tabBarOptions = useMemo(
     () => ({
       showLabel: false,
       style: {
-        backgroundColor: surfaceContrast,
+        backgroundColor: primaryBackground,
+        // borderTopColor: '#222222',
         paddingHorizontal: wp(12),
       },
     }),
-    [surfaceContrast],
+    [primaryBackground],
   )
 
   const screenOptions = useCallback(

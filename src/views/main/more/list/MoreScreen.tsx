@@ -336,9 +336,14 @@ const MoreScreen = () => {
   const edges = useMemo(() => ['left', 'right', 'top'] as Edge[], [])
   return (
     <SafeAreaBox backgroundColor="primaryBackground" flex={1} edges={edges}>
-      <Text variant="h3" marginVertical="m" paddingHorizontal="l">
-        {t('more.title')}
-      </Text>
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        marginVertical="m"
+        paddingHorizontal="l"
+      >
+        <Text variant="h3">{t('more.title')}</Text>
+      </Box>
       <SectionList
         contentContainerStyle={contentContainer}
         sections={SectionData}

@@ -2,8 +2,6 @@ import React, { memo, useEffect, useMemo, useState } from 'react'
 import QRCode from 'react-qr-code'
 import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
-import { SafeAreaView } from 'react-native-safe-area-context'
-// import { useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { Button } from 'react-native-elements/dist/buttons/Button'
 import { getAddress } from '../../../utils/secureAccount'
@@ -13,12 +11,12 @@ import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
 import useCurrency from '../../../utils/hooks/useCurrency'
-// import { RootState } from '../../../store/rootReducer'
 import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
 import { useAppDispatch } from '../../../store/store'
-// import { updateSetting } from '../../../store/app/appSlice'
 import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
+
+import TabViewContainer from '../../../widgets/main/TabViewContainer'
 
 const QR_CONTAINER_SIZE = 146
 
@@ -97,48 +95,46 @@ const OverviewScreen = ({ navigation }: any) => {
   const gotoActivityScreen = useDebouncedCallback(naviToActivityScreen, 700, {})
 
   return (
-    <Box flex={1}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Box flex={1} padding="l">
-          <Text>address: {address}</Text>
-          <Text>
-            balance: {account?.balance?.floatBalance || '0'}{' '}
-            {account?.balance?.type.ticker}({fiat})
-          </Text>
-          <Text>
-            dcBalance: {account?.dcBalance?.floatBalance || 0}{' '}
-            {account?.dcBalance?.type.ticker}
-          </Text>
-          <Text>
-            stakedBalance: {account?.stakedBalance?.floatBalance || 0}{' '}
-            {account?.stakedBalance?.type.ticker}
-          </Text>
-          <Text>hotspotCount: {account?.hotspotCount || 0}</Text>
-          <Text>validatorCount: {account?.validatorCount || 0}</Text>
+    <TabViewContainer title="Account">
+      <Box flex={1} padding="l">
+        <Text>address: {address}</Text>
+        <Text>
+          balance: {account?.balance?.floatBalance || '0'}{' '}
+          {account?.balance?.type.ticker}({fiat})
+        </Text>
+        <Text>
+          dcBalance: {account?.dcBalance?.floatBalance || 0}{' '}
+          {account?.dcBalance?.type.ticker}
+        </Text>
+        <Text>
+          stakedBalance: {account?.stakedBalance?.floatBalance || 0}{' '}
+          {account?.stakedBalance?.type.ticker}
+        </Text>
+        <Text>hotspotCount: {account?.hotspotCount || 0}</Text>
+        <Text>validatorCount: {account?.validatorCount || 0}</Text>
+      </Box>
+      <Box flex={1} flexDirection="row" justifyContent="center">
+        <QRCode
+          size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
+          value={address}
+        />
+      </Box>
+      <Box flex={2} padding="l">
+        <Button
+          onPress={gotoActivityScreen.callback}
+          buttonStyle={{
+            backgroundColor: 'blue',
+            marginBottom: 10,
+          }}
+          title="View Activity"
+        />
+        <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
+          {address ? (
+            <RewardsStatistics address={address} resource="accounts" />
+          ) : null}
         </Box>
-        <Box flex={1} flexDirection="row" justifyContent="center">
-          <QRCode
-            size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
-            value={address}
-          />
-        </Box>
-        <Box flex={2} padding="l">
-          <Button
-            onPress={gotoActivityScreen.callback}
-            buttonStyle={{
-              backgroundColor: 'blue',
-              marginBottom: 10,
-            }}
-            title="View Activity"
-          />
-          <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
-            {address ? (
-              <RewardsStatistics address={address} resource="accounts" />
-            ) : null}
-          </Box>
-        </Box>
-      </SafeAreaView>
-    </Box>
+      </Box>
+    </TabViewContainer>
   )
 }
 

@@ -163,9 +163,7 @@ const App = () => {
             <BottomSheetModalProvider>
               <SafeAreaProvider>
                 {/* TODO: Will need to adapt status bar for light/dark modes */}
-                {Platform.OS === 'ios' && (
-                  <StatusBar barStyle="light-content" />
-                )}
+                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
                 {Platform.OS === 'android' && (
                   <StatusBar translucent backgroundColor="transparent" />
                 )}

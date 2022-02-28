@@ -254,7 +254,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   )
   const widgets = [Statistics, Activity, Empty]
 
-  const { surfaceContrast } = useColors()
+  const { surfaceContrast, blueMain } = useColors()
 
   const assertLocation = useCallback(async () => {
     if (!hotspotData) return
@@ -389,7 +389,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               alignItems="center"
               marginTop="xs"
             >
-              <IconLocation width={10} height={10} color="#3c82f7" />
+              <IconLocation width={10} height={10} color={blueMain} />
               <ThemedText
                 flex={1}
                 variant="body2"
