@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Hotspot, Witness } from '@helium/http'
 import Balance, { NetworkTokens } from '@helium/currency'
 import {
@@ -33,7 +33,7 @@ export type HotspotIndexed<T> = Record<HotspotAddress, T>
 
 export type HotspotsSliceState = {
   hotspots: CacheRecord<{ data: B58Address[] }>
-  // hotspotsObj: Record<string, Hotspot>
+  connectedHotspotId: string
   location?: LocationCoords
   loadingRewards: boolean
   hotspotsLoaded: boolean
@@ -45,7 +45,7 @@ export type HotspotsSliceState = {
 
 const initialState: HotspotsSliceState = {
   hotspots: { lastFetchedTimestamp: 0, loading: false, data: [] },
-  // hotspotsObj: {},
+  connectedHotspotId: '',
   loadingRewards: false,
   hotspotsLoaded: false,
   failure: false,
@@ -53,40 +53,6 @@ const initialState: HotspotsSliceState = {
   rewards: {},
   hotspotsData: {},
 }
-
-// type Restore = {
-//   hotspots: boolean
-//   isPinRequired: boolean
-//   authInterval: number
-//   isLocked: boolean
-//   walletLinkToken?: string
-// }
-
-// export const restoreAppSettings = createAsyncThunk<Restore>(
-//   'app/restoreAppSettings',
-//   async () => {
-//     const [isBackedUp, isPinRequired, authInterval, walletLinkToken, address] =
-//       await Promise.all([
-//         getSecureItem('hotspots'),
-//         getSecureItem('hotspotsData'),
-//       ])
-//     if (isBackedUp && address) {
-//       // 推送
-//       console.log('OneSignal.sendTags:', { address })
-//       // OneSignal.sendTags({ address })
-//       // Logger.setUser(address)
-//     }
-//     return {
-//       isBackedUp,
-//       isPinRequired,
-//       authInterval: authInterval
-//         ? parseInt(authInterval, 10)
-//         : Intervals.IMMEDIATELY,
-//       isLocked: isPinRequired,
-//       walletLinkToken,
-//     } as Restore
-//   },
-// )
 
 export const fetchRewards = createAsyncThunk<
   Rewards,
@@ -198,6 +164,9 @@ const hotspotsSlice = createSlice({
       state.syncStatuses[address] = handleCacheFulfilled({
         status,
       })
+    },
+    setConnectedHotspotId: (state, action: PayloadAction<string>) => {
+      state.connectedHotspotId = action.payload
     },
   },
   extraReducers: (builder) => {

@@ -17,7 +17,7 @@ import SafeAreaBox from '../../../components/SafeAreaBox'
 import { hotspotOnChain } from '../../../utils/clients/appDataClient'
 import useAlert from '../../../utils/hooks/useAlert'
 import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
-import { getSecureItem } from '../../../utils/secureAccount'
+import { getSecureItem } from '../../../store/app/secureData'
 import { useColors } from '../../../theme/themeHooks'
 import { DebouncedButton } from '../../../components/Button'
 import useMount from '../../../utils/hooks/useMount'
@@ -59,7 +59,7 @@ const HotspotTxnsProgressScreen = () => {
   }
 
   const submitOnboardingTxns = async () => {
-    const token = await getSecureItem('walletLinkToken')
+    const token = await getSecureItem('user.walletLinkToken')
     if (!token) throw new Error('Token Not found')
 
     const parsed = WalletLink.parseWalletLinkToken(token)

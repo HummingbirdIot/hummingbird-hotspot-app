@@ -14,7 +14,7 @@ import Text from '../../../components/Text'
 import Box from '../../../components/Box'
 import SafeAreaBox from '../../../components/SafeAreaBox'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
-import { getAddress } from '../../../utils/secureAccount'
+import { getAddress } from '../../../store/app/secureData'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import { useColors } from '../../../theme/themeHooks'
 

@@ -22,7 +22,7 @@ import { DebouncedButton } from '../../../components/Button'
 import Text from '../../../components/Text'
 import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import { getAddress } from '../../../utils/secureAccount'
+import { getAddress } from '../../../store/app/secureData'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import HotspotLocationPreview from '../../../widgets/features/HotspotLocationPreview'
 

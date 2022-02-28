@@ -15,7 +15,7 @@ import { useBreakpoints, useColors } from '../../../theme/themeHooks'
 import animateTransition from '../../../utils/animateTransition'
 import { DebouncedButton } from '../../../components/Button'
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import { getAddress } from '../../../utils/secureAccount'
+import { getAddress } from '../../../store/app/secureData'
 import useMount from '../../../utils/hooks/useMount'
 
 type Route = RouteProp<

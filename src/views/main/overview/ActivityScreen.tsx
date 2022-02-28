@@ -18,7 +18,7 @@ import { RootState } from '../../../store/rootReducer'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/hooks/useAlert'
-import { getAddress } from '../../../utils/secureAccount'
+import { getAddress } from '../../../store/app/secureData'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
 import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
 

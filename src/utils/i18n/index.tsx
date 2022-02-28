@@ -6,7 +6,7 @@ import en from '../../locales/en'
 import ko from '../../locales/ko'
 import ja from '../../locales/ja'
 import zh from '../../locales/zh'
-import { getSecureItem, setSecureItem } from '../secureAccount'
+import { getSecureItem, setSecureItem } from '../../store/app/secureData'
 import { getTranslations } from '../../makers'
 
 const locales = RNLocalize.getLocales()
@@ -49,12 +49,12 @@ export const useLanguage = () => {
 
   const changeLanguage = useCallback((lang: string) => {
     setLanguage(lang)
-    setSecureItem('language', lang)
+    setSecureItem('settings.language', lang)
     i18n.changeLanguage(lang)
   }, [])
 
   const initLanguage = useCallback(async () => {
-    const lang = await getSecureItem('language')
+    const lang = await getSecureItem('settings.language')
     if (lang) {
       changeLanguage(lang)
     }

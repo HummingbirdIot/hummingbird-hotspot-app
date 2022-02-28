@@ -30,7 +30,7 @@ import { useSpacing } from '../../../../theme/themeHooks'
 import Box from '../../../../components/Box'
 import { SUPPORTED_LANGUAGUES } from '../../../../utils/i18n/i18nTypes'
 import { useLanguageContext } from '../../../../providers/LanguageProvider'
-import { getSecureItem } from '../../../../utils/secureAccount'
+import { getSecureItem } from '../../../../store/app/secureData'
 import { clearMapCache } from '../../../../utils/mapUtils'
 import Articles from '../../../../constants/articles'
 import useAlert from '../../../../utils/hooks/useAlert'
@@ -58,7 +58,7 @@ const MoreScreen = () => {
   const { showOKCancelAlert } = useAlert()
 
   useAsync(async () => {
-    const token = await getSecureItem('walletLinkToken')
+    const token = await getSecureItem('user.walletLinkToken')
     if (!token) return ''
     const parsedToken = WalletLink.parseWalletLinkToken(token)
 
@@ -105,17 +105,17 @@ const MoreScreen = () => {
 
   const handlePinRequired = useCallback(
     (value?: boolean) => {
-      if (!app.isPinRequired && value) {
+      if (!app.settings.isPinRequired && value) {
         // toggling on
         navigation.push('AccountCreatePinScreen', { pinReset: true })
       }
 
-      if (app.isPinRequired && !value) {
+      if (app.settings.isPinRequired && !value) {
         // toggling off, confirm pin before turning off
         navigation.push('LockScreen', { requestType: 'disablePin' })
       }
     },
-    [app.isPinRequired, navigation],
+    [app.settings.isPinRequired, navigation],
   )
 
   const handleResetPin = useCallback(() => {
@@ -164,16 +164,16 @@ const MoreScreen = () => {
       {
         title: t('more.sections.security.enablePin'),
         onToggle: handlePinRequired,
-        value: app.isPinRequired,
+        value: app.settings.isPinRequired,
       },
     ]
 
-    if (app.isPinRequired) {
+    if (app.settings.isPinRequired) {
       pin = [
         ...pin,
         {
           title: t('more.sections.security.requirePin'),
-          value: app.authInterval || '',
+          value: app.settings.authInterval || '',
           select: {
             items: authIntervals,
             onValueSelect: handleIntervalSelected,
@@ -275,9 +275,9 @@ const MoreScreen = () => {
   }, [
     t,
     handlePinRequired,
-    app.isPinRequired,
+    app.settings.isPinRequired,
     app.settings.currencyType,
-    app.authInterval,
+    app.settings.authInterval,
     language,
     handleLanguageChange,
     handleCurrencyTypeChange,

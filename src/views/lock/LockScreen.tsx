@@ -6,7 +6,7 @@ import { useAsync } from 'react-async-hook'
 import { useStateWithCallbackLazy } from 'use-state-with-callback'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { RootNavigationProp, RootStackParamList } from '../navigation/naviTypes'
-import { getSecureItem } from '../../utils/secureAccount'
+import { getSecureItem } from '../../store/app/secureData'
 import ConfirmPinView from '../../components/ConfirmPinView'
 import { MoreNavigationProp } from '../main/more/moreTypes'
 import { useAppDispatch } from '../../store/store'
@@ -25,7 +25,7 @@ const LockScreen = () => {
   const [locked, setLocked] = useStateWithCallbackLazy(shouldLock)
   const dispatch = useAppDispatch()
 
-  const { result: pin } = useAsync(getSecureItem, ['userPin'])
+  const { result: pin } = useAsync(getSecureItem, ['settings.userPin'])
 
   const handleSuccess = useCallback(() => {
     if (shouldLock) {

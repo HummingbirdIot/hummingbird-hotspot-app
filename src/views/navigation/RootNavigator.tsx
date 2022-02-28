@@ -25,7 +25,9 @@ const MainStack = createStackNavigator()
 // const MainStack = createNativeStackNavigator()
 
 const RootNavigator = () => {
-  const { walletLinkToken } = useSelector((state: RootState) => state.app)
+  const { isViewOnly, walletLinkToken } = useSelector(
+    (state: RootState) => state.app.user,
+  )
   const colors = useColors()
   // const { surfaceContrast, white } = colors
 
@@ -33,7 +35,7 @@ const RootNavigator = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  if (!walletLinkToken) {
+  if (!isViewOnly && !walletLinkToken) {
     return (
       <OnboardingStack.Navigator
         headerMode="none"

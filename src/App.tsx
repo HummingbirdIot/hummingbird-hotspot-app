@@ -37,6 +37,7 @@ import RootNavigator from './views/navigation/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
 import { configChainVars } from './utils/clients/appDataClient'
+import Box from './components/Box'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */
@@ -81,12 +82,11 @@ const App = () => {
 
   const {
     lastIdle,
-    isPinRequired,
-    authInterval,
     isRestored,
     isBackedUp,
     isRequestingPermission,
     isLocked,
+    settings: { isPinRequired, authInterval },
   } = useSelector((state: RootState) => state.app)
 
   useMount(() => {
@@ -147,10 +147,21 @@ const App = () => {
     () => ({
       ...theme,
       colors: colorScheme === 'light' ? lightThemeColors : darkThemeColors,
-      // colors: lightThemeColors,
     }),
-    // [],
     [colorScheme],
+  )
+
+  const ReactiveStatusBar = useMemo(
+    () =>
+      Platform.OS === 'ios' ? (
+        <StatusBar barStyle="default" />
+      ) : (
+        <StatusBar
+          translucent
+          backgroundColor={colorAdaptedTheme.colors.primaryBackground}
+        />
+      ),
+    [colorAdaptedTheme],
   )
 
   const elementsTheme = useElementsTheme()
@@ -162,14 +173,12 @@ const App = () => {
           <ElementsThemeProvider theme={elementsTheme}>
             <BottomSheetModalProvider>
               <SafeAreaProvider>
-                {/* TODO: Will need to adapt status bar for light/dark modes */}
-                {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-                {Platform.OS === 'android' && (
-                  <StatusBar translucent backgroundColor="black" />
-                )}
+                {ReactiveStatusBar}
                 <NavigationContainer ref={navigationRef}>
                   <AppLinkProvider>
-                    <RootNavigator />
+                    <Box flex={1} backgroundColor="primaryBackground">
+                      <RootNavigator />
+                    </Box>
                   </AppLinkProvider>
                 </NavigationContainer>
               </SafeAreaProvider>

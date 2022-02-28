@@ -13,10 +13,9 @@ import {
   HotspotSetupStackParamList,
 } from '../../views/navigation/features/hotspotSetupTypes'
 import useAlert from '../../utils/hooks/useAlert'
-import appSlice from '../../store/app/appSlice'
+import hotspotsSlice from '../../store/data/hotspotsSlice'
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
-// import useHotspot from '../../utils/useHotspot'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -52,14 +51,14 @@ const HotspotSetupBluetoothSuccess = () => {
   const { showOKAlert } = useAlert()
   const dispatch = useAppDispatch()
   const {
-    app: { connectedHotspotId },
+    hotspots: { connectedHotspotId },
   } = useSelector((state: RootState) => state)
 
   const handleError = useCallback(
     async (e: unknown) => {
       setConnectStatus(false)
       setConnectingHotspotId('')
-      dispatch(appSlice.actions.setConnectedHotspotId(''))
+      dispatch(hotspotsSlice.actions.setConnectedHotspotId(''))
       const titleKey = 'generic.error'
       if ((e as BleError).toString !== undefined) {
         await showOKAlert({
@@ -91,7 +90,7 @@ const HotspotSetupBluetoothSuccess = () => {
         } else if (hotspot.id !== connectedHotspotId) {
           await connect(hotspot)
         }
-        dispatch(appSlice.actions.setConnectedHotspotId(hotspot.id))
+        dispatch(hotspotsSlice.actions.setConnectedHotspotId(hotspot.id))
         setConnectStatus(true)
       } catch (e) {
         console.log('HotspotSetupBluetoothSuccess::handleConnect::error:', e)

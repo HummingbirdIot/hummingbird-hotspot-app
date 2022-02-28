@@ -10,26 +10,37 @@ import Box from '../../components/Box'
 import { RootNavigationProp } from '../navigation/naviTypes'
 import { useAppDispatch } from '../../store/store'
 import appSlice from '../../store/app/appSlice'
+import addressMap from '../../store/app/addressMap'
+import useAlert from '../../utils/hooks/useAlert'
 
 // type Route = RouteProp<HotspotSetupStackParamList, 'EnterExplorationCodeScreen'>
 const EnterExplorationCodeScreen = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const nav = useNavigation<RootNavigationProp>()
+  const { showOKCancelAlert } = useAlert()
   const dispatch = useAppDispatch()
-  const [xpcode, setXPCode] = useState('')
+  const [xpCode, setXPCode] = useState('')
 
   const handleClose = useCallback(() => {
     nav.pop()
   }, [nav])
 
   const navNext = useCallback(async () => {
-    dispatch(
-      appSlice.actions.storeWalletLinkToken(
-        'eyJ0aW1lIjoxNjQ1MDAwNDE5LCJhZGRyZXNzIjoiMTN1TTdndFZ4UFI1N1AzdWU5azVtS2ZlWURmZmZlc1o4b25naURBZGtFTHlXODN6bkJlIiwicmVxdWVzdEFwcElkIjoib3JnLm1ha2VyLmh1bW1pbmdiaXJkIiwic2lnbmluZ0FwcElkIjoiY29tLmhlbGl1bS5tb2JpbGUud2FsbGV0IiwiY2FsbGJhY2tVcmwiOiJodW1taW5nYmlyZHNjaGVtZTovLyIsImFwcE5hbWUiOiJIdW1taW5nYmlyZCIsInNpZ25hdHVyZSI6ImwxNWh2b0s4VkxkclE5Nko0YjZqWHNZWVBxTW8vVDY5TVlld1VSMFAvT0NkSzhXNm13bG96TEk0dXEvMTRDa1ZyN1RZVEx5UWwzS0Y1L3VBZ2QvM0J3PT0ifQ==',
-      ),
-    )
-  }, [dispatch])
+    if (xpCode) {
+      const code = xpCode.toUpperCase()
+      if (addressMap[code]) {
+        dispatch(appSlice.actions.enableViewOnlyMode(code))
+      } else {
+        const decision = await showOKCancelAlert({
+          titleKey: 'Exploration Code Invalid',
+          messageKey:
+            'The exploration code you entered is invalid, please check it carefully or contace with your agent.',
+        })
+        if (!decision) return false
+      }
+    }
+  }, [dispatch, showOKCancelAlert, xpCode])
 
   return (
     <BackScreen onClose={handleClose}>
@@ -48,7 +59,7 @@ const EnterExplorationCodeScreen = () => {
               Enter Your Exploration Code
             </Text>
             <Text
-              variant="body2"
+              variant="body3"
               textAlign="center"
               maxFontSizeMultiplier={1.2}
             >
@@ -57,7 +68,7 @@ const EnterExplorationCodeScreen = () => {
               a helium wallet account.
             </Text>
             <Text
-              variant="body2"
+              variant="body3"
               textAlign="center"
               marginBottom="xl"
               maxFontSizeMultiplier={1.2}
@@ -71,7 +82,7 @@ const EnterExplorationCodeScreen = () => {
             variant="regular"
             placeholder="Exploration Code"
             onChangeText={setXPCode}
-            value={xpcode}
+            value={xpCode}
             keyboardAppearance="dark"
             autoCorrect={false}
             placeholderTextColor="secondaryText"
@@ -91,6 +102,7 @@ const EnterExplorationCodeScreen = () => {
           variant="primary"
           mode="contained"
           title="Start Exploration"
+          disabled={!xpCode}
         />
       </Box>
     </BackScreen>

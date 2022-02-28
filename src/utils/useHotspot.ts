@@ -20,7 +20,7 @@ import {
   parseChar,
 } from './bluetooth/bluetoothDataParser'
 // import { getAddress } from './appDataClient'
-import { getSecureItem } from './secureAccount'
+import { getSecureItem } from '../store/app/secureData'
 // import { makeAddGatewayTxn } from './transactions'
 import { calculateAddGatewayFee } from './fees'
 // import connectedHotspotSlice, {

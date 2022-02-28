@@ -7,9 +7,10 @@ import {
   getSecureItem,
   setSecureItem,
   signOut,
-} from '../../utils/secureAccount'
+} from './secureData'
 import { Intervals } from '../../views/main/more/list/useAuthIntervals'
 import { Loading } from '../txns/txnsTypes'
+import addressMap from './addressMap'
 // import OneSignal from 'react-native-onesignal'
 
 const boolKeys = [] as const
@@ -23,25 +24,26 @@ type AccountData = {
 }
 
 export type AppState = {
-  account?: Account
-  fetchAccountStatus: Loading
   isBackedUp: boolean
-  isSettingUpHotspot: boolean
   isRestored: boolean
-  isPinRequired: boolean
-  authInterval: number
   lastIdle: number | null
   isLocked: boolean
+  isSettingUpHotspot: boolean
   isRequestingPermission: boolean
-  walletLinkToken?: string
-  connectedHotspotId: string
+  user: {
+    isViewOnly: boolean
+    xpCode?: string
+    walletLinkToken?: string
+    account?: Account
+    fetchAccountStatus: Loading
+    lastHNTBlance: string
+    lastFiatBlance: string
+  }
   settings: {
-    // isFleetModeEnabled?: boolean
-    // hasFleetModeAutoEnabled?: boolean
-    // convertHntToCurrency?: boolean
-    // showHiddenHotspots?: boolean
-    // hiddenAddresses?: string
-    // network?: string
+    isPinRequired: boolean
+    authInterval: number
+    network?: string
+    // language?: string
     currencyType?: string
   }
 }
@@ -49,35 +51,85 @@ const initialState: AppState = {
   isBackedUp: false,
   isSettingUpHotspot: false,
   isRestored: false,
-  isPinRequired: false,
-  authInterval: Intervals.IMMEDIATELY,
   lastIdle: null,
   isLocked: false,
   isRequestingPermission: false,
-  connectedHotspotId: '',
-  settings: { currencyType },
-  fetchAccountStatus: 'idle',
+  user: {
+    isViewOnly: false,
+    fetchAccountStatus: 'idle',
+    lastHNTBlance: '0.00000',
+    lastFiatBlance: '0.00',
+  },
+  settings: {
+    isPinRequired: false,
+    authInterval: Intervals.IMMEDIATELY,
+    currencyType,
+  },
 }
 
 type Restore = {
   isBackedUp: boolean
-  isPinRequired: boolean
-  authInterval: number
   isLocked: boolean
-  walletLinkToken?: string
+  user: {
+    isViewOnly: boolean
+    xpCode?: string
+    walletLinkToken?: string
+    account?: Account
+    fetchAccountStatus: Loading
+    lastHNTBlance: string
+    lastFiatBlance: string
+  }
+  settings: {
+    isPinRequired: boolean
+    authInterval: number
+    // language?: string
+    currencyType?: string
+  }
 }
 
 export const restoreAppSettings = createAsyncThunk<Restore>(
   'app/restoreAppSettings',
   async () => {
-    const [isBackedUp, isPinRequired, authInterval, walletLinkToken, address] =
-      await Promise.all([
-        getSecureItem('accountBackedUp'),
-        getSecureItem('requirePin'),
-        getSecureItem('authInterval'),
-        getSecureItem('walletLinkToken'),
-        getSecureItem('address'),
-      ])
+    console.log('restoreAppSettings A:', await getSecureItem('user.isViewOnly'))
+    const [
+      isBackedUp,
+      isViewOnly,
+      explorationCode,
+      walletLinkToken,
+      address,
+      lastHNTBlance,
+      lastFiatBlance,
+
+      isPinRequired,
+      authInterval,
+      // language,
+      currency,
+    ] = await Promise.all([
+      getSecureItem('isBackedUp'),
+      getSecureItem('user.isViewOnly'),
+      getSecureItem('user.explorationCode'),
+      getSecureItem('user.walletLinkToken'),
+      getSecureItem('user.address'),
+      getSecureItem('user.lastHNTBlance'),
+      getSecureItem('user.lastFiatBlance'),
+
+      getSecureItem('settings.isPinRequired'),
+      getSecureItem('settings.authInterval'),
+      // getSecureItem('settings.language'),
+      getSecureItem('settings.currencyType'),
+    ])
+
+    console.log(
+      'restoreAppSettings B:',
+      isBackedUp,
+      isViewOnly,
+      explorationCode,
+      walletLinkToken,
+      address,
+      lastHNTBlance,
+      lastFiatBlance,
+    )
+
     if (isBackedUp && address) {
       // 推送
       console.log('OneSignal.sendTags:', { address })
@@ -85,14 +137,24 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       // Logger.setUser(address)
     }
     return {
-      isBackedUp,
-      isPinRequired,
-      authInterval: authInterval
-        ? parseInt(authInterval, 10)
-        : Intervals.IMMEDIATELY,
-      isLocked: isPinRequired,
-      walletLinkToken,
-    } as Restore
+      isLocked: !!isPinRequired,
+      user: {
+        fetchAccountStatus: 'idle',
+        isViewOnly,
+        explorationCode,
+        walletLinkToken,
+        lastHNTBlance: lastHNTBlance || '0.00000',
+        lastFiatBlance: lastFiatBlance || '0.00',
+      },
+      settings: {
+        isPinRequired: !!isPinRequired,
+        authInterval: authInterval
+          ? parseInt(authInterval, 10)
+          : Intervals.IMMEDIATELY,
+        // language,
+        currencyType: currency || currencyType,
+      },
+    } as unknown as Restore
   },
 )
 
@@ -123,10 +185,33 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    enableViewOnlyMode: (state, { payload: xpCode }: PayloadAction<string>) => {
+      state.user.walletLinkToken = ''
+      state.user.xpCode = xpCode
+      state.user.isViewOnly = true
+      setSecureItem('user.walletLinkToken', '')
+      setSecureItem('user.address', addressMap[xpCode])
+      setSecureItem('user.explorationCode', xpCode)
+      setSecureItem('user.isViewOnly', true)
+      setSecureItem('isBackedUp', true)
+    },
+    storeWalletLinkToken: (
+      state,
+      { payload: token }: PayloadAction<string>,
+    ) => {
+      state.user.isViewOnly = false
+      state.user.walletLinkToken = token
+      setSecureItem('user.isViewOnly', false)
+      setSecureItem('user.address', '') // 清除之前的旧 Address
+      setSecureItem('user.explorationCode', '')
+      setSecureItem('user.walletLinkToken', token)
+      setSecureItem('isBackedUp', true)
+    },
+
     backupAccount: (state, action: PayloadAction<string>) => {
-      setSecureItem('requirePin', true)
-      setSecureItem('userPin', action.payload)
-      state.isPinRequired = true
+      setSecureItem('settings.isPinRequired', true)
+      setSecureItem('settings.userPin', action.payload)
+      state.settings.isPinRequired = true
     },
     startHotspotSetup: (state) => {
       state.isSettingUpHotspot = false
@@ -136,24 +221,18 @@ const appSlice = createSlice({
       return { ...initialState, isRestored: true }
     },
     updateAuthInterval: (state, action: PayloadAction<number>) => {
-      state.authInterval = action.payload
-      setSecureItem('authInterval', action.payload.toString())
+      state.settings.authInterval = action.payload
+      setSecureItem('settings.authInterval', action.payload.toString())
     },
     disablePin: (state) => {
-      deleteSecureItem('requirePin')
-      deleteSecureItem('userPin')
-      state.isPinRequired = false
+      deleteSecureItem('settings.isPinRequired')
+      deleteSecureItem('settings.userPin')
+      state.settings.isPinRequired = false
     },
     updateLastIdle: (state) => {
       state.lastIdle = Date.now()
     },
-    storeWalletLinkToken: (
-      state,
-      { payload: token }: PayloadAction<string>,
-    ) => {
-      state.walletLinkToken = token
-      setSecureItem('walletLinkToken', token)
-    },
+
     lock: (state, action: PayloadAction<boolean>) => {
       state.isLocked = action.payload
       if (!state.isLocked) {
@@ -163,12 +242,10 @@ const appSlice = createSlice({
     requestingPermission: (state, action: PayloadAction<boolean>) => {
       state.isRequestingPermission = action.payload
     },
-    setConnectedHotspotId: (state, action: PayloadAction<string>) => {
-      state.connectedHotspotId = action.payload
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(restoreAppSettings.fulfilled, (state, { payload }) => {
+      console.log('restoreAppSettings', payload)
       return { ...state, ...payload, isRestored: true }
     })
     builder.addCase(
@@ -189,14 +266,14 @@ const appSlice = createSlice({
       },
     )
     builder.addCase(fetchAccount.pending, (state, _action) => {
-      state.fetchAccountStatus = 'pending'
+      state.user.fetchAccountStatus = 'pending'
     })
     builder.addCase(fetchAccount.fulfilled, (state, { payload }) => {
-      state.fetchAccountStatus = 'fulfilled'
-      state.account = payload.account
+      state.user.fetchAccountStatus = 'fulfilled'
+      state.user.account = payload.account
     })
     builder.addCase(fetchAccount.rejected, (state, _action) => {
-      state.fetchAccountStatus = 'rejected'
+      state.user.fetchAccountStatus = 'rejected'
     })
   },
 })

@@ -103,7 +103,7 @@ const WelcomeScreen = () => {
             <Text
               variant="h6"
               textAlign="center"
-              color="white"
+              color="primaryText"
               onPress={enterExplorationCode}
             >
               Enter Exploration Code
@@ -111,7 +111,7 @@ const WelcomeScreen = () => {
             <Text
               variant="h6"
               marginHorizontal="m"
-              color="gray"
+              color="grayLightText"
               textAlign="center"
             >
               |
@@ -119,7 +119,7 @@ const WelcomeScreen = () => {
             <Text
               variant="h6"
               textAlign="center"
-              color="white"
+              color="primaryText"
               onPress={createAccount}
             >
               Create Helium Account

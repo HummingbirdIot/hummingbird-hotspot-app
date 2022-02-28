@@ -2,7 +2,7 @@ import { Address } from '@helium/crypto-react-native'
 import {
   AddGatewayV1,
   AssertLocationV2,
-  TokenBurnV1,
+  // TokenBurnV1,
   TransferHotspotV1,
 } from '@helium/transactions'
 import Balance, {
@@ -13,7 +13,7 @@ import Balance, {
 import { minBy } from 'lodash'
 import { useSelector } from 'react-redux'
 import { useCallback } from 'react'
-import { getKeypair } from './secureAccount'
+// import { getKeypair } from './secureData'
 import { RootState } from '../store/rootReducer'
 // import { SendDetails } from '../features/wallet/send/sendTypes'
 // import { encodeMemoString } from './transactions'
@@ -81,30 +81,30 @@ export const calculateAssertLocFee = (
   return { fee: txn.fee || 0, stakingFee: txn.stakingFee || 0 }
 }
 
-export const calculateBurnTxnFee = async (
-  amount: number,
-  payeeB58: string,
-  nonce: number,
-  memo: string,
-) => {
-  const keypair = await getKeypair()
-  if (!keypair) throw new Error('missing keypair')
+// export const calculateBurnTxnFee = async (
+//   amount: number,
+//   payeeB58: string,
+//   nonce: number,
+//   memo: string,
+// ) => {
+//   const keypair = await getKeypair()
+//   if (!keypair) throw new Error('missing keypair')
 
-  // if a payee isn't supplied, we use a dummy address
-  const payee = Address.isValid(payeeB58)
-    ? Address.fromB58(payeeB58)
-    : emptyB58Address()
+//   // if a payee isn't supplied, we use a dummy address
+//   const payee = Address.isValid(payeeB58)
+//     ? Address.fromB58(payeeB58)
+//     : emptyB58Address()
 
-  const tokenBurnTxn = new TokenBurnV1({
-    payer: keypair.address,
-    payee,
-    amount,
-    nonce,
-    memo,
-  })
+//   const tokenBurnTxn = new TokenBurnV1({
+//     payer: keypair.address,
+//     payee,
+//     amount,
+//     nonce,
+//     memo,
+//   })
 
-  return new Balance(tokenBurnTxn.fee || 0, CurrencyType.dataCredit)
-}
+//   return new Balance(tokenBurnTxn.fee || 0, CurrencyType.dataCredit)
+// }
 
 export const calculateTransferTxnFee = async (
   partialTransaction: string | undefined,
