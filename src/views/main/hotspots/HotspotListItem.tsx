@@ -42,12 +42,11 @@ const HotspotListItem = ({
     '#E49D84',
     '#223F59',
     '#8C8C8C',
-    '#1E1E1E',
   ]
 
   const calculateColor = (name: string) => {
     const value = name.split('').reduce((p, c) => p + c.charCodeAt(0), 0)
-    const index = value % 10
+    const index = value % 9
     return colorList[index]
   }
 

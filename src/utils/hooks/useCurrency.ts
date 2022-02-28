@@ -141,47 +141,6 @@ const useCurrency = () => {
     ) => {
       const multiplier = currentPrices?.[currencyType.toLowerCase()] || 0
 
-      // const showAsHnt = !convert || !multiplier
-
-      // if (showAsHnt) {
-      //   if (split) {
-      //     let [intStr, decStr] = balance
-      //       .toString(undefined, {
-      //         decimalSeparator,
-      //         groupSeparator,
-      //         showTicker: false,
-      //       })
-      //       .split(decimalSeparator)
-
-      //     // when there is no network the toString method from helium js may not work properly
-      //     if (intStr === '[object Object]') {
-      //       const balString = balance?.floatBalance?.toString()
-      //       const [intPart, decPart] = balString.split('.')
-      //       intStr = intPart
-      //       decStr = decPart
-      //     }
-
-      //     const decimalPart = [
-      //       decimalSeparator,
-      //       decStr,
-      //       ' ',
-      //       CurrencyType.networkToken.ticker,
-      //     ].join('')
-
-      //     return { integerPart: intStr, decimalPart }
-      //   }
-
-      //   // when there is no network the toString method from helium js may not work properly
-      //   const stringBalance = balance.toString(maxDecimalPlaces, {
-      //     groupSeparator,
-      //     decimalSeparator,
-      //   })
-
-      //   return stringBalance === '[object Object]'
-      //     ? `${balance?.floatBalance?.toFixed(2)} HNT`
-      //     : stringBalance
-      // }
-
       try {
         const convertedValue = multiplier * balance.floatBalance
         const formattedValue: string = await formatCurrency(convertedValue)

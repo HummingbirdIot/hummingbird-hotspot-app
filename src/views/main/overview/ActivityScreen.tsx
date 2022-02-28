@@ -6,6 +6,7 @@ import { ButtonGroup, Header } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAsync } from 'react-async-hook'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Box from '../../../components/Box'
 import ActivitiesList from '../../../widgets/main/ActivitiesList/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
@@ -19,10 +20,12 @@ import { useAppDispatch } from '../../../store/store'
 import useAlert from '../../../utils/hooks/useAlert'
 import { getAddress } from '../../../utils/secureAccount'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
+import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ActivityScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
+  const colorScheme: ColorSchemeName = useColorScheme()
   const insets = useSafeAreaInsets()
   const [address, setAccountAddress] = useState('')
   // const { showOKCancelAlert } = useAlert()
@@ -80,42 +83,50 @@ const ActivityScreen = ({ navigation }: any) => {
   const [all, mining, payment, hotspot, pending] = AccountFilterKeys
   const buttons = [all, mining, payment, hotspot, pending]
 
-  const { surfaceContrast } = useColors()
+  const { primaryBackground, surfaceContrast, blueMain } = useColors()
 
   if (!address) {
     return <Box />
   }
 
   return (
-    <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
-      <Header
-        backgroundColor={surfaceContrast}
-        centerComponent={{
-          text: 'Acitivity',
-          // style: { fontSize: 20, color: '#fff' },
-        }}
-        leftComponent={{
-          icon: 'arrow-back-ios',
-          color: '#fff',
-          onPress: () => {
-            navigation.goBack()
-          },
-        }}
-      />
+    <DetailViewContainer title="Acitivity" goBack={() => navigation.goBack()}>
       <Box flex={1} backgroundColor="primaryBackground">
-        <ButtonGroup
-          onPress={updateIndex}
-          selectedIndex={selectedIndex}
-          buttons={buttons}
-          containerStyle={{ height: 36 }}
-        />
-
+        <Box
+          height={50}
+          backgroundColor={
+            colorScheme === 'light' ? 'surfaceContrast' : 'primaryBackground'
+          }
+        >
+          <ButtonGroup
+            onPress={updateIndex}
+            selectedIndex={selectedIndex}
+            buttons={buttons}
+            containerStyle={{
+              height: 36,
+              backgroundColor:
+                colorScheme === 'light' ? surfaceContrast : primaryBackground,
+              borderColor: blueMain,
+            }}
+            innerBorderStyle={{
+              color: blueMain,
+            }}
+            selectedButtonStyle={{
+              backgroundColor: blueMain,
+              borderColor: blueMain,
+            }}
+            selectedTextStyle={{
+              color: 'white',
+            }}
+            textStyle={{
+              color: 'lightgray',
+            }}
+          />
+        </Box>
         <Box
           flex={1}
+          backgroundColor="white"
           style={{
-            paddingTop: 5,
-            // paddingLeft: 10,
-            // paddingRight: 10,
             paddingBottom: insets.bottom,
           }}
         >
@@ -128,7 +139,7 @@ const ActivityScreen = ({ navigation }: any) => {
           />
         </Box>
       </Box>
-    </Box>
+    </DetailViewContainer>
   )
 }
 

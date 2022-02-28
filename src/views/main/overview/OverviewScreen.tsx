@@ -1,12 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useEffect, useMemo, useState } from 'react'
-import QRCode from 'react-qr-code'
+// import QRCode from 'react-qr-code'
 import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { useDebouncedCallback } from 'use-debounce/lib'
-import { Button } from 'react-native-elements/dist/buttons/Button'
+import { useSelector } from 'react-redux'
+import { isEqual } from 'lodash'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Platform } from 'expo-modules-core'
+import { Tooltip, Icon } from 'react-native-elements'
+import { ScrollView } from 'react-native'
 import { getAddress } from '../../../utils/secureAccount'
-import { useSpacing } from '../../../theme/themeHooks'
-import { Spacing } from '../../../theme/theme'
+import { useColors, useSpacing } from '../../../theme/themeHooks'
+// import { Spacing } from '../../../theme/theme'
 import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
@@ -17,73 +23,43 @@ import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 
 import TabViewContainer from '../../../widgets/main/TabViewContainer'
+import { RootState } from '../../../store/rootReducer'
+import DashboardItem from './DashboardItem'
 
-const QR_CONTAINER_SIZE = 146
+// const QR_CONTAINER_SIZE = 146
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const OverviewScreen = ({ navigation }: any) => {
-  const spacing = useSpacing()
-  const padding = useMemo(() => 'm' as Spacing, [])
+  // const spacing = useSpacing()
+  // const padding = useMemo(() => 'm' as Spacing, [])
+  const currentPrices = useSelector(
+    (state: RootState) => state.helium.currentPrices,
+    isEqual,
+  )
   const [address, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
-  const [fiat, setFiat] = useState<string>('loading...')
+  const [fiat, setFiat] = useState<string>('0.00')
   const dispatch = useAppDispatch()
+  const { primaryText, surfaceContrast, surfaceContrastText } = useColors()
 
-  const {
-    hntBalanceToDisplayVal,
-    // hntToDisplayVal,
-    // networkTokensToDataCredits,
-    // toggleConvertHntToCurrency,
-  } = useCurrency()
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const currentPrices = useSelector(
-  //   (state: RootState) => state.helium.currentPrices,
-  // )
-
-  // const pendingTransactions = useSelector(
-  //   (state: RootState) => state.txns.pendingAndFailded,
-  // )
+  const { hntBalanceToDisplayVal } = useCurrency()
 
   useAsync(async () => {
-    // console.log('OverviewScreen::account:', account)
+    console.log('OverviewScreen::account:', Platform.OS, currentPrices?.cny)
     if (account?.balance) {
-      // console.log(
-      //   'OverviewScreen::currency::funcs:',
-      //   await hntToDisplayVal(account.balance.floatBalance),
-      //   await hntBalanceToDisplayVal(account.balance),
-      //   await networkTokensToDataCredits(account.balance),
-      //   (await networkTokensToDataCredits(account.balance)).toString(),
-      //   (
-      //     (await networkTokensToDataCredits(account.balance)).floatBalance /
-      //     100000
-      //   ).toFixed(2),
-      // )
       setFiat((await hntBalanceToDisplayVal(account.balance)).toString())
     }
-  }, [account])
+  }, [account, currentPrices])
 
   useEffect(() => {
     getAccount(address)
       .then(setAccount)
       .then(() => dispatch(fetchCurrentPrices()))
-    // .then(() =>
-    //   dispatch(
-    //     updateSetting({
-    //       key: 'currencyType',
-    //       value: 'CNY',
-    //     }),
-    //   ),
-    // )
   }, [address, dispatch])
 
   useEffect(() => {
     dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
   }, [address, dispatch])
-
-  // useEffect(() => {
-  //   console.log('pendingTransactions', pendingTransactions)
-  // }, [pendingTransactions])
 
   useAsync(async () => {
     const aacc = await getAddress()
@@ -93,46 +69,119 @@ const OverviewScreen = ({ navigation }: any) => {
 
   const naviToActivityScreen = () => navigation.navigate('ActvityScreen')
   const gotoActivityScreen = useDebouncedCallback(naviToActivityScreen, 700, {})
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ELTooltip = Tooltip as unknown as any
 
   return (
-    <TabViewContainer title="Account">
-      <Box flex={1} padding="l">
-        <Text>address: {address}</Text>
-        <Text>
-          balance: {account?.balance?.floatBalance || '0'}{' '}
-          {account?.balance?.type.ticker}({fiat})
-        </Text>
-        <Text>
-          dcBalance: {account?.dcBalance?.floatBalance || 0}{' '}
-          {account?.dcBalance?.type.ticker}
-        </Text>
-        <Text>
-          stakedBalance: {account?.stakedBalance?.floatBalance || 0}{' '}
-          {account?.stakedBalance?.type.ticker}
-        </Text>
-        <Text>hotspotCount: {account?.hotspotCount || 0}</Text>
-        <Text>validatorCount: {account?.validatorCount || 0}</Text>
-      </Box>
-      <Box flex={1} flexDirection="row" justifyContent="center">
+    <TabViewContainer
+      title="Account"
+      icons={[
+        {
+          name: 'insights',
+          onPress: gotoActivityScreen.callback,
+        },
+      ]}
+    >
+      <Box flex={1}>
+        <ScrollView style={{ flex: 1 }}>
+          <Box paddingBottom="m">
+            <Box paddingTop="l">
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 20,
+                }}
+              >
+                <ELTooltip
+                  popover={
+                    <Text
+                      variant="body3"
+                      style={{ color: surfaceContrastText }}
+                    >
+                      Prices data source from CoinGecko, please make sure that
+                      coingecko.com is touchable for your mobile.
+                    </Text>
+                  }
+                  width={240}
+                  height={60}
+                  backgroundColor={surfaceContrast}
+                  // withPointer
+                  withOverlay={false}
+                  highlightColor="transparent"
+                >
+                  <Icon
+                    name="help"
+                    color={primaryText}
+                    size={20}
+                    tvParallaxProperties={undefined}
+                  />
+                </ELTooltip>
+              </Box>
+              <Box paddingTop="l">
+                <Text variant="h1" textAlign="center">
+                  {fiat}
+                </Text>
+                <Text variant="body1" paddingVertical="s" textAlign="center">
+                  {account?.balance?.floatBalance || '0'} HNT
+                </Text>
+              </Box>
+            </Box>
+            <Box>
+              <Box
+                padding="m"
+                paddingBottom="s"
+                flexDirection="row"
+                justifyContent="space-around"
+              >
+                <DashboardItem.Number
+                  item="DC Balance"
+                  value={account?.dcBalance?.floatBalance.toFixed(4) || '0'}
+                />
+                <DashboardItem.Number
+                  item="Staked Balance"
+                  value={account?.stakedBalance?.floatBalance.toFixed(4) || '0'}
+                />
+              </Box>
+              <Box
+                flex={1}
+                padding="m"
+                paddingTop="s"
+                flexDirection="row"
+                justifyContent="space-around"
+              >
+                <DashboardItem.Number
+                  item="Hotspots"
+                  value={(account?.hotspotCount || 0).toString()}
+                  onPress={() => {}}
+                />
+                <DashboardItem.Number
+                  item="Validators"
+                  value={(account?.validatorCount || 0).toString()}
+                />
+                <DashboardItem.Icon name="qr-code" onPress={() => {}} />
+                <DashboardItem.Icon
+                  name="add"
+                  onPress={() => navigation.navigate('HotspotSetup')}
+                />
+              </Box>
+            </Box>
+          </Box>
+
+          {/* <Box flex={1} flexDirection="row" justifyContent="center">
         <QRCode
           size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
           value={address}
         />
-      </Box>
-      <Box flex={2} padding="l">
-        <Button
-          onPress={gotoActivityScreen.callback}
-          buttonStyle={{
-            backgroundColor: 'blue',
-            marginBottom: 10,
-          }}
-          title="View Activity"
-        />
-        <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
-          {address ? (
-            <RewardsStatistics address={address} resource="accounts" />
-          ) : null}
-        </Box>
+      </Box> */}
+          <Box flex={1} padding="l" backgroundColor="white" borderRadius="l">
+            <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
+              {address ? (
+                <RewardsStatistics address={address} resource="accounts" />
+              ) : null}
+            </Box>
+          </Box>
+        </ScrollView>
       </Box>
     </TabViewContainer>
   )

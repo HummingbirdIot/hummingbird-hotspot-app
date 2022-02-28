@@ -2,7 +2,7 @@ export default {
   account_setup: {
     welcome: {
       title: 'Hummingbird',
-      subtitle: "Hey, Let's Humming!!",
+      subtitle: "Listen, it's Humming!!",
       create_account: 'Create an account on the Helium Network',
       login_with_helium: 'Already have a Helium Wallet?\nTap to get started.',
     },

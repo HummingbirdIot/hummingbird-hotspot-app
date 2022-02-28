@@ -323,7 +323,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
     <DetailViewContainer
       title={formatHotspotNameArray(hotspotData?.name || '').join(' ')}
       goBack={() => navigation.goBack()}
-      icon={{ name: 'menu', onPress: () => setIsVisible(true) }}
+      icon={{ name: 'more-horiz', onPress: () => setIsVisible(true) }}
     >
       <Box flex={1}>
         <Box flex={5}>

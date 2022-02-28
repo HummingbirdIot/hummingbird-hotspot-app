@@ -12,7 +12,7 @@ const DetailViewContainer = ({
   goBack,
 }: {
   title: string
-  icon: {
+  icon?: {
     name: string
     onPress: (event: GestureResponderEvent) => void
   }
