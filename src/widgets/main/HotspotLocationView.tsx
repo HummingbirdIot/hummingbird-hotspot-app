@@ -27,7 +27,13 @@ const HotspotLocationView = ({
 
   if (!mapCenter) {
     return (
-      <Box flex={1} justifyContent="center">
+      <Box
+        flex={1}
+        justifyContent="center"
+        style={{
+          backgroundColor: '#1a2637',
+        }}
+      >
         <Text
           style={{
             textAlign: 'center',

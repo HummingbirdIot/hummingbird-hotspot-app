@@ -1,22 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Linking, Platform, ScrollView, Text, View } from 'react-native'
+import { Linking, Platform, ScrollView, Text } from 'react-native'
 import { useSelector } from 'react-redux'
-import {
-  BottomSheet,
-  ButtonGroup,
-  Header,
-  ListItem,
-} from 'react-native-elements'
+import { BottomSheet, ButtonGroup, ListItem } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useHotspotBle } from '@helium/react-native-sdk'
-// import SafeAreaBox from '../../../components/SafeAreaBox'
 import { useAsync } from 'react-async-hook'
 import { Hotspot, Witness } from '@helium/http'
 import { RouteProp, useRoute } from '@react-navigation/native'
 import Box from '../../../components/Box'
-// import Map from '../../../components/Map'
 import ThemedText from '../../../components/Text'
 import IconLocation from '../../../assets/images/location.svg'
 import IconMaker from '../../../assets/images/maker.svg'
@@ -46,6 +39,7 @@ import {
   useMaker,
 } from '../../../utils/formatter'
 import { RootStackParamList } from '../../navigation/naviTypes'
+import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
 
 type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 
@@ -172,22 +166,22 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   const buttons = ['Statistics', 'Activity', 'Witnessed']
   const Statistics = useMemo(
     () => (
-      <Box
-        flex={1}
+      <ScrollView
         style={{
+          flex: 1,
           paddingLeft: 10,
           paddingRight: 10,
         }}
       >
         <Box
           width="100%"
-          minHeight={280}
+          minHeight={260}
           backgroundColor="grayBoxLight"
           borderRadius="l"
         >
           <RewardsStatistics address={address} resource="hotspots" />
         </Box>
-      </Box>
+      </ScrollView>
     ),
     [address],
   )
@@ -326,175 +320,165 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   //                   makerName: getMakerName(hotspot?.payer, makers),
 
   return (
-    <Box flex={1} style={{ backgroundColor: '#1a2637' }}>
-      <Header
-        backgroundColor={surfaceContrast}
-        centerComponent={{
-          text: formatHotspotNameArray(hotspotData?.name || '').join(' '),
-          // style: { fontSize: 20, color: '#fff' },
-        }}
-        leftComponent={{
-          icon: 'arrow-back-ios',
-          color: '#fff',
-          onPress: () => {
-            navigation.goBack()
-          },
-        }}
-        rightComponent={{
-          icon: 'menu',
-          color: '#fff',
-          onPress: () => {
-            // navigation.navigate('HotspotAssert')
-            setIsVisible(true)
-          },
-        }}
-      />
-      <Box flex={6}>
-        <HotspotLocationView
-          mapCenter={
-            hotspotData?.location
-              ? [hotspotData.lng || 0, hotspotData.lat || 0]
-              : undefined
-          }
-          locationName={locationName}
-          assertLocation={assertLocation}
-        />
-      </Box>
-      {hotspotData ? (
-        <Box flex={10} backgroundColor="primaryBackground">
-          <Box
-            style={{
-              padding: 10,
-              paddingBottom: 5,
-            }}
-          >
-            <Box
-              flexDirection="row"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
-              <IconAddress width={20} height={20} />
-              <ThemedText
-                style={{
-                  fontSize: 20,
-                  color: '#474DFF',
-                }}
-              >
-                {truncateAddress(address, 16)}
-              </ThemedText>
-            </Box>
-            <Box
-              flexDirection="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              marginTop="xs"
-            >
-              <IconLocation width={10} height={10} color={blueMain} />
-              <ThemedText
+    <DetailViewContainer
+      title={formatHotspotNameArray(hotspotData?.name || '').join(' ')}
+      goBack={() => navigation.goBack()}
+      icon={{ name: 'menu', onPress: () => setIsVisible(true) }}
+    >
+      <Box flex={1}>
+        <Box flex={5}>
+          <HotspotLocationView
+            mapCenter={
+              hotspotData?.location
+                ? [hotspotData.lng || 0, hotspotData.lat || 0]
+                : undefined
+            }
+            locationName={locationName}
+            assertLocation={assertLocation}
+          />
+        </Box>
+        <Box flex={12}>
+          {hotspotData ? (
+            <Box flex={1}>
+              <Box padding="s">
+                <Box
+                  flexDirection="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                >
+                  <IconAddress width={20} height={20} />
+                  <ThemedText
+                    style={{
+                      fontSize: 20,
+                      color: '#474DFF',
+                    }}
+                  >
+                    {truncateAddress(address, 16)}
+                  </ThemedText>
+                </Box>
+                <Box
+                  flexDirection="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  marginTop="xs"
+                >
+                  <IconLocation width={10} height={10} color={blueMain} />
+                  <ThemedText
+                    flex={1}
+                    variant="body2"
+                    marginLeft="xs"
+                    marginRight="m"
+                  >
+                    {locationName}
+                  </ThemedText>
+                  <IconRewardsScale width={10} height={10} />
+                  <ThemedText variant="body2" marginLeft="xs">
+                    {hotspotData.rewardScale?.toFixed(5) || '0.00'}
+                  </ThemedText>
+                </Box>
+                <Box
+                  flexDirection="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  marginTop="xs"
+                >
+                  <IconMaker width={10} height={10} />
+                  <ThemedText
+                    flex={1}
+                    variant="body2"
+                    marginLeft="xs"
+                    marginRight="m"
+                  >
+                    {getMakerName(hotspotData.payer)}
+                  </ThemedText>
+                  <IconAccount width={10} height={10} />
+                  <ThemedText variant="body2" marginLeft="xs">
+                    {truncateAddress(hotspotData.owner || 'UnknownOwner')}
+                  </ThemedText>
+                </Box>
+                <Box
+                  flexDirection="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  marginTop="xs"
+                >
+                  <IconBlcok width={10} height={10} />
+                  <ThemedText
+                    flex={1}
+                    variant="body2"
+                    marginLeft="xs"
+                    marginRight="m"
+                  >
+                    {hotspotData.block} (+{hotspotData.blockAdded || 0})
+                  </ThemedText>
+                  <IconElevation width={10} height={10} />
+                  <ThemedText variant="body2" marginLeft="xs" marginRight="m">
+                    {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
+                      maximumFractionDigits: 1,
+                    }) + t('antennas.onboarding.dbi')}
+                  </ThemedText>
+                  <IconGain width={10} height={10} />
+                  <ThemedText variant="body2" marginLeft="xs">
+                    {t('generic.meters', {
+                      distance: hotspotData?.elevation || 0,
+                    })}
+                  </ThemedText>
+                </Box>
+              </Box>
+              <Box
                 flex={1}
-                variant="body2"
-                marginLeft="xs"
-                marginRight="m"
+                backgroundColor="white"
+                paddingTop="s"
+                borderRadius="l"
               >
-                {locationName}
-              </ThemedText>
-              <IconRewardsScale width={10} height={10} />
-              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-                {hotspotData.rewardScale?.toFixed(5) || '0.00'}
-              </ThemedText>
+                <ButtonGroup
+                  onPress={updateIndex}
+                  selectedIndex={selectedIndex}
+                  buttons={buttons}
+                  containerStyle={{ height: 36 }}
+                />
+                <Box
+                  flex={1}
+                  style={{
+                    paddingTop: 5,
+                    paddingBottom: insets.bottom,
+                  }}
+                >
+                  {widgets[selectedIndex] || null}
+                </Box>
+              </Box>
             </Box>
-            <Box
-              flexDirection="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              marginTop="xs"
-            >
-              <IconMaker width={10} height={10} />
-              <ThemedText
-                flex={1}
-                variant="body2"
-                marginLeft="xs"
-                marginRight="m"
-              >
-                {getMakerName(hotspotData.payer)}
-              </ThemedText>
-              <IconAccount width={10} height={10} />
-              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-                {truncateAddress(hotspotData.owner || 'UnknownOwner')}
-              </ThemedText>
-            </Box>
-            <Box
-              flexDirection="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              marginTop="xs"
-            >
-              <IconBlcok width={10} height={10} />
-              <ThemedText
-                flex={1}
-                variant="body2"
-                marginLeft="xs"
-                marginRight="m"
-              >
-                {hotspotData.block} (+{hotspotData.blockAdded || 0})
-              </ThemedText>
-              <IconElevation width={10} height={10} />
-              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-                {t('generic.meters', { distance: hotspotData?.elevation || 0 })}
-              </ThemedText>
-              <IconGain width={10} height={10} />
-              <ThemedText variant="body2" marginLeft="xs" marginRight="m">
-                {((hotspotData?.gain || 0) / 10).toLocaleString(locale, {
-                  maximumFractionDigits: 1,
-                }) + t('antennas.onboarding.dbi')}
-              </ThemedText>
-            </Box>
-          </Box>
-          <Box flex={1}>
-            <ButtonGroup
-              onPress={updateIndex}
-              selectedIndex={selectedIndex}
-              buttons={buttons}
-              containerStyle={{ height: 36 }}
-            />
+          ) : (
             <Box
               flex={1}
+              justifyContent="center"
               style={{
-                paddingTop: 5,
-                paddingBottom: insets.bottom,
+                backgroundColor: '#1a2637',
               }}
             >
-              {widgets[selectedIndex] || null}
+              <Text style={{ textAlign: 'center' }}>Loading...</Text>
             </Box>
-          </Box>
+          )}
         </Box>
-      ) : (
-        <Box
-          flex={10}
-          backgroundColor="primaryBackground"
-          justifyContent="center"
+        <BottomSheet
+          isVisible={isVisible}
+          containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
         >
-          <Text style={{ textAlign: 'center' }}>Loading...</Text>
-        </Box>
-      )}
-      <BottomSheet
-        isVisible={isVisible}
-        containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
-      >
-        {list.map((l, i) => (
-          <ListItem
-            // eslint-disable-next-line react/no-array-index-key
-            key={i}
-            containerStyle={l.containerStyle || {}}
-            onPress={l.onPress}
-          >
-            <ListItem.Content>
-              <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
-        ))}
-      </BottomSheet>
-    </Box>
+          {list.map((l, i) => (
+            <ListItem
+              // eslint-disable-next-line react/no-array-index-key
+              key={i}
+              containerStyle={l.containerStyle || {}}
+              onPress={l.onPress}
+            >
+              <ListItem.Content>
+                <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+              </ListItem.Content>
+            </ListItem>
+          ))}
+        </BottomSheet>
+      </Box>
+    </DetailViewContainer>
   )
 }
 

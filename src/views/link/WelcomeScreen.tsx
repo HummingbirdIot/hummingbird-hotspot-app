@@ -69,6 +69,7 @@ const WelcomeScreen = () => {
           <TextTransform
             variant="subtitle1"
             marginVertical="xl"
+            textAlign="center"
             i18nKey="account_setup.welcome.subtitle"
           />
         </Box>

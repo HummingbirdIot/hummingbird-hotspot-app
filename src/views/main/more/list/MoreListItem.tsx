@@ -4,6 +4,7 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Text, { TextProps } from '../../../../components/Text'
 import TouchableOpacityBox from '../../../../components/TouchableOpacityBox'
 import { useColors } from '../../../../theme/themeHooks'
@@ -38,6 +39,7 @@ const MoreListItem = ({
   isBottom?: boolean
 }) => {
   const colors = useColors()
+  const colorScheme: ColorSchemeName = useColorScheme()
 
   const handlePress = () => {
     if (openUrl) {
@@ -72,7 +74,9 @@ const MoreListItem = ({
     <TouchableOpacityBox
       flexDirection="row"
       justifyContent="space-between"
-      backgroundColor="secondaryBackground"
+      backgroundColor={
+        colorScheme === 'light' ? 'primaryBackground' : 'secondaryBackground'
+      }
       alignItems="center"
       height={48}
       paddingHorizontal="ms"

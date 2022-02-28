@@ -11,11 +11,10 @@ import { Alert, SectionList } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { isEqual } from 'lodash'
-import { Edge } from 'react-native-safe-area-context'
 import { WalletLink } from '@helium/react-native-sdk'
 import { useAsync } from 'react-async-hook'
 import Config from 'react-native-config'
-import SafeAreaBox from '../../../../components/SafeAreaBox'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Text from '../../../../components/Text'
 import { RootState } from '../../../../store/rootReducer'
 import { useAppDispatch } from '../../../../store/store'
@@ -40,12 +39,14 @@ import Learn from '../../../../assets/images/learn.svg'
 // import Contact from '../../../../assets/images/account.svg'
 import Account from '../../../../assets/images/account.svg'
 import { SUPPORTED_CURRENCIES } from '../../../../utils/hooks/useCurrency'
+import TabViewContainer from '../../../../widgets/main/TabViewContainer'
 
 const Contact = Account
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
 const MoreScreen = () => {
   const { t } = useTranslation()
+  const colorScheme: ColorSchemeName = useColorScheme()
   const { params } = useRoute<Route>()
   const dispatch = useAppDispatch()
   const app = useSelector((state: RootState) => state.app, isEqual)
@@ -315,7 +316,9 @@ const MoreScreen = () => {
         paddingTop="l"
         paddingBottom="s"
         paddingHorizontal="xs"
-        backgroundColor="primaryBackground"
+        backgroundColor={
+          colorScheme === 'light' ? 'secondaryBackground' : 'primaryBackground'
+        }
       >
         {icon !== undefined && icon}
         <Text variant="body1" marginLeft="s">
@@ -323,7 +326,7 @@ const MoreScreen = () => {
         </Text>
       </Box>
     ),
-    [],
+    [colorScheme],
   )
 
   const renderSectionFooter = useCallback(
@@ -333,17 +336,8 @@ const MoreScreen = () => {
 
   const keyExtractor = useCallback((item, index) => item.title + index, [])
 
-  const edges = useMemo(() => ['left', 'right', 'top'] as Edge[], [])
   return (
-    <SafeAreaBox backgroundColor="primaryBackground" flex={1} edges={edges}>
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        marginVertical="m"
-        paddingHorizontal="l"
-      >
-        <Text variant="h3">{t('more.title')}</Text>
-      </Box>
+    <TabViewContainer title="more.title">
       <SectionList
         contentContainerStyle={contentContainer}
         sections={SectionData}
@@ -355,7 +349,7 @@ const MoreScreen = () => {
         // ^ Sometimes on initial page load there is a bug with SectionList
         // where it won't render all items right away. This seems to fix it.
       />
-    </SafeAreaBox>
+    </TabViewContainer>
   )
 }
 
