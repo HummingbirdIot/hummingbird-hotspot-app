@@ -20,13 +20,11 @@ const DetailViewContainer = ({
   children?: Array<JSX.Element> | JSX.Element
 }) => {
   const colorScheme: ColorSchemeName = useColorScheme()
-  const { primaryBackground, surfaceContrast } = useColors()
+  const { surface, surfaceContrast } = useColors()
   return (
     <Box flex={1} backgroundColor="primaryBackground">
       <Header
-        backgroundColor={
-          colorScheme === 'light' ? surfaceContrast : primaryBackground
-        }
+        backgroundColor={colorScheme === 'light' ? surfaceContrast : surface}
         containerStyle={{
           borderBottomWidth: 0,
         }}

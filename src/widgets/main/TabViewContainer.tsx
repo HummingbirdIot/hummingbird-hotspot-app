@@ -31,7 +31,13 @@ const TabViewContainer = ({
   const edges = useMemo(() => ['left', 'right', 'top'] as Edge[], [])
 
   return (
-    <SafeAreaBox backgroundColor="primaryBackground" flex={1} edges={edges}>
+    <SafeAreaBox
+      backgroundColor={
+        colorScheme === 'light' ? 'primaryBackground' : 'surface'
+      }
+      flex={1}
+      edges={edges}
+    >
       <Box
         flexDirection="row"
         justifyContent="space-between"

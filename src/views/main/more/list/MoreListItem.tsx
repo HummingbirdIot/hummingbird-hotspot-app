@@ -75,7 +75,7 @@ const MoreListItem = ({
       flexDirection="row"
       justifyContent="space-between"
       backgroundColor={
-        colorScheme === 'light' ? 'primaryBackground' : 'secondaryBackground'
+        colorScheme === 'light' ? 'primaryBackground' : 'surface'
       }
       alignItems="center"
       height={48}

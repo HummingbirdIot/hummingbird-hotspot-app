@@ -165,7 +165,7 @@ const App = () => {
                 {/* TODO: Will need to adapt status bar for light/dark modes */}
                 {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
                 {Platform.OS === 'android' && (
-                  <StatusBar translucent backgroundColor="transparent" />
+                  <StatusBar translucent backgroundColor="black" />
                 )}
                 <NavigationContainer ref={navigationRef}>
                   <AppLinkProvider>

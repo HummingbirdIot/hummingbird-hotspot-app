@@ -30,8 +30,13 @@ const HotspotListItem = ({
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
   const { getMakerName } = useMaker()
-  const { primaryBackground, secondaryBackground, primaryText, blueMain } =
-    useColors()
+  const {
+    primaryBackground,
+    secondaryBackground,
+    primaryText,
+    surface,
+    blueMain,
+  } = useColors()
   const colorList = [
     '#6D9088',
     '#D6A3CB',
@@ -58,10 +63,10 @@ const HotspotListItem = ({
             borderColor: secondaryBackground,
           }
         : {
-            backgroundColor: '#111111',
+            backgroundColor: surface,
             borderColor: primaryBackground,
           },
-    [colorScheme, primaryBackground, secondaryBackground],
+    [colorScheme, primaryBackground, secondaryBackground, surface],
   )
 
   return (

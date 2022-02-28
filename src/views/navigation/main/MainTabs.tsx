@@ -2,6 +2,7 @@ import React, { useEffect, memo, useMemo, useCallback } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { TabBarIconType, MainTabType, RootNavigationProp } from '../naviTypes'
 import TabBarIcon from './TabBarIcon'
 import { RootState } from '../../../store/rootReducer'
@@ -18,7 +19,7 @@ import MoreNavigator from '../../main/more/MoreNavigator'
 const MainTab = createBottomTabNavigator()
 
 const MainTabs = () => {
-  const { primaryBackground, secondaryBackground } = useColors()
+  const { primaryBackground, secondaryBackground, surface } = useColors()
   const navigation = useNavigation<RootNavigationProp>()
   const {
     app: { isLocked, isSettingUpHotspot },
@@ -45,17 +46,18 @@ const MainTabs = () => {
   )
 
   // console.log('surfaceContrast', surfaceContrast)
+  const colorScheme: ColorSchemeName = useColorScheme()
 
   const tabBarOptions = useMemo(
     () => ({
       showLabel: false,
       style: {
-        backgroundColor: primaryBackground,
+        backgroundColor: colorScheme === 'light' ? primaryBackground : surface,
         borderTopColor: secondaryBackground,
         paddingHorizontal: wp(12),
       },
     }),
-    [primaryBackground, secondaryBackground],
+    [colorScheme, primaryBackground, secondaryBackground, surface],
   )
 
   const screenOptions = useCallback(

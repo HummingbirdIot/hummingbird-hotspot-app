@@ -9,6 +9,7 @@ import { useHotspotBle } from '@helium/react-native-sdk'
 import { useAsync } from 'react-async-hook'
 import { Hotspot, Witness } from '@helium/http'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Box from '../../../components/Box'
 import ThemedText from '../../../components/Text'
 import IconLocation from '../../../assets/images/location.svg'
@@ -46,6 +47,7 @@ type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotDetailScreen = ({ navigation }: any) => {
   const { t } = useTranslation()
+  const colorScheme: ColorSchemeName = useColorScheme()
   const insets = useSafeAreaInsets()
   const { address } = useRoute<Route>().params
   const { enable, getState } = useHotspotBle()
@@ -248,7 +250,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
   )
   const widgets = [Statistics, Activity, Empty]
 
-  const { surfaceContrast, blueMain } = useColors()
+  const { blueMain } = useColors()
 
   const assertLocation = useCallback(async () => {
     if (!hotspotData) return
@@ -340,17 +342,22 @@ const HotspotDetailScreen = ({ navigation }: any) => {
         <Box flex={12}>
           {hotspotData ? (
             <Box flex={1}>
-              <Box padding="s">
+              <Box
+                padding="s"
+                backgroundColor={
+                  colorScheme === 'light' ? 'primaryBackground' : 'surface'
+                }
+              >
                 <Box
                   flexDirection="row"
                   justifyContent="flex-start"
                   alignItems="center"
                 >
-                  <IconAddress width={20} height={20} />
+                  <IconAddress width={20} color={blueMain} height={20} />
                   <ThemedText
                     style={{
                       fontSize: 20,
-                      color: '#474DFF',
+                      color: blueMain,
                     }}
                   >
                     {truncateAddress(address, 16)}

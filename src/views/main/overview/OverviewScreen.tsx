@@ -86,10 +86,18 @@ const OverviewScreen = ({ navigation }: any) => {
         <ScrollView style={{ flex: 1 }}>
           <Box paddingBottom="m">
             <Box paddingTop="l">
+              <Box paddingTop="l">
+                <Text variant="h1" textAlign="center">
+                  {fiat}
+                </Text>
+                <Text variant="body1" paddingVertical="s" textAlign="center">
+                  {account?.balance?.floatBalance || '0'} HNT
+                </Text>
+              </Box>
               <Box
                 style={{
                   position: 'absolute',
-                  top: 10,
+                  top: 20,
                   right: 20,
                 }}
               >
@@ -100,7 +108,7 @@ const OverviewScreen = ({ navigation }: any) => {
                       style={{ color: surfaceContrastText }}
                     >
                       Prices data source from CoinGecko, please make sure that
-                      coingecko.com is touchable for your mobile.
+                      coingecko.com is touchable to your mobile.
                     </Text>
                   }
                   width={240}
@@ -117,14 +125,6 @@ const OverviewScreen = ({ navigation }: any) => {
                     tvParallaxProperties={undefined}
                   />
                 </ELTooltip>
-              </Box>
-              <Box paddingTop="l">
-                <Text variant="h1" textAlign="center">
-                  {fiat}
-                </Text>
-                <Text variant="body1" paddingVertical="s" textAlign="center">
-                  {account?.balance?.floatBalance || '0'} HNT
-                </Text>
               </Box>
             </Box>
             <Box>
@@ -153,7 +153,7 @@ const OverviewScreen = ({ navigation }: any) => {
                 <DashboardItem.Number
                   item="Hotspots"
                   value={(account?.hotspotCount || 0).toString()}
-                  onPress={() => {}}
+                  onPress={() => navigation.navigate('Hotspots')}
                 />
                 <DashboardItem.Number
                   item="Validators"
@@ -174,7 +174,7 @@ const OverviewScreen = ({ navigation }: any) => {
           value={address}
         />
       </Box> */}
-          <Box flex={1} padding="l" backgroundColor="white" borderRadius="l">
+          <Box flex={1} padding="l" backgroundColor="white" borderRadius="s">
             <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
               {address ? (
                 <RewardsStatistics address={address} resource="accounts" />
