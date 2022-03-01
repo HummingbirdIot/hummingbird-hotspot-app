@@ -76,8 +76,12 @@ const HotspotDetailScreen = () => {
         if (lat && lng) {
           const [{ street, city }] = await reverseGeocode(lat, lng)
           if (street && city) {
+            setLocationName(`${street}, ${city}`)
+          } else if (street && longCity) {
+            setLocationName(`${street}, ${longCity}`)
+          } else if (longStreet && city) {
+            setLocationName(`${longStreet}, ${city}`)
           }
-          setLocationName(`${street}, ${city}`)
         }
       }
     }

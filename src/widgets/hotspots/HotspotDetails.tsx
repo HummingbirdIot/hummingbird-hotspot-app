@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Hotspot, Witness } from '@helium/http'
 import Box from '../../components/Box'
 import Text from '../../components/Text'
-import ActivitiesList from '../main/ActivitiesList/ListContainer'
+import ActivitiesList from '../main/activities/ListContainer'
 import RewardsStatistics from '../main/RewardsStatistics'
 import { formatHotspotName } from '../../utils/formatter'
 

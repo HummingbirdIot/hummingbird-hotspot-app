@@ -90,6 +90,7 @@ export default {
   },
   back: 'Back',
   generic: {
+    success: 'Successful',
     cancel: 'Cancel',
     clear: 'Clear',
     connect: 'Connect',

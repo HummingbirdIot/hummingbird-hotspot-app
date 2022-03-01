@@ -2,15 +2,17 @@ import React, { memo, useState } from 'react'
 import { ButtonGroup } from 'react-native-elements'
 import { useAsync } from 'react-async-hook'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
+import { useNavigation } from '@react-navigation/native'
 import Box from '../../../components/Box'
-import ActivitiesList from '../../../widgets/main/ActivitiesList/ListContainer'
+import ActivitiesList from '../../../widgets/main/activities/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
 import { getAddress } from '../../../store/app/secureData'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
 import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
+import { RootNavigationProp } from '../../navigation/naviTypes'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ActivityScreen = ({ navigation }: any) => {
+const ActivityScreen = () => {
+  const navigation = useNavigation<RootNavigationProp>()
   const colorScheme: ColorSchemeName = useColorScheme()
   const [address, setAccountAddress] = useState('')
 
