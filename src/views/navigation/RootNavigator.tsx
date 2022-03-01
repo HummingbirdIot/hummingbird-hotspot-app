@@ -88,7 +88,7 @@ const RootNavigator = () => {
         />
       </MainStack.Group>
       <MainStack.Group screenOptions={{ headerShown: false }}>
-        <MainStack.Screen name="ActvityScreen" component={ActivityScreen} />
+        <MainStack.Screen name="ActivityScreen" component={ActivityScreen} />
         <MainStack.Screen name="HotspotScreen" component={HotspotScreen} />
         <MainStack.Screen name="LockScreen" component={LockScreen} />
       </MainStack.Group>

@@ -24,6 +24,7 @@ import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import { getAddress } from '../../../store/app/secureData'
 import { getAccount } from '../../../utils/clients/appDataClient'
+import { useColors } from '../../../theme/themeHooks'
 
 type Route = RouteProp<
   HotspotSetupStackParamList,
@@ -54,6 +55,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
 
   // console.log('HotspotAssertConfirmAntennaScreen::routeParams:', params)
   const { elevation, gain, hotspot } = params
+  const { gray } = useColors()
 
   useAsync(async () => {
     const address = await getAddress()
@@ -116,7 +118,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
   ])
 
   const navNext = useCallback(async () => {
-    console.log('HotspotTxnsProgressScreen::navNextParams', params)
+    // console.log('HotspotTxnsProgressScreen::navNextParams:', params)
     navigation.replace('HotspotTxnsProgressScreen', params)
   }, [navigation, params])
 
@@ -155,8 +157,8 @@ const HotspotAssertConfirmAntennaScreen = () => {
     return (
       <BackScreen onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
-          <ActivityIndicator color="#687A8C" size={54} />
-          <Text textAlign="center" fontSize={16} marginTop="m">
+          <ActivityIndicator color={gray} size={54} />
+          <Text textAlign="center" variant="body1" marginTop="m">
             {t('hotspot_setup.antenna_fee.calculating_fee')}
           </Text>
         </Box>

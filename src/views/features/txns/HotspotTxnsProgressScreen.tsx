@@ -10,17 +10,22 @@ import {
   useOnboarding,
 } from '@helium/react-native-sdk'
 import { ActivityIndicator, Linking } from 'react-native'
+import { useSelector } from 'react-redux'
 import Box from '../../../components/Box'
 import Text from '../../../components/Text'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import SafeAreaBox from '../../../components/SafeAreaBox'
 import { hotspotOnChain } from '../../../utils/clients/appDataClient'
 import useAlert from '../../../utils/hooks/useAlert'
-import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
-import { getSecureItem } from '../../../store/app/secureData'
+import {
+  GatewayAction,
+  HotspotSetupStackParamList,
+} from '../../navigation/features/hotspotSetupTypes'
 import { useColors } from '../../../theme/themeHooks'
 import { DebouncedButton } from '../../../components/Button'
 import useMount from '../../../utils/hooks/useMount'
+import { RootState } from '../../../store/rootReducer'
+import navigator from '../../navigation/navigator'
 
 type Route = RouteProp<HotspotSetupStackParamList, 'HotspotTxnsProgressScreen'>
 
@@ -32,6 +37,9 @@ const HotspotTxnsProgressScreen = () => {
   const { createGatewayTxn } = useHotspotBle()
   const { getOnboardingRecord } = useOnboarding()
   const { primaryText } = useColors()
+  const { walletLinkToken: token, isViewOnly } = useSelector(
+    (state: RootState) => state.app.user,
+  )
 
   const {
     hotspotAddress,
@@ -47,8 +55,8 @@ const HotspotTxnsProgressScreen = () => {
 
     if (isString(error)) {
       if (error === HotspotErrorCode.WAIT) {
-        messageKey = t('hotspot_setup.add_hotspot.wait_error_body')
-        titleKey = t('hotspot_setup.add_hotspot.wait_error_title')
+        messageKey = 'hotspot_setup.add_hotspot.wait_error_body'
+        titleKey = 'hotspot_setup.add_hotspot.wait_error_title'
       } else {
         messageKey = `Got error code ${error}`
       }
@@ -59,8 +67,21 @@ const HotspotTxnsProgressScreen = () => {
   }
 
   const submitOnboardingTxns = async () => {
-    const token = await getSecureItem('user.walletLinkToken')
-    if (!token) throw new Error('Token Not found')
+    console.log('submitOnboardingTxns', token, isViewOnly)
+    if (!token) {
+      if (isViewOnly) {
+        setTimeout(
+          () =>
+            navigator.demoExplorationTxns({
+              action: gatewayAction as Exclude<GatewayAction, 'setWiFi'>,
+            }),
+          1000 * 3,
+        )
+      } else {
+        handleError('Token Not found')
+      }
+      return
+    }
 
     const parsed = WalletLink.parseWalletLinkToken(token)
     if (!parsed?.address) throw new Error('Invalid Token')
@@ -140,11 +161,14 @@ const HotspotTxnsProgressScreen = () => {
   }
 
   useMount(() => {
-    try {
-      submitOnboardingTxns()
-    } catch (e) {
-      handleError(e)
+    const onmounted = async () => {
+      try {
+        await submitOnboardingTxns()
+      } catch (e) {
+        handleError(e)
+      }
     }
+    onmounted()
   })
 
   return (

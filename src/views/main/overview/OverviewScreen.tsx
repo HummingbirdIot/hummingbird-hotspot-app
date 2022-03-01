@@ -1,18 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { memo, useEffect, useMemo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 // import QRCode from 'react-qr-code'
 import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { useSelector } from 'react-redux'
 import { isEqual } from 'lodash'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { Platform } from 'expo-modules-core'
 import { Tooltip, Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native'
 import { getAddress } from '../../../store/app/secureData'
-import { useColors, useSpacing } from '../../../theme/themeHooks'
-// import { Spacing } from '../../../theme/theme'
+import { useColors } from '../../../theme/themeHooks'
 import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
@@ -25,6 +21,7 @@ import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
 import TabViewContainer from '../../../widgets/main/TabViewContainer'
 import { RootState } from '../../../store/rootReducer'
 import DashboardItem from './DashboardItem'
+import appSlice from '../../../store/app/appSlice'
 
 // const QR_CONTAINER_SIZE = 146
 
@@ -36,26 +33,38 @@ const OverviewScreen = ({ navigation }: any) => {
     (state: RootState) => state.helium.currentPrices,
     isEqual,
   )
+  const { lastHNTBlance, lastFiatBlance } = useSelector(
+    (state: RootState) => state.app.user,
+  )
+  const { currencyType } = useSelector((state: RootState) => state.app.settings)
   const [address, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
-  const [fiat, setFiat] = useState<string>('0.00')
+  const [fiat, setFiat] = useState<string>(lastFiatBlance)
   const dispatch = useAppDispatch()
   const { primaryText, surfaceContrast, surfaceContrastText } = useColors()
 
-  const { hntBalanceToDisplayVal } = useCurrency()
+  const { hntBalanceToFiatBlance } = useCurrency()
 
   useAsync(async () => {
-    console.log('OverviewScreen::account:', Platform.OS, currentPrices?.cny)
     if (account?.balance) {
-      setFiat((await hntBalanceToDisplayVal(account.balance)).toString())
+      setFiat((await hntBalanceToFiatBlance(account.balance)).toString())
     }
-  }, [account, currentPrices])
+  }, [account, currentPrices, currencyType])
 
   useEffect(() => {
-    getAccount(address)
-      .then(setAccount)
-      .then(() => dispatch(fetchCurrentPrices()))
-  }, [address, dispatch])
+    getAccount(address).then(setAccount)
+  }, [address])
+
+  useEffect(() => {
+    if (account?.balance) {
+      dispatch(
+        appSlice.actions.updateBlance(
+          account.balance.floatBalance.toString() || '0.00000',
+        ),
+      )
+      dispatch(fetchCurrentPrices())
+    }
+  }, [account?.balance, address, dispatch])
 
   useEffect(() => {
     dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
@@ -67,7 +76,7 @@ const OverviewScreen = ({ navigation }: any) => {
     setAccountAddress(aacc || '')
   }, [])
 
-  const naviToActivityScreen = () => navigation.navigate('ActvityScreen')
+  const naviToActivityScreen = () => navigation.navigate('ActivityScreen')
   const gotoActivityScreen = useDebouncedCallback(naviToActivityScreen, 700, {})
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ELTooltip = Tooltip as unknown as any
@@ -82,6 +91,12 @@ const OverviewScreen = ({ navigation }: any) => {
         },
       ]}
     >
+      {/* <Box flex={1} flexDirection="row" justifyContent="center">
+        <QRCode
+          size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
+          value={address}
+        />
+      </Box> */}
       <Box flex={1}>
         <ScrollView style={{ flex: 1 }}>
           <Box paddingBottom="m">
@@ -91,7 +106,7 @@ const OverviewScreen = ({ navigation }: any) => {
                   {fiat}
                 </Text>
                 <Text variant="body1" paddingVertical="s" textAlign="center">
-                  {account?.balance?.floatBalance || '0'} HNT
+                  {lastHNTBlance || '0'} HNT
                 </Text>
               </Box>
               <Box
@@ -108,13 +123,12 @@ const OverviewScreen = ({ navigation }: any) => {
                       style={{ color: surfaceContrastText }}
                     >
                       Prices data source from CoinGecko, please make sure that
-                      coingecko.com is touchable to your mobile.
+                      your mobile could connect to coingecko.com.
                     </Text>
                   }
                   width={240}
-                  height={60}
+                  height={70}
                   backgroundColor={surfaceContrast}
-                  // withPointer
                   withOverlay={false}
                   highlightColor="transparent"
                 >
@@ -167,19 +181,15 @@ const OverviewScreen = ({ navigation }: any) => {
               </Box>
             </Box>
           </Box>
-
-          {/* <Box flex={1} flexDirection="row" justifyContent="center">
-        <QRCode
-          size={QR_CONTAINER_SIZE - 2 * spacing[padding]}
-          value={address}
-        />
-      </Box> */}
-          <Box flex={1} padding="l" backgroundColor="white" borderRadius="s">
-            <Box flex={1} backgroundColor="grayBoxLight" borderRadius="l">
-              {address ? (
-                <RewardsStatistics address={address} resource="accounts" />
-              ) : null}
-            </Box>
+          <Box
+            flex={1}
+            backgroundColor="white"
+            marginHorizontal="l"
+            borderRadius="l"
+          >
+            {address ? (
+              <RewardsStatistics address={address} resource="accounts" />
+            ) : null}
           </Box>
         </ScrollView>
       </Box>

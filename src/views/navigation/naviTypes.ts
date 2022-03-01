@@ -18,7 +18,10 @@ export type LockScreenRequestType =
   | 'unlock'
 
 export type RootStackParamList = {
-  MainTabs: undefined | { pinVerifiedFor: LockScreenRequestType }
+  MainTabs:
+    | undefined
+    | { pinVerifiedFor: LockScreenRequestType }
+    | { screen: string }
   LockScreen: {
     requestType: LockScreenRequestType
     lock?: boolean

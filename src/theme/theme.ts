@@ -39,7 +39,6 @@ const textVariants = {
     fontSize: 20,
     fontWeight: '300',
     color: 'primaryText',
-    letterSpacing: 3,
   },
   subtitle2: {
     fontSize: 17,
@@ -250,7 +249,7 @@ export const darkThemeColors = {
   primary: palette.bobcatRed,
   primaryBackground: palette.black,
   primaryText: palette.white,
-  secondaryBackground: palette.bobcatDarkGrey,
+  secondaryBackground: '#181818',
   secondary: palette.bobcatDarkGrey,
   secondaryText: palette.white,
   error: palette.bobcatRed,

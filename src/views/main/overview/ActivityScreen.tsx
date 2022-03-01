@@ -90,7 +90,14 @@ const ActivityScreen = ({ navigation }: any) => {
   }
 
   return (
-    <DetailViewContainer title="Acitivity" goBack={() => navigation.goBack()}>
+    <DetailViewContainer
+      title="Acitivity"
+      goBack={() => {
+        if (navigation.canGoBack()) {
+          navigation.goBack()
+        }
+      }}
+    >
       <Box flex={1} backgroundColor="primaryBackground">
         <Box
           height={50}

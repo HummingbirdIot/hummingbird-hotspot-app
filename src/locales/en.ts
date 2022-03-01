@@ -197,6 +197,7 @@ export default {
       wait_error_body:
         'Hotspot miner is waiting to start. Please try again in a few minutes.',
       wait_error_title: 'Please Try Again',
+      next: 'Add Hotspot',
     },
     ble_error: {
       enablePairing: 'Enable Pairing Mode',

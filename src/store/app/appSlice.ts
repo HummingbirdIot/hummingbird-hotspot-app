@@ -13,7 +13,7 @@ import { Loading } from '../txns/txnsTypes'
 import addressMap from './addressMap'
 // import OneSignal from 'react-native-onesignal'
 
-const boolKeys = [] as const
+const boolKeys = ['isPinRequired'] as const
 type BooleanKey = typeof boolKeys[number]
 const stringKeys = ['currencyType'] as const
 type StringKey = typeof stringKeys[number]
@@ -176,7 +176,7 @@ export const updateSetting = createAsyncThunk<
     key,
     value: String(value),
   }
-  // return postWallet('accounts/settings', setting)
+  setSecureItem(`settings.${key}`, value)
   return Promise.resolve([setting])
 })
 
@@ -206,6 +206,14 @@ const appSlice = createSlice({
       setSecureItem('user.explorationCode', '')
       setSecureItem('user.walletLinkToken', token)
       setSecureItem('isBackedUp', true)
+    },
+    updateBlance: (state, { payload: blance }: PayloadAction<string>) => {
+      state.user.lastHNTBlance = blance
+      setSecureItem('user.lastHNTBlance', blance)
+    },
+    updateFiat: (state, { payload: blance }: PayloadAction<string>) => {
+      state.user.lastFiatBlance = blance
+      setSecureItem('user.lastFiatBlance', blance)
     },
 
     backupAccount: (state, action: PayloadAction<string>) => {
@@ -259,7 +267,7 @@ const appSlice = createSlice({
         },
       ) => {
         if (boolKeys.includes(key as BooleanKey)) {
-          // state.settings[key as BooleanKey] = value as boolean
+          state.settings[key as BooleanKey] = value as boolean
         } else if (stringKeys.includes(key as StringKey)) {
           state.settings[key as StringKey] = value as string
         }

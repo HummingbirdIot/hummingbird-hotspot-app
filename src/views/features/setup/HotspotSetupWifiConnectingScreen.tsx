@@ -60,7 +60,9 @@ const HotspotSetupWifiConnectingScreen = () => {
           )
         },
       )
-      navigation.goBack()
+      if (navigation.canGoBack()) {
+        navigation.goBack()
+      }
     },
     [navigation, showOKAlert],
   )

@@ -13,12 +13,10 @@ import appSlice from '../../store/app/appSlice'
 import addressMap from '../../store/app/addressMap'
 import useAlert from '../../utils/hooks/useAlert'
 
-// type Route = RouteProp<HotspotSetupStackParamList, 'EnterExplorationCodeScreen'>
 const EnterExplorationCodeScreen = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const nav = useNavigation<RootNavigationProp>()
-  const { showOKCancelAlert } = useAlert()
+  const { showOKAlert } = useAlert()
   const dispatch = useAppDispatch()
   const [xpCode, setXPCode] = useState('')
 
@@ -32,15 +30,15 @@ const EnterExplorationCodeScreen = () => {
       if (addressMap[code]) {
         dispatch(appSlice.actions.enableViewOnlyMode(code))
       } else {
-        const decision = await showOKCancelAlert({
+        await showOKAlert({
           titleKey: 'Exploration Code Invalid',
           messageKey:
             'The exploration code you entered is invalid, please check it carefully or contace with your agent.',
         })
-        if (!decision) return false
+        return false
       }
     }
-  }, [dispatch, showOKCancelAlert, xpCode])
+  }, [dispatch, showOKAlert, xpCode])
 
   return (
     <BackScreen onClose={handleClose}>
@@ -63,9 +61,9 @@ const EnterExplorationCodeScreen = () => {
               textAlign="center"
               maxFontSizeMultiplier={1.2}
             >
-              Type in the Exploration Code you got from Hummingbird or its
-              agent, you would be able to browser the views of this app without
-              a helium wallet account.
+              {t(
+                'Type in the Exploration Code you got from Hummingbird or its agent, you would be able to browser the views of this app without a helium wallet account.',
+              )}
             </Text>
             <Text
               variant="body3"
@@ -73,8 +71,9 @@ const EnterExplorationCodeScreen = () => {
               marginBottom="xl"
               maxFontSizeMultiplier={1.2}
             >
-              You will, however, only be allowed visiting under the VIEWONLY
-              MODE, in which you cannot sumbit any transaction.
+              {t(
+                'You will, however, only be allowed to browser under the VIEWONLY MODE, in which you cannot sumbit any transaction.',
+              )}
             </Text>
           </Box>
           <TextInput

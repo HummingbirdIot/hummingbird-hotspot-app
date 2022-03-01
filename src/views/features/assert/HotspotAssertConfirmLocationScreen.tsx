@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -158,7 +159,7 @@ const HotspotAssertConfirmLocationScreen = () => {
   ])
 
   const navNext = useCallback(async () => {
-    console.log('HotspotTxnsProgressScreen::navNextParams', params)
+    // console.log('HotspotTxnsProgressScreen::navNextParams:', params)
     navigation.replace('HotspotTxnsProgressScreen', params)
   }, [navigation, params])
 
@@ -334,7 +335,9 @@ const HotspotAssertConfirmLocationScreen = () => {
       <Box>
         <DebouncedButton
           title={
-            isFree
+            gatewayAction === 'addGateway'
+              ? t('hotspot_setup.add_hotspot.next')
+              : isFree
               ? t('hotspot_setup.location_fee.next')
               : t('hotspot_setup.location_fee.fee_next')
           }

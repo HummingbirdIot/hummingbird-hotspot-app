@@ -61,10 +61,6 @@ const HotspotTxnsSubmitScreen = () => {
       }
       const tasks = []
       if (params.gatewayTxn) {
-        // console.log(
-        //   'HotspotTxnsSubmitScreen::params::gatewayTxn:',
-        //   params.gatewayTxn,
-        // )
         setStatus(2.1)
         const gatewayTxn = await postPaymentTransaction(
           params.gatewayAddress,
@@ -136,7 +132,7 @@ const HotspotTxnsSubmitScreen = () => {
   let messageBox = (
     <Box flex={1} justifyContent="center">
       <ActivityIndicator color={primaryText} />
-      <Text textAlign="center">
+      <Text variant="body1" textAlign="center" marginVertical="l">
         Preparing for Sending Transactions (step: {status})
       </Text>
     </Box>
@@ -146,13 +142,22 @@ const HotspotTxnsSubmitScreen = () => {
     if (status === 5) {
       messageBox =
         results.length === taskCount ? (
-          <Box>
-            <Text textAlign="center">{taskCount} Transactions Sent</Text>
-            {results.map((result) => (
-              <Text key={result.hash} textAlign="center">
-                {result.hash}
-              </Text>
-            ))}
+          <Box flex={1} justifyContent="center" padding="l">
+            <Text textAlign="center" variant="h4">
+              {taskCount} Transactions Sent
+            </Text>
+            <Box flex={1} marginTop="l">
+              {results.map((result) => (
+                <Text
+                  key={result.hash}
+                  textAlign="center"
+                  variant="body1"
+                  marginBottom="s"
+                >
+                  {result.hash}
+                </Text>
+              ))}
+            </Box>
           </Box>
         ) : (
           <Box flex={1} justifyContent="center">
@@ -161,26 +166,34 @@ const HotspotTxnsSubmitScreen = () => {
         )
     } else if (status > 4) {
       messageBox = (
-        <Box flex={1} justifyContent="center">
-          <Text>{errorInof?.msg}</Text>
-          <Text>
-            {errorInof?.error?.toString() ||
-              'One or more Transactions sent failed.'}
+        <Box flex={1} justifyContent="center" padding="l">
+          <Text textAlign="center" variant="h4">
+            {errorInof?.msg}
           </Text>
+          <Box flex={1} marginTop="l">
+            <Text variant="body1">
+              {errorInof?.error?.toString() ||
+                'One or more Transactions sent failed.'}
+            </Text>
+          </Box>
         </Box>
       )
     } else {
       messageBox = (
         <Box flex={1} justifyContent="center">
           <ActivityIndicator color={primaryText} />
-          <Text textAlign="center">Submitting {taskCount} Transactions</Text>
+          <Text variant="body1" textAlign="center" marginVertical="l">
+            Submitting {taskCount} Transactions
+          </Text>
         </Box>
       )
     }
   } else if (status === 6) {
     messageBox = (
       <Box flex={1} justifyContent="center">
-        <Text textAlign="center">You cancelled this Submitting</Text>
+        <Text variant="body1" textAlign="center">
+          You cancelled this Submitting
+        </Text>
       </Box>
     )
   }
@@ -192,22 +205,31 @@ const HotspotTxnsSubmitScreen = () => {
       padding="lx"
       paddingTop="xxl"
     >
-      <Box flex={2} alignItems="center" paddingTop="xxl">
-        <Text variant="subtitle1" marginBottom="l">
-          {t('hotspot_setup.progress.title')}
-        </Text>
-        <Box paddingHorizontal="l">
-          <Text variant="body1" textAlign="center" marginBottom="l">
+      <Box alignItems="center" paddingTop="xxl">
+        <Text variant="subtitle1">{t('hotspot_setup.progress.title')}</Text>
+        <Box paddingTop="l">
+          <Text variant="body1" textAlign="center">
             {t('hotspot_setup.progress.subtitle')}
           </Text>
         </Box>
       </Box>
-      <Box flex={1}>{messageBox}</Box>
+      <Box
+        flex={1}
+        marginVertical="xxxl"
+        justifyContent="center"
+        backgroundColor="surface"
+        borderRadius="xl"
+      >
+        {messageBox}
+      </Box>
       <DebouncedButton
         onPress={() => {
           if (status === 5 || status === 4.3)
             navigation.navigate('ActivityScreen')
-          else navigation.navigate('MainTabs')
+          else
+            navigation.navigate('MainTabs', {
+              screen: 'Hotspots',
+            })
         }}
         variant="primary"
         width="100%"
@@ -217,6 +239,7 @@ const HotspotTxnsSubmitScreen = () => {
             ? t('hotspot_setup.progress.next')
             : t('hotspot_setup.progress.back')
         }
+        disabled={status < 2}
       />
     </SafeAreaBox>
   )

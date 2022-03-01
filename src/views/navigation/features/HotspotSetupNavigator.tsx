@@ -21,6 +21,7 @@ import FirmwareUpdateNeededScreen from '../../features/others/FirmwareUpdateNeed
 
 import HotspotTxnsProgressScreen from '../../features/txns/HotspotTxnsProgressScreen'
 import HotspotTxnsSubmitScreen from '../../features/txns/HotspotTxnsSubmitScreen'
+import HotspotTxnsDemoScreen from '../../features/txns/HotspotTxnsDemoScreen'
 
 import OnboardingErrorScreen from '../../features/error/OnboardingErrorScreen'
 import NotHotspotOwnerErrorScreen from '../../features/error/NotHotspotOwnerErrorScreen'
@@ -123,6 +124,10 @@ const HotspotSetup = () => {
       <HotspotSetupStack.Screen
         name="HotspotTxnsSubmitScreen"
         component={HotspotTxnsSubmitScreen}
+      />
+      <HotspotSetupStack.Screen
+        name="HotspotTxnsDemoScreen"
+        component={HotspotTxnsDemoScreen}
       />
     </HotspotSetupStack.Navigator>
   )

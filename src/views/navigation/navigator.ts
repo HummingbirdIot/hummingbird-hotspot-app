@@ -1,7 +1,11 @@
 import React from 'react'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { LockScreenRequestType } from './naviTypes'
-import { AppLink, HotspotLink } from '../../providers/appLinkTypes'
+import {
+  AppLink,
+  HotspotLink,
+  HotspotLinkDemo,
+} from '../../providers/appLinkTypes'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const navigationRef = React.createRef<NavigationContainerRef<any>>()
@@ -50,6 +54,13 @@ const submitGatewayTxns = (params: HotspotLink) => {
   })
 }
 
+const demoExplorationTxns = (params: HotspotLinkDemo) => {
+  navigationRef.current?.navigate('HotspotSetup', {
+    screen: 'HotspotTxnsDemoScreen',
+    params,
+  })
+}
+
 const submitTransferTxn = (params: HotspotLink) => {
   navigationRef.current?.navigate('TransferHotspot', params)
 }
@@ -66,5 +77,6 @@ export default {
   confirmAddGateway,
   submitGatewayTxns,
   submitTransferTxn,
+  demoExplorationTxns,
   goToMainTabs,
 }

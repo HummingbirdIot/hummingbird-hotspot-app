@@ -4,6 +4,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { uniq } from 'lodash'
 import { useHotspotBle } from '@helium/react-native-sdk'
+import { useSelector } from 'react-redux'
 import BackScreen from '../../../components/BackScreen'
 import Text from '../../../components/Text'
 import {
@@ -17,8 +18,10 @@ import { DebouncedButton } from '../../../components/Button'
 import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
 import Checkmark from '../../../assets/images/check.svg'
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import { getAddress, getSecureItem } from '../../../store/app/secureData'
+import { getAddress } from '../../../store/app/secureData'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
+import { RootState } from '../../../store/rootReducer'
+import useAlert from '../../../utils/hooks/useAlert'
 
 const WifiItem = ({
   name,
@@ -78,8 +81,12 @@ const HotspotSetupPickWifiScreen = () => {
   const [connectedWifiNetworks, setConnectedWifiNetworks] =
     useState(connectedNetworks)
   const [scanning, setScanning] = useState(false)
-
+  const { showOKCancelAlert } = useAlert()
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
+
+  const { walletLinkToken: token, isViewOnly } = useSelector(
+    (state: RootState) => state.app.user,
+  )
 
   console.log(
     'HotspotSetupPickWifiScreen::wifiNetworks:',
@@ -104,57 +111,56 @@ const HotspotSetupPickWifiScreen = () => {
         rootNav.navigate('MainTabs')
       }
     } else {
-      const token = await getSecureItem('user.walletLinkToken')
-      // console.log('HotspotSetupPickWifiScreen::navSkip::token:', token)
-      if (!token) return
+      if (!token) {
+        if (isViewOnly) {
+          const decision = await showOKCancelAlert({
+            titleKey: 'Viewonly Warning',
+            okKey: 'Next',
+            cancelKey: 'Back to Home',
+            messageKey:
+              'You are undering the VIEWONLY MODE now, will not allowed to complete any transation action.',
+          })
+          if (!decision) {
+            rootNav.navigate('MainTabs')
+          }
+        } else return
+      }
       const address = await getAddress()
       // console.log('HotspotSetupPickWifiScreen::navSkip::address:', address)
       try {
         const hotspot = await getHotspotDetails(hotspotAddress)
-        // console.log(
-        //   'HotspotSetupPickWifiScreen::navSkip::hotspot:',
-        //   hotspotAddress,
-        //   hotspot,
-        // )
 
         if (hotspot && hotspot.owner === address) {
           navigation.replace('OwnedHotspotErrorScreen')
         } else if (hotspot && hotspot.owner !== address) {
           navigation.replace('NotHotspotOwnerErrorScreen')
         } else {
-          // console.log(
-          //   'HotspotSetupPickWifiScreen::navSkip::addGatewayTxn:',
-          //   hotspotType,
-          //   addGatewayTxn,
-          // )
           navigation.navigate('HotspotTxnsProgressScreen', {
             gatewayAction,
             hotspotAddress,
             addGatewayTxn,
-            // hotspotType,
           })
         }
       } catch (error) {
-        console.log(
-          'HotspotSetupPickWifiScreen::getHotspotDetails::error:',
-          hotspotAddress,
-          error,
-        )
-        // navigation.navigate('HotspotSetupEnableLocationScreen', {
-        //   hotspotAddress,
-        //   addGatewayTxn,
-        //   hotspotType,
-        //   gatewayAction,
-        // })
-        navigation.navigate('HotspotTxnsProgressScreen', {
-          gatewayAction,
+        navigation.navigate('HotspotSetupEnableLocationScreen', {
           hotspotAddress,
           addGatewayTxn,
-          // hotspotType,
+          hotspotType,
+          gatewayAction,
         })
       }
     }
-  }, [gatewayAction, rootNav, hotspotAddress, navigation, addGatewayTxn])
+  }, [
+    gatewayAction,
+    rootNav,
+    token,
+    isViewOnly,
+    showOKCancelAlert,
+    hotspotAddress,
+    navigation,
+    addGatewayTxn,
+    hotspotType,
+  ])
 
   const navNext = (network: string) => {
     navigation.navigate('HotspotSetupWifiFormScreen', {

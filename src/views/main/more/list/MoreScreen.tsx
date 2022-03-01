@@ -11,7 +11,7 @@ import { Alert, SectionList } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { isEqual } from 'lodash'
-import { WalletLink } from '@helium/react-native-sdk'
+// import { WalletLink } from '@helium/react-native-sdk'
 import { useAsync } from 'react-async-hook'
 import Config from 'react-native-config'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
@@ -58,13 +58,13 @@ const MoreScreen = () => {
   const { showOKCancelAlert } = useAlert()
 
   useAsync(async () => {
-    const token = await getSecureItem('user.walletLinkToken')
-    if (!token) return ''
-    const parsedToken = WalletLink.parseWalletLinkToken(token)
+    const fullAddress = await getSecureItem('user.address')
+    console.log('fullAddress', fullAddress)
+    if (!fullAddress) return ''
 
     const truncatedAddress = [
-      parsedToken.address.slice(0, 8),
-      parsedToken.address.slice(-8),
+      fullAddress.slice(0, 8),
+      fullAddress.slice(-8),
     ].join('...')
     setAddress(truncatedAddress)
   }, [])

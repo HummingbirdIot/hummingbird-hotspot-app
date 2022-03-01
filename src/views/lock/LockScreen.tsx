@@ -31,7 +31,9 @@ const LockScreen = () => {
     if (shouldLock) {
       setLocked(false, () => {
         dispatch(appSlice.actions.lock(false))
-        rootNav.goBack()
+        if (rootNav.canGoBack()) {
+          rootNav.goBack()
+        }
       })
     } else {
       moreNav.navigate('MoreScreen', {
@@ -63,7 +65,7 @@ const LockScreen = () => {
   const handleCancel = useCallback(() => {
     if (shouldLock) {
       handleSignOut()
-    } else {
+    } else if (rootNav.canGoBack()) {
       rootNav.goBack()
     }
   }, [handleSignOut, rootNav, shouldLock])

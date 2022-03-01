@@ -52,7 +52,6 @@ const DashboardIconItem = ({
   return (
     <Box flex={1} paddingHorizontal="s">
       <TouchableOpacityBox
-        width={70}
         height={70}
         backgroundColor={
           colorScheme === 'light' ? 'primaryBackground' : 'surface'

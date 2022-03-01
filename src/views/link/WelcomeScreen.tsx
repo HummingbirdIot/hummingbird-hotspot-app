@@ -50,7 +50,7 @@ const WelcomeScreen = () => {
   )
 
   return (
-    <SafeAreaBox flex={1}>
+    <SafeAreaBox flex={1} backgroundColor="primaryBackground">
       <Box flex={1} alignItems="center">
         <Box
           backgroundColor="surface"
@@ -68,6 +68,7 @@ const WelcomeScreen = () => {
 
           <TextTransform
             variant="subtitle1"
+            letterSpacing={3}
             marginVertical="xl"
             textAlign="center"
             i18nKey="account_setup.welcome.subtitle"

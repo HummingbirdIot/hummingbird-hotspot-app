@@ -11,7 +11,7 @@ export type HotspotConnectStatus =
   | 'service_unavailable'
   | 'details_fetch_failure'
 
-type GatewayAction =
+export type GatewayAction =
   | 'addGateway'
   | 'assertLocation'
   | 'assertAntenna'
@@ -139,6 +139,9 @@ export type HotspotSetupStackParamList = {
     gatewayTxn?: string
     gatewayAddress?: string
     cancelled?: number
+  }
+  HotspotTxnsDemoScreen: {
+    action: Exclude<GatewayAction, 'setWiFi'>
   }
 }
 

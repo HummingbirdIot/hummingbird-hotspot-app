@@ -158,10 +158,10 @@ const App = () => {
       ) : (
         <StatusBar
           translucent
-          backgroundColor={colorAdaptedTheme.colors.primaryBackground}
+          barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
         />
       ),
-    [colorAdaptedTheme],
+    [colorScheme],
   )
 
   const elementsTheme = useElementsTheme()

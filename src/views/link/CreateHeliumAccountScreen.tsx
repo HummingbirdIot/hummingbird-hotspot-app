@@ -26,7 +26,9 @@ const CreateAccount = () => {
           `https://apps.apple.com/${locale}/app/${app.name}/id${app.appStoreId}`,
         )
       }
-      nav.goBack()
+      if (nav.canGoBack()) {
+        nav.goBack()
+      }
     },
     [nav],
   )
