@@ -4,12 +4,12 @@ import { WalletLink } from '@helium/react-native-sdk'
 import { Linking, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 // import SafeAreaBox from '../../components/SafeAreaBox'
-import Text from '../../components/Text'
-import Box from '../../components/Box'
-import TouchableOpacityBox from '../../components/TouchableOpacityBox'
-import { locale } from '../../utils/i18n'
-import BackScreen from '../../components/BackScreen'
-import { RootNavigationProp } from '../navigation/naviTypes'
+import Text from '../../../components/Text'
+import Box from '../../../components/Box'
+import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
+import { locale } from '../../../utils/i18n'
+import BackScreen from '../../../components/BackScreen'
+import { RootNavigationProp } from '../../navigation/naviTypes'
 
 const CreateAccount = () => {
   const { t } = useTranslation()

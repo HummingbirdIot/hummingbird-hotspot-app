@@ -5,12 +5,12 @@ import { Linking, Platform } from 'react-native'
 import { getBundleId } from 'react-native-device-info'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Text from '../../components/Text'
+import Text from '../../../components/Text'
 import { OnboardingNavigationProp } from './onboardingTypes'
-import Box from '../../components/Box'
-import TextTransform from '../../components/TextTransform'
-import SafeAreaBox from '../../components/SafeAreaBox'
-import TouchableOpacityBox from '../../components/TouchableOpacityBox'
+import Box from '../../../components/Box'
+import TextTransform from '../../../components/TextTransform'
+import SafeAreaBox from '../../../components/SafeAreaBox'
+import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
 
 const WelcomeScreen = () => {
   const { t } = useTranslation()

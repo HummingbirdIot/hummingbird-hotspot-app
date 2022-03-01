@@ -14,7 +14,7 @@ import appSlice from '../../../store/app/appSlice'
 import OverviewScreen from '../../main/overview/OverviewScreen'
 import HotspotsScreen from '../../main/hotspots/HotspotsScreen'
 // import ExplorerScreen from '../../main/explorer/ExplorerScreen'
-import MoreNavigator from '../../main/more/MoreNavigator'
+import MoreNavigator from '../../main/settings/MoreNavigator'
 
 const MainTab = createBottomTabNavigator()
 
