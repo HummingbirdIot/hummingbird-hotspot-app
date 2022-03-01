@@ -20,7 +20,7 @@ import { RootState } from '../store/rootReducer'
 
 export const useFees = () => {
   const { currentOraclePrice, predictedOraclePrices } = useSelector(
-    (state: RootState) => state.helium,
+    (state: RootState) => state.hnt,
   )
 
   const feeToHNT = useCallback(

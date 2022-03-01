@@ -34,14 +34,12 @@ import { getSecureItem } from '../../../../store/app/secureData'
 import { clearMapCache } from '../../../../utils/mapUtils'
 import Articles from '../../../../constants/articles'
 import useAlert from '../../../../utils/hooks/useAlert'
-import Security from '../../../../assets/images/security.svg'
-import Learn from '../../../../assets/images/learn.svg'
-// import Contact from '../../../../assets/images/account.svg'
-import Account from '../../../../assets/images/account.svg'
+import Security from '../../../../assets/images/settings/security.svg'
+import Learn from '../../../../assets/images/settings/learn.svg'
+import Contact from '../../../../assets/images/settings/contact.svg'
+import Configuration from '../../../../assets/images/settings/config.svg'
 import { SUPPORTED_CURRENCIES } from '../../../../utils/hooks/useCurrency'
 import TabViewContainer from '../../../../widgets/main/TabViewContainer'
-
-const Contact = Account
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
 const MoreScreen = () => {
@@ -236,7 +234,7 @@ const MoreScreen = () => {
       },
       {
         title: t('more.sections.app.title'),
-        icon: <Account />,
+        icon: <Configuration />,
         data: [
           {
             title: t('more.sections.app.language'),

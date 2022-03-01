@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import CurrencyFormatter from 'react-native-currency-format'
 import { OraclePrice } from '@helium/http'
-import { fetchCurrentOraclePrice } from '../../store/helium/heliumSlice'
+import { fetchCurrentOraclePrice } from '../../store/hnt/hntSlice'
 import { RootState } from '../../store/rootReducer'
 import { useAppDispatch } from '../../store/store'
 import { currencyType as defaultCurrencyType } from '../i18n'
@@ -59,7 +59,7 @@ const useCurrency = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const currentPrices = useSelector(
-    (state: RootState) => state.helium.currentPrices,
+    (state: RootState) => state.hnt.currentPrices,
     isEqual,
   )
   const currencyType =

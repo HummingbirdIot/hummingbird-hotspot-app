@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import HeliumActionSheet from './HeliumActionSheet'
+import HeliumActionSheet from '../widgets/modals/ActionSheetModal'
 import Box from './Box'
 import Text from './Text'
 import TouchableOpacityBox from './TouchableOpacityBox'

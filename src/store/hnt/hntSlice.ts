@@ -77,7 +77,7 @@ export const fetchCurrentPrices = createAsyncThunk(
 )
 
 // This slice contains global helium data not specifically related to the current user
-const heliumSlice = createSlice({
+const hntSlice = createSlice({
   name: 'helium',
   initialState,
   reducers: {},
@@ -118,4 +118,4 @@ const heliumSlice = createSlice({
   },
 })
 
-export default heliumSlice
+export default hntSlice

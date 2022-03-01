@@ -13,7 +13,7 @@ import Box from '../../../components/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import Text from '../../../components/Text'
 import useCurrency from '../../../utils/hooks/useCurrency'
-import { fetchCurrentPrices } from '../../../store/helium/heliumSlice'
+import { fetchCurrentPrices } from '../../../store/hnt/hntSlice'
 import { useAppDispatch } from '../../../store/store'
 import { fetchTxnsPending } from '../../../store/txns/txnsHelper'
 import RewardsStatistics from '../../../widgets/main/RewardsStatistics'
@@ -30,7 +30,7 @@ const OverviewScreen = ({ navigation }: any) => {
   // const spacing = useSpacing()
   // const padding = useMemo(() => 'm' as Spacing, [])
   const currentPrices = useSelector(
-    (state: RootState) => state.helium.currentPrices,
+    (state: RootState) => state.hnt.currentPrices,
     isEqual,
   )
   const { lastHNTBlance, lastFiatBlance } = useSelector(

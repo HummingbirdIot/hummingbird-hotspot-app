@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import { SvgProps } from 'react-native-svg'
-import { useColors } from '../theme/themeHooks'
-import Text from './Text'
-import TouchableOpacityBox from './TouchableOpacityBox'
+import { useColors } from '../../theme/themeHooks'
+import Text from '../../components/Text'
+import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 
 export type HeliumActionSheetItemType = {
   label: string

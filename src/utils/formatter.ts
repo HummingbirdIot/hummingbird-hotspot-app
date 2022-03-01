@@ -29,7 +29,7 @@ export const formatHotspotName = (name: string) => {
 }
 
 export const useMaker = () => {
-  const makers = useSelector((state: RootState) => state.helium.makers)
+  const makers = useSelector((state: RootState) => state.hnt.makers)
   const getMakerName = (payer: B58Address | undefined) => {
     if (payer === HUMMINGBIRD_MAKER_ADDRESS) {
       return 'Hummingbird'

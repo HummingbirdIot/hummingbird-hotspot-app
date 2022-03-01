@@ -10,8 +10,8 @@ import TouchableOpacityBox from '../../../../components/TouchableOpacityBox'
 import { useColors } from '../../../../theme/themeHooks'
 import CarotRight from '../../../../assets/images/carot-right.svg'
 import LinkImg from '../../../../assets/images/link.svg'
-import HeliumActionSheet from '../../../../components/HeliumActionSheet'
-import { HeliumActionSheetItemType } from '../../../../components/HeliumActionSheetItem'
+import HeliumActionSheet from '../../../../widgets/modals/ActionSheetModal'
+import { HeliumActionSheetItemType } from '../../../../widgets/modals/ActionSheetModalItem'
 
 export type SelectProps = {
   onDonePress?: () => void

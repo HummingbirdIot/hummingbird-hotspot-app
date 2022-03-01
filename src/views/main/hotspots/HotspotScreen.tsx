@@ -41,6 +41,7 @@ import {
 } from '../../../utils/formatter'
 import { RootStackParamList } from '../../navigation/naviTypes'
 import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
+import BottomActionsModal from '../../../widgets/modals/BottomActionsModal'
 
 type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 
@@ -343,7 +344,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             assertLocation={assertLocation}
           />
         </Box>
-        <Box flex={12}>
+        <Box flex={13}>
           {hotspotData ? (
             <Box flex={1}>
               <Box
@@ -471,7 +472,7 @@ const HotspotDetailScreen = ({ navigation }: any) => {
             </Box>
           )}
         </Box>
-        <BottomSheet
+        {/* <BottomSheet
           isVisible={isVisible}
           containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
         >
@@ -487,7 +488,14 @@ const HotspotDetailScreen = ({ navigation }: any) => {
               </ListItem.Content>
             </ListItem>
           ))}
-        </BottomSheet>
+        </BottomSheet> */}
+        <BottomActionsModal
+          title="AAAAA"
+          data={[]}
+          modalVisible={isVisible}
+          handleClose={() => setIsVisible(false)}
+          maxModalHeight={0}
+        />
       </Box>
     </DetailViewContainer>
   )

@@ -42,12 +42,6 @@ const ListItem = ({
     <ListItemComponent bottomDivider>
       <Avatar
         rounded
-        // source={{
-        //   uri:
-        //     Platform.OS === 'ios'
-        //       ? icon || ''
-        //       : 'asset:/images/add_hotspot.svg',
-        // }}
         containerStyle={{
           width: 31,
           height: 31,

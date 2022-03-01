@@ -119,23 +119,21 @@ export const useDescription = (
     }
     feeOrAmount = `${symbol} ${payments[0].amount}`
   } else if (fee) {
-    const symbol = '-'
-    // if (payer === address) {
-    //   symbol = '-'
-    // }
-    if (fee.floatBalance) {
-      feeOrAmount = `${symbol} ${
-        ((stakingFee?.floatBalance || 0) + fee.floatBalance).toString() || '0'
-      } DC`
-    } else {
-      feeOrAmount = `${symbol} ${
-        (Number(stakingFee || 0) + fee).toString() || '0'
-      } DC`
+    if (payer === address) {
+      const symbol = '-'
+      if (fee.floatBalance) {
+        feeOrAmount = `${symbol} ${
+          ((stakingFee?.floatBalance || 0) + fee.floatBalance).toString() || '0'
+        } DC`
+      } else {
+        feeOrAmount = `${symbol} ${
+          (Number(stakingFee || 0) + fee).toString() || '0'
+        } DC`
+      }
     }
     // console.log('balance:', feeOrAmount)
   } else if (totalAmount) {
     feeOrAmount = `+ ${totalAmount.floatBalance.toString() || '0'} HNT`
-    // console.log('balance:', feeOrAmount)
   } else if (
     addressType === 'hotspot' &&
     challenger !== address &&

@@ -3,7 +3,7 @@ import { persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import appSlice from './app/appSlice'
 import locationSlice from './app/locationSlice'
-import heliumSlice from './helium/heliumSlice'
+import hntSlice from './hnt/hntSlice'
 import hotspotsSlice from './data/hotspotsSlice'
 import rewardsSlice from './data/rewardsSlice'
 import txnsSlice from './txns/txnsSlice'
@@ -37,7 +37,7 @@ const rootReducer = combineReducers({
   // hotspots: persistReducer(config.hotspots, hotspotsSlice.reducer),
   hotspots: hotspotsSlice.reducer,
   rewards: rewardsSlice.reducer,
-  helium: heliumSlice.reducer,
+  hnt: hntSlice.reducer,
   txns: txnsSlice.reducer,
 })
 
