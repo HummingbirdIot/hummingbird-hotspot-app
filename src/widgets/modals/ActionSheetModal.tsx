@@ -8,9 +8,9 @@ import { StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FlatList } from 'react-native-gesture-handler'
 import { Colors, Theme } from '../../theme/theme'
-import HeliumActionSheetItem, {
-  HeliumActionSheetItemHeight,
-  HeliumActionSheetItemType,
+import ActionSheetItem, {
+  ActionSheetItemHeight,
+  ActionSheetItemType,
 } from './ActionSheetModalItem'
 import { useColors } from '../../theme/themeHooks'
 import Text, { TextProps } from '../../components/Text'
@@ -20,7 +20,7 @@ import useVisible from '../../utils/hooks/useVisible'
 import BottomModal from './BottomModal'
 
 type Props = BoxProps<Theme> & {
-  data: Array<HeliumActionSheetItemType>
+  data: Array<ActionSheetItemType>
   selectedValue?: string | number
   onValueSelected?: (itemValue: string | number, itemIndex: number) => void
   title?: string
@@ -35,9 +35,9 @@ type Props = BoxProps<Theme> & {
   closeOnSelect?: boolean
   maxModalHeight?: number
 }
-type ListItem = { item: HeliumActionSheetItemType; index: number }
+type ListItem = { item: ActionSheetItemType; index: number }
 
-const HeliumActionSheet = ({
+const ActionSheet = ({
   data: propsData,
   selectedValue,
   onValueSelected,
@@ -56,7 +56,7 @@ const HeliumActionSheet = ({
   const insets = useSafeAreaInsets()
   const [modalVisible, setModalVisible] = useState(false)
   const [sheetHeight, setSheetHeight] = useState(0)
-  const [data, setData] = useState<Array<HeliumActionSheetItemType>>([])
+  const [data, setData] = useState<Array<ActionSheetItemType>>([])
   const { t } = useTranslation()
   const colors = useColors()
 
@@ -66,7 +66,7 @@ const HeliumActionSheet = ({
 
   useEffect(() => {
     let nextSheetHeight =
-      data.length * HeliumActionSheetItemHeight + 156 + (insets?.bottom || 0)
+      data.length * ActionSheetItemHeight + 156 + (insets?.bottom || 0)
     if (maxModalHeight && nextSheetHeight > maxModalHeight) {
       nextSheetHeight = maxModalHeight
     }
@@ -117,7 +117,7 @@ const HeliumActionSheet = ({
   const renderItem = useCallback(
     ({ index, item: { label, value, Icon, action } }: ListItem) => {
       return (
-        <HeliumActionSheetItem
+        <ActionSheetItem
           label={label}
           value={value}
           onPress={handleItemSelected(value, index, action)}
@@ -232,4 +232,4 @@ const styles = StyleSheet.create({
   divider: { borderBottomColor: '#F0F0F5' },
 })
 
-export default memo(HeliumActionSheet)
+export default memo(ActionSheet)

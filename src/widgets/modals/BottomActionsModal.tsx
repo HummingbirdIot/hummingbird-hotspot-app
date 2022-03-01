@@ -1,6 +1,5 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import Text from '../../components/Text'
@@ -11,11 +10,6 @@ import BottomModal from './BottomModal'
 type ListItem = {
   label: string
   action: () => void
-}
-
-export type IndexedListItem = {
-  index: number
-  item: ListItem
 }
 
 const BottomActionsModal = ({
@@ -36,19 +30,8 @@ const BottomActionsModal = ({
 
   const [sheetHeight, setSheetHeight] = useState(0)
 
-  const renderItem = useCallback(
-    ({ index, item: { label, action } }: IndexedListItem) => {
-      return (
-        <Box key={index} height={50}>
-          <Text onPress={action}>{label}</Text>
-        </Box>
-      )
-    },
-    [],
-  )
-
   useEffect(() => {
-    let nextSheetHeight = data.length * 44 + 156 + (insets?.bottom || 0)
+    let nextSheetHeight = data.length * 70 + 156 + (insets?.bottom || 0)
     if (maxModalHeight && nextSheetHeight > maxModalHeight) {
       nextSheetHeight = maxModalHeight
     }
@@ -75,21 +58,35 @@ const BottomActionsModal = ({
     )
   }, [handleClose, t])
 
-  const keyExtractor = useCallback((_, index) => index, [])
-
   return (
     <BottomModal
       title={title}
       modalVisible={modalVisible}
       handleClose={handleClose}
-      bodyHeight={sheetHeight}
+      contentHeight={sheetHeight}
       footer={footer}
     >
-      <FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-      />
+      <Box>
+        {data.map((item, index) => {
+          const { label, action } = item
+          return (
+            <Box
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              height={60}
+              backgroundColor="primaryBackground"
+              borderBottomWidth={10}
+              borderBottomColor="surface"
+              borderRadius="m"
+              justifyContent="center"
+            >
+              <Text variant="body2" textAlign="center" onPress={action}>
+                {label}
+              </Text>
+            </Box>
+          )
+        })}
+      </Box>
     </BottomModal>
   )
 }

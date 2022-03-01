@@ -5,18 +5,18 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
-import Text, { TextProps } from '../../../../components/Text'
-import TouchableOpacityBox from '../../../../components/TouchableOpacityBox'
-import { useColors } from '../../../../theme/themeHooks'
-import CarotRight from '../../../../assets/images/carot-right.svg'
-import LinkImg from '../../../../assets/images/link.svg'
-import HeliumActionSheet from '../../../../widgets/modals/ActionSheetModal'
-import { HeliumActionSheetItemType } from '../../../../widgets/modals/ActionSheetModalItem'
+import Text, { TextProps } from '../../components/Text'
+import TouchableOpacityBox from '../../components/TouchableOpacityBox'
+import { useColors } from '../../theme/themeHooks'
+import CarotRight from '../../assets/images/carot-right.svg'
+import LinkImg from '../../assets/images/link.svg'
+import ActionSheet from '../modals/ActionSheetModal'
+import { ActionSheetItemType } from '../modals/ActionSheetModalItem'
 
 export type SelectProps = {
   onDonePress?: () => void
   onValueSelect: (value: ReactText, index: number) => void
-  items: HeliumActionSheetItemType[]
+  items: ActionSheetItemType[]
 }
 
 export type MoreListItemType = {
@@ -107,7 +107,7 @@ const MoreListItem = ({
         />
       )}
       {select && (
-        <HeliumActionSheet
+        <ActionSheet
           data={select.items}
           selectedValue={value as string}
           onValueSelected={select.onValueSelect}

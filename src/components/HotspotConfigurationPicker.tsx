@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import HeliumActionSheet from '../widgets/modals/ActionSheetModal'
+import ActionSheet from '../widgets/modals/ActionSheetModal'
 import Box from './Box'
 import Text from './Text'
 import TouchableOpacityBox from './TouchableOpacityBox'
@@ -139,7 +139,7 @@ const HotspotConfigurationPicker = ({
       borderWidth={outline ? 1 : 0}
       borderColor="primary"
     >
-      <HeliumActionSheet
+      <ActionSheet
         title={t('antennas.onboarding.select')}
         textProps={{ variant: 'body1', fontSize: 16, color: 'black' }}
         initialValue={t('antennas.onboarding.select')}

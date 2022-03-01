@@ -8,7 +8,7 @@ import {
   setSecureItem,
   signOut,
 } from './secureData'
-import { Intervals } from '../../views/main/more/list/useAuthIntervals'
+import { Intervals } from '../../utils/hooks/useAuthIntervals'
 import { Loading } from '../txns/txnsTypes'
 import addressMap from './addressMap'
 // import OneSignal from 'react-native-onesignal'

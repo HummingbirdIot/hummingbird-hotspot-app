@@ -4,25 +4,25 @@ import { useColors } from '../../theme/themeHooks'
 import Text from '../../components/Text'
 import TouchableOpacityBox from '../../components/TouchableOpacityBox'
 
-export type HeliumActionSheetItemType = {
+export type ActionSheetItemType = {
   label: string
   labelShort?: string
   value: string | number
   Icon?: React.FC<SvgProps>
   action?: () => void
 }
-type Props = HeliumActionSheetItemType & {
+type Props = ActionSheetItemType & {
   onPress: () => void
   selected: boolean
 }
 
-export const HeliumActionSheetItemHeight = 40
+export const ActionSheetItemHeight = 40
 
-const HeliumActionSheetItem = ({ label, onPress, selected, Icon }: Props) => {
+const ActionSheetItem = ({ label, onPress, selected, Icon }: Props) => {
   const { primary, secondary } = useColors()
   return (
     <TouchableOpacityBox
-      height={HeliumActionSheetItemHeight}
+      height={ActionSheetItemHeight}
       onPress={onPress}
       alignItems="center"
       flexDirection="row"
@@ -42,4 +42,4 @@ const HeliumActionSheetItem = ({ label, onPress, selected, Icon }: Props) => {
   )
 }
 
-export default memo(HeliumActionSheetItem)
+export default memo(ActionSheetItem)

@@ -3,22 +3,22 @@ import { Avatar, ListItem, Text } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { Hotspot } from '@helium/http'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
-import ThemedText from '../../../components/Text'
-import Box from '../../../components/Box'
-import { locale } from '../../../utils/i18n'
+import ThemedText from '../../components/Text'
+import Box from '../../components/Box'
+import { locale } from '../../utils/i18n'
 import {
   formatHotspotNameArray,
   formatHotspotShortName,
   useMaker,
-} from '../../../utils/formatter'
+} from '../../utils/formatter'
 
-import Maker from '../../../assets/images/maker.svg'
-import RewardsScale from '../../../assets/images/rewardsScale.svg'
-import Location from '../../../assets/images/location.svg'
-import Signal from '../../../assets/images/signal.svg'
-import Elevation from '../../../assets/images/elevation.svg'
-import { RootNavigationProp } from '../../navigation/naviTypes'
-import { useColors } from '../../../theme/themeHooks'
+import Maker from '../../assets/images/maker.svg'
+import RewardsScale from '../../assets/images/rewardsScale.svg'
+import Location from '../../assets/images/location.svg'
+import Signal from '../../assets/images/signal.svg'
+import Elevation from '../../assets/images/elevation.svg'
+import { RootNavigationProp } from '../../views/navigation/naviTypes'
+import { useColors } from '../../theme/themeHooks'
 
 const HotspotListItem = ({
   hotspot,

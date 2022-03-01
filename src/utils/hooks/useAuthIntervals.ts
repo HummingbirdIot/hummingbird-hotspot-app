@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { HeliumActionSheetItemType } from '../../../../components/HeliumActionSheetItem'
+import { ActionSheetItemType } from '../../widgets/modals/ActionSheetModalItem'
 
 const MILLIS_IN_SECOND = 1000
 const SECONDS_IN_MINUTE = 60
@@ -42,5 +42,5 @@ export default () => {
       label: t('more.sections.security.authIntervals.after_4_hr'),
       value: Intervals.FOUR_HOURS,
     },
-  ] as HeliumActionSheetItemType[]
+  ] as ActionSheetItemType[]
 }

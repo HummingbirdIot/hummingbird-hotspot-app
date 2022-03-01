@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
-import { RootState } from 'src/store/rootReducer'
-import { B58Address } from 'src/store/txns/txnsTypes'
+import { RootState } from '../store/rootReducer'
+import { B58Address } from '../store/txns/txnsTypes'
 
 export const HELIUM_OLD_MAKER_ADDRESS =
   '14fzfjFcHpDR1rTH8BNPvSi5dKBbgxaDnmsVPbCjuq9ENjpZbxh'

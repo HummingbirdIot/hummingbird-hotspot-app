@@ -1,6 +1,8 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import { B58Address } from 'src/store/txns/txnsTypes'
+import { Hotspot } from '@helium/http'
+import { B58Address } from '../../store/txns/txnsTypes'
+import { GatewayAction } from './features/hotspotSetupTypes'
 
 export type MainTabType = 'Overview' | 'Hotspots' | 'Explorer' | 'More'
 
@@ -27,7 +29,20 @@ export type RootStackParamList = {
     lock?: boolean
   }
   HotspotSetup: undefined
-  HotspotAssert: undefined
+  HotspotAssert: {
+    hotspot: Hotspot
+    hotspotAddress: B58Address
+    locationName?: string
+    coords?: [number, number]
+    gain?: number
+    elevation?: number
+    currentLocation?: string
+    gatewayAction: GatewayAction
+  }
+  HotspotSetWiFi: {
+    hotspotAddress: B58Address
+    gatewayAction: GatewayAction
+  }
   ScanStack: undefined
   ActivityScreen: undefined
   HotspotScreen: {

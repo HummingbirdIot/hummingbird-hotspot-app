@@ -10,7 +10,7 @@ import { RootState } from '../../../store/rootReducer'
 import useMount from '../../../utils/hooks/useMount'
 
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import HotspotListItem from './HotspotListItem'
+import HotspotListItem from '../../../widgets/hotspots/HotspotListItem'
 import TabViewContainer from '../../../widgets/main/TabViewContainer'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
