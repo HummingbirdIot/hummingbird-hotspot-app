@@ -3,11 +3,9 @@ import { ScrollView } from 'react-native'
 import { ButtonGroup } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Hotspot, Witness } from '@helium/http'
-// import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Box from '../../components/Box'
-import ThemedText from '../../components/Text'
+import Text from '../../components/Text'
 import ActivitiesList from '../main/ActivitiesList/ListContainer'
-// import { getSecureItem, setSecureItem } from '../../utils/secureAccount'
 import RewardsStatistics from '../main/RewardsStatistics'
 import { formatHotspotName } from '../../utils/formatter'
 
@@ -18,7 +16,6 @@ const HotspotDetails = ({
   hotspot: Hotspot
   witnessed: Witness[]
 }) => {
-  // const colorScheme: ColorSchemeName = useColorScheme()
   const insets = useSafeAreaInsets()
   const [selectedIndex, updateIndex] = useState(0)
 
@@ -73,19 +70,19 @@ const HotspotDetails = ({
           >
             {witnessed.map((witness) => (
               <Box key={witness.address}>
-                <ThemedText textAlign="center" color="gray">
+                <Text textAlign="center" color="gray">
                   {formatHotspotName(witness.name || 'unknow-hotspot-name')}
-                </ThemedText>
-                <ThemedText textAlign="center" color="gray">
+                </Text>
+                <Text textAlign="center" color="gray">
                   Location: {witness.geocode?.longStreet},{' '}
                   {witness.geocode?.longCity}, {witness.geocode?.shortCountry}
-                </ThemedText>
-                <ThemedText textAlign="center" color="gray">
+                </Text>
+                <Text textAlign="center" color="gray">
                   RewardScale: {witness.rewardScale}
-                </ThemedText>
-                <ThemedText textAlign="center" color="gray">
+                </Text>
+                <Text textAlign="center" color="gray">
                   --------------------------------------
-                </ThemedText>
+                </Text>
               </Box>
             ))}
           </Box>
@@ -98,9 +95,9 @@ const HotspotDetails = ({
             borderRadius: 5,
           }}
         >
-          <ThemedText textAlign="center" color="gray">
+          <Text textAlign="center" color="gray">
             Empty
-          </ThemedText>
+          </Text>
         </Box>
       ),
     [witnessed],

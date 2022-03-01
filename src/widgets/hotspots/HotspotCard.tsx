@@ -5,7 +5,7 @@ import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { SvgProps } from 'react-native-svg'
 import { TFunctionResult } from 'i18next'
 import Box from '../../components/Box'
-import ThemedText from '../../components/Text'
+import Text from '../../components/Text'
 import IconLocation from '../../assets/images/location.svg'
 import IconMaker from '../../assets/images/maker.svg'
 import IconElevation from '../../assets/images/gain.svg'
@@ -20,31 +20,33 @@ import { truncateAddress, useMaker } from '../../utils/formatter'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type text = string | number | TFunctionResult
-const HotspotCardItem = ({
+export const HotspotCardItem = ({
   Icon,
+  iconColor,
   children,
   flex,
   right,
 }: {
   Icon: React.FC<SvgProps>
+  iconColor?: string
   children: text | text[]
   flex?: number
   right?: boolean
 }) => (
   <>
-    <Icon width={10} height={10} />
-    <ThemedText
+    <Icon width={10} height={10} color={iconColor || undefined} />
+    <Text
       flex={flex}
       variant="body2"
       marginLeft="xs"
       marginRight={right ? undefined : 'm'}
     >
       {children}
-    </ThemedText>
+    </Text>
   </>
 )
 
-const HotspotCardGroup = ({ children }: { children: Element[] }) => (
+export const HotspotCardGroup = ({ children }: { children: Element[] }) => (
   <Box
     flexDirection="row"
     justifyContent="flex-start"
@@ -76,20 +78,20 @@ const HotspotCard = ({
     >
       <Box flexDirection="row" justifyContent="flex-start" alignItems="center">
         <IconAddress width={20} color={blueMain} height={20} />
-        <ThemedText
+        <Text
           style={{
             fontSize: 20,
             color: blueMain,
           }}
         >
           {truncateAddress(hotspot.address, 16)}
-        </ThemedText>
+        </Text>
       </Box>
       <HotspotCardGroup>
         <IconLocation width={10} height={10} color={blueMain} />
-        <ThemedText flex={1} variant="body2" marginLeft="xs" marginRight="m">
+        <Text flex={1} variant="body2" marginLeft="xs" marginRight="m">
           {locationName}
-        </ThemedText>
+        </Text>
         <HotspotCardItem Icon={IconRewardsScale} right>
           {hotspot.rewardScale?.toFixed(5) || '0.00'}
         </HotspotCardItem>

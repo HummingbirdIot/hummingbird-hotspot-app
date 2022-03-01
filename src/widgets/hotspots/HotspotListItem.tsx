@@ -3,8 +3,6 @@ import { Avatar, ListItem, Text } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { Hotspot } from '@helium/http'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
-import ThemedText from '../../components/Text'
-import Box from '../../components/Box'
 import { locale } from '../../utils/i18n'
 import {
   formatHotspotNameArray,
@@ -19,6 +17,7 @@ import Signal from '../../assets/images/signal.svg'
 import Elevation from '../../assets/images/elevation.svg'
 import { RootNavigationProp } from '../../views/navigation/naviTypes'
 import { useColors } from '../../theme/themeHooks'
+import { HotspotCardGroup, HotspotCardItem } from './HotspotCard'
 
 const HotspotListItem = ({
   hotspot,
@@ -122,58 +121,29 @@ const HotspotListItem = ({
             )
           })}
         </ListItem.Title>
-        <Box
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          marginTop="xs"
-          opacity={hotspot.address === undefined ? 0 : 100}
-        >
-          <Box flex={1} flexDirection="row" alignItems="center">
-            <Maker width={10} height={10} />
-            <ThemedText marginLeft="s" color="secondaryText">
-              {getMakerName(hotspot.payer)}
-            </ThemedText>
-          </Box>
-          <Box flex={1} flexDirection="row-reverse" alignItems="center">
-            <ThemedText marginLeft="s" color="secondaryText">
-              {hotspot.rewardScale?.toFixed(5) || '0.00'}
-            </ThemedText>
-            <RewardsScale width={10} height={10} />
-          </Box>
-        </Box>
-
-        <Box
-          flexDirection="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          marginTop="xs"
-          opacity={hotspot.address === undefined ? 0 : 100}
-        >
-          <Box flex={8} flexDirection="row" alignItems="center">
-            <Location width={10} height={10} color={blueMain} />
-            <ThemedText variant="body2" marginLeft="s" color="secondaryText">
-              {`${hotspot?.geocode?.longCity}, ${hotspot?.geocode?.shortCountry}`}
-            </ThemedText>
-          </Box>
-          <Box flex={3} flexDirection="row" alignItems="center">
-            <Signal width={10} height={10} color={blueMain} />
-
-            <ThemedText variant="body2" marginLeft="s" color="secondaryText">
-              {((hotspot?.gain || 0) / 10).toLocaleString(locale, {
-                maximumFractionDigits: 1,
-              }) + t('antennas.onboarding.dbi')}
-            </ThemedText>
-          </Box>
-          <Box flex={3} flexDirection="row-reverse" alignItems="center">
-            <ThemedText variant="body2" marginLeft="s" color="secondaryText">
-              {t('generic.meters', {
-                distance: hotspot?.elevation || 0,
-              })}
-            </ThemedText>
-            <Elevation width={10} height={10} />
-          </Box>
-        </Box>
+        <HotspotCardGroup>
+          <HotspotCardItem Icon={Maker} flex={1}>
+            {getMakerName(hotspot.payer)}
+          </HotspotCardItem>
+          <HotspotCardItem Icon={RewardsScale} right>
+            {hotspot.rewardScale?.toFixed(5) || '0.00'}
+          </HotspotCardItem>
+        </HotspotCardGroup>
+        <HotspotCardGroup>
+          <HotspotCardItem flex={7} Icon={Location} iconColor={blueMain}>
+            {`${hotspot?.geocode?.longCity}, ${hotspot?.geocode?.shortCountry}`}
+          </HotspotCardItem>
+          <HotspotCardItem flex={3} Icon={Signal} iconColor={blueMain}>
+            {((hotspot?.gain || 0) / 10).toLocaleString(locale, {
+              maximumFractionDigits: 1,
+            }) + t('antennas.onboarding.dbi')}
+          </HotspotCardItem>
+          <HotspotCardItem Icon={Elevation} iconColor={blueMain} right>
+            {t('generic.meters', {
+              distance: hotspot?.elevation || 0,
+            })}
+          </HotspotCardItem>
+        </HotspotCardGroup>
       </ListItem.Content>
     </ListItem>
   )
