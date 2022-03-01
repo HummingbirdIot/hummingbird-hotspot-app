@@ -12,7 +12,6 @@ import {
   getTxnTypeName,
 } from '../../../utils/txns'
 import Box from '../../../components/Box'
-import { AddressType, HttpTransaction } from '../../../store/txns/txnsTypes'
 import { useDescription } from './itemFormatter'
 
 /**
@@ -71,7 +70,7 @@ const getDuration = (t: number) => {
 
 const ListItem = ({ activity }: { activity: PendingTransaction }) => {
   const { hash, createdAt, txn, type } = activity
-  const icon = getTxnIconPath(activity)
+  const icon = getTxnIconPath({ type })
   const color = getTxnTypeColor(type)
   const { description, feeOrAmount } = useDescription('', txn, {})
 

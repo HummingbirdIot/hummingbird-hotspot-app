@@ -127,7 +127,7 @@ const OverviewScreen = ({ navigation }: any) => {
                     </Text>
                   }
                   width={240}
-                  height={70}
+                  height={60}
                   backgroundColor={surfaceContrast}
                   withOverlay={false}
                   highlightColor="transparent"

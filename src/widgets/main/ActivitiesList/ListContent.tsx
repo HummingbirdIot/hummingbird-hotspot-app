@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
-// import { Avatar, ListItem, Text } from 'react-native-elements'
 import { ActivityIndicator, FlatList } from 'react-native'
 import { PendingTransaction } from '@helium/http'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Box from '../../../components/Box'
 import {
   AddressType,
@@ -34,6 +34,7 @@ const ListContent = ({
   const [activityList, setActivityList] = useState<
     Array<HttpTransaction & PendingTransaction>
   >(activities ? activities.slice(0, count) : [])
+  const insets = useSafeAreaInsets()
 
   useEffect(() => {
     // console.log('ActivitiesList::ListContent::activityList:', activities.length)
@@ -92,23 +93,8 @@ const ListContent = ({
       data={activityList}
       renderItem={renderItem}
       keyExtractor={(activity) => activity.hash}
+      style={{ overflow: 'hidden', paddingBottom: insets.bottom }}
     />
-    //   {activityList.map((activity: HttpTransaction & PendingTransaction) => {
-    //     if (activity.status === 'pending') {
-    //       return <PendingListItem key={activity.hash} activity={activity} />
-    //     }
-    //     return (
-    //       <ListItem
-    //         key={activity.hash}
-    //         activity={activity}
-    //         address={address}
-    //         addressType={addressType}
-    //         lng={lng}
-    //         lat={lat}
-    //       />
-    //     )
-    //   })}
-    // </>
   )
 }
 

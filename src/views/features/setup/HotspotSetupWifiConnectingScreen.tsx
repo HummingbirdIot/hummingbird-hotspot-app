@@ -45,21 +45,9 @@ const HotspotSetupWifiConnectingScreen = () => {
   const { primaryText } = useColors()
 
   const handleError = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (messageKey: string, err: unknown) => {
-      console.log(
-        'HotspotSetupWifiConnectingScreen::handleError',
-        messageKey,
-        err,
-      )
-
-      await showOKAlert({ titleKey: 'generic.error', messageKey }).catch(
-        (e) => {
-          console.log(
-            'HotspotSetupWifiConnectingScreen::showOKAlert::error:',
-            e,
-          )
-        },
-      )
+      await showOKAlert({ titleKey: 'generic.error', messageKey })
       if (navigation.canGoBack()) {
         navigation.goBack()
       }
@@ -67,9 +55,18 @@ const HotspotSetupWifiConnectingScreen = () => {
     [navigation, showOKAlert],
   )
 
+  const navLoaction = useCallback(() => {
+    navigation.navigate('HotspotSetupEnableLocationScreen', {
+      hotspotAddress,
+      addGatewayTxn,
+      hotspotType,
+      gatewayAction,
+    })
+  }, [addGatewayTxn, gatewayAction, hotspotAddress, hotspotType, navigation])
+
   const goToNextStep = useCallback(async () => {
     if (gatewayAction === 'setWiFi') {
-      console.log('HotspotSetupWifiConnectingScreen::SetWiFiSuccess!')
+      // console.log('HotspotSetupWifiConnectingScreen::SetWiFiSuccess!')
       await showOKAlert({
         titleKey: 'Success',
         messageKey: 'Set WiFi Successfully!',
@@ -83,52 +80,23 @@ const HotspotSetupWifiConnectingScreen = () => {
       }
     } else {
       const address = await getAddress()
-      // console.log(
-      //   'HotspotSetupWifiConnectingScreen::goToNextStep::address:',
-      //   address,
-      // )
       try {
         const hotspot = await getHotspotDetails(hotspotAddress)
-        // console.log(
-        //   'HotspotSetupPickWifiScreen::goToNextStep::hotspot:',
-        //   hotspotAddress,
-        //   hotspot,
-        // )
         if (hotspot && hotspot.owner === address) {
           navigation.replace('OwnedHotspotErrorScreen')
         } else if (hotspot && hotspot.owner !== address) {
           navigation.replace('NotHotspotOwnerErrorScreen')
         } else {
-          console.log(
-            'HotspotSetupWifiConnectingScreen::goToNextStep::addGatewayTxn:',
-            hotspotType,
-            addGatewayTxn,
-          )
-          navigation.replace('HotspotTxnsProgressScreen', {
-            hotspotAddress,
-            addGatewayTxn,
-            // hotspotType,
-          })
+          navLoaction()
         }
       } catch (error) {
-        console.log(
-          'HotspotSetupWifiConnectingScreen::getHotspotDetails::error:',
-          hotspotAddress,
-          error,
-        )
-        navigation.replace('HotspotTxnsProgressScreen', {
-          gatewayAction,
-          hotspotAddress,
-          addGatewayTxn,
-          // hotspotType,
-        })
+        navLoaction()
       }
     }
   }, [
-    addGatewayTxn,
     gatewayAction,
     hotspotAddress,
-    hotspotType,
+    navLoaction,
     navigation,
     rootNav,
     showOKAlert,

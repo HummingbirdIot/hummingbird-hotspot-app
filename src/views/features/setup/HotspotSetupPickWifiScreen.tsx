@@ -99,6 +99,25 @@ const HotspotSetupPickWifiScreen = () => {
     return wifiNetworks.length > 0
   }, [wifiNetworks])
 
+  const navNext = (network: string) => {
+    navigation.navigate('HotspotSetupWifiFormScreen', {
+      gatewayAction,
+      network,
+      hotspotAddress,
+      addGatewayTxn,
+      hotspotType,
+    })
+  }
+
+  const navLoaction = useCallback(() => {
+    navigation.navigate('HotspotSetupEnableLocationScreen', {
+      hotspotAddress,
+      addGatewayTxn,
+      hotspotType,
+      gatewayAction,
+    })
+  }, [addGatewayTxn, gatewayAction, hotspotAddress, hotspotType, navigation])
+
   const navSkip = useCallback(async () => {
     console.log(
       'gatewayActiongatewayActiongatewayActiongatewayAction',
@@ -135,19 +154,10 @@ const HotspotSetupPickWifiScreen = () => {
         } else if (hotspot && hotspot.owner !== address) {
           navigation.replace('NotHotspotOwnerErrorScreen')
         } else {
-          navigation.navigate('HotspotTxnsProgressScreen', {
-            gatewayAction,
-            hotspotAddress,
-            addGatewayTxn,
-          })
+          navLoaction()
         }
       } catch (error) {
-        navigation.navigate('HotspotSetupEnableLocationScreen', {
-          hotspotAddress,
-          addGatewayTxn,
-          hotspotType,
-          gatewayAction,
-        })
+        navLoaction()
       }
     }
   }, [
@@ -158,19 +168,8 @@ const HotspotSetupPickWifiScreen = () => {
     showOKCancelAlert,
     hotspotAddress,
     navigation,
-    addGatewayTxn,
-    hotspotType,
+    navLoaction,
   ])
-
-  const navNext = (network: string) => {
-    navigation.navigate('HotspotSetupWifiFormScreen', {
-      gatewayAction,
-      network,
-      hotspotAddress,
-      addGatewayTxn,
-      hotspotType,
-    })
-  }
 
   const scanForNetworks = async () => {
     setScanning(true)

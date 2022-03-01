@@ -40,13 +40,6 @@ const HotspotSetupBluetoothSuccess = () => {
     getDiagnosticInfo,
   } = useHotspotBle()
 
-  // const {
-  //   // availableHotspots,
-  //   connectAndConfigHotspot,
-  //   scanForWifiNetworks,
-  //   // checkFirmwareCurrent,
-  // } = useHotspot()
-
   const { getMinFirmware, getOnboardingRecord } = useOnboarding()
   const { showOKAlert } = useAlert()
   const dispatch = useAppDispatch()

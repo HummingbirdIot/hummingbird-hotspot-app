@@ -1,89 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { memo, useCallback, useEffect, useState } from 'react'
-import { Linking, Platform, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
-import { ButtonGroup, Header } from 'react-native-elements'
-import { useTranslation } from 'react-i18next'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, { memo, useState } from 'react'
+import { ButtonGroup } from 'react-native-elements'
 import { useAsync } from 'react-async-hook'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import Box from '../../../components/Box'
 import ActivitiesList from '../../../widgets/main/ActivitiesList/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
-import {
-  getLocation,
-  getLocationPermission,
-} from '../../../store/app/locationSlice'
-import { RootState } from '../../../store/rootReducer'
-import usePermissionManager from '../../../utils/hooks/usePermissionManager'
-import { useAppDispatch } from '../../../store/store'
-import useAlert from '../../../utils/hooks/useAlert'
 import { getAddress } from '../../../store/app/secureData'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
 import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ActivityScreen = ({ navigation }: any) => {
-  const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
-  const insets = useSafeAreaInsets()
   const [address, setAccountAddress] = useState('')
-  // const { showOKCancelAlert } = useAlert()
-  const dispatch = useAppDispatch()
-  // const { requestLocationPermission } = usePermissionManager()
-  // const { currentLocation, permissionResponse, locationBlocked } = useSelector(
-  //   (state: RootState) => state.location,
-  // )
 
   const [selectedIndex, updateIndex] = useState(0)
-  // const [coords, setUserCoords] = useState(
-  //   currentLocation || { latitude: 0, longitude: 0 },
-  // )
-
-  // useEffect(() => {
-  //   dispatch(getLocation()).then(() =>
-  //     setUserCoords(currentLocation || { latitude: 0, longitude: 0 }),
-  //   )
-  // }, [currentLocation, dispatch])
-
   useAsync(async () => {
     const aacc = await getAddress()
-    // console.log('OverviewScreen::address:', aacc)
     setAccountAddress(aacc || '')
   }, [])
 
-  // const getLocation()
-
-  // const checkLocation = useCallback(async () => {
-  //   if (Platform.OS === 'ios') return true
-
-  //   if (permissionResponse?.granted) {
-  //     return true
-  //   }
-
-  //   if (!locationBlocked) {
-  //     const response = await requestLocationPermission()
-  //     if (response && response.granted) {
-  //       return true
-  //     }
-  //   } else {
-  //     const decision = await showOKCancelAlert({
-  //       titleKey: 'permissions.location.title',
-  //       messageKey: 'permissions.location.message',
-  //       okKey: 'generic.go_to_settings',
-  //     })
-  //     if (decision) Linking.openSettings()
-  //   }
-  // }, [
-  //   locationBlocked,
-  //   permissionResponse?.granted,
-  //   requestLocationPermission,
-  //   showOKCancelAlert,
-  // ])
   const [all, mining, payment, hotspot, pending] = AccountFilterKeys
   const buttons = [all, mining, payment, hotspot, pending]
 
-  const { primaryBackground, surfaceContrast, blueMain } = useColors()
+  const { blueMain } = useColors()
 
   if (!address) {
     return <Box />
@@ -98,21 +38,20 @@ const ActivityScreen = ({ navigation }: any) => {
         }
       }}
     >
-      <Box flex={1} backgroundColor="primaryBackground">
-        <Box
-          height={50}
-          backgroundColor={
-            colorScheme === 'light' ? 'surfaceContrast' : 'primaryBackground'
-          }
-        >
+      <Box
+        flex={1}
+        backgroundColor={
+          colorScheme === 'light' ? 'surfaceContrast' : 'primaryBackground'
+        }
+      >
+        <Box height={50}>
           <ButtonGroup
             onPress={updateIndex}
             selectedIndex={selectedIndex}
             buttons={buttons}
             containerStyle={{
               height: 36,
-              backgroundColor:
-                colorScheme === 'light' ? surfaceContrast : primaryBackground,
+              backgroundColor: 'transparent',
               borderColor: blueMain,
             }}
             innerBorderStyle={{
@@ -133,16 +72,16 @@ const ActivityScreen = ({ navigation }: any) => {
         <Box
           flex={1}
           backgroundColor="white"
+          borderTopStartRadius="l"
+          borderTopEndRadius="l"
           style={{
-            paddingBottom: insets.bottom,
+            overflow: 'hidden',
           }}
         >
           <ActivitiesList
             address={address}
             filter={buttons[selectedIndex]}
             addressType="account"
-            // lng={coords.longitude}
-            // lat={coords.latitude}
           />
         </Box>
       </Box>

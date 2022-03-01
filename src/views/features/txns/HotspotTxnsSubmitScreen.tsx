@@ -224,10 +224,11 @@ const HotspotTxnsSubmitScreen = () => {
       </Box>
       <DebouncedButton
         onPress={() => {
+          navigation.reset(navigation.getState())
           if (status === 5 || status === 4.3)
-            navigation.navigate('ActivityScreen')
+            navigation.replace('ActivityScreen')
           else
-            navigation.navigate('MainTabs', {
+            navigation.replace('MainTabs', {
               screen: 'Hotspots',
             })
         }}
