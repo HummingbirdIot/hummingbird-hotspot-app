@@ -6,8 +6,8 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { MoreStackParamList } from './moreTypes'
 import DefaultScreenOptions from '../../defaultScreenOptions'
 import MoreScreen from './MoreScreen'
-import AccountCreatePinScreen from './pin/AccountCreatePinScreen'
-import AccountConfirmPinScreen from './pin/AccountConfirmPinScreen'
+import AccountCreatePinScreen from './CreatePinScreen'
+import AccountConfirmPinScreen from './ConfirmPinScreen'
 import { RootStackParamList } from '../../navigation/naviTypes'
 
 const MoreStack = createStackNavigator<MoreStackParamList>()
