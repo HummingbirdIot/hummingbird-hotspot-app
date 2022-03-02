@@ -110,6 +110,7 @@ export default {
     period: '.',
     meters: '{{distance}}m',
     kilometers: '{{distance}}km',
+    not_available: 'N/A',
   },
   hotspot_details: {
     no_location_body: 'Pair with the Hotspot to begin.',
