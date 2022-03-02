@@ -57,7 +57,7 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
             </Text>
           }
           width={240}
-          height={60}
+          height={68}
           backgroundColor={surfaceContrast}
           withOverlay={false}
           highlightColor="transparent"

@@ -86,8 +86,6 @@ const RewardsChart = ({
   }, [timelineValue])
 
   const networkAvgTotal = useMemo(() => {
-    // if (timelineValue === 'YTD') return
-
     if (timelineValue > networkHotspotEarnings.length) {
       return t('generic.not_available')
     }
