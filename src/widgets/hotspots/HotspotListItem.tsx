@@ -35,22 +35,26 @@ const HotspotListItem = ({
     primaryText,
     surface,
     blueMain,
+    greenMain,
+    error,
   } = useColors()
   const colorList = [
-    '#6D9088',
-    '#D6A3CB',
-    '#A3D6A7',
-    '#E37C7B',
-    '#49B8E6',
-    '#A48780',
-    '#E49D84',
-    '#223F59',
-    '#8C8C8C',
+    '#639B81',
+    '#DB90BD',
+    '#97E29C',
+    '#D88785',
+    '#49B8F6',
+    '#D37368',
+    '#F49D84',
+    '#3572BB',
+    '#ACACAC',
   ]
+  const isOnline = hotspot.status?.online === 'online'
 
-  const calculateColor = (name: string) => {
+  const calculateColor = (name: string): typeof colorList[number] => {
+    if (!isOnline) return colorList[8]
     const value = name.split('').reduce((p, c) => p + c.charCodeAt(0), 0)
-    const index = value % 9
+    const index = value % 8
     return colorList[index]
   }
 
@@ -87,7 +91,7 @@ const HotspotListItem = ({
       <Avatar
         rounded
         title={formatHotspotShortName(hotspot.name || '')}
-        titleStyle={{ fontSize: 18 }}
+        titleStyle={{ fontSize: 18, color: isOnline ? 'white' : 'lightgray' }}
         containerStyle={{
           backgroundColor: calculateColor(hotspot.name || ''),
         }}
@@ -103,7 +107,7 @@ const HotspotListItem = ({
                   style={{
                     fontSize: 22,
                     fontWeight: '500',
-                    color: primaryText,
+                    color: isOnline ? greenMain : error,
                   }}
                 >
                   {str}
@@ -114,7 +118,11 @@ const HotspotListItem = ({
               <Text
                 // eslint-disable-next-line react/no-array-index-key
                 key={j}
-                style={{ fontSize: 22, fontWeight: '200', color: primaryText }}
+                style={{
+                  fontSize: 22,
+                  fontWeight: '200',
+                  color: primaryText,
+                }}
               >
                 {str}{' '}
               </Text>
@@ -126,7 +134,7 @@ const HotspotListItem = ({
             {getMakerName(hotspot.payer)}
           </HotspotCardItem>
           <HotspotCardItem Icon={RewardsScale} right>
-            {hotspot.rewardScale?.toFixed(5) || '0.00'}
+            {hotspot.rewardScale?.toFixed(5) || '0.00000'}
           </HotspotCardItem>
         </HotspotCardGroup>
         <HotspotCardGroup>

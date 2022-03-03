@@ -173,7 +173,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.maker.hummingbird"
+        applicationId "com.hummingbird.hotspots"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode getVersionCode()

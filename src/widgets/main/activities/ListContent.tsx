@@ -19,7 +19,7 @@ const ListContent = ({
   addressType,
   lng,
   lat,
-  initCount = 20,
+  initCount = 100,
 }: {
   activities: Array<HttpTransaction & PendingTransaction>
   status: Loading

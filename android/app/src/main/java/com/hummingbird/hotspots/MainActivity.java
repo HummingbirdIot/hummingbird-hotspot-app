@@ -1,4 +1,4 @@
-package org.maker.hummingbird;
+package com.hummingbird.hotspots;
 import expo.modules.ReactActivityDelegateWrapper;
 import com.facebook.react.ReactActivityDelegate;
 

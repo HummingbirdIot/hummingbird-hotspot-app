@@ -28,7 +28,7 @@ const EnterExplorationCodeScreen = () => {
     if (xpCode) {
       const code = xpCode.toUpperCase()
       if (addressMap[code]) {
-        dispatch(appSlice.actions.enableViewOnlyMode(code))
+        dispatch(appSlice.actions.enableWatchMode(code))
       } else {
         await showOKAlert({
           titleKey: 'Exploration Code Invalid',
@@ -62,7 +62,7 @@ const EnterExplorationCodeScreen = () => {
               maxFontSizeMultiplier={1.2}
             >
               {t(
-                'Type in the Exploration Code you got from Hummingbird or its agent, you would be able to browser the views of this app without a helium wallet account.',
+                'Type in the Exploration Code you got from Hummingbird or its agent, you would be able to watch the data pages of this app without signing-in a helium wallet account.',
               )}
             </Text>
             <Text
@@ -72,7 +72,7 @@ const EnterExplorationCodeScreen = () => {
               maxFontSizeMultiplier={1.2}
             >
               {t(
-                'You will, however, only be allowed to browser under the VIEWONLY MODE, in which you cannot sumbit any transaction.',
+                'You will, however, be only allowed to watch data under WATCH MODE, in which status you cannot sumbit transactions.',
               )}
             </Text>
           </Box>

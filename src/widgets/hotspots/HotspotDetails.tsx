@@ -24,14 +24,14 @@ const HotspotDetails = ({
     () => (
       <ScrollView
         style={{
-          flex: 1,
+          height: '100%',
           paddingLeft: 10,
           paddingRight: 10,
         }}
       >
         <Box
           width="100%"
-          minHeight={260}
+          minHeight={300}
           backgroundColor="grayBoxLight"
           borderRadius="l"
         >
@@ -58,7 +58,7 @@ const HotspotDetails = ({
       witnessed && witnessed.length ? (
         <ScrollView
           style={{
-            flex: 1,
+            height: '100%',
           }}
         >
           <Box

@@ -105,7 +105,7 @@ const ListContainer = ({
       addressType={addressType}
       lng={lng}
       lat={lat}
-      initCount={addressType === 'hotspot' ? 100 : 200}
+      initCount={addressType === 'hotspot' ? 200 : 500}
     />
   )
 }

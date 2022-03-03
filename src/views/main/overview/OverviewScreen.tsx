@@ -63,14 +63,14 @@ const OverviewScreen = () => {
       ]}
     >
       <Box flex={1}>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ height: '100%' }}>
           <Box paddingBottom="m">
             <AssetsBoard account={account} />
             <Dashboard account={account} />
           </Box>
           <Box
-            flex={1}
             backgroundColor="white"
+            height={300}
             marginHorizontal="l"
             borderRadius="l"
           >

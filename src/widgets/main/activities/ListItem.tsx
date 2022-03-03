@@ -54,7 +54,7 @@ const ListItem = ({
 
       <ListItemComponent.Content>
         <Box flexDirection="row">
-          <Box flex={1}>
+          <Box flex={1} minHeight={44} justifyContent="center">
             <Text style={{ fontSize: 16, fontWeight: '500' }}>
               {getTxnTypeName(activity.type, 'hotspot')}
             </Text>

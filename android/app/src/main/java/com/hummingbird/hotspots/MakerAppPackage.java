@@ -1,4 +1,4 @@
-package org.maker.hummingbird;
+package com.hummingbird.hotspots;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

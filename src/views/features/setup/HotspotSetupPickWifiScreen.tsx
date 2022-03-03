@@ -84,7 +84,7 @@ const HotspotSetupPickWifiScreen = () => {
   const { showOKCancelAlert } = useAlert()
   const handleClose = useCallback(() => rootNav.navigate('MainTabs'), [rootNav])
 
-  const { walletLinkToken: token, isViewOnly } = useSelector(
+  const { walletLinkToken: token, isWatcher } = useSelector(
     (state: RootState) => state.app.user,
   )
 
@@ -131,13 +131,13 @@ const HotspotSetupPickWifiScreen = () => {
       }
     } else {
       if (!token) {
-        if (isViewOnly) {
+        if (isWatcher) {
           const decision = await showOKCancelAlert({
-            titleKey: 'Viewonly Warning',
+            titleKey: 'Warning',
             okKey: 'Next',
             cancelKey: 'Back to Home',
             messageKey:
-              'You are undering the VIEWONLY MODE now, will not allowed to complete any transation action.',
+              'You are undering the WATCH MODE now, will not allowed to complete any transation action.',
           })
           if (!decision) {
             rootNav.navigate('MainTabs')
@@ -164,7 +164,7 @@ const HotspotSetupPickWifiScreen = () => {
     gatewayAction,
     rootNav,
     token,
-    isViewOnly,
+    isWatcher,
     showOKCancelAlert,
     hotspotAddress,
     navigation,

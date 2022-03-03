@@ -31,7 +31,7 @@ export type AppState = {
   isSettingUpHotspot: boolean
   isRequestingPermission: boolean
   user: {
-    isViewOnly: boolean
+    isWatcher: boolean
     xpCode?: string
     walletLinkToken?: string
     account?: Account
@@ -55,7 +55,7 @@ const initialState: AppState = {
   isLocked: false,
   isRequestingPermission: false,
   user: {
-    isViewOnly: false,
+    isWatcher: false,
     fetchAccountStatus: 'idle',
     lastHNTBlance: '0.00000',
     lastFiatBlance: '0.00',
@@ -71,7 +71,7 @@ type Restore = {
   isBackedUp: boolean
   isLocked: boolean
   user: {
-    isViewOnly: boolean
+    isWatcher: boolean
     xpCode?: string
     walletLinkToken?: string
     account?: Account
@@ -90,10 +90,10 @@ type Restore = {
 export const restoreAppSettings = createAsyncThunk<Restore>(
   'app/restoreAppSettings',
   async () => {
-    console.log('restoreAppSettings A:', await getSecureItem('user.isViewOnly'))
+    console.log('restoreAppSettings A:', await getSecureItem('user.isWatcher'))
     const [
       isBackedUp,
-      isViewOnly,
+      isWatcher,
       explorationCode,
       walletLinkToken,
       address,
@@ -106,7 +106,7 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       currency,
     ] = await Promise.all([
       getSecureItem('isBackedUp'),
-      getSecureItem('user.isViewOnly'),
+      getSecureItem('user.isWatcher'),
       getSecureItem('user.explorationCode'),
       getSecureItem('user.walletLinkToken'),
       getSecureItem('user.address'),
@@ -122,7 +122,7 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
     console.log(
       'restoreAppSettings B:',
       isBackedUp,
-      isViewOnly,
+      isWatcher,
       explorationCode,
       walletLinkToken,
       address,
@@ -140,7 +140,7 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       isLocked: !!isPinRequired,
       user: {
         fetchAccountStatus: 'idle',
-        isViewOnly,
+        isWatcher,
         explorationCode,
         walletLinkToken,
         lastHNTBlance: lastHNTBlance || '0.00000',
@@ -185,23 +185,23 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    enableViewOnlyMode: (state, { payload: xpCode }: PayloadAction<string>) => {
+    enableWatchMode: (state, { payload: xpCode }: PayloadAction<string>) => {
       state.user.walletLinkToken = ''
       state.user.xpCode = xpCode
-      state.user.isViewOnly = true
+      state.user.isWatcher = true
       setSecureItem('user.walletLinkToken', '')
       setSecureItem('user.address', addressMap[xpCode])
       setSecureItem('user.explorationCode', xpCode)
-      setSecureItem('user.isViewOnly', true)
+      setSecureItem('user.isWatcher', true)
       setSecureItem('isBackedUp', true)
     },
     storeWalletLinkToken: (
       state,
       { payload: token }: PayloadAction<string>,
     ) => {
-      state.user.isViewOnly = false
+      state.user.isWatcher = false
       state.user.walletLinkToken = token
-      setSecureItem('user.isViewOnly', false)
+      setSecureItem('user.isWatcher', false)
       setSecureItem('user.address', '') // 清除之前的旧 Address
       setSecureItem('user.explorationCode', '')
       setSecureItem('user.walletLinkToken', token)

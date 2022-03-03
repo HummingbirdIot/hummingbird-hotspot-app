@@ -42,11 +42,11 @@ const Dashboard = ({ account }: { account?: Account }) => {
       >
         <DashboardItem.Number
           item="DC Balance"
-          value={account?.dcBalance?.floatBalance.toFixed(4) || '0'}
+          value={account?.dcBalance?.floatBalance.toFixed(5) || '0.00000'}
         />
         <DashboardItem.Number
           item="Staked Balance"
-          value={account?.stakedBalance?.floatBalance.toFixed(4) || '0'}
+          value={account?.stakedBalance?.floatBalance.toFixed(5) || '0.00000'}
         />
       </Box>
       <Box

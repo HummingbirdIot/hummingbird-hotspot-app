@@ -9,7 +9,7 @@ import {
   Location,
   useOnboarding,
 } from '@helium/react-native-sdk'
-import { ActivityIndicator, Linking } from 'react-native'
+import { ActivityIndicator, Linking, Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 import Box from '../../../components/Box'
 import Text from '../../../components/Text'
@@ -37,7 +37,7 @@ const HotspotTxnsProgressScreen = () => {
   const { createGatewayTxn } = useHotspotBle()
   const { getOnboardingRecord } = useOnboarding()
   const { primaryText } = useColors()
-  const { walletLinkToken: token, isViewOnly } = useSelector(
+  const { walletLinkToken: token, isWatcher } = useSelector(
     (state: RootState) => state.app.user,
   )
 
@@ -67,9 +67,9 @@ const HotspotTxnsProgressScreen = () => {
   }
 
   const submitOnboardingTxns = async () => {
-    console.log('submitOnboardingTxns', token, isViewOnly)
+    console.log('submitOnboardingTxns', token, isWatcher)
     if (!token) {
-      if (isViewOnly) {
+      if (isWatcher) {
         setTimeout(
           () =>
             navigator.demoExplorationTxns({
@@ -149,15 +149,32 @@ const HotspotTxnsProgressScreen = () => {
 
     console.log('HotspotTxnsProgressScreen::updateParams:', updateParams)
 
-    const url = WalletLink.createUpdateHotspotUrl(updateParams)
+    let url = WalletLink.createUpdateHotspotUrl(updateParams)
     if (!url) {
       // eslint-disable-next-line no-console
       console.error('Link could not be created')
       return
     }
+    const { delegateApps } = WalletLink
+    const { universalLink, urlScheme } = delegateApps[0]
+    if (Platform.OS === 'android') {
+      url = url.replace(universalLink, urlScheme)
+    }
+    console.log(
+      'schemes and urls:',
+      universalLink,
+      urlScheme,
+      url,
+      url.replace(universalLink, urlScheme),
+    )
 
-    console.log('HotspotTxnsProgressScreen::url:', url)
-    Linking.openURL(url)
+    // console.log('HotspotTxnsProgressScreen::url:', url)
+
+    const supported = await Linking.canOpenURL(url)
+    if (supported) {
+      Linking.openURL(url)
+    } else {
+    }
   }
 
   useMount(() => {

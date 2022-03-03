@@ -22,7 +22,7 @@ type StringKey = typeof stringKeys[number]
 
 const boolKeys = [
   'isBackedUp',
-  'user.isViewOnly',
+  'user.isWatcher',
   'settings.isPinRequired',
 ] as const
 type BooleanKey = typeof boolKeys[number]
