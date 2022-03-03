@@ -1,13 +1,12 @@
 import React, { memo, useMemo, useState } from 'react'
-import { ScrollView } from 'react-native'
 import { ButtonGroup } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Hotspot, Witness } from '@helium/http'
 import Box from '../../components/Box'
-import Text from '../../components/Text'
 import ActivitiesList from '../main/activities/ListContainer'
-import RewardsStatistics from '../main/RewardsStatistics'
-import { formatHotspotName } from '../../utils/formatter'
+import WitnessList from '../main/WitnessList'
+import useListWidgets from '../../utils/hooks/useListWidgets'
+import HotspotStatistics from './HotspotStatistics'
 
 const HotspotDetails = ({
   hotspot,
@@ -18,27 +17,11 @@ const HotspotDetails = ({
 }) => {
   const insets = useSafeAreaInsets()
   const [selectedIndex, updateIndex] = useState(0)
+  const { Empty } = useListWidgets()
 
   const buttons = ['Statistics', 'Activity', 'Witnessed']
   const Statistics = useMemo(
-    () => (
-      <ScrollView
-        style={{
-          height: '100%',
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      >
-        <Box
-          width="100%"
-          minHeight={300}
-          backgroundColor="grayBoxLight"
-          borderRadius="l"
-        >
-          <RewardsStatistics address={hotspot.address} resource="hotspots" />
-        </Box>
-      </ScrollView>
-    ),
+    () => <HotspotStatistics address={hotspot.address} />,
     [hotspot],
   )
   const Activity = useMemo(
@@ -56,51 +39,11 @@ const HotspotDetails = ({
   const Witnessed = useMemo(
     () =>
       witnessed && witnessed.length ? (
-        <ScrollView
-          style={{
-            height: '100%',
-          }}
-        >
-          <Box
-            style={{
-              backgroundColor: '#f6f6f6',
-              paddingVertical: 20,
-              borderRadius: 5,
-            }}
-          >
-            {witnessed.map((witness) => (
-              <Box key={witness.address}>
-                <Text textAlign="center" color="gray">
-                  {formatHotspotName(witness.name || 'unknow-hotspot-name')}
-                </Text>
-                <Text textAlign="center" color="gray">
-                  Location: {witness.geocode?.longStreet},{' '}
-                  {witness.geocode?.longCity}, {witness.geocode?.shortCountry}
-                </Text>
-                <Text textAlign="center" color="gray">
-                  RewardScale: {witness.rewardScale}
-                </Text>
-                <Text textAlign="center" color="gray">
-                  --------------------------------------
-                </Text>
-              </Box>
-            ))}
-          </Box>
-        </ScrollView>
+        <WitnessList witnessed={witnessed} />
       ) : (
-        <Box
-          style={{
-            backgroundColor: '#f6f6f6',
-            paddingVertical: 20,
-            borderRadius: 5,
-          }}
-        >
-          <Text textAlign="center" color="gray">
-            Empty
-          </Text>
-        </Box>
+        <Empty />
       ),
-    [witnessed],
+    [Empty, witnessed],
   )
   const widgets = [Statistics, Activity, Witnessed]
 

@@ -117,7 +117,7 @@ const Dashboard = ({ account }: { account?: Account }) => {
             }}
           >
             {account
-              ? `${account.address}  [${t('click to copy address')}]`
+              ? `${account.address}  [${t('click to copy')}]`
               : 'Loading Account Info...'}
           </Text>
         </Box>

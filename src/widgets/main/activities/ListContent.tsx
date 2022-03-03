@@ -1,8 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 import { PendingTransaction } from '@helium/http'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Box from '../../../components/Box'
 import {
   AddressType,
   HttpTransaction,
@@ -10,7 +9,8 @@ import {
 } from '../../../store/txns/txnsTypes'
 import PendingListItem from './PendingListItem'
 import ListItem from './ListItem'
-import Text from '../../../components/Text'
+import useListWidgets from '../../../utils/hooks/useListWidgets'
+import Box from '../../../components/Box'
 
 const ListContent = ({
   activities,
@@ -41,28 +41,15 @@ const ListContent = ({
     setActivityList(activities ? activities.slice(0, count) : [])
   }, [activities, count])
 
+  const { ActivityIndicator, Empty } = useListWidgets()
+
   if (activityList.length === 0) {
     if (status === 'pending') {
-      return (
-        <Box justifyContent="center">
-          <ActivityIndicator
-            color="#687A8C"
-            size={activities.length ? 30 : 100}
-          />
-        </Box>
-      )
+      return <ActivityIndicator length={activities.length} />
     }
     return (
-      <Box
-        style={{
-          backgroundColor: '#f6f6f6',
-          paddingVertical: 20,
-          borderRadius: 5,
-        }}
-      >
-        <Text textAlign="center" color="gray">
-          Empty
-        </Text>
+      <Box paddingTop="ms">
+        <Empty />
       </Box>
     )
   }

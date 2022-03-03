@@ -2,6 +2,7 @@ import React, { memo } from 'react'
 import { Hotspot } from '@helium/http'
 import BottomActionsModal from '../modals/BottomActionsModal'
 import useActions from '../../utils/hooks/useActions'
+import useListWidgets from '../../utils/hooks/useListWidgets'
 
 const HotspotActions = ({
   hotspot,
@@ -19,6 +20,7 @@ const HotspotActions = ({
     locationName,
     setIsVisible,
   })
+  const { ActivityIndicator } = useListWidgets()
 
   const data = [
     {
@@ -34,7 +36,7 @@ const HotspotActions = ({
       action: setWiFi,
     },
   ]
-  return (
+  return hotspot ? (
     <BottomActionsModal
       title="Actions"
       data={data}
@@ -42,6 +44,8 @@ const HotspotActions = ({
       handleClose={() => setIsVisible(false)}
       maxModalHeight={0}
     />
+  ) : (
+    <ActivityIndicator />
   )
 }
 

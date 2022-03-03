@@ -116,7 +116,7 @@ const HotspotCard = ({
               color: secondaryText,
             }}
           >
-            (click to copy)
+            {t('click to copy')}
           </Text>
         </Box>
       </TouchableOpacityBox>

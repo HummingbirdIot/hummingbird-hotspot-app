@@ -1,36 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRef, useState } from 'react'
 import { BleError, Device, Subscription } from 'react-native-ble-plx'
-import compareVersions from 'compare-versions'
-import { useSelector } from 'react-redux'
-import { AddGatewayV1 } from '@helium/transactions'
-import { decode } from 'base-64'
-import { Hotspot } from '@helium/http'
 // import { useBluetoothContext } from '../providers/BluetoothProvider'
-import {
-  FirmwareCharacteristic,
-  HotspotCharacteristic,
-  Service,
-} from './bluetooth/bluetoothTypes'
+import { HotspotCharacteristic } from '../bluetooth/bluetoothTypes'
 // import { getStaking, getStakingSignedTransaction } from './stakingClient'
 import {
-  encodeAddGateway,
   encodeWifiConnect,
   encodeWifiRemove,
   parseChar,
-} from './bluetooth/bluetoothDataParser'
+} from '../bluetooth/bluetoothDataParser'
 // import { getAddress } from './appDataClient'
-import { getSecureItem } from '../store/app/secureData'
 // import { makeAddGatewayTxn } from './transactions'
-import { calculateAddGatewayFee } from './fees'
 // import connectedHotspotSlice, {
 //   AllHotspotDetails,
 //   fetchConnectedHotspotDetails,
 //   HotspotStatus,
 // } from '../store/connectedHotspot/connectedHotspotSlice'
-import { useAppDispatch } from '../store/store'
-import { RootState } from '../store/rootReducer'
-import useBluetooth from './bluetooth/useBluetooth'
+import useBluetooth from '../bluetooth/useBluetooth'
 // import * as Logger from './logger'
 // import useSubmitTxn from '../hooks/useSubmitTxn'
 
