@@ -16,10 +16,10 @@ import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
-import BackScreen from '../../../components/BackScreen'
-import Box from '../../../components/Box'
-import { DebouncedButton } from '../../../components/Button'
-import Text from '../../../components/Text'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import Box from '../../../components/boxes/Box'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import Text from '../../../components/texts/Text'
 import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import { getAddress } from '../../../store/app/secureData'

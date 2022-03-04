@@ -2,7 +2,7 @@ import React, { memo, useCallback, useState } from 'react'
 // import { Text, View } from 'react-native'
 // import { Position } from 'geojson'
 // import { reverseGeocode } from '../../../utils/location'
-import Map from '../../../components/Map'
+import Map from '../../../components/locations/Map'
 
 const ExplorerScreen = () => {
   const [mapCenter, setMapCenter] = useState([-122.419, 37.775])

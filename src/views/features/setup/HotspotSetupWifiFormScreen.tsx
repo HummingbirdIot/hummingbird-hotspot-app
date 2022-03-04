@@ -2,15 +2,15 @@ import React, { useState, useCallback } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
-import BackScreen from '../../../components/BackScreen'
-import Text from '../../../components/Text'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import Text from '../../../components/texts/Text'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
-import TextInput from '../../../components/TextInput'
-import Button, { DebouncedButton } from '../../../components/Button'
-import Box from '../../../components/Box'
+import TextInput from '../../../components/texts/TextInput'
+import Button, { DebouncedButton } from '../../../components/buttons/Button'
+import Box from '../../../components/boxes/Box'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 
 type Route = RouteProp<HotspotSetupStackParamList, 'HotspotSetupWifiFormScreen'>

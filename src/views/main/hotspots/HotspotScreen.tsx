@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux'
 import { useAsync } from 'react-async-hook'
 import { Hotspot, Witness } from '@helium/http'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import Box from '../../../components/Box'
+import Box from '../../../components/boxes/Box'
 import { getLocationPermission } from '../../../store/app/locationSlice'
 import { RootState } from '../../../store/rootReducer'
 import { useAppDispatch } from '../../../store/store'
-import HotspotLocationView from '../../../widgets/hotspots/HotspotLocationView'
+import HotspotLocationView from '../../../components/locations/HotspotLocationView'
 import { fetchHotspotDetail } from '../../../store/data/hotspotsSlice'
 import { reverseGeocode } from '../../../utils/location'
 import { formatHotspotNameArray } from '../../../utils/formatter'
@@ -16,11 +16,11 @@ import {
   RootNavigationProp,
   RootStackParamList,
 } from '../../navigation/naviTypes'
-import DetailViewContainer from '../../../widgets/main/DetailViewContainer'
+import DetailViewContainer from '../../../components/containers/DetailScreenContainer'
 import useActions from '../../../utils/hooks/useActions'
-import HotspotActions from '../../../widgets/hotspots/HotspotActions'
-import HotspotCard from '../../../widgets/hotspots/HotspotCard'
-import HotspotDetails from '../../../widgets/hotspots/HotspotDetails'
+import HotspotActions from '../../../components/modals/HotspotActions'
+import HotspotCard from '../../../components/cards/HotspotCard'
+import HotspotDetails from '../../../components/elements/HotspotDetails'
 
 type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 

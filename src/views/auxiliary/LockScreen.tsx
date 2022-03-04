@@ -7,11 +7,11 @@ import { useStateWithCallbackLazy } from 'use-state-with-callback'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { RootNavigationProp, RootStackParamList } from '../navigation/naviTypes'
 import { getSecureItem } from '../../store/app/secureData'
-import ConfirmPinView from '../../components/ConfirmPinView'
+import ConfirmPinView from '../../components/pads/ConfirmPinView'
 import { MoreNavigationProp } from '../main/settings/moreTypes'
 import { useAppDispatch } from '../../store/store'
 import appSlice from '../../store/app/appSlice'
-import SafeAreaBox from '../../components/SafeAreaBox'
+import SafeAreaBox from '../../components/boxes/SafeAreaBox'
 
 type Route = RouteProp<RootStackParamList, 'LockScreen'>
 

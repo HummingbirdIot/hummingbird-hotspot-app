@@ -16,21 +16,21 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet'
-import Box from '../../../components/Box'
-import { DebouncedButton } from '../../../components/Button'
-import Map from '../../../components/Map'
-import Text from '../../../components/Text'
+import Box from '../../../components/boxes/Box'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import Map from '../../../components/locations/Map'
+import Text from '../../../components/texts/Text'
 import { reverseGeocode } from '../../../utils/location'
 import sleep from '../../../utils/sleep'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
-import SafeAreaBox from '../../../components/SafeAreaBox'
-import TouchableOpacityBox from '../../../components/TouchableOpacityBox'
+import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
+import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { useColors, useSpacing } from '../../../theme/themeHooks'
-import BSHandle from '../../../components/BSHandle'
-import AddressSearchModal from '../../../widgets/features/AddressSearchModal'
+import BSHandle from '../../../components/modals/BSHandle'
+import AddressSearchModal from '../../../components/modals/AddressSearchModal'
 import { PlaceGeography } from '../../../utils/clients/googlePlacesClient'
 
 type Route = RouteProp<

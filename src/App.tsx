@@ -37,7 +37,7 @@ import RootNavigator from './views/navigation/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
 import { configChainVars } from './utils/clients/appDataClient'
-import Box from './components/Box'
+import Box from './components/boxes/Box'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */

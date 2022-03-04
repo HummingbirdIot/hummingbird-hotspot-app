@@ -4,7 +4,7 @@ import Cog from '@assets/images/cog.svg'
 import Account from '@assets/images/accountIcon.svg'
 import Hotspot from '@assets/images/hotspotIcon.svg'
 import Search from '@assets/images/search.svg'
-import Box from '../../../components/Box'
+import Box from '../../../components/boxes/Box'
 import { MainTabType, TabBarIconType } from '../naviTypes'
 import { useColors } from '../../../theme/themeHooks'
 

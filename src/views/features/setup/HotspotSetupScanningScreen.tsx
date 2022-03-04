@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import { ActivityIndicator } from 'react-native'
-import Box from '../../../components/Box'
-import { DebouncedButton } from '../../../components/Button'
-import SafeAreaBox from '../../../components/SafeAreaBox'
-import Text from '../../../components/Text'
+import Box from '../../../components/boxes/Box'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
+import Text from '../../../components/texts/Text'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,

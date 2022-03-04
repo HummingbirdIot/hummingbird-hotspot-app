@@ -16,7 +16,7 @@ import { useAsync } from 'react-async-hook'
 import Config from 'react-native-config'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { getVersion } from 'react-native-device-info'
-import Text from '../../../components/Text'
+import Text from '../../../components/texts/Text'
 import { RootState } from '../../../store/rootReducer'
 import { useAppDispatch } from '../../../store/store'
 import appSlice, { updateSetting } from '../../../store/app/appSlice'
@@ -27,9 +27,9 @@ import {
 } from '../../navigation/naviTypes'
 import MoreListItem, {
   MoreListItemType,
-} from '../../../widgets/main/MoreListItem'
+} from '../../../components/lists/MoreListItem'
 import { useSpacing } from '../../../theme/themeHooks'
-import Box from '../../../components/Box'
+import Box from '../../../components/boxes/Box'
 import { SUPPORTED_LANGUAGUES } from '../../../utils/i18n/i18nTypes'
 import { useLanguageContext } from '../../../providers/LanguageProvider'
 import { getSecureItem } from '../../../store/app/secureData'
@@ -41,9 +41,9 @@ import Learn from '../../../assets/images/settings/learn.svg'
 import Contact from '../../../assets/images/settings/contact.svg'
 import Configuration from '../../../assets/images/settings/config.svg'
 import { SUPPORTED_CURRENCIES } from '../../../utils/hooks/useCurrency'
-import TabViewContainer from '../../../widgets/main/TabViewContainer'
+import TabViewContainer from '../../../components/containers/TabViewContainer'
 import useAuthIntervals from '../../../utils/hooks/useAuthIntervals'
-import AppInfoItem from '../../../widgets/main/AppInfoItem'
+import AppInfoItem from '../../../components/elements/AppInfoItem'
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
 const MoreScreen = () => {

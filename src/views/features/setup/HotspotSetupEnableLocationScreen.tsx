@@ -1,14 +1,14 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DebouncedButton } from '../../../components/Button'
-import Text from '../../../components/Text'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import Text from '../../../components/texts/Text'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
-import Box from '../../../components/Box'
-import BackScreen from '../../../components/BackScreen'
+import Box from '../../../components/boxes/Box'
+import BackScreen from '../../../components/containers/BackScreenContainer'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import useGetLocation from '../../../utils/hooks/useGetLocation'
 

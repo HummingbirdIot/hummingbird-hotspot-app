@@ -10,9 +10,9 @@ import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
-import Text from '../../../components/Text'
-import Box from '../../../components/Box'
-import SafeAreaBox from '../../../components/SafeAreaBox'
+import Text from '../../../components/texts/Text'
+import Box from '../../../components/boxes/Box'
+import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
 import { getAddress } from '../../../store/app/secureData'
 import { RootNavigationProp } from '../../navigation/naviTypes'

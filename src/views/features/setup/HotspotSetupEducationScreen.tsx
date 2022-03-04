@@ -2,15 +2,15 @@ import React, { useState, useRef, useCallback } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import BackScreen from '../../../components/BackScreen'
-import Box from '../../../components/Box'
-import Text from '../../../components/Text'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import Box from '../../../components/boxes/Box'
+import Text from '../../../components/texts/Text'
 import slides from '../hotspotSetupSlides'
 import { wp } from '../../../utils/layout'
-import { DebouncedButton } from '../../../components/Button'
+import { DebouncedButton } from '../../../components/buttons/Button'
 import CarouselItem, {
   CarouselItemData,
-} from '../../../components/CarouselItem'
+} from '../../../components/elements/CarouselItem'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ActivityIndicator as AI } from 'react-native'
-import Box from '../../components/Box'
-import Text from '../../components/Text'
+import Box from '../../components/boxes/Box'
+import Text from '../../components/texts/Text'
 
 const useListWidgets = () => {
   const ActivityIndicator = useMemo(

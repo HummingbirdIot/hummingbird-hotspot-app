@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
-import BackScreen from '../../../components/BackScreen'
-import Box from '../../../components/Box'
-import { DebouncedButton } from '../../../components/Button'
-import Text from '../../../components/Text'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import Box from '../../../components/boxes/Box'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 
 const OwnedHotspotErrorScreen = () => {

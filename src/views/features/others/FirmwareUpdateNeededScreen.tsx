@@ -1,12 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import BackScreen from '../../../components/BackScreen'
-import { DebouncedButton } from '../../../components/Button'
-import Text from '../../../components/Text'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import { DebouncedButton } from '../../../components/buttons/Button'
+import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 import Cloud from '../../../assets/images/cloud.svg'
-import Box from '../../../components/Box'
+import Box from '../../../components/boxes/Box'
 import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
 
 type Route = RouteProp<HotspotSetupStackParamList, 'FirmwareUpdateNeededScreen'>

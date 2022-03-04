@@ -1,5 +1,5 @@
 import Icon from '@assets/images/placeholder.svg'
-import { CarouselItemData } from '../../components/CarouselItem'
+import { CarouselItemData } from '../../components/elements/CarouselItem'
 
 const slides: Array<CarouselItemData> = [
   {

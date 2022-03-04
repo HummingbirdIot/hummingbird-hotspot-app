@@ -7,10 +7,10 @@ import { Linking, Platform } from 'react-native'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import { useSelector } from 'react-redux'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
-import BackScreen from '../../../components/BackScreen'
-import Box from '../../../components/Box'
-import Text from '../../../components/Text'
-import HotspotSetupSelectionListItem from '../../../widgets/features/HotspotSetupSelectionListItem'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import Box from '../../../components/boxes/Box'
+import Text from '../../../components/texts/Text'
+import HotspotSetupSelectionListItem from '../../../components/ble/HotspotSetupSelectionListItem'
 import {
   HotspotSetupNavigationProp,
   HotspotSetupStackParamList,

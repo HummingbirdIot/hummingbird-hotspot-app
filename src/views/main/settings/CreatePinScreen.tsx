@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import Text from '../../../components/Text'
-import PinDisplay from '../../../components/PinDisplay'
-import Keypad from '../../../components/Keypad'
-import Box from '../../../components/Box'
+import Text from '../../../components/texts/Text'
+import PinDisplay from '../../../components/pads/PinDisplay'
+import Keypad from '../../../components/pads/Keypad'
+import Box from '../../../components/boxes/Box'
 import { MoreNavigationProp, MoreStackParamList } from './moreTypes'
 
 type Route = RouteProp<MoreStackParamList, 'AccountCreatePinScreen'>

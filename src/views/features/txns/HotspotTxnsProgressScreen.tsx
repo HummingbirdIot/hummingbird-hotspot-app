@@ -11,10 +11,10 @@ import {
 } from '@helium/react-native-sdk'
 import { ActivityIndicator, Linking, Platform } from 'react-native'
 import { useSelector } from 'react-redux'
-import Box from '../../../components/Box'
-import Text from '../../../components/Text'
+import Box from '../../../components/boxes/Box'
+import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import SafeAreaBox from '../../../components/SafeAreaBox'
+import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import { hotspotOnChain } from '../../../utils/clients/appDataClient'
 import useAlert from '../../../utils/hooks/useAlert'
 import {
@@ -22,7 +22,7 @@ import {
   HotspotSetupStackParamList,
 } from '../../navigation/features/hotspotSetupTypes'
 import { useColors } from '../../../theme/themeHooks'
-import { DebouncedButton } from '../../../components/Button'
+import { DebouncedButton } from '../../../components/buttons/Button'
 import useMount from '../../../utils/hooks/useMount'
 import { RootState } from '../../../store/rootReducer'
 import navigator from '../../navigation/navigator'

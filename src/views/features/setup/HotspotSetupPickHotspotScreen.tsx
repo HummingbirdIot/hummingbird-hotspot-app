@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useHotspotBle } from '@helium/react-native-sdk'
-import BackScreen from '../../../components/BackScreen'
-import HotspotSetupBluetoothError from '../../../widgets/features/HotspotSetupBluetoothError'
-import HotspotSetupBluetoothSuccess from '../../../widgets/features/HotspotSetupBluetoothSuccess'
+import BackScreen from '../../../components/containers/BackScreenContainer'
+import HotspotSetupBluetoothError from '../../../components/ble/HotspotSetupBluetoothError'
+import HotspotSetupBluetoothSuccess from '../../../components/ble/HotspotSetupBluetoothSuccess'
 import { RootNavigationProp } from '../../navigation/naviTypes'
 
 const HotspotSetupPickHotspotScreen = () => {

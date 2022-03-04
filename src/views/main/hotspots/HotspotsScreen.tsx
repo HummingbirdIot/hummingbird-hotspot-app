@@ -3,15 +3,15 @@ import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import Box from '../../../components/Box'
+import Box from '../../../components/boxes/Box'
 import { useAppDispatch } from '../../../store/store'
 import { fetchHotspotsData } from '../../../store/data/hotspotsSlice'
 import { RootState } from '../../../store/rootReducer'
 import useMount from '../../../utils/hooks/useMount'
 
 import { RootNavigationProp } from '../../navigation/naviTypes'
-import HotspotListItem from '../../../widgets/hotspots/HotspotListItem'
-import TabViewContainer from '../../../widgets/main/TabViewContainer'
+import HotspotListItem from '../../../components/elements/HotspotListItem'
+import TabViewContainer from '../../../components/containers/TabViewContainer'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HotspotsScreen = () => {
