@@ -14,21 +14,21 @@ import {
 import type { Account } from '@helium/http'
 import { useAsync } from 'react-async-hook'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { getAddress } from '../../../store/app/secureData'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import HotspotLocationPreview from '../../../components/locations/HotspotLocationPreview'
 
 type Route = RouteProp<
-  HotspotSetupStackParamList,
+  FeaturesStackParamList,
   'HotspotAssertConfirmLocationScreen'
 >
 
@@ -36,7 +36,7 @@ const HotspotAssertConfirmLocationScreen = () => {
   const { t } = useTranslation()
   const { getOnboardingRecord } = useOnboarding()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const [account, setAccount] = useState<Account>()
   const [ownerAddress, setOwnerAddress] = useState<string | null>(null)

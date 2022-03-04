@@ -9,28 +9,25 @@ import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import TextTransform from '../../../components/texts/TextTransform'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import Box from '../../../components/boxes/Box'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import useAlert from '../../../utils/hooks/useAlert'
 import { useAppDispatch } from '../../../store/store'
 import { getLocationPermission } from '../../../store/app/locationSlice'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
 import { RootState } from '../../../store/rootReducer'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupInstructionsScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupInstructionsScreen'>
 
 const HotspotSetupDiagnosticsScreen = () => {
   const {
     params: { hotspotType, gatewayAction, slideIndex },
   } = useRoute<Route>()
   const { t, i18n } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const { enable, getState } = useHotspotBle()
   const { showOKCancelAlert } = useAlert()

@@ -12,9 +12,9 @@ import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import HotspotSetupSelectionListItem from '../../../components/ble/HotspotSetupSelectionListItem'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import {
   HotspotType,
   HotspotModelKeys,
@@ -30,13 +30,10 @@ const ItemSeparatorComponent = () => (
   <Box height={1} backgroundColor="primaryBackground" />
 )
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupSelectionScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupSelectionScreen'>
 const HotspotSetupSelectionScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const edges = useMemo((): Edge[] => ['top', 'left', 'right'], [])
   const radii = useBorderRadii()
 

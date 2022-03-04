@@ -5,15 +5,18 @@ import Text from '../../../components/texts/Text'
 import PinDisplay from '../../../components/pads/PinDisplay'
 import Keypad from '../../../components/pads/Keypad'
 import Box from '../../../components/boxes/Box'
-import { MoreNavigationProp, MoreStackParamList } from './moreTypes'
+import {
+  SettingsNavigationProp,
+  SettingsStackParamList,
+} from './settingsNavigationTypes'
 
-type Route = RouteProp<MoreStackParamList, 'AccountCreatePinScreen'>
+type Route = RouteProp<SettingsStackParamList, 'AccountCreatePinScreen'>
 const AccountCreatePinScreen = () => {
   const { t } = useTranslation()
   const {
     params: { fromImport, pinReset } = { fromImport: false, pinReset: false },
   } = useRoute<Route>()
-  const navigation = useNavigation<MoreNavigationProp>()
+  const navigation = useNavigation<SettingsNavigationProp>()
 
   const [pin, setPin] = useState('')
 

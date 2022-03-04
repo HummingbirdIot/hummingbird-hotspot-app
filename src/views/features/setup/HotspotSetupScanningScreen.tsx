@@ -8,13 +8,13 @@ import { DebouncedButton } from '../../../components/buttons/Button'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import Text from '../../../components/texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import sleep from '../../../utils/sleep'
 import { useColors } from '../../../theme/themeHooks'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotSetupScanningScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupScanningScreen'>
 
 const SCAN_DURATION = 6000
 const HotspotSetupScanningScreen = () => {
@@ -22,7 +22,7 @@ const HotspotSetupScanningScreen = () => {
   const { primaryText } = useColors()
   const { startScan, stopScan } = useHotspotBle()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
 
   useEffect(() => {
     const scan = async () => {

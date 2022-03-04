@@ -6,7 +6,7 @@ import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import { DebouncedTouchableHighlightBox } from '../boxes/TouchableHighlightBox'
 import { useColors, useSpacing } from '../../theme/themeHooks'
-import CarotRight from '../assets/images/carot-right.svg'
+import CarotRight from '../../assets/images/carot-right.svg'
 import { HotspotMakerModels, HotspotModelKeys } from '../../makers'
 
 const HotspotPairingList = ({

@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavigationContainerRef } from '@react-navigation/native'
-import { LockScreenRequestType } from './naviTypes'
+import { LockScreenRequestType } from './rootNavigationTypes'
 import {
   AppLink,
   HotspotLink,

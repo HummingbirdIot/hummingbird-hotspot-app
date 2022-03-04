@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import usePermissionManager from './usePermissionManager'
 import { RootState } from '../../store/rootReducer'
-import { RootNavigationProp } from '../../views/navigation/naviTypes'
+import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
 import useAlert from './useAlert'
 
 const useActions = ({

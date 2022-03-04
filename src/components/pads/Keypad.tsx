@@ -3,7 +3,7 @@ import useHaptic from '../../utils/hooks/useHaptic'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import TouchableCircle from './TouchableCircle'
-import Backspace from '../assets/images/backspace.svg'
+import Backspace from '../../assets/images/backspace.svg'
 import { useColors } from '../../theme/themeHooks'
 
 type Props = {

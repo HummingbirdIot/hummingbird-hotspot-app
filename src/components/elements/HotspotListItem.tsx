@@ -15,7 +15,7 @@ import RewardsScale from '../../assets/images/rewardsScale.svg'
 import Location from '../../assets/images/location.svg'
 import Signal from '../../assets/images/signal.svg'
 import Elevation from '../../assets/images/elevation.svg'
-import { RootNavigationProp } from '../../views/navigation/naviTypes'
+import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
 import { useColors } from '../../theme/themeHooks'
 import { HotspotCardGroup, HotspotCardItem } from '../cards/HotspotCard'
 

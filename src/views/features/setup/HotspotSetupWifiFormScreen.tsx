@@ -5,18 +5,18 @@ import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import TextInput from '../../../components/texts/TextInput'
 import Button, { DebouncedButton } from '../../../components/buttons/Button'
 import Box from '../../../components/boxes/Box'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotSetupWifiFormScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupWifiFormScreen'>
 const HotspotSetupWifiFormScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
 
   const {

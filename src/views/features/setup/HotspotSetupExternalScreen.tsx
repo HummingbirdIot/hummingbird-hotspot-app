@@ -16,16 +16,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
-import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
+import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
 import { useColors, useBorderRadii } from '../../../theme/themeHooks'
 import { getAddress } from '../../../store/app/secureData'
 import { useAppLinkContext } from '../../../providers/AppLinkProvider'
 import useHaptic from '../../../utils/hooks/useHaptic'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { HotspotMakerModels } from '../../../makers'
 import useMount from '../../../utils/hooks/useMount'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotSetupExternalScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupExternalScreen'>
 
 const HotspotSetupExternalScreen = () => {
   const { t } = useTranslation()

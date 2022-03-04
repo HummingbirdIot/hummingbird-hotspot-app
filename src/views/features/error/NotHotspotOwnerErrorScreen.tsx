@@ -5,7 +5,7 @@ import BackScreen from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
 const NotHotspotOwnerErrorScreen = () => {
   const { t } = useTranslation()

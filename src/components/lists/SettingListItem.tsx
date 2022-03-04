@@ -19,7 +19,7 @@ export type SelectProps = {
   items: ActionSheetItemType[]
 }
 
-export type MoreListItemType = {
+export type SettingListItemType = {
   title: string
   destructive?: boolean
   onPress?: () => void
@@ -29,12 +29,12 @@ export type MoreListItemType = {
   openUrl?: string
 }
 
-const MoreListItem = ({
+const SettingListItem = ({
   item: { title, value, destructive, onToggle, onPress, select, openUrl },
   isTop = false,
   isBottom = false,
 }: {
-  item: MoreListItemType
+  item: SettingListItemType
   isTop?: boolean
   isBottom?: boolean
 }) => {
@@ -121,4 +121,4 @@ const MoreListItem = ({
   )
 }
 
-export default memo(MoreListItem)
+export default memo(SettingListItem)

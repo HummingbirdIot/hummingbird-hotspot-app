@@ -5,10 +5,13 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useAsync } from 'react-async-hook'
 import { useStateWithCallbackLazy } from 'use-state-with-callback'
 import * as LocalAuthentication from 'expo-local-authentication'
-import { RootNavigationProp, RootStackParamList } from '../navigation/naviTypes'
+import {
+  RootNavigationProp,
+  RootStackParamList,
+} from '../navigation/rootNavigationTypes'
 import { getSecureItem } from '../../store/app/secureData'
 import ConfirmPinView from '../../components/pads/ConfirmPinView'
-import { MoreNavigationProp } from '../main/settings/moreTypes'
+import { SettingsNavigationProp } from '../main/settings/settingsNavigationTypes'
 import { useAppDispatch } from '../../store/store'
 import appSlice from '../../store/app/appSlice'
 import SafeAreaBox from '../../components/boxes/SafeAreaBox'
@@ -21,7 +24,7 @@ const LockScreen = () => {
     params: { lock: shouldLock, requestType },
   } = useRoute<Route>()
   const rootNav = useNavigation<RootNavigationProp>()
-  const moreNav = useNavigation<MoreNavigationProp>()
+  const moreNav = useNavigation<SettingsNavigationProp>()
   const [locked, setLocked] = useStateWithCallbackLazy(shouldLock)
   const dispatch = useAppDispatch()
 
@@ -36,7 +39,7 @@ const LockScreen = () => {
         }
       })
     } else {
-      moreNav.navigate('MoreScreen', {
+      moreNav.navigate('SettingsScreen', {
         pinVerifiedFor: requestType,
       })
     }

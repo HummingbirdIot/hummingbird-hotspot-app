@@ -1,10 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack'
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { Hotspot } from '@helium/http'
 import { B58Address } from '../../store/txns/txnsTypes'
-import { GatewayAction } from './features/hotspotSetupTypes'
+import { GatewayAction } from './features/featuresNavigationTypes'
 
-export type MainTabType = 'Overview' | 'Hotspots' | 'Explorer' | 'More'
+export type MainTabType = 'Account' | 'Hotspots' | 'Explorer' | 'Settings'
 
 export type TabBarIconType = {
   focused: boolean
@@ -47,18 +46,7 @@ export type RootStackParamList = {
   ActivityScreen: undefined
   HotspotScreen: {
     address: B58Address
-    // title: string
-    // makerName: string
   }
 }
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList>
-
-export type MainTabParamList = {
-  Hotspots: undefined
-  Wallet: undefined
-  Notifications: undefined
-  More: undefined
-}
-
-export type MainTabNavigationProp = BottomTabNavigationProp<MainTabParamList>

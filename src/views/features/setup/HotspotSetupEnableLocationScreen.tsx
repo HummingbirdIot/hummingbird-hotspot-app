@@ -4,23 +4,23 @@ import { useTranslation } from 'react-i18next'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import Box from '../../../components/boxes/Box'
 import BackScreen from '../../../components/containers/BackScreenContainer'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import useGetLocation from '../../../utils/hooks/useGetLocation'
 
 type Route = RouteProp<
-  HotspotSetupStackParamList,
+  FeaturesStackParamList,
   'HotspotSetupEnableLocationScreen'
 >
 
 const HotspotSetupEnableLocationScreen = () => {
   const { t } = useTranslation()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const maybeGetLocation = useGetLocation()
 

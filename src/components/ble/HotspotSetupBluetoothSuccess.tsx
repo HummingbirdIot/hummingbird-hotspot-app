@@ -9,18 +9,15 @@ import Box from '../boxes/Box'
 import HotspotPairingList from '../lists/HotspotPairingList'
 import Text from '../texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../views/navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../views/navigation/features/featuresNavigationTypes'
 import useAlert from '../../utils/hooks/useAlert'
 import hotspotsSlice from '../../store/data/hotspotsSlice'
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupPickHotspotScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupPickHotspotScreen'>
 const HotspotSetupBluetoothSuccess = () => {
   const { t } = useTranslation()
   const [connectStatus, setConnectStatus] = useState<boolean>(false)
@@ -29,7 +26,7 @@ const HotspotSetupBluetoothSuccess = () => {
   const {
     params: { hotspotType, gatewayAction },
   } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const {
     scannedDevices,
     connect,

@@ -13,21 +13,21 @@ import { ActivityIndicator, Linking, Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import { hotspotOnChain } from '../../../utils/clients/appDataClient'
 import useAlert from '../../../utils/hooks/useAlert'
 import {
   GatewayAction,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import { useColors } from '../../../theme/themeHooks'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import useMount from '../../../utils/hooks/useMount'
 import { RootState } from '../../../store/rootReducer'
 import navigator from '../../navigation/navigator'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotTxnsProgressScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotTxnsProgressScreen'>
 
 const HotspotTxnsProgressScreen = () => {
   const { t } = useTranslation()

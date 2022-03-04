@@ -9,7 +9,7 @@ import { useColors } from '../../../theme/themeHooks'
 import { getAddress } from '../../../store/app/secureData'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
 import DetailViewContainer from '../../../components/containers/DetailScreenContainer'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
 const ActivityScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()

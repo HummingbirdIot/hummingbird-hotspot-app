@@ -17,7 +17,7 @@ export type GatewayAction =
   | 'assertAntenna'
   | 'setWiFi'
 
-export type HotspotSetupStackParamList = {
+export type FeaturesStackParamList = {
   HotspotSetupSelectionScreen: { gatewayAction: GatewayAction }
   HotspotSetupEducationScreen: {
     hotspotType: HotspotType
@@ -145,5 +145,4 @@ export type HotspotSetupStackParamList = {
   }
 }
 
-export type HotspotSetupNavigationProp =
-  StackNavigationProp<HotspotSetupStackParamList>
+export type FeaturesNavigationProp = StackNavigationProp<FeaturesStackParamList>

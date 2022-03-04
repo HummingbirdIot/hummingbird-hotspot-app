@@ -8,25 +8,25 @@ import BackScreen from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import { useBreakpoints, useColors } from '../../../theme/themeHooks'
 import animateTransition from '../../../utils/animateTransition'
 import { DebouncedButton } from '../../../components/buttons/Button'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { getAddress } from '../../../store/app/secureData'
 import useMount from '../../../utils/hooks/useMount'
 
 type Route = RouteProp<
-  HotspotSetupStackParamList,
+  FeaturesStackParamList,
   'HotspotTxnsConfirmExternalScreen'
 >
 
 const HotspotTxnsConfirmExternalScreen = () => {
   const { t } = useTranslation()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const colors = useColors()
   const breakpoints = useBreakpoints()
   const [address, setAddress] = useState<string | null>()

@@ -5,9 +5,9 @@ import { getCountry } from 'react-native-localize'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import Box from '../../../components/boxes/Box'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import { DebouncedButton } from '../../../components/buttons/Button'
@@ -15,16 +15,13 @@ import HotspotConfigurationPicker from '../../../components/pickers/HotspotConfi
 import { MakerAntenna } from '../../../makers/antennaMakerTypes'
 import Example from '../../../makers/example'
 import { HotspotMakerModels } from '../../../makers'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotAssertPickAntennaScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotAssertPickAntennaScreen'>
 
 const HotspotAssertPickAntennaScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const { params } = useRoute<Route>()
   // console.log(

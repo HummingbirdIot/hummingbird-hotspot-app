@@ -12,20 +12,17 @@ import CarouselItem, {
   CarouselItemData,
 } from '../../../components/elements/CarouselItem'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import { useColors, useSpacing } from '../../../theme/themeHooks'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupEducationScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupEducationScreen'>
 
 const HotspotEducationScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
   const carouselRef = useRef<Carousel<CarouselItemData>>(null)
   const [slideIndex, setSlideIndex] = useState(0)

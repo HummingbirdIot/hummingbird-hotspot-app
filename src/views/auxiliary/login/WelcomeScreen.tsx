@@ -6,7 +6,7 @@ import { getBundleId } from 'react-native-device-info'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Text from '../../../components/texts/Text'
-import { OnboardingNavigationProp } from './onboardingTypes'
+import { LoginNavigationProp } from './loginNavigationTypes'
 import Box from '../../../components/boxes/Box'
 import TextTransform from '../../../components/texts/TextTransform'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
@@ -17,7 +17,7 @@ const WelcomeScreen = () => {
   const { delegateApps } = WalletLink
   const [delegateApp] = delegateApps
   const insets = useSafeAreaInsets()
-  const navigation = useNavigation<OnboardingNavigationProp>()
+  const navigation = useNavigation<LoginNavigationProp>()
 
   const handleAppSelection = useCallback(
     (app: WalletLink.DelegateApp) => async () => {

@@ -4,7 +4,7 @@ import { useHotspotBle } from '@helium/react-native-sdk'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import HotspotSetupBluetoothError from '../../../components/ble/HotspotSetupBluetoothError'
 import HotspotSetupBluetoothSuccess from '../../../components/ble/HotspotSetupBluetoothSuccess'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
 const HotspotSetupPickHotspotScreen = () => {
   const { scannedDevices } = useHotspotBle()

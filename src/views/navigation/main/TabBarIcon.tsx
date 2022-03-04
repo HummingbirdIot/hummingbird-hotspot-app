@@ -5,7 +5,7 @@ import Account from '@assets/images/accountIcon.svg'
 import Hotspot from '@assets/images/hotspotIcon.svg'
 import Search from '@assets/images/search.svg'
 import Box from '../../../components/boxes/Box'
-import { MainTabType, TabBarIconType } from '../naviTypes'
+import { MainTabType, TabBarIconType } from '../rootNavigationTypes'
 import { useColors } from '../../../theme/themeHooks'
 
 type Props = {
@@ -21,7 +21,7 @@ const Icon = ({
   size: number
   name: MainTabType
 }) => {
-  if (name === 'Overview') {
+  if (name === 'Account') {
     return <Account height={size} width={size} color={color} />
   }
   if (name === 'Hotspots') {

@@ -9,7 +9,7 @@ import Box from '../../../components/boxes/Box'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { locale } from '../../../utils/i18n'
 import BackScreen from '../../../components/containers/BackScreenContainer'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
 const CreateAccount = () => {
   const { t } = useTranslation()

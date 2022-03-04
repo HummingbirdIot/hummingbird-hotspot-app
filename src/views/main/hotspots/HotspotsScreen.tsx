@@ -9,7 +9,7 @@ import { fetchHotspotsData } from '../../../store/data/hotspotsSlice'
 import { RootState } from '../../../store/rootReducer'
 import useMount from '../../../utils/hooks/useMount'
 
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import HotspotListItem from '../../../components/elements/HotspotListItem'
 import TabViewContainer from '../../../components/containers/TabViewContainer'
 

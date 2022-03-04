@@ -5,18 +5,15 @@ import Box from '../boxes/Box'
 import { DebouncedButton } from '../buttons/Button'
 import Text from '../texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../views/navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../views/navigation/features/featuresNavigationTypes'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupPickHotspotScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupPickHotspotScreen'>
 const HotspotSetupBluetoothError = () => {
   const { t } = useTranslation()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   return (
     <Box flex={1}>
       <Box flex={1} alignItems="center" justifyContent="center">

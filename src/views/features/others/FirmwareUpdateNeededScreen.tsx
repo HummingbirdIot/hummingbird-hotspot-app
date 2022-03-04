@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import Cloud from '../../../assets/images/cloud.svg'
 import Box from '../../../components/boxes/Box'
-import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
+import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'FirmwareUpdateNeededScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'FirmwareUpdateNeededScreen'>
 
 const FirmwareUpdateNeededScreen = () => {
   const { t } = useTranslation()

@@ -23,9 +23,9 @@ import Text from '../../../components/texts/Text'
 import { reverseGeocode } from '../../../utils/location'
 import sleep from '../../../utils/sleep'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { useColors, useSpacing } from '../../../theme/themeHooks'
@@ -34,13 +34,13 @@ import AddressSearchModal from '../../../components/modals/AddressSearchModal'
 import { PlaceGeography } from '../../../utils/clients/googlePlacesClient'
 
 type Route = RouteProp<
-  HotspotSetupStackParamList,
+  FeaturesStackParamList,
   'HotspotAssertPickLocationScreen'
 >
 const HotspotAssertPickLocationScreen = () => {
   const { t } = useTranslation()
   const { params } = useRoute<Route>()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const [disabled, setDisabled] = useState(true)
   const [mapCenter, setMapCenter] = useState([-122.419, 37.775])
   const [markerCenter, setMarkerCenter] = useState([-122.419, 37.775])

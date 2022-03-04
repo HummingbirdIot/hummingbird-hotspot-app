@@ -15,7 +15,7 @@ import { formatHotspotNameArray } from '../../../utils/formatter'
 import {
   RootNavigationProp,
   RootStackParamList,
-} from '../../navigation/naviTypes'
+} from '../../navigation/rootNavigationTypes'
 import DetailViewContainer from '../../../components/containers/DetailScreenContainer'
 import useActions from '../../../utils/hooks/useActions'
 import HotspotActions from '../../../components/modals/HotspotActions'

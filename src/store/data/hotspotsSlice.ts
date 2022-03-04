@@ -16,10 +16,10 @@ import {
   handleCacheRejected,
   hasValidCache,
 } from '../../utils/cacheUtils'
-import { HotspotSyncStatus } from '../../views/main/hotspots/hotspotTypes'
 import { B58Address } from '../txns/txnsTypes'
 // import { getSecureItem } from '../../utils/secureAccount'
 
+export type HotspotSyncStatus = 'full' | 'partial'
 export type Rewards = Record<string, Array<Balance<NetworkTokens>>>
 
 type HotspotDetail = {

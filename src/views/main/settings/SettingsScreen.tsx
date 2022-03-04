@@ -20,14 +20,17 @@ import Text from '../../../components/texts/Text'
 import { RootState } from '../../../store/rootReducer'
 import { useAppDispatch } from '../../../store/store'
 import appSlice, { updateSetting } from '../../../store/app/appSlice'
-import { MoreNavigationProp, MoreStackParamList } from './moreTypes'
+import {
+  SettingsNavigationProp,
+  SettingsStackParamList,
+} from './settingsNavigationTypes'
 import {
   RootNavigationProp,
   RootStackParamList,
-} from '../../navigation/naviTypes'
-import MoreListItem, {
-  MoreListItemType,
-} from '../../../components/lists/MoreListItem'
+} from '../../navigation/rootNavigationTypes'
+import SettingListItem, {
+  SettingListItemType,
+} from '../../../components/lists/SettingListItem'
 import { useSpacing } from '../../../theme/themeHooks'
 import Box from '../../../components/boxes/Box'
 import { SUPPORTED_LANGUAGUES } from '../../../utils/i18n/i18nTypes'
@@ -45,15 +48,20 @@ import TabViewContainer from '../../../components/containers/TabViewContainer'
 import useAuthIntervals from '../../../utils/hooks/useAuthIntervals'
 import AppInfoItem from '../../../components/elements/AppInfoItem'
 
-type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
-const MoreScreen = () => {
+type Route = RouteProp<
+  RootStackParamList & SettingsStackParamList,
+  'SettingsScreen'
+>
+const SettingsScreen = () => {
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
   const { params } = useRoute<Route>()
   const dispatch = useAppDispatch()
   const app = useSelector((state: RootState) => state.app, isEqual)
   const authIntervals = useAuthIntervals()
-  const navigation = useNavigation<MoreNavigationProp & RootNavigationProp>()
+  const navigation = useNavigation<
+    SettingsNavigationProp & RootNavigationProp
+  >()
   const spacing = useSpacing()
   const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
@@ -163,7 +171,7 @@ const MoreScreen = () => {
   }, [showOKCancelAlert])
 
   const SectionData = useMemo(() => {
-    let pin: MoreListItemType[] = [
+    let pin: SettingListItemType[] = [
       {
         title: t('more.sections.security.enablePin'),
         onToggle: handlePinRequired,
@@ -215,7 +223,7 @@ const MoreScreen = () => {
             title: t('more.sections.learn.troubleshooting'),
             openUrl: Articles.Docs_Root,
           },
-        ] as MoreListItemType[],
+        ] as SettingListItemType[],
         // footer: <DiscordItem />,
       },
 
@@ -276,7 +284,7 @@ const MoreScreen = () => {
             title: 'Privacy Policy',
             openUrl: 'https://xdt.com/privacy-policy.html',
           },
-        ] as MoreListItemType[],
+        ] as SettingListItemType[],
         footer: <AppInfoItem version={version} />,
       },
     ]
@@ -308,7 +316,7 @@ const MoreScreen = () => {
 
   const renderItem = useCallback(
     ({ item, index, section }) => (
-      <MoreListItem
+      <SettingListItem
         item={item}
         isTop={index === 0}
         isBottom={index === section.data.length - 1}
@@ -362,4 +370,4 @@ const MoreScreen = () => {
   )
 }
 
-export default memo(MoreScreen)
+export default memo(SettingsScreen)

@@ -3,43 +3,43 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Platform } from 'react-native'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-import { MoreStackParamList } from './moreTypes'
+import { SettingsStackParamList } from './settingsNavigationTypes'
 import DefaultScreenOptions from '../../defaultScreenOptions'
-import MoreScreen from './MoreScreen'
+import SettingsScreen from './SettingsScreen'
 import AccountCreatePinScreen from './CreatePinScreen'
 import AccountConfirmPinScreen from './ConfirmPinScreen'
-import { RootStackParamList } from '../../navigation/naviTypes'
+import { RootStackParamList } from '../../navigation/rootNavigationTypes'
 
-const MoreStack = createStackNavigator<MoreStackParamList>()
+const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 type Props = BottomTabScreenProps<RootStackParamList>
-const More = ({ navigation, route }: Props) => {
+const SettingsNavigator = ({ navigation, route }: Props) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route)
     navigation.setOptions({
-      tabBarVisible: !routeName || routeName === 'MoreScreen',
+      tabBarVisible: !routeName || routeName === 'SettingsScreen',
     })
   }, [navigation, route])
 
   return (
-    <MoreStack.Navigator
+    <SettingsStack.Navigator
       headerMode="none"
       screenOptions={
         Platform.OS === 'android' ? DefaultScreenOptions : undefined
       }
       mode={Platform.OS === 'android' ? 'modal' : undefined}
     >
-      <MoreStack.Screen name="MoreScreen" component={MoreScreen} />
-      <MoreStack.Screen
+      <SettingsStack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <SettingsStack.Screen
         name="AccountCreatePinScreen"
         component={AccountCreatePinScreen}
       />
-      <MoreStack.Screen
+      <SettingsStack.Screen
         name="AccountConfirmPinScreen"
         component={AccountConfirmPinScreen}
       />
-    </MoreStack.Navigator>
+    </SettingsStack.Navigator>
   )
 }
 
-export default More
+export default SettingsNavigator

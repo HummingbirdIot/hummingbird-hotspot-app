@@ -23,7 +23,7 @@ import { isFinite } from 'lodash'
 import LocationIcon from '@assets/images/location-icon.svg'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
-import NoLocation from '../assets/images/no-location.svg'
+import NoLocation from '../../assets/images/no-location.svg'
 import { findBounds } from '../../utils/mapUtils'
 import CurrentLocationButton from '../buttons/CurrentLocationButton'
 import { theme, Theme } from '../../theme/theme'
@@ -145,7 +145,7 @@ const Map = ({
 
   const mapImages = useMemo(
     () => ({
-      markerLocation: require('../assets/images/locationPurple.png'),
+      markerLocation: require('../../assets/images/locationPurple.png'),
     }),
     [],
   )

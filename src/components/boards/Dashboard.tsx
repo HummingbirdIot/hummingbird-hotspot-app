@@ -8,10 +8,8 @@ import Clipboard from '@react-native-community/clipboard'
 import { useTranslation } from 'react-i18next'
 import Box from '../boxes/Box'
 import DashboardItem from './DashboardItem'
-import {
-  MainTabNavigationProp,
-  RootNavigationProp,
-} from '../../views/navigation/naviTypes'
+import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
+import { MainTabNavigationProp } from '../../views/navigation/main/mainTabNavigationTypes'
 import BottomModal from '../modals/BottomModal'
 import { useColors, useSpacing } from '../../theme/themeHooks'
 import { Spacing } from '../../theme/theme'

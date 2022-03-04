@@ -16,9 +16,9 @@ import TabViewContainer from '../../../components/containers/TabViewContainer'
 import appSlice from '../../../store/app/appSlice'
 import AssetsBoard from '../../../components/boards/AssetsBoard'
 import Dashboard from '../../../components/boards/Dashboard'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
-const OverviewScreen = () => {
+const AccountScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()
   const [address, setAccountAddress] = useState('')
   const [account, setAccount] = useState<Account>()
@@ -45,7 +45,7 @@ const OverviewScreen = () => {
 
   useAsync(async () => {
     const aacc = await getAddress()
-    // console.log('OverviewScreen::address:', aacc)
+    // console.log('AccountScreen::address:', aacc)
     setAccountAddress(aacc || '')
   }, [])
 
@@ -84,4 +84,4 @@ const OverviewScreen = () => {
   )
 }
 
-export default memo(OverviewScreen)
+export default memo(AccountScreen)

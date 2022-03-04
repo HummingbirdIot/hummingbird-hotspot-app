@@ -4,7 +4,7 @@ import { BoxProps } from '@shopify/restyle'
 import { useTranslation } from 'react-i18next'
 import Text from '../texts/Text'
 import { Colors, Spacing, Theme } from '../../theme/theme'
-import BackArrow from '../assets/images/backArrow.svg'
+import BackArrow from '../../assets/images/backArrow.svg'
 import { DebouncedTouchableOpacityBox } from '../boxes/TouchableOpacityBox'
 import { useColors } from '../../theme/themeHooks'
 

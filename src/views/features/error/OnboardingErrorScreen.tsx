@@ -5,10 +5,10 @@ import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
-import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
+import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'OnboardingErrorScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'OnboardingErrorScreen'>
 const OnboardingErrorScreen = () => {
   const { t, i18n } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()

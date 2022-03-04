@@ -15,14 +15,14 @@ import HotspotSetWiFiNavigator from './features/HotspotSetWiFiNavigator'
 import WelcomeScreen from '../auxiliary/login/WelcomeScreen'
 import CreateHeliumAccountScreen from '../auxiliary/login/CreateHeliumAccountScreen'
 import EnterExplorationCodeScreen from '../auxiliary/login/EnterExplorationCodeScreen'
-import { OnboardingStackParamList } from '../auxiliary/login/onboardingTypes'
-import ActivityScreen from '../main/overview/ActivityScreen'
+import { LoginStackParamList } from '../auxiliary/login/loginNavigationTypes'
+import ActivityScreen from '../main/account/ActivityScreen'
 import LockScreen from '../auxiliary/LockScreen'
 import HotspotScreen from '../main/hotspots/HotspotScreen'
 
-const OnboardingStack = createStackNavigator<OnboardingStackParamList>()
-const MainStack = createStackNavigator()
-// const MainStack = createNativeStackNavigator()
+const LoginStack = createStackNavigator<LoginStackParamList>()
+const RootStack = createStackNavigator()
+// const RootStack = createNativeStackNavigator()
 
 const RootNavigator = () => {
   const { isWatcher, walletLinkToken } = useSelector(
@@ -37,26 +37,26 @@ const RootNavigator = () => {
 
   if (!isWatcher && !walletLinkToken) {
     return (
-      <OnboardingStack.Navigator
+      <LoginStack.Navigator
         headerMode="none"
         screenOptions={defaultScreenOptions}
         options={{ gestureEnabled: false }}
       >
-        <OnboardingStack.Screen name="Welcome" component={WelcomeScreen} />
-        <OnboardingStack.Screen
+        <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
+        <LoginStack.Screen
           name="TypeInExplorationCode"
           component={EnterExplorationCodeScreen}
         />
-        <OnboardingStack.Screen
+        <LoginStack.Screen
           name="CreateHeliumAccount"
           component={CreateHeliumAccountScreen}
         />
-      </OnboardingStack.Navigator>
+      </LoginStack.Navigator>
     )
   }
 
   return (
-    <MainStack.Navigator
+    <RootStack.Navigator
       // headerMode="none"
       screenOptions={({ route }) => {
         if (route.name === 'LockScreen')
@@ -67,32 +67,32 @@ const RootNavigator = () => {
         return {}
       }}
     >
-      <MainStack.Screen
+      <RootStack.Screen
         name="MainTabs"
         options={{ headerShown: false }}
         component={MainTabs}
       />
 
-      <MainStack.Group screenOptions={{ headerShown: false }}>
-        <MainStack.Screen
+      <RootStack.Group screenOptions={{ headerShown: false }}>
+        <RootStack.Screen
           name="HotspotSetup"
           component={HotspotSetupNavigator}
         />
-        <MainStack.Screen
+        <RootStack.Screen
           name="HotspotAssert"
           component={HotspotAssertLocationNavigator}
         />
-        <MainStack.Screen
+        <RootStack.Screen
           name="HotspotSetWiFi"
           component={HotspotSetWiFiNavigator}
         />
-      </MainStack.Group>
-      <MainStack.Group screenOptions={{ headerShown: false }}>
-        <MainStack.Screen name="ActivityScreen" component={ActivityScreen} />
-        <MainStack.Screen name="HotspotScreen" component={HotspotScreen} />
-        <MainStack.Screen name="LockScreen" component={LockScreen} />
-      </MainStack.Group>
-    </MainStack.Navigator>
+      </RootStack.Group>
+      <RootStack.Group screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="ActivityScreen" component={ActivityScreen} />
+        <RootStack.Screen name="HotspotScreen" component={HotspotScreen} />
+        <RootStack.Screen name="LockScreen" component={LockScreen} />
+      </RootStack.Group>
+    </RootStack.Navigator>
   )
 }
 

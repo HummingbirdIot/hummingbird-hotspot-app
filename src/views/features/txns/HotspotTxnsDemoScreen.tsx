@@ -7,12 +7,12 @@ import { ActivityIndicator } from 'react-native'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
-import { HotspotSetupStackParamList } from '../../navigation/features/hotspotSetupTypes'
+import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
 import { useColors } from '../../../theme/themeHooks'
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotTxnsDemoScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotTxnsDemoScreen'>
 
 const HotspotTxnsSubmitScreen = () => {
   const { t } = useTranslation()

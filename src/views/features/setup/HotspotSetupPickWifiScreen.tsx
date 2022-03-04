@@ -8,16 +8,16 @@ import { useSelector } from 'react-redux'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import Box from '../../../components/boxes/Box'
 import CarotRight from '../../../assets/images/carot-right.svg'
 import { useColors } from '../../../theme/themeHooks'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import Checkmark from '../../../assets/images/check.svg'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { getAddress } from '../../../store/app/secureData'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
 import { RootState } from '../../../store/rootReducer'
@@ -59,10 +59,10 @@ const WifiItem = ({
   )
 }
 
-type Route = RouteProp<HotspotSetupStackParamList, 'HotspotSetupPickWifiScreen'>
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupPickWifiScreen'>
 const HotspotSetupPickWifiScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
 
   const {

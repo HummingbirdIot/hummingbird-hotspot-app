@@ -7,25 +7,25 @@ import { useHotspotBle } from '@helium/react-native-sdk'
 import { ActivityIndicator } from 'react-native'
 import useAlert from '../../../utils/hooks/useAlert'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import Text from '../../../components/texts/Text'
 import Box from '../../../components/boxes/Box'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import { getHotspotDetails } from '../../../utils/clients/appDataClient'
 import { getAddress } from '../../../store/app/secureData'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { useColors } from '../../../theme/themeHooks'
 
 type Route = RouteProp<
-  HotspotSetupStackParamList,
+  FeaturesStackParamList,
   'HotspotSetupWifiConnectingScreen'
 >
 
 const HotspotSetupWifiConnectingScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
 
   const {

@@ -2,23 +2,20 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import {
-  HotspotSetupNavigationProp,
-  HotspotSetupStackParamList,
-} from '../../navigation/features/hotspotSetupTypes'
+  FeaturesNavigationProp,
+  FeaturesStackParamList,
+} from '../../navigation/features/featuresNavigationTypes'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
-import { RootNavigationProp } from '../../navigation/naviTypes'
+import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
-type Route = RouteProp<
-  HotspotSetupStackParamList,
-  'HotspotSetupSkipLocationScreen'
->
+type Route = RouteProp<FeaturesStackParamList, 'HotspotSetupSkipLocationScreen'>
 
 const HotspotSetupSkipLocationScreen = () => {
   const { t } = useTranslation()
-  const navigation = useNavigation<HotspotSetupNavigationProp>()
+  const navigation = useNavigation<FeaturesNavigationProp>()
   const rootNav = useNavigation<RootNavigationProp>()
 
   const { params } = useRoute<Route>()
