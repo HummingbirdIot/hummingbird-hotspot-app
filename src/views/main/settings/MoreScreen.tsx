@@ -15,6 +15,7 @@ import { isEqual } from 'lodash'
 import { useAsync } from 'react-async-hook'
 import Config from 'react-native-config'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
+import { getVersion } from 'react-native-device-info'
 import Text from '../../../components/Text'
 import { RootState } from '../../../store/rootReducer'
 import { useAppDispatch } from '../../../store/store'
@@ -42,6 +43,7 @@ import Configuration from '../../../assets/images/settings/config.svg'
 import { SUPPORTED_CURRENCIES } from '../../../utils/hooks/useCurrency'
 import TabViewContainer from '../../../widgets/main/TabViewContainer'
 import useAuthIntervals from '../../../utils/hooks/useAuthIntervals'
+import AppInfoItem from '../../../widgets/main/AppInfoItem'
 
 type Route = RouteProp<RootStackParamList & MoreStackParamList, 'MoreScreen'>
 const MoreScreen = () => {
@@ -56,6 +58,7 @@ const MoreScreen = () => {
   const { changeLanguage, language } = useLanguageContext()
   const [address, setAddress] = useState('')
   const { showOKCancelAlert } = useAlert()
+  const [version] = useState(getVersion())
 
   useAsync(async () => {
     const fullAddress = await getSecureItem('user.address')
@@ -269,7 +272,12 @@ const MoreScreen = () => {
             onPress: handleSignOut,
             destructive: true,
           },
+          {
+            title: 'Privacy Policy',
+            openUrl: 'https://xdt.com/privacy-policy.html',
+          },
         ] as MoreListItemType[],
+        footer: <AppInfoItem version={version} />,
       },
     ]
   }, [
@@ -284,6 +292,7 @@ const MoreScreen = () => {
     handleClearMapCache,
     address,
     handleSignOut,
+    version,
     authIntervals,
     handleIntervalSelected,
     handleResetPin,

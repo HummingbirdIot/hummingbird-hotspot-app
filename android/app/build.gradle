@@ -233,7 +233,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
+    implementation project(path: ':@react-native-community_async-storage')  // From node_modules
 
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
