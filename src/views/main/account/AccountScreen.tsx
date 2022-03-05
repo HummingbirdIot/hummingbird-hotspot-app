@@ -11,8 +11,8 @@ import RewardsStatistics from '../../../components/charts/BarChart/RewardsStatis
 
 import TabViewContainer from '../../../components/containers/TabViewContainer'
 import appSlice, { fetchAccount } from '../../../store/app/appSlice'
-import AssetsBoard from '../../../components/boards/AssetsBoard'
-import Dashboard from '../../../components/boards/Dashboard'
+import AssetsBoard from '../../../components/elements/AssetsBoard'
+import Dashboard from '../../../components/elements/Dashboard'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { RootState } from '../../../store/rootReducer'
 

@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { GestureResponderEvent, Linking, Platform } from 'react-native'
-import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
+import React, { memo, useCallback, useState } from 'react'
+import { Linking, Platform } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { Edge, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { FlatList } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
@@ -22,22 +20,23 @@ import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 import { B58Address } from '../../store/txns/txnsTypes'
 import { useAppDispatch } from '../../store/store'
 import hotspotsSlice from '../../store/data/hotspotsSlice'
+import { truncateAddress } from '../../utils/formatter'
+import AccountsListItem from '../lists/AccountsListItem'
 
 const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
-  const colorScheme: ColorSchemeName = useColorScheme()
   const dispatch = useAppDispatch()
-  const [modalVisible, setModalVisible] = useState(false)
   const [ownedAddress, setOwnedAddress] = useState('')
   const [addresses, setAddresses] = useState<WatchingAddress[]>([])
   const { bottom } = useSafeAreaInsets()
 
   const { primaryText } = useColors()
 
-  const { isWatcher, walletLinkToken, watchingAddresses, accountAddress } =
-    useSelector((state: RootState) => state.app.user)
+  const { walletLinkToken, watchingAddresses, accountAddress } = useSelector(
+    (state: RootState) => state.app.user,
+  )
   const [delegateApp] = WalletLink.delegateApps
   const handleAppSelection = useCallback(
     (app: WalletLink.DelegateApp) => async () => {
@@ -74,35 +73,38 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
   }, [walletLinkToken, watchingAddresses])
 
   const switchWatchingAccount = (address: B58Address) => {
-    if (address !== accountAddress) {
+    if (address === accountAddress) {
+      handleClose()
+    } else {
       dispatch(hotspotsSlice.actions.signOut())
       dispatch(appSlice.actions.enableWatchMode(address))
       handleClose()
     }
   }
 
-  const renderItem = ({ item }: { item: WatchingAddress }) => {
-    return (
-      <Box>
-        <TouchableOpacityBox
-          padding="m"
-          onPress={() => switchWatchingAccount(item.address)}
-        >
-          <Text variant="body1">{item.alias}</Text>
-          <Text variant="body3">{item.address}</Text>
-        </TouchableOpacityBox>
-      </Box>
-    )
-  }
+  const renderItem = ({ item }: { item: WatchingAddress }) => (
+    <AccountsListItem
+      data={item}
+      isCurrent={item.address === accountAddress}
+      onSelect={switchWatchingAccount}
+    />
+  )
 
   return (
     <>
-      <Box padding="m">
-        <Text variant="h4">Linked</Text>
+      <Box
+        margin="m"
+        padding="s"
+        backgroundColor="primaryBackground"
+        borderRadius="m"
+      >
+        <Text variant="h4">My Account</Text>
       </Box>
       <Box padding="m">
         {ownedAddress ? (
-          <Text variant="body1">Linked as: {ownedAddress}</Text>
+          <Text variant="body1">
+            Linked as: {truncateAddress(ownedAddress, 4, 4)}
+          </Text>
         ) : (
           <TouchableOpacityBox>
             <Text variant="body1">Link now</Text>
@@ -115,7 +117,15 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
           </TouchableOpacityBox>
         )}
       </Box>
-      <Box padding="m">
+      <Box
+        margin="m"
+        padding="s"
+        backgroundColor="primaryBackground"
+        borderRadius="m"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Text variant="h4">Watching</Text>
         <Icon
           name="add"

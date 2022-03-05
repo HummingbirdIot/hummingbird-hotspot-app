@@ -241,7 +241,6 @@ const appSlice = createSlice({
       state.user.lastFiatBlance = blance
       setSecureItem('user.lastFiatBlance', blance)
     },
-
     backupAccount: (state, action: PayloadAction<string>) => {
       setSecureItem('settings.isPinRequired', true)
       setSecureItem('settings.userPin', action.payload)
@@ -277,7 +276,6 @@ const appSlice = createSlice({
     updateLastIdle: (state) => {
       state.lastIdle = Date.now()
     },
-
     lock: (state, action: PayloadAction<boolean>) => {
       state.isLocked = action.payload
       if (!state.isLocked) {

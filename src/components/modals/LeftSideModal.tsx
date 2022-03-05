@@ -112,26 +112,31 @@ const LeftSideModal = ({
           backgroundColor={backgroundColor || 'surface'}
         >
           <Box
-            flexDirection="row"
-            justifyContent="space-between"
-            marginVertical="m"
             paddingHorizontal="m"
-            alignItems="center"
             style={{
               paddingTop: top,
             }}
           >
-            <Box flex={1}>
-              <Text variant="h3">{title}</Text>
-            </Box>
-            <Box>
-              <Icon
-                name="menu-open"
-                onPress={close}
-                size={30}
-                color={primaryText}
-                tvParallaxProperties={undefined}
-              />
+            <Box
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              paddingVertical="m"
+              borderBottomColor="primaryBackground"
+              borderBottomWidth={1}
+            >
+              <Box flex={1}>
+                <Text variant="h3">{title}</Text>
+              </Box>
+              <Box>
+                <Icon
+                  name="menu-open"
+                  onPress={close}
+                  size={30}
+                  color={primaryText}
+                  tvParallaxProperties={undefined}
+                />
+              </Box>
             </Box>
           </Box>
           <Box flex={1}>{children}</Box>

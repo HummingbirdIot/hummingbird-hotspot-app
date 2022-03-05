@@ -9,7 +9,7 @@ import SafeAreaBox from '../boxes/SafeAreaBox'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import LeftSideModal from '../modals/LeftSideModal'
-import AccountsView from './AccountsView'
+import AccountsView from '../elements/AccountsView'
 import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 
 type IconInfo = {
