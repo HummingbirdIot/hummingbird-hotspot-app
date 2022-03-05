@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { Icon } from 'react-native-elements'
-import { GestureResponderEvent } from 'react-native'
+import { ActivityIndicator, GestureResponderEvent } from 'react-native'
 import { useColors } from '../../theme/themeHooks'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
@@ -10,9 +10,11 @@ import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 const DashboardNumberItem = ({
   item,
   value,
+  loading,
   onPress,
 }: {
   item: string
+  loading: boolean
   value: string
   onPress?: (event: GestureResponderEvent) => void
 }) => {
@@ -29,12 +31,18 @@ const DashboardNumberItem = ({
         justifyContent="center"
         onPress={onPress}
       >
-        <Text color="surfaceText" fontSize={30} textAlign="center">
-          {value}
-        </Text>
-        <Text color="surfaceText" fontSize={11} textAlign="right">
-          {item}
-        </Text>
+        {loading ? (
+          <ActivityIndicator size={30} />
+        ) : (
+          <>
+            <Text color="surfaceText" fontSize={30} textAlign="center">
+              {value}
+            </Text>
+            <Text color="surfaceText" fontSize={11} textAlign="right">
+              {item}
+            </Text>
+          </>
+        )}
       </TouchableOpacityBox>
     </Box>
   )

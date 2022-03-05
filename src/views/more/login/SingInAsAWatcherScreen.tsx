@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { useSelector } from 'react-redux'
 import BackScreen from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import TextInput from '../../../components/texts/TextInput'
@@ -10,47 +11,66 @@ import { DebouncedButton } from '../../../components/buttons/Button'
 import Box from '../../../components/boxes/Box'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { useAppDispatch } from '../../../store/store'
-import appSlice from '../../../store/app/appSlice'
+import appSlice, { fetchAccount } from '../../../store/app/appSlice'
 import useAlert from '../../../utils/hooks/useAlert'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { useColors } from '../../../theme/themeHooks'
-import { getAccount } from '../../../utils/clients/appDataClient'
+import { B58Address } from '../../../store/txns/txnsTypes'
+import { RootState } from '../../../store/rootReducer'
+
+const addresses = [
+  '13dSn1UkygFggDtaq7ePn1UbhxFDh41zAJkS7whhKec2Df24Beg',
+  '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
+]
 
 const SingInAsAWatcherScreen = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const nav = useNavigation<RootNavigationProp>()
   const { showOKAlert } = useAlert()
   const dispatch = useAppDispatch()
-  const [loading, setLoading] = useState(false)
-  const [address, setAddress] = useState('')
+  const [checking, setCheckState] = useState(false)
+  const [address, setAddress] = useState<B58Address>('')
   const { primaryText } = useColors()
+  const { fetchAccountStatus, account } = useSelector(
+    (state: RootState) => state.app.user,
+  )
 
   const handleClose = useCallback(() => {
     nav.pop()
   }, [nav])
 
-  const navNext = useCallback(async () => {
-    if (address) {
-      try {
-        setLoading(true)
-        const account = await getAccount(address)
-        if (!account) throw new Error('Account not found')
-        // console.log('SingInAsAWatcherScreen::account:', account)
+  useEffect(() => {
+    if (checking) {
+      if (fetchAccountStatus === 'pending' || fetchAccountStatus === 'idle')
+        return
+      if (fetchAccountStatus === 'fulfilled' && account?.address === address) {
         nav.pop()
         dispatch(appSlice.actions.enableWatchMode(account?.address))
-      } catch (error) {
-        await showOKAlert({
+      } else if (fetchAccountStatus === 'rejected') {
+        showOKAlert({
           titleKey: 'Address Invalid',
           messageKey:
             'The address you entered is invalid, please check it carefully.',
         })
-        return false
-      } finally {
-        setLoading(false)
       }
+      setCheckState(false)
     }
-  }, [address, nav, dispatch, showOKAlert])
+  }, [
+    account?.address,
+    address,
+    checking,
+    dispatch,
+    fetchAccountStatus,
+    nav,
+    showOKAlert,
+  ])
+
+  const navNext = useCallback(async () => {
+    if (address) {
+      setCheckState(true)
+      dispatch(fetchAccount({ address }))
+    }
+  }, [address, dispatch])
 
   return (
     <BackScreen onClose={handleClose}>
@@ -74,7 +94,7 @@ const SingInAsAWatcherScreen = () => {
               maxFontSizeMultiplier={1.2}
             >
               {t(
-                'Sign in as watch by typing in an address of a helium account, you would be able to watch the data of this account.',
+                'Sign in as a watcher by typing in an address of a helium account, you will be able to watch the data of this account.',
               )}
             </Text>
             <Text
@@ -84,7 +104,7 @@ const SingInAsAWatcherScreen = () => {
               maxFontSizeMultiplier={1.2}
             >
               {t(
-                'Under the WATCHING MODE, however, you will not be able to sumbit transactions.',
+                'Under the WATCHING MODE, however, you will not be allowed to sumbit transactions.',
               )}
             </Text>
           </Box>
@@ -108,8 +128,8 @@ const SingInAsAWatcherScreen = () => {
               multiline
               numberOfLines={3} // Android only
               maxLength={51}
-              opacity={loading ? 0.6 : 1}
-              editable={!loading}
+              opacity={fetchAccountStatus === 'pending' ? 0.6 : 1}
+              editable={fetchAccountStatus !== 'pending'}
             />
           </Box>
           <Box
@@ -118,42 +138,24 @@ const SingInAsAWatcherScreen = () => {
             marginHorizontal="n_s"
             justifyContent="space-between"
           >
-            <TouchableOpacityBox
-              flex={2}
-              height={50}
-              backgroundColor="surface"
-              margin="s"
-              borderRadius="s"
-              justifyContent="center"
-              onPress={() =>
-                loading ||
-                setAddress(
-                  '13YxjCpiGrbDtbthrPAH2zrJKCk5UajQHJRfqtSSmqTE8924Q65',
-                )
-              }
-            >
-              <Text color="surfaceText" textAlign="center">
-                Address 4Q65
-              </Text>
-            </TouchableOpacityBox>
-            <TouchableOpacityBox
-              flex={2}
-              height={50}
-              backgroundColor="surface"
-              margin="s"
-              borderRadius="s"
-              justifyContent="center"
-              onPress={() =>
-                loading ||
-                setAddress(
-                  '13uM7gtVxPR57P3ue9k5mKfeYDfffesZ8ongiDAdkELyW83znBe',
-                )
-              }
-            >
-              <Text color="surfaceText" textAlign="center">
-                Address znBe
-              </Text>
-            </TouchableOpacityBox>
+            {addresses.map((addr: B58Address) => (
+              <TouchableOpacityBox
+                key={addr}
+                flex={2}
+                height={50}
+                backgroundColor="surface"
+                margin="s"
+                borderRadius="s"
+                justifyContent="center"
+                onPress={() =>
+                  fetchAccountStatus === 'pending' || setAddress(addr)
+                }
+              >
+                <Text color="surfaceText" textAlign="center">
+                  Address {addr.slice(addr.length - 4).toUpperCase()}
+                </Text>
+              </TouchableOpacityBox>
+            ))}
             <TouchableOpacityBox
               flex={1}
               height={50}
@@ -161,12 +163,7 @@ const SingInAsAWatcherScreen = () => {
               margin="s"
               borderRadius="s"
               justifyContent="center"
-              onPress={() =>
-                loading ||
-                setAddress(
-                  '13uM7gtVxPR57P3ue9k5mKfeYDfffesZ8ongiDAdkELyW83znBe',
-                )
-              }
+              onPress={() => {}}
             >
               <Icon
                 name="qr-code-scanner"
@@ -188,8 +185,12 @@ const SingInAsAWatcherScreen = () => {
           onPress={navNext}
           variant="primary"
           mode="contained"
-          title={loading ? 'Checking Address' : 'Start Watching'}
-          disabled={loading || !address}
+          title={
+            fetchAccountStatus === 'pending'
+              ? 'Checking Address'
+              : 'Start Watching'
+          }
+          disabled={fetchAccountStatus === 'pending' || !address}
         />
       </Box>
     </BackScreen>

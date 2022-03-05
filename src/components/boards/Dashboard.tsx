@@ -40,10 +40,12 @@ const Dashboard = ({ account }: { account?: Account }) => {
       >
         <DashboardItem.Number
           item="DC Balance"
+          loading={!account}
           value={account?.dcBalance?.floatBalance.toFixed(5) || '0.00000'}
         />
         <DashboardItem.Number
           item="Staked Balance"
+          loading={!account}
           value={account?.stakedBalance?.floatBalance.toFixed(5) || '0.00000'}
         />
       </Box>
@@ -56,11 +58,13 @@ const Dashboard = ({ account }: { account?: Account }) => {
       >
         <DashboardItem.Number
           item="Hotspots"
+          loading={!account}
           value={(account?.hotspotCount || 0).toString()}
           onPress={() => navigation.navigate('Hotspots')}
         />
         <DashboardItem.Number
           item="Validators"
+          loading={!account}
           value={(account?.validatorCount || 0).toString()}
         />
         <DashboardItem.Icon

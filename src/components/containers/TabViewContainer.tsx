@@ -10,6 +10,7 @@ import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import LeftSideModal from '../modals/LeftSideModal'
 import AccountsView from './AccountsView'
+import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 
 type IconInfo = {
   name: string
@@ -48,7 +49,11 @@ const TabViewContainer = ({
         paddingHorizontal="l"
         alignItems="center"
       >
-        <Box paddingRight="s" paddingVertical="xs">
+        <TouchableOpacityBox
+          paddingRight="s"
+          paddingVertical="xs"
+          onPress={() => setModalVisible(true)}
+        >
           <Box
             flex={1}
             borderRightWidth={2}
@@ -58,13 +63,12 @@ const TabViewContainer = ({
             <Icon
               // name="reorder"
               name="menu"
-              onPress={() => setModalVisible(true)}
               size={26}
               color={primaryText}
               tvParallaxProperties={undefined}
             />
           </Box>
-        </Box>
+        </TouchableOpacityBox>
         <Box flex={1}>
           <Text variant="h3">{t(title)}</Text>
         </Box>

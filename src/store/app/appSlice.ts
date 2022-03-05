@@ -165,15 +165,15 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
   },
 )
 
-export const fetchAccount = createAsyncThunk<AccountData>(
-  'app/fetchAccount',
-  async () => {
-    const data = await getAccount()
-    return {
-      account: data,
-    }
-  },
-)
+export const fetchAccount = createAsyncThunk<
+  AccountData,
+  { address: B58Address }
+>('app/fetchAccount', async ({ address }) => {
+  const data = await getAccount(address)
+  return {
+    account: data,
+  }
+})
 
 export const updateSetting = createAsyncThunk<
   SettingsBag,

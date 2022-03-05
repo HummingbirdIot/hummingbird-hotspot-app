@@ -4,7 +4,8 @@ import { Account } from '@helium/http'
 import { useSelector } from 'react-redux'
 import { isEqual } from 'lodash'
 import { Tooltip, Icon } from 'react-native-elements'
-import { useColors } from '../../theme/themeHooks'
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
+import { useColors, useSpacing } from '../../theme/themeHooks'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import useCurrency from '../../utils/hooks/useCurrency'
@@ -15,6 +16,7 @@ const ELTooltip = Tooltip as unknown as any
 
 const AssetsBoard = ({ account }: { account?: Account }) => {
   const { primaryText, surfaceContrast, surfaceContrastText } = useColors()
+  const spacing = useSpacing()
   const { hntBalanceToFiatBlance } = useCurrency()
   const currentPrices = useSelector(
     (state: RootState) => state.hnt.currentPrices,
@@ -35,12 +37,32 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
   return (
     <Box paddingTop="l">
       <Box paddingTop="l">
-        <Text variant="h1" textAlign="center">
-          {fiat}
-        </Text>
-        <Text variant="body1" paddingVertical="s" textAlign="center">
-          {lastHNTBlance || '0'} HNT
-        </Text>
+        {account ? (
+          <Box justifyContent="center">
+            <Text variant="h1" textAlign="center">
+              {fiat}
+            </Text>
+            <Text variant="body1" paddingVertical="s" textAlign="center">
+              {lastHNTBlance || '0'} HNT
+            </Text>
+          </Box>
+        ) : (
+          <SkeletonPlaceholder>
+            <SkeletonPlaceholder.Item
+              width="60%"
+              height={40}
+              borderRadius={5}
+              marginHorizontal="20%"
+            />
+            <SkeletonPlaceholder.Item
+              width="40%"
+              height={17}
+              borderRadius={5}
+              marginVertical={spacing.s}
+              marginHorizontal="30%"
+            />
+          </SkeletonPlaceholder>
+        )}
       </Box>
       <Box
         style={{
