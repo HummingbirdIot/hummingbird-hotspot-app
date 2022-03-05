@@ -17,7 +17,7 @@ const config = {
   hotspots: {
     key: hotspotsSlice.name,
     storage: AsyncStorage,
-    whitelist: ['hotspots', 'hotspotsData'],
+    whitelist: ['hotspotsData'],
     version: 0,
     migrate: createMigrate(hotspotsSliceMigrations, { debug: false }),
   },
@@ -26,8 +26,7 @@ const config = {
 const rootReducer = combineReducers({
   app: persistReducer(config.app, appSlice.reducer),
   location: locationSlice.reducer,
-  // hotspots: persistReducer(config.hotspots, hotspotsSlice.reducer),
-  hotspots: hotspotsSlice.reducer,
+  hotspots: persistReducer(config.hotspots, hotspotsSlice.reducer),
   rewards: rewardsSlice.reducer,
   hnt: hntSlice.reducer,
   txns: txnsSlice.reducer,

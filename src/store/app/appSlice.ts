@@ -102,11 +102,12 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
     const [
       isBackedUp,
 
-      isWatcher,
-      walletLinkToken,
+      isWatching,
+      token,
       lastHNTBlance,
       lastFiatBlance,
       watchingAddressesJSON,
+      address,
 
       isPinRequired,
       authInterval,
@@ -117,9 +118,10 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
 
       getSecureItem('user.isWatching'),
       getSecureItem('user.walletLinkToken'),
-      getSecureItem('user.address'),
       getSecureItem('user.lastHNTBlance'),
       getSecureItem('user.lastFiatBlance'),
+      getSecureItem('user.watchingAddressesJSON'),
+      getAddress(),
 
       getSecureItem('settings.isPinRequired'),
       getSecureItem('settings.authInterval'),
@@ -127,46 +129,81 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       getSecureItem('settings.currencyType'),
     ])
 
+    let isWatcher = false
+    let walletLinkToken = ''
     let watchingAddresses: WatchingAddress[] = []
+    let accountAddress = ''
     try {
       watchingAddresses = JSON.parse(watchingAddressesJSON || '[]') || []
     } catch (error) {
       watchingAddresses = []
     }
 
-    let address = await getAddress()
-    if (isBackedUp && address) {
-      // 推送
-      console.log('OneSignal.sendTags:', { address })
-      // OneSignal.sendTags({ address })
-      // Logger.setUser(address)
-      const account = watchingAddresses.find((item) => item.address === address)
-      if (!account) {
-        deleteSecureItem('user.address')
-        address = ''
+    if (isBackedUp) {
+      if (token) {
+        const addr = parseLinkedAddress(token)
+        if (addr) {
+          accountAddress = addr
+          walletLinkToken = token
+        } else {
+          deleteSecureItem('user.walletLinkToken')
+          walletLinkToken = ''
+        }
       }
+
+      if (address) {
+        if (isWatching) {
+          if (accountAddress === address) {
+            setSecureItem('user.isWatching', false)
+          } else {
+            const account = watchingAddresses.find(
+              (item) => item.address === address,
+            )
+            if (account) {
+              isWatcher = true
+              accountAddress = address
+            } else {
+              setSecureItem('user.isWatching', false)
+              if (accountAddress) {
+                setSecureItem('user.address', accountAddress)
+              } else {
+                deleteSecureItem('user.address')
+              }
+            }
+          }
+        }
+      } else if (isWatching) {
+        setSecureItem('user.isWatching', false)
+      }
+
+      if (accountAddress) {
+        // 推送
+        console.log('OneSignal.sendTags:', { accountAddress })
+      }
+
+      return {
+        isLocked: !!isPinRequired,
+        user: {
+          isWatcher,
+          walletLinkToken,
+          accountAddress,
+          watchingAddresses,
+          lastHNTBlance: lastHNTBlance || '0.00000',
+          lastFiatBlance: lastFiatBlance || '0.00',
+          fetchAccountStatus: 'idle',
+        },
+        settings: {
+          isPinRequired: !!isPinRequired,
+          authInterval: authInterval
+            ? parseInt(authInterval, 10)
+            : Intervals.IMMEDIATELY,
+          // language,
+          currencyType: currency || currencyType,
+        },
+      } as unknown as Restore
     }
 
-    return {
-      isLocked: !!isPinRequired,
-      user: {
-        fetchAccountStatus: 'idle',
-        isWatcher,
-        walletLinkToken,
-        lastHNTBlance: lastHNTBlance || '0.00000',
-        lastFiatBlance: lastFiatBlance || '0.00',
-        watchingAddresses,
-        accountAddress: address || '',
-      },
-      settings: {
-        isPinRequired: !!isPinRequired,
-        authInterval: authInterval
-          ? parseInt(authInterval, 10)
-          : Intervals.IMMEDIATELY,
-        // language,
-        currencyType: currency || currencyType,
-      },
-    } as unknown as Restore
+    return {} as unknown as Restore
   },
 )
 
@@ -218,10 +255,7 @@ const appSlice = createSlice({
       setSecureItem('user.isWatching', true)
       setSecureItem('isBackedUp', true)
 
-      if (state.user.accountAddress !== address) {
-        delete state.user.account
-        state.user.accountAddress = address
-      }
+      state.user.accountAddress = address
       state.user.isWatcher = true
     },
     storeWalletLinkToken: (
@@ -241,6 +275,7 @@ const appSlice = createSlice({
         delete state.user.account
         state.user.accountAddress = address as B58Address
       }
+      state.user.walletLinkToken = token
       state.user.isWatcher = false
     },
     asOwner: (state) => {

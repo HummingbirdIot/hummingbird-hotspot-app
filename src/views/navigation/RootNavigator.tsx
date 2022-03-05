@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Platform } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -19,6 +19,7 @@ import { LoginStackParamList } from './loginNavigationTypes'
 import ActivityScreen from '../main/account/ActivityScreen'
 import LockScreen from '../more/LockScreen'
 import HotspotScreen from '../main/hotspots/HotspotScreen'
+import Box from '../../components/boxes/Box'
 
 const LoginStack = createStackNavigator<LoginStackParamList>()
 const RootStack = createStackNavigator()
@@ -35,8 +36,8 @@ const RootNavigator = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  if ((isWatcher || walletLinkToken) && accountAddress) {
-    return (
+  const root = useMemo(
+    () => (
       <RootStack.Navigator
         // headerMode="none"
         screenOptions={({ route }) => {
@@ -78,25 +79,35 @@ const RootNavigator = () => {
           <RootStack.Screen name="LockScreen" component={LockScreen} />
         </RootStack.Group>
       </RootStack.Navigator>
-    )
-  }
+    ),
+    [],
+  )
+
+  const sign = useMemo(
+    () => (
+      <LoginStack.Navigator
+        headerMode="none"
+        screenOptions={defaultScreenOptions}
+        options={{ gestureEnabled: false }}
+      >
+        <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
+        <LoginStack.Screen
+          name="TypeInExplorationCode"
+          component={SingInAsAWatcherScreen}
+        />
+        <LoginStack.Screen
+          name="CreateHeliumAccount"
+          component={CreateHeliumAccountScreen}
+        />
+      </LoginStack.Navigator>
+    ),
+    [],
+  )
 
   return (
-    <LoginStack.Navigator
-      headerMode="none"
-      screenOptions={defaultScreenOptions}
-      options={{ gestureEnabled: false }}
-    >
-      <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
-      <LoginStack.Screen
-        name="TypeInExplorationCode"
-        component={SingInAsAWatcherScreen}
-      />
-      <LoginStack.Screen
-        name="CreateHeliumAccount"
-        component={CreateHeliumAccountScreen}
-      />
-    </LoginStack.Navigator>
+    <Box flex={1} backgroundColor="primaryBackground">
+      {(isWatcher || walletLinkToken) && accountAddress ? root : sign}
+    </Box>
   )
 }
 export default RootNavigator

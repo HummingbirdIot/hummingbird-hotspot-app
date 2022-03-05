@@ -1,18 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo } from 'react'
-// import { Platform } from 'react-native'
 import { LogBox, Platform, StatusBar, UIManager } from 'react-native'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { ThemeProvider } from '@shopify/restyle'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {
-  ThemeProvider as ElementsThemeProvider,
-  // Button,
-  // colors,
-} from 'react-native-elements'
-// import { NavigationContainer } from '@react-navigation/native'
+import { ThemeProvider as ElementsThemeProvider } from 'react-native-elements'
+import { NavigationContainer } from '@react-navigation/native'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 import Config from 'react-native-config'
 import useAppState from 'react-native-appstate-hook'
@@ -23,7 +15,6 @@ import {
 import * as SplashScreen from 'expo-splash-screen'
 import { useSelector } from 'react-redux'
 import { useAsync } from 'react-async-hook'
-import { NavigationContainer } from '@react-navigation/native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { theme, darkThemeColors, lightThemeColors } from './theme/theme'
 import SecurityScreen from './views/more/SecurityScreen'
@@ -37,7 +28,6 @@ import RootNavigator from './views/navigation/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
 import { configChainVars } from './utils/clients/appDataClient'
-import Box from './components/boxes/Box'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */
@@ -176,9 +166,7 @@ const App = () => {
                 {ReactiveStatusBar}
                 <NavigationContainer ref={navigationRef}>
                   <AppLinkProvider>
-                    <Box flex={1} backgroundColor="primaryBackground">
-                      <RootNavigator />
-                    </Box>
+                    <RootNavigator />
                   </AppLinkProvider>
                 </NavigationContainer>
               </SafeAreaProvider>

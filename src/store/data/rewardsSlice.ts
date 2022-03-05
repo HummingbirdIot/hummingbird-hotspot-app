@@ -17,18 +17,6 @@ import {
 } from '../../utils/cacheUtils'
 import { getWalletExt } from '../../utils/clients/walletClient'
 
-// export type WalletReward = {
-//   avg: number
-//   gateway: string
-//   max: number
-//   median: number
-//   min: number
-//   stddev: number
-//   sum: number
-//   total: number
-//   updated_at: string
-// }
-
 export type ChartTimelineValue = number // | 'YTD'
 export type RewardsResource = 'accounts' | 'validators' | 'hotspots'
 

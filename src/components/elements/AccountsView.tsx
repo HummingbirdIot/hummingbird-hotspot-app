@@ -114,7 +114,7 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
                 address: ownedAddress,
               }}
               isCurrent={ownedAddress === accountAddress}
-              icon={ownedAddress === accountAddress ? 'star' : 'star-outline'}
+              icon={ownedAddress === accountAddress ? 'verified' : 'bedtime'}
               onPress={asOwner}
             />
             <AccountCard.SingOut />

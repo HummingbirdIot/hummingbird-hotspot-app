@@ -3,10 +3,8 @@ import { Hotspot, Witness } from '@helium/http'
 import Balance, { NetworkTokens } from '@helium/currency'
 import {
   getHotspotDetails,
-  getHotspotRewards,
   getHotspots,
   getWitnessedHotspots,
-  // getWitnessesHotspots,
 } from '../../utils/clients/appDataClient'
 import { LocationCoords } from '../../utils/location'
 import {
@@ -17,7 +15,6 @@ import {
   hasValidCache,
 } from '../../utils/cacheUtils'
 import { B58Address } from '../txns/txnsTypes'
-// import { getSecureItem } from '../../utils/secureAccount'
 
 export type HotspotSyncStatus = 'full' | 'partial'
 export type Rewards = Record<string, Array<Balance<NetworkTokens>>>
@@ -39,7 +36,6 @@ export type HotspotsSliceState = {
   hotspotsLoaded: boolean
   failure: boolean
   syncStatuses: Record<string, CacheRecord<{ status: HotspotSyncStatus }>>
-  rewards: Rewards
   hotspotsData: HotspotIndexed<HotspotDetailCache>
 }
 
@@ -50,28 +46,8 @@ const initialState: HotspotsSliceState = {
   hotspotsLoaded: false,
   failure: false,
   syncStatuses: {},
-  rewards: {},
   hotspotsData: {},
 }
-
-export const fetchRewards = createAsyncThunk<
-  Rewards,
-  { address: string; numDays: number }
->('hotspots/fetchRewards', async ({ address, numDays = 1 }, { getState }) => {
-  const state = ((await getState()) as { hotspots: HotspotsSliceState })
-    .hotspots
-  if (hasValidCache(state.rewards[address])) {
-    return {
-      [address]: state.rewards[address],
-    }
-  }
-  const rewards = await getHotspotRewards(address, numDays)
-  return {
-    [address]: handleCacheFulfilled(
-      rewards.map((reward) => reward.balanceTotal),
-    ),
-  }
-})
 
 export const fetchHotspotDetail = createAsyncThunk<HotspotDetail, string>(
   'hotspots/fetchHotspotDetail',
@@ -153,8 +129,8 @@ const hotspotsSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      const { rewards, hotspotsData } = state
-      return { ...initialState, rewards, hotspotsData }
+      const { hotspotsData } = state
+      return { ...initialState, hotspotsData }
     },
     updateSyncStatus: (
       state,
@@ -187,19 +163,6 @@ const hotspotsSlice = createSlice({
       state.loadingRewards = false
       state.hotspotsLoaded = true
       state.failure = true
-    })
-    builder.addCase(fetchRewards.rejected, (state, _action) => {
-      state.loadingRewards = false
-    })
-    builder.addCase(fetchRewards.pending, (state, _action) => {
-      state.loadingRewards = true
-    })
-    builder.addCase(fetchRewards.fulfilled, (state, action) => {
-      state.rewards = {
-        ...state.rewards,
-        ...action.payload,
-      }
-      state.loadingRewards = false
     })
     builder.addCase(fetchHotspotDetail.pending, (state, action) => {
       const address = action.meta.arg

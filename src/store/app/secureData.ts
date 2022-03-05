@@ -116,11 +116,11 @@ const signOut = async () => {
 }
 
 export const unlinkAccount = async () => {
-  deleteSecureItem('user.walletLinkToken')
+  await deleteSecureItem('user.walletLinkToken')
   return signOut()
 }
 
 export const endWatching = async () => {
-  setSecureItem('user.isWatching', false)
+  await setSecureItem('user.isWatching', false)
   return signOut()
 }
