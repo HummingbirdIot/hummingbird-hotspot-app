@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { GestureResponderEvent } from 'react-native'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { Icon } from 'react-native-elements'
@@ -8,6 +8,8 @@ import { useColors } from '../../theme/themeHooks'
 import SafeAreaBox from '../boxes/SafeAreaBox'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
+import LeftSideModal from '../modals/LeftSideModal'
+import AccountsView from './AccountsView'
 
 type IconInfo = {
   name: string
@@ -25,6 +27,7 @@ const TabViewContainer = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
+  const [modalVisible, setModalVisible] = useState(false)
 
   const { primaryText } = useColors()
 
@@ -43,7 +46,25 @@ const TabViewContainer = ({
         justifyContent="space-between"
         marginVertical="m"
         paddingHorizontal="l"
+        alignItems="center"
       >
+        <Box paddingRight="s" paddingVertical="xs">
+          <Box
+            flex={1}
+            borderRightWidth={2}
+            borderRightColor="primaryText"
+            paddingRight="xs"
+          >
+            <Icon
+              // name="reorder"
+              name="menu"
+              onPress={() => setModalVisible(true)}
+              size={26}
+              color={primaryText}
+              tvParallaxProperties={undefined}
+            />
+          </Box>
+        </Box>
         <Box flex={1}>
           <Text variant="h3">{t(title)}</Text>
         </Box>
@@ -69,6 +90,13 @@ const TabViewContainer = ({
       >
         {children}
       </Box>
+      <LeftSideModal
+        title="Accounts"
+        modalVisible={modalVisible}
+        handleClose={() => setModalVisible(false)}
+      >
+        <AccountsView handleClose={() => setModalVisible(false)} />
+      </LeftSideModal>
     </SafeAreaBox>
   )
 }

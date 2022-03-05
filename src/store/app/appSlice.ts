@@ -6,11 +6,12 @@ import {
   deleteSecureItem,
   getSecureItem,
   setSecureItem,
-  signOut,
+  unlinkAccount,
+  endWatching,
+  getLinkedAddress,
 } from './secureData'
 import { Intervals } from '../../utils/hooks/useAuthIntervals'
-import { Loading } from '../txns/txnsTypes'
-import addressMap from './addressMap'
+import { B58Address, Loading } from '../txns/txnsTypes'
 // import OneSignal from 'react-native-onesignal'
 
 const boolKeys = ['isPinRequired'] as const
@@ -23,6 +24,11 @@ type AccountData = {
   account?: Account
 }
 
+export type WatchingAddress = {
+  address: B58Address
+  alias: string
+}
+
 export type AppState = {
   isBackedUp: boolean
   isRestored: boolean
@@ -32,12 +38,13 @@ export type AppState = {
   isRequestingPermission: boolean
   user: {
     isWatcher: boolean
-    xpCode?: string
     walletLinkToken?: string
+    watchingAddresses: WatchingAddress[]
+    accountAddress?: B58Address
     account?: Account
-    fetchAccountStatus: Loading
     lastHNTBlance: string
     lastFiatBlance: string
+    fetchAccountStatus: Loading
   }
   settings: {
     isPinRequired: boolean
@@ -59,6 +66,7 @@ const initialState: AppState = {
     fetchAccountStatus: 'idle',
     lastHNTBlance: '0.00000',
     lastFiatBlance: '0.00',
+    watchingAddresses: [],
   },
   settings: {
     isPinRequired: false,
@@ -72,17 +80,17 @@ type Restore = {
   isLocked: boolean
   user: {
     isWatcher: boolean
-    xpCode?: string
     walletLinkToken?: string
+    watchingAddresses: WatchingAddress[]
+    accountAddress?: B58Address
     account?: Account
-    fetchAccountStatus: Loading
     lastHNTBlance: string
     lastFiatBlance: string
+    fetchAccountStatus: Loading
   }
   settings: {
     isPinRequired: boolean
     authInterval: number
-    // language?: string
     currencyType?: string
   }
 }
@@ -90,15 +98,14 @@ type Restore = {
 export const restoreAppSettings = createAsyncThunk<Restore>(
   'app/restoreAppSettings',
   async () => {
-    console.log('restoreAppSettings A:', await getSecureItem('user.isWatcher'))
     const [
       isBackedUp,
       isWatcher,
-      explorationCode,
       walletLinkToken,
       address,
       lastHNTBlance,
       lastFiatBlance,
+      watchingAddressesJSON,
 
       isPinRequired,
       authInterval,
@@ -106,12 +113,12 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       currency,
     ] = await Promise.all([
       getSecureItem('isBackedUp'),
-      getSecureItem('user.isWatcher'),
-      getSecureItem('user.explorationCode'),
+      getSecureItem('user.isWatching'),
       getSecureItem('user.walletLinkToken'),
       getSecureItem('user.address'),
       getSecureItem('user.lastHNTBlance'),
       getSecureItem('user.lastFiatBlance'),
+      getSecureItem('user.watchingAddressesJSON'),
 
       getSecureItem('settings.isPinRequired'),
       getSecureItem('settings.authInterval'),
@@ -119,32 +126,32 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       getSecureItem('settings.currencyType'),
     ])
 
-    console.log(
-      'restoreAppSettings B:',
-      isBackedUp,
-      isWatcher,
-      explorationCode,
-      walletLinkToken,
-      address,
-      lastHNTBlance,
-      lastFiatBlance,
-    )
-
     if (isBackedUp && address) {
       // 推送
       console.log('OneSignal.sendTags:', { address })
       // OneSignal.sendTags({ address })
       // Logger.setUser(address)
     }
+
+    let watchingAddresses = []
+    try {
+      watchingAddresses = JSON.parse(watchingAddressesJSON || '[]') || []
+    } catch (error) {
+      watchingAddresses = []
+    }
+
+    console.log('watchingAddresses', watchingAddresses)
+
     return {
       isLocked: !!isPinRequired,
       user: {
         fetchAccountStatus: 'idle',
         isWatcher,
-        explorationCode,
         walletLinkToken,
         lastHNTBlance: lastHNTBlance || '0.00000',
         lastFiatBlance: lastFiatBlance || '0.00',
+        watchingAddresses,
+        accountAddress: address || '',
       },
       settings: {
         isPinRequired: !!isPinRequired,
@@ -185,27 +192,46 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    enableWatchMode: (state, { payload: xpCode }: PayloadAction<string>) => {
-      state.user.walletLinkToken = ''
-      state.user.xpCode = xpCode
-      state.user.isWatcher = true
-      setSecureItem('user.walletLinkToken', '')
-      setSecureItem('user.address', addressMap[xpCode])
-      setSecureItem('user.explorationCode', xpCode)
-      setSecureItem('user.isWatcher', true)
+    enableWatchMode: (state, { payload: address }: PayloadAction<string>) => {
+      const account = state.user.watchingAddresses.find(
+        (item) => item.address === address,
+      )
+      if (!account) {
+        state.user.watchingAddresses = [
+          ...state.user.watchingAddresses,
+          {
+            address,
+            alias: address.slice(address.length - 4).toUpperCase(),
+          },
+        ]
+      }
+      setSecureItem(
+        'user.watchingAddressesJSON',
+        JSON.stringify(state.user.watchingAddresses),
+      )
+      setSecureItem('user.address', address)
+      setSecureItem('user.isWatching', true)
       setSecureItem('isBackedUp', true)
+      state.user.isWatcher = true
+      state.user.accountAddress = address
     },
     storeWalletLinkToken: (
       state,
       { payload: token }: PayloadAction<string>,
     ) => {
-      state.user.isWatcher = false
-      state.user.walletLinkToken = token
-      setSecureItem('user.isWatcher', false)
+      setSecureItem('user.isWatching', false)
       setSecureItem('user.address', '') // 清除之前的旧 Address
-      setSecureItem('user.explorationCode', '')
-      setSecureItem('user.walletLinkToken', token)
-      setSecureItem('isBackedUp', true)
+      setSecureItem('user.walletLinkToken', token).then(() =>
+        getLinkedAddress().then((address) => {
+          state.user.accountAddress = address as B58Address
+          state.user.walletLinkToken = token
+          state.user.isWatcher = false
+          setSecureItem('isBackedUp', true)
+        }),
+      )
+    },
+    switchAccount: (state) => {
+      state.isSettingUpHotspot = false
     },
     updateBlance: (state, { payload: blance }: PayloadAction<string>) => {
       state.user.lastHNTBlance = blance
@@ -224,9 +250,20 @@ const appSlice = createSlice({
     startHotspotSetup: (state) => {
       state.isSettingUpHotspot = false
     },
-    signOut: () => {
-      signOut()
-      return { ...initialState, isRestored: true }
+    signOut: (state) => {
+      if (state.user.isWatcher) {
+        endWatching()
+      } else {
+        unlinkAccount()
+      }
+      return {
+        ...initialState,
+        user: {
+          ...initialState.user,
+          watchingAddresses: state.user.watchingAddresses,
+        },
+        isRestored: true,
+      }
     },
     updateAuthInterval: (state, action: PayloadAction<number>) => {
       state.settings.authInterval = action.payload

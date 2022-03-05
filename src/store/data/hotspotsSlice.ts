@@ -152,8 +152,9 @@ const hotspotsSlice = createSlice({
   name: 'hotspots',
   initialState,
   reducers: {
-    signOut: () => {
-      return { ...initialState }
+    signOut: (state) => {
+      const { rewards, hotspotsData } = state
+      return { ...initialState, rewards, hotspotsData }
     },
     updateSyncStatus: (
       state,

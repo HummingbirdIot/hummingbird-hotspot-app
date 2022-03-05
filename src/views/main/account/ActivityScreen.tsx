@@ -1,26 +1,24 @@
 import React, { memo, useState } from 'react'
 import { ButtonGroup } from 'react-native-elements'
-import { useAsync } from 'react-async-hook'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import Box from '../../../components/boxes/Box'
 import ActivitiesList from '../../../components/lists/ActivityList/ListContainer'
 import { useColors } from '../../../theme/themeHooks'
-import { getAddress } from '../../../store/app/secureData'
 import { AccountFilterKeys } from '../../../store/txns/txnsTypes'
 import DetailViewContainer from '../../../components/containers/DetailScreenContainer'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
+import { RootState } from '../../../store/rootReducer'
 
 const ActivityScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()
   const colorScheme: ColorSchemeName = useColorScheme()
-  const [address, setAccountAddress] = useState('')
+  const { accountAddress: address } = useSelector(
+    (state: RootState) => state.app.user,
+  )
 
   const [selectedIndex, updateIndex] = useState(0)
-  useAsync(async () => {
-    const aacc = await getAddress()
-    setAccountAddress(aacc || '')
-  }, [])
 
   const [all, mining, payment, hotspot, pending] = AccountFilterKeys
   const buttons = [all, mining, payment, hotspot, pending]

@@ -14,7 +14,7 @@ import HotspotSetupNavigator from './features/HotspotSetupNavigator'
 import HotspotSetWiFiNavigator from './features/HotspotSetWiFiNavigator'
 import WelcomeScreen from '../more/login/WelcomeScreen'
 import CreateHeliumAccountScreen from '../more/login/CreateHeliumAccountScreen'
-import EnterExplorationCodeScreen from '../more/login/EnterExplorationCodeScreen'
+import SingInAsAWatcherScreen from '../more/login/SingInAsAWatcherScreen'
 import { LoginStackParamList } from './loginNavigationTypes'
 import ActivityScreen from '../main/account/ActivityScreen'
 import LockScreen from '../more/LockScreen'
@@ -45,7 +45,7 @@ const RootNavigator = () => {
         <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
         <LoginStack.Screen
           name="TypeInExplorationCode"
-          component={EnterExplorationCodeScreen}
+          component={SingInAsAWatcherScreen}
         />
         <LoginStack.Screen
           name="CreateHeliumAccount"
@@ -85,6 +85,10 @@ const RootNavigator = () => {
         <RootStack.Screen
           name="HotspotSetWiFi"
           component={HotspotSetWiFiNavigator}
+        />
+        <RootStack.Screen
+          name="AddWatchingAccount"
+          component={SingInAsAWatcherScreen}
         />
       </RootStack.Group>
       <RootStack.Group screenOptions={{ headerShown: false }}>

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
-import { ScrollView } from 'react-native'
+import { ActivityIndicator, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import Box from '../../../components/boxes/Box'
 import { useAppDispatch } from '../../../store/store'
 import { fetchHotspotsData } from '../../../store/data/hotspotsSlice'
 import { RootState } from '../../../store/rootReducer'
-import useMount from '../../../utils/hooks/useMount'
+// import useMount from '../../../utils/hooks/useMount'
 
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import HotspotListItem from '../../../components/elements/HotspotListItem'
@@ -19,7 +19,8 @@ const HotspotsScreen = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
 
-  const { hotspots, hotspotsData } = useSelector(
+  const { accountAddress } = useSelector((state: RootState) => state.app.user)
+  const { hotspots, hotspotsData, hotspotsLoaded } = useSelector(
     (state: RootState) => state.hotspots,
   )
   const dispatch = useAppDispatch()
@@ -31,12 +32,11 @@ const HotspotsScreen = () => {
     // console.log('HotspotsScreen::hotspotAddresses:', hotspots.data)
   }, [hotspots.data])
 
-  useMount(() => {
+  useEffect(() => {
     dispatch(fetchHotspotsData()).catch((error) =>
-      console.log('HotspotsScreen::fetchHotspotsData:werror:', error),
+      console.log('HotspotsScreen::fetchHotspotsData:error:', error),
     )
-    // maybeGetLocation(false)
-  })
+  }, [accountAddress, dispatch])
 
   return (
     <TabViewContainer
@@ -50,13 +50,17 @@ const HotspotsScreen = () => {
     >
       <Box flex={1}>
         <ScrollView>
-          {addresses.map((address) => (
-            <HotspotListItem
-              key={address}
-              hotspot={hotspotsData[address].hotspot}
-              navigation={navigation}
-            />
-          ))}
+          {hotspotsLoaded ? (
+            addresses.map((address) => (
+              <HotspotListItem
+                key={address}
+                hotspot={hotspotsData[address].hotspot}
+                navigation={navigation}
+              />
+            ))
+          ) : (
+            <ActivityIndicator size={200} />
+          )}
         </ScrollView>
       </Box>
     </TabViewContainer>

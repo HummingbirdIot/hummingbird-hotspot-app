@@ -35,7 +35,6 @@ import { useSpacing } from '../../../theme/themeHooks'
 import Box from '../../../components/boxes/Box'
 import { SUPPORTED_LANGUAGUES } from '../../../utils/i18n/i18nTypes'
 import { useLanguageContext } from '../../../providers/LanguageProvider'
-import { getSecureItem } from '../../../store/app/secureData'
 import { clearMapCache } from '../../../utils/mapUtils'
 import Articles from '../../../constants/articles'
 import useAlert from '../../../utils/hooks/useAlert'
@@ -64,21 +63,20 @@ const SettingsScreen = () => {
   >()
   const spacing = useSpacing()
   const { changeLanguage, language } = useLanguageContext()
+  const { accountAddress } = useSelector((state: RootState) => state.app.user)
   const [address, setAddress] = useState('')
   const { showOKCancelAlert } = useAlert()
   const [version] = useState(getVersion())
 
   useAsync(async () => {
-    const fullAddress = await getSecureItem('user.address')
-    console.log('fullAddress', fullAddress)
-    if (!fullAddress) return ''
+    if (!accountAddress) return ''
 
     const truncatedAddress = [
-      fullAddress.slice(0, 8),
-      fullAddress.slice(-8),
+      accountAddress.slice(0, 8),
+      accountAddress.slice(-8),
     ].join('...')
     setAddress(truncatedAddress)
-  }, [])
+  }, [accountAddress])
 
   useEffect(() => {
     if (!params?.pinVerifiedFor) return
@@ -272,6 +270,10 @@ const SettingsScreen = () => {
             },
           },
           {
+            title: 'Privacy Policy',
+            openUrl: 'https://xdt.com/privacy-policy.html',
+          },
+          {
             title: t('more.sections.app.clearMapCache'),
             onPress: handleClearMapCache,
           },
@@ -279,10 +281,6 @@ const SettingsScreen = () => {
             title: t('more.sections.app.signOutWithLink', { address }),
             onPress: handleSignOut,
             destructive: true,
-          },
-          {
-            title: 'Privacy Policy',
-            openUrl: 'https://xdt.com/privacy-policy.html',
           },
         ] as SettingListItemType[],
         footer: <AppInfoItem version={version} />,

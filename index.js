@@ -1,5 +1,6 @@
 import './src/utils/polyfill'
 import React from 'react'
+import axios from 'axios'
 import { AppRegistry } from 'react-native'
 import { Provider } from 'react-redux'
 import App from './src/App'
@@ -17,5 +18,6 @@ const render = () => {
   )
 }
 
+axios.defaults.timeout = 1000 * 10
 // AppRegistry.registerHeadlessTask('SomeTaskName', () => require('SomeTaskName'))
 AppRegistry.registerComponent(appName, () => render)

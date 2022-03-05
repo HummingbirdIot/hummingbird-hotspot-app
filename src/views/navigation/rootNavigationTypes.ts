@@ -42,6 +42,7 @@ export type RootStackParamList = {
     hotspotAddress: B58Address
     gatewayAction: GatewayAction
   }
+  AddWatchingAccount: undefined
   ScanStack: undefined
   ActivityScreen: undefined
   HotspotScreen: {

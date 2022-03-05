@@ -137,7 +137,7 @@ const HotspotSetupPickWifiScreen = () => {
             okKey: 'Next',
             cancelKey: 'Back to Home',
             messageKey:
-              'You are undering the WATCH MODE now, will not allowed to complete any transation action.',
+              'You are undering the WATCHING MODE now, will not allowed to complete any transation action.',
           })
           if (!decision) {
             rootNav.navigate('MainTabs')

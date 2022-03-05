@@ -4,7 +4,6 @@ import { WalletLink } from '@helium/react-native-sdk'
 import { Linking, Platform } from 'react-native'
 import { getBundleId } from 'react-native-device-info'
 import { useNavigation } from '@react-navigation/native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Text from '../../../components/texts/Text'
 import { LoginNavigationProp } from '../../navigation/loginNavigationTypes'
 import Box from '../../../components/boxes/Box'
@@ -16,7 +15,6 @@ const WelcomeScreen = () => {
   const { t } = useTranslation()
   const { delegateApps } = WalletLink
   const [delegateApp] = delegateApps
-  const insets = useSafeAreaInsets()
   const navigation = useNavigation<LoginNavigationProp>()
 
   const handleAppSelection = useCallback(
@@ -52,29 +50,33 @@ const WelcomeScreen = () => {
   return (
     <SafeAreaBox flex={1} backgroundColor="primaryBackground">
       <Box flex={1} alignItems="center">
-        <Box
-          backgroundColor="surface"
-          style={{
-            width: 1000,
-            height: 1000,
-            borderRadius: 500,
-            marginTop: -800 + insets.top * 2,
-            paddingTop: 820,
-          }}
-        >
-          <Text variant="h1" textAlign="center" textTransform="uppercase">
-            {t('account_setup.welcome.title')}
-          </Text>
-
-          <TextTransform
-            variant="subtitle1"
-            letterSpacing={3}
-            marginVertical="xl"
-            textAlign="center"
-            i18nKey="account_setup.welcome.subtitle"
-          />
+        <Box flex={4}>
+          <Box
+            backgroundColor="surface"
+            style={{
+              position: 'absolute',
+              width: 1000,
+              height: 1000,
+              borderRadius: 500,
+              bottom: 0,
+              left: -500,
+            }}
+            justifyContent="flex-end"
+            padding="l"
+          >
+            <Text variant="h1" textAlign="center" textTransform="uppercase">
+              {t('account_setup.welcome.title')}
+            </Text>
+            <TextTransform
+              variant="subtitle1"
+              letterSpacing={3}
+              marginVertical="xl"
+              textAlign="center"
+              i18nKey="account_setup.welcome.subtitle"
+            />
+          </Box>
         </Box>
-        <Box flex={1} width="100%" padding="xl">
+        <Box flex={6} width="100%" padding="xl">
           <Box flex={1} flexDirection="row" justifyContent="center">
             <TouchableOpacityBox
               key={
@@ -107,7 +109,7 @@ const WelcomeScreen = () => {
               color="primaryText"
               onPress={enterExplorationCode}
             >
-              Enter Exploration Code
+              Sign-in as a watcher
             </Text>
             <Text
               variant="h6"
@@ -123,7 +125,7 @@ const WelcomeScreen = () => {
               color="primaryText"
               onPress={createAccount}
             >
-              Create Helium Account
+              Create helium account
             </Text>
           </Box>
         </Box>

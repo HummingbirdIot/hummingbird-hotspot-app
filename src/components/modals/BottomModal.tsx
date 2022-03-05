@@ -26,7 +26,7 @@ export type IndexedListItem = {
   item: ListItem
 }
 
-const BottomActionsModal = ({
+const BottomModal = ({
   title,
   children,
   modalVisible,
@@ -128,4 +128,4 @@ const BottomActionsModal = ({
   )
 }
 
-export default memo(BottomActionsModal)
+export default memo(BottomModal)

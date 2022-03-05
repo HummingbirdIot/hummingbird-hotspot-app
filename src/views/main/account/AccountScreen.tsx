@@ -1,10 +1,9 @@
 import React, { memo, useEffect, useState } from 'react'
-import { useAsync } from 'react-async-hook'
 import { Account } from '@helium/http'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { getAddress } from '../../../store/app/secureData'
+import { useSelector } from 'react-redux'
 import Box from '../../../components/boxes/Box'
 import { getAccount } from '../../../utils/clients/appDataClient'
 import { fetchCurrentPrices } from '../../../store/hnt/hntSlice'
@@ -17,10 +16,13 @@ import appSlice from '../../../store/app/appSlice'
 import AssetsBoard from '../../../components/boards/AssetsBoard'
 import Dashboard from '../../../components/boards/Dashboard'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
+import { RootState } from '../../../store/rootReducer'
 
 const AccountScreen = () => {
   const navigation = useNavigation<RootNavigationProp>()
-  const [address, setAccountAddress] = useState('')
+  const { accountAddress: address } = useSelector(
+    (state: RootState) => state.app.user,
+  )
   const [account, setAccount] = useState<Account>()
   const dispatch = useAppDispatch()
 
@@ -40,14 +42,9 @@ const AccountScreen = () => {
   }, [account?.balance, address, dispatch])
 
   useEffect(() => {
-    dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
+    if (address)
+      dispatch(fetchTxnsPending(address)).catch((error) => console.error(error))
   }, [address, dispatch])
-
-  useAsync(async () => {
-    const aacc = await getAddress()
-    // console.log('AccountScreen::address:', aacc)
-    setAccountAddress(aacc || '')
-  }, [])
 
   const naviToActivityScreen = () => navigation.navigate('ActivityScreen')
   const gotoActivityScreen = useDebouncedCallback(naviToActivityScreen, 700, {})
