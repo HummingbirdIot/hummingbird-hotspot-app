@@ -1,8 +1,9 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import { Avatar, ListItem, Text } from 'react-native-elements'
 import { useTranslation } from 'react-i18next'
 import { Hotspot } from '@helium/http'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
+import { useSelector } from 'react-redux'
 import { locale } from '../../utils/i18n'
 import {
   formatHotspotNameArray,
@@ -11,13 +12,16 @@ import {
 } from '../../utils/formatter'
 
 import Maker from '../../assets/images/maker.svg'
-import RewardsScale from '../../assets/images/rewardsScale.svg'
+import HNT from '../../assets/images/hnt.svg'
 import Location from '../../assets/images/location.svg'
 import Signal from '../../assets/images/signal.svg'
 import Elevation from '../../assets/images/elevation.svg'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
 import { useColors } from '../../theme/themeHooks'
 import { HotspotCardGroup, HotspotCardItem } from '../cards/HotspotCard'
+import { fetchChartData } from '../../store/data/rewardsSlice'
+import { useAppDispatch } from '../../store/store'
+import { RootState } from '../../store/rootReducer'
 
 const HotspotListItem = ({
   hotspot,
@@ -28,6 +32,11 @@ const HotspotListItem = ({
 }) => {
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
+  const dispatch = useAppDispatch()
+  const chartData =
+    useSelector(
+      (state: RootState) => state.rewards.chartData[hotspot.address],
+    ) || {}
   const { getMakerName } = useMaker()
   const {
     primaryBackground,
@@ -71,6 +80,22 @@ const HotspotListItem = ({
           },
     [colorScheme, primaryBackground, secondaryBackground, surface],
   )
+
+  useEffect(() => {
+    if (hotspot.address) {
+      dispatch(
+        fetchChartData({
+          address: hotspot.address,
+          numDays: 7,
+          resource: 'hotspots',
+        }),
+      )
+    }
+  }, [dispatch, hotspot.address])
+
+  const [yesterday] =
+    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
+  console.log('chartDatachartDatachartData', yesterday?.total)
 
   return (
     <ListItem
@@ -130,11 +155,11 @@ const HotspotListItem = ({
           })}
         </ListItem.Title>
         <HotspotCardGroup>
-          <HotspotCardItem Icon={Maker} flex={1}>
-            {getMakerName(hotspot.payer)}
+          <HotspotCardItem Icon={HNT} flex={1}>
+            + {yesterday?.total || '0.00000'}
           </HotspotCardItem>
-          <HotspotCardItem Icon={RewardsScale} right>
-            {hotspot.rewardScale?.toFixed(5) || '0.00000'}
+          <HotspotCardItem Icon={Maker} right>
+            {getMakerName(hotspot.payer)}
           </HotspotCardItem>
         </HotspotCardGroup>
         <HotspotCardGroup>
