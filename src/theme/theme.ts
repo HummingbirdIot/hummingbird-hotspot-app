@@ -82,6 +82,7 @@ const textVariants = {
     // fontFamily: Font.main.semiBold,
     fontSize: 17,
     lineHeight: 17,
+    fontWeight: '600',
     color: 'primaryText',
   },
   h6: {

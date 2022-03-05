@@ -47,6 +47,7 @@ const HotspotsScreen = () => {
           onPress: () => navigation.navigate('HotspotSetup'),
         },
       ]}
+      showAccountSwitch
     >
       <Box flex={1}>
         <ScrollView>

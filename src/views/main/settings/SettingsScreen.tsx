@@ -7,12 +7,10 @@ import React, {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, SectionList } from 'react-native'
+import { SectionList } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { isEqual } from 'lodash'
-// import { WalletLink } from '@helium/react-native-sdk'
-import { useAsync } from 'react-async-hook'
 import Config from 'react-native-config'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { getVersion } from 'react-native-device-info'
@@ -63,20 +61,8 @@ const SettingsScreen = () => {
   >()
   const spacing = useSpacing()
   const { changeLanguage, language } = useLanguageContext()
-  const { accountAddress } = useSelector((state: RootState) => state.app.user)
-  const [address, setAddress] = useState('')
   const { showOKCancelAlert } = useAlert()
   const [version] = useState(getVersion())
-
-  useAsync(async () => {
-    if (!accountAddress) return ''
-
-    const truncatedAddress = [
-      accountAddress.slice(0, 8),
-      accountAddress.slice(-8),
-    ].join('...')
-    setAddress(truncatedAddress)
-  }, [accountAddress])
 
   useEffect(() => {
     if (!params?.pinVerifiedFor) return
@@ -131,25 +117,25 @@ const SettingsScreen = () => {
     navigation.push('LockScreen', { requestType: 'resetPin' })
   }, [navigation])
 
-  const handleSignOut = useCallback(() => {
-    Alert.alert(
-      t('more.sections.app.signOutAlert.title'),
-      t('more.sections.app.signOutAlert.body'),
-      [
-        {
-          text: t('generic.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: t('more.sections.app.signOut'),
-          style: 'destructive',
-          onPress: () => {
-            dispatch(appSlice.actions.signOut())
-          },
-        },
-      ],
-    )
-  }, [t, dispatch])
+  // const handleSignOut = useCallback(() => {
+  //   Alert.alert(
+  //     t('more.sections.app.signOutAlert.title'),
+  //     t('more.sections.app.signOutAlert.body'),
+  //     [
+  //       {
+  //         text: t('generic.cancel'),
+  //         style: 'cancel',
+  //       },
+  //       {
+  //         text: t('more.sections.app.signOut'),
+  //         style: 'destructive',
+  //         onPress: () => {
+  //           dispatch(appSlice.actions.signOut())
+  //         },
+  //       },
+  //     ],
+  //   )
+  // }, [t, dispatch])
 
   const handleIntervalSelected = useCallback(
     (value: ReactText) => {
@@ -277,11 +263,6 @@ const SettingsScreen = () => {
             title: t('more.sections.app.clearMapCache'),
             onPress: handleClearMapCache,
           },
-          {
-            title: t('more.sections.app.signOutWithLink', { address }),
-            onPress: handleSignOut,
-            destructive: true,
-          },
         ] as SettingListItemType[],
         footer: <AppInfoItem version={version} />,
       },
@@ -296,8 +277,6 @@ const SettingsScreen = () => {
     handleLanguageChange,
     handleCurrencyTypeChange,
     handleClearMapCache,
-    address,
-    handleSignOut,
     version,
     authIntervals,
     handleIntervalSelected,

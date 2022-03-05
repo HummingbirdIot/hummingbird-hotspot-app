@@ -56,6 +56,7 @@ const AccountScreen = () => {
           onPress: gotoActivityScreen.callback,
         },
       ]}
+      showAccountSwitch
     >
       <Box flex={1}>
         <ScrollView style={{ height: '100%' }}>

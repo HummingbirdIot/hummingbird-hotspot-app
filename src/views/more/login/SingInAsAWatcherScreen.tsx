@@ -43,6 +43,7 @@ const SingInAsAWatcherScreen = () => {
     if (checking) {
       if (fetchAccountStatus === 'pending' || fetchAccountStatus === 'idle')
         return
+      setCheckState(false)
       if (fetchAccountStatus === 'fulfilled' && account?.address === address) {
         nav.pop()
         dispatch(appSlice.actions.enableWatchMode(account?.address))
@@ -53,7 +54,6 @@ const SingInAsAWatcherScreen = () => {
             'The address you entered is invalid, please check it carefully.',
         })
       }
-      setCheckState(false)
     }
   }, [
     account?.address,

@@ -25,7 +25,7 @@ const RootStack = createStackNavigator()
 // const RootStack = createNativeStackNavigator()
 
 const RootNavigator = () => {
-  const { isWatcher, walletLinkToken } = useSelector(
+  const { isWatcher, walletLinkToken, accountAddress } = useSelector(
     (state: RootState) => state.app.user,
   )
   const colors = useColors()
@@ -35,69 +35,68 @@ const RootNavigator = () => {
     changeNavigationBarColor(colors.primaryBackground, true, false)
   }, [colors.primaryBackground])
 
-  if (!isWatcher && !walletLinkToken) {
+  if ((isWatcher || walletLinkToken) && accountAddress) {
     return (
-      <LoginStack.Navigator
-        headerMode="none"
-        screenOptions={defaultScreenOptions}
-        options={{ gestureEnabled: false }}
+      <RootStack.Navigator
+        // headerMode="none"
+        screenOptions={({ route }) => {
+          if (route.name === 'LockScreen')
+            // 锁频模式下，禁用掉手势
+            return { ...defaultScreenOptions, gestureEnabled: false }
+
+          if (Platform.OS === 'android') return defaultScreenOptions
+          return {}
+        }}
       >
-        <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
-        <LoginStack.Screen
-          name="TypeInExplorationCode"
-          component={SingInAsAWatcherScreen}
+        <RootStack.Screen
+          name="MainTabs"
+          options={{ headerShown: false }}
+          component={MainTabs}
         />
-        <LoginStack.Screen
-          name="CreateHeliumAccount"
-          component={CreateHeliumAccountScreen}
-        />
-      </LoginStack.Navigator>
+
+        <RootStack.Group screenOptions={{ headerShown: false }}>
+          <RootStack.Screen
+            name="HotspotSetup"
+            component={HotspotSetupNavigator}
+          />
+          <RootStack.Screen
+            name="HotspotAssert"
+            component={HotspotAssertLocationNavigator}
+          />
+          <RootStack.Screen
+            name="HotspotSetWiFi"
+            component={HotspotSetWiFiNavigator}
+          />
+          <RootStack.Screen
+            name="AddWatchingAccount"
+            component={SingInAsAWatcherScreen}
+          />
+        </RootStack.Group>
+        <RootStack.Group screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name="ActivityScreen" component={ActivityScreen} />
+          <RootStack.Screen name="HotspotScreen" component={HotspotScreen} />
+          <RootStack.Screen name="LockScreen" component={LockScreen} />
+        </RootStack.Group>
+      </RootStack.Navigator>
     )
   }
 
   return (
-    <RootStack.Navigator
-      // headerMode="none"
-      screenOptions={({ route }) => {
-        if (route.name === 'LockScreen')
-          // 锁频模式下，禁用掉手势
-          return { ...defaultScreenOptions, gestureEnabled: false }
-
-        if (Platform.OS === 'android') return defaultScreenOptions
-        return {}
-      }}
+    <LoginStack.Navigator
+      headerMode="none"
+      screenOptions={defaultScreenOptions}
+      options={{ gestureEnabled: false }}
     >
-      <RootStack.Screen
-        name="MainTabs"
-        options={{ headerShown: false }}
-        component={MainTabs}
+      <LoginStack.Screen name="Welcome" component={WelcomeScreen} />
+      <LoginStack.Screen
+        name="TypeInExplorationCode"
+        component={SingInAsAWatcherScreen}
       />
-
-      <RootStack.Group screenOptions={{ headerShown: false }}>
-        <RootStack.Screen
-          name="HotspotSetup"
-          component={HotspotSetupNavigator}
-        />
-        <RootStack.Screen
-          name="HotspotAssert"
-          component={HotspotAssertLocationNavigator}
-        />
-        <RootStack.Screen
-          name="HotspotSetWiFi"
-          component={HotspotSetWiFiNavigator}
-        />
-        <RootStack.Screen
-          name="AddWatchingAccount"
-          component={SingInAsAWatcherScreen}
-        />
-      </RootStack.Group>
-      <RootStack.Group screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="ActivityScreen" component={ActivityScreen} />
-        <RootStack.Screen name="HotspotScreen" component={HotspotScreen} />
-        <RootStack.Screen name="LockScreen" component={LockScreen} />
-      </RootStack.Group>
-    </RootStack.Navigator>
+      <LoginStack.Screen
+        name="CreateHeliumAccount"
+        component={CreateHeliumAccountScreen}
+      />
+    </LoginStack.Navigator>
   )
 }
-
 export default RootNavigator

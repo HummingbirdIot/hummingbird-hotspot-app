@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useState } from 'react'
 import { Linking, Platform } from 'react-native'
-import { Icon } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { FlatList } from 'react-native-gesture-handler'
@@ -9,30 +8,25 @@ import { useNavigation } from '@react-navigation/native'
 import { useAsync } from 'react-async-hook'
 import { WalletLink } from '@helium/react-native-sdk'
 import { getBundleId } from 'react-native-device-info'
-import { useColors } from '../../theme/themeHooks'
 import Box from '../boxes/Box'
-import Text from '../texts/Text'
 import { RootState } from '../../store/rootReducer'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import { getLinkedAddress } from '../../store/app/secureData'
-import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 import { B58Address } from '../../store/txns/txnsTypes'
 import { useAppDispatch } from '../../store/store'
 import hotspotsSlice from '../../store/data/hotspotsSlice'
-import { truncateAddress } from '../../utils/formatter'
 import AccountsListItem from '../lists/AccountsListItem'
+import AccountCard from '../cards/AccountCard'
+import AccountListHeader from './AccountListHeader'
 
 const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
   const dispatch = useAppDispatch()
   const [ownedAddress, setOwnedAddress] = useState('')
   const [addresses, setAddresses] = useState<WatchingAddress[]>([])
   const { bottom } = useSafeAreaInsets()
-
-  const { primaryText } = useColors()
 
   const { walletLinkToken, watchingAddresses, accountAddress } = useSelector(
     (state: RootState) => state.app.user,
@@ -82,6 +76,12 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
     }
   }
 
+  const asOwner = useCallback(() => {
+    dispatch(hotspotsSlice.actions.signOut())
+    dispatch(appSlice.actions.asOwner())
+    handleClose()
+  }, [dispatch, handleClose])
+
   const renderItem = ({ item }: { item: WatchingAddress }) => (
     <AccountsListItem
       data={item}
@@ -92,51 +92,49 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
 
   return (
     <>
-      <Box
-        margin="m"
-        padding="s"
-        backgroundColor="primaryBackground"
-        borderRadius="m"
+      <AccountListHeader
+        icon="payment"
+        action={
+          ownedAddress
+            ? {
+                icon: 'swap-vertical-circle',
+                handler: handleAppSelection(delegateApp),
+              }
+            : undefined
+        }
       >
-        <Text variant="h4">My Account</Text>
-      </Box>
-      <Box padding="m">
+        {t('My Account')}
+      </AccountListHeader>
+      <Box>
         {ownedAddress ? (
-          <Text variant="body1">
-            Linked as: {truncateAddress(ownedAddress, 4, 4)}
-          </Text>
-        ) : (
-          <TouchableOpacityBox>
-            <Text variant="body1">Link now</Text>
-            <Icon
-              name="link"
-              color={primaryText}
-              tvParallaxProperties={undefined}
-              onPress={handleAppSelection(delegateApp)}
+          <>
+            <AccountCard.Collapsed
+              data={{
+                alias: 'Linked as:',
+                address: ownedAddress,
+              }}
+              isCurrent={ownedAddress === accountAddress}
+              icon={ownedAddress === accountAddress ? 'star' : 'star-outline'}
+              onPress={asOwner}
             />
-          </TouchableOpacityBox>
+            <AccountCard.SingOut />
+          </>
+        ) : (
+          <AccountCard.LinkButton onPress={handleAppSelection(delegateApp)} />
         )}
       </Box>
-      <Box
-        margin="m"
-        padding="s"
-        backgroundColor="primaryBackground"
-        borderRadius="m"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Text variant="h4">Watching</Text>
-        <Icon
-          name="add"
-          color={primaryText}
-          tvParallaxProperties={undefined}
-          onPress={() => {
+      <AccountListHeader
+        icon="visibility"
+        action={{
+          icon: 'add-circle',
+          handler: () => {
             handleClose()
             navigation.navigate('AddWatchingAccount')
-          }}
-        />
-      </Box>
+          },
+        }}
+      >
+        {t('Watching')}
+      </AccountListHeader>
       <FlatList
         data={addresses}
         renderItem={renderItem}

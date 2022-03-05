@@ -54,7 +54,7 @@ const LockScreen = () => {
           text: t('more.sections.app.signOut'),
           style: 'destructive',
           onPress: () => {
-            dispatch(appSlice.actions.signOut())
+            dispatch(appSlice.actions.unlinkAccount())
           },
         },
         {

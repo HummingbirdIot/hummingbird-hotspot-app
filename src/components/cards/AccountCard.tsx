@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Icon } from 'react-native-elements'
 import { useSelector } from 'react-redux'
 import { useAsync } from 'react-async-hook'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
+import { Account } from '@helium/http'
 import { useColors } from '../../theme/themeHooks'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import { RootState } from '../../store/rootReducer'
-import { WatchingAddress } from '../../store/app/appSlice'
+import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 import { useAppDispatch } from '../../store/store'
 import { getAccount } from '../../utils/clients/appDataClient'
 import { fetchChartData } from '../../store/data/rewardsSlice'
 import { truncateAddress } from '../../utils/formatter'
-
+import { B58Address } from '../../store/txns/txnsTypes'
 import HNT from '../../assets/images/hnt.svg'
 
 export const flexProps = {
@@ -26,7 +27,7 @@ export const flexProps = {
 
 export const boxProps = {
   paddingHorizontal: 's',
-  paddingVertical: 'xs',
+  paddingVertical: 's',
   borderLeftWidth: 4,
   backgroundColor: 'primaryBackground',
   borderRadius: 's',
@@ -36,10 +37,12 @@ const Collapsed = ({
   data,
   isCurrent,
   onPress,
+  icon,
 }: {
   data: WatchingAddress
   isCurrent: boolean
   onPress: () => void
+  icon?: string
 }) => {
   const { blueMain, primaryText } = useColors()
   return (
@@ -57,10 +60,58 @@ const Collapsed = ({
           </Text>
         </Box>
         <Icon
-          name={isCurrent ? 'chevron-right' : 'expand-more'}
+          name={icon || (isCurrent ? 'chevron-right' : 'expand-more')}
           color={isCurrent ? blueMain : primaryText}
           tvParallaxProperties={undefined}
         />
+      </TouchableOpacityBox>
+    </Box>
+  )
+}
+
+const LinkButton = ({ onPress }: { onPress: () => void }) => {
+  const { primaryText } = useColors()
+  return (
+    <Box paddingVertical="s" padding="m">
+      <TouchableOpacityBox
+        {...flexProps}
+        {...boxProps}
+        borderLeftColor="primaryBackground"
+        onPress={onPress}
+      >
+        <Box flex={1}>
+          <Text variant="h5">Link Now</Text>
+          <Text variant="body3" marginTop="s">
+            Link in with Helium App
+          </Text>
+        </Box>
+        <Icon
+          name="link"
+          color={primaryText}
+          tvParallaxProperties={undefined}
+          onPress={onPress}
+        />
+      </TouchableOpacityBox>
+    </Box>
+  )
+}
+
+const SingOutButton = () => {
+  const dispatch = useAppDispatch()
+  const onPress = useCallback(
+    () => dispatch(appSlice.actions.unlinkAccount()),
+    [dispatch],
+  )
+  return (
+    <Box paddingVertical="s" padding="m">
+      <TouchableOpacityBox
+        {...boxProps}
+        borderLeftColor="primaryBackground"
+        onPress={onPress}
+      >
+        <Text variant="body2" color="redMain" textAlign="center">
+          Sign Out
+        </Text>
       </TouchableOpacityBox>
     </Box>
   )
@@ -71,11 +122,13 @@ const Button = ({
   backgroundColor,
   borderColor,
   onPress,
+  disabled,
 }: {
   children: string
   backgroundColor: any
   borderColor?: any
   onPress: () => void
+  disabled?: boolean
 }) => (
   <TouchableOpacityBox
     backgroundColor={backgroundColor}
@@ -84,6 +137,8 @@ const Button = ({
     borderRadius="s"
     borderColor={borderColor || backgroundColor}
     borderWidth={1}
+    disabled={disabled}
+    opacity={disabled ? 0.6 : 1}
     onPress={onPress}
   >
     <Text variant="body2">{children}</Text>
@@ -101,12 +156,13 @@ const Expand = ({
   data: WatchingAddress
   isCurrent: boolean
   onCollapse: () => void
-  onWatch: () => void
+  onWatch: (address: B58Address) => void
   onRename: () => void
   onDelete: () => void
 }) => {
   const { primaryText } = useColors()
   const dispatch = useAppDispatch()
+  const [account, setAccount] = useState<Account>()
   const [balance, setBalance] = useState('')
   const chartData =
     useSelector((state: RootState) => state.rewards.chartData[data.address]) ||
@@ -124,13 +180,21 @@ const Expand = ({
         }),
       )
       try {
-        const account = await getAccount(data.address)
-        setBalance(account?.balance?.floatBalance.toString() || '0.00000')
+        const acc = await getAccount(data.address)
+        setAccount(acc || undefined)
+        setBalance(acc?.balance?.floatBalance.toString() || '0.00000')
       } catch (error) {
         setBalance('0.00000')
       }
     }
   }, [])
+
+  const switchAccount = () => {
+    if (account) {
+      dispatch(appSlice.actions.updateAccount({ account }))
+      onWatch(data.address)
+    }
+  }
 
   if (isCurrent) return null
 
@@ -183,8 +247,12 @@ const Expand = ({
             )}
           </Box>
         </Box>
-        <Box {...flexProps} marginVertical="ms">
-          <Button backgroundColor="blueMain" onPress={onWatch}>
+        <Box {...flexProps} marginTop="ms" marginBottom="xs">
+          <Button
+            backgroundColor="blueMain"
+            disabled={!balance}
+            onPress={switchAccount}
+          >
             Watch
           </Button>
           <Button
@@ -205,5 +273,7 @@ const Expand = ({
 
 export default {
   Collapsed: memo(Collapsed),
+  LinkButton: memo(LinkButton),
   Expand: memo(Expand),
+  SingOut: memo(SingOutButton),
 }

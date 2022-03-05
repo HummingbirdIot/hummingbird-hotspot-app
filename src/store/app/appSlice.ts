@@ -8,7 +8,8 @@ import {
   setSecureItem,
   unlinkAccount,
   endWatching,
-  getLinkedAddress,
+  getAddress,
+  parseLinkedAddress,
 } from './secureData'
 import { Intervals } from '../../utils/hooks/useAuthIntervals'
 import { B58Address, Loading } from '../txns/txnsTypes'
@@ -100,9 +101,9 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
   async () => {
     const [
       isBackedUp,
+
       isWatcher,
       walletLinkToken,
-      address,
       lastHNTBlance,
       lastFiatBlance,
       watchingAddressesJSON,
@@ -113,12 +114,12 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       currency,
     ] = await Promise.all([
       getSecureItem('isBackedUp'),
+
       getSecureItem('user.isWatching'),
       getSecureItem('user.walletLinkToken'),
       getSecureItem('user.address'),
       getSecureItem('user.lastHNTBlance'),
       getSecureItem('user.lastFiatBlance'),
-      getSecureItem('user.watchingAddressesJSON'),
 
       getSecureItem('settings.isPinRequired'),
       getSecureItem('settings.authInterval'),
@@ -126,21 +127,25 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
       getSecureItem('settings.currencyType'),
     ])
 
-    if (isBackedUp && address) {
-      // 推送
-      console.log('OneSignal.sendTags:', { address })
-      // OneSignal.sendTags({ address })
-      // Logger.setUser(address)
-    }
-
-    let watchingAddresses = []
+    let watchingAddresses: WatchingAddress[] = []
     try {
       watchingAddresses = JSON.parse(watchingAddressesJSON || '[]') || []
     } catch (error) {
       watchingAddresses = []
     }
 
-    console.log('watchingAddresses', watchingAddresses)
+    let address = await getAddress()
+    if (isBackedUp && address) {
+      // 推送
+      console.log('OneSignal.sendTags:', { address })
+      // OneSignal.sendTags({ address })
+      // Logger.setUser(address)
+      const account = watchingAddresses.find((item) => item.address === address)
+      if (!account) {
+        deleteSecureItem('user.address')
+        address = ''
+      }
+    }
 
     return {
       isLocked: !!isPinRequired,
@@ -212,26 +217,57 @@ const appSlice = createSlice({
       setSecureItem('user.address', address)
       setSecureItem('user.isWatching', true)
       setSecureItem('isBackedUp', true)
+
+      if (state.user.accountAddress !== address) {
+        delete state.user.account
+        state.user.accountAddress = address
+      }
       state.user.isWatcher = true
-      state.user.accountAddress = address
     },
     storeWalletLinkToken: (
       state,
       { payload: token }: PayloadAction<string>,
     ) => {
+      const address = parseLinkedAddress(token)
+      deleteSecureItem('user.address')
       setSecureItem('user.isWatching', false)
-      setSecureItem('user.address', '') // 清除之前的旧 Address
-      setSecureItem('user.walletLinkToken', token).then(() =>
-        getLinkedAddress().then((address) => {
-          state.user.accountAddress = address as B58Address
-          state.user.walletLinkToken = token
-          state.user.isWatcher = false
-          setSecureItem('isBackedUp', true)
-        }),
-      )
+      deleteSecureItem('user.address').then(() => {
+        setSecureItem('user.walletLinkToken', token)
+        setSecureItem('user.address', address as B58Address)
+        setSecureItem('isBackedUp', true)
+      })
+
+      if (state.user.accountAddress !== address) {
+        delete state.user.account
+        state.user.accountAddress = address as B58Address
+      }
+      state.user.isWatcher = false
     },
-    switchAccount: (state) => {
-      state.isSettingUpHotspot = false
+    asOwner: (state) => {
+      if (state.user.walletLinkToken) {
+        const address = parseLinkedAddress(state.user.walletLinkToken)
+        deleteSecureItem('user.address')
+          .then(endWatching)
+          .then(() => {
+            setSecureItem('user.address', address as B58Address)
+            setSecureItem('isBackedUp', true)
+          })
+
+        delete state.user.account
+        state.user.accountAddress = address as B58Address
+        state.user.isWatcher = false
+      }
+    },
+    unlinkAccount: (state) => {
+      unlinkAccount().then(() => {
+        setSecureItem('isBackedUp', true)
+      })
+      state.user.walletLinkToken = ''
+      state.user.accountAddress = ''
+      state.user.isWatcher = false
+    },
+    updateAccount: (state, { payload }: PayloadAction<AccountData>) => {
+      state.user.account = payload.account
     },
     updateBlance: (state, { payload: blance }: PayloadAction<string>) => {
       state.user.lastHNTBlance = blance
@@ -248,21 +284,6 @@ const appSlice = createSlice({
     },
     startHotspotSetup: (state) => {
       state.isSettingUpHotspot = false
-    },
-    signOut: (state) => {
-      if (state.user.isWatcher) {
-        endWatching()
-      } else {
-        unlinkAccount()
-      }
-      return {
-        ...initialState,
-        user: {
-          ...initialState.user,
-          watchingAddresses: state.user.watchingAddresses,
-        },
-        isRestored: true,
-      }
     },
     updateAuthInterval: (state, action: PayloadAction<number>) => {
       state.settings.authInterval = action.payload
@@ -288,7 +309,7 @@ const appSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(restoreAppSettings.fulfilled, (state, { payload }) => {
-      console.log('restoreAppSettings', payload)
+      // console.log('restoreAppSettings', payload)
       return { ...state, ...payload, isRestored: true }
     })
     builder.addCase(

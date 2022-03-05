@@ -68,7 +68,7 @@ const useAppLink = () => {
 
   const navToAppLink = useCallback(
     (record: AppLink | WalletLink) => {
-      console.log('navToAppLink::AppLinkRecord:', record.type, record)
+      // console.log('navToAppLink::AppLinkRecord:', record.type, record)
 
       if (isLocked) {
         setUnhandledLink(record)

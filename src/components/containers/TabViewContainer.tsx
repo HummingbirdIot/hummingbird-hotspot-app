@@ -20,10 +20,12 @@ const TabViewContainer = ({
   title,
   icons,
   children,
+  showAccountSwitch,
 }: {
   title: string
   icons?: Array<IconInfo>
   children?: Array<JSX.Element> | JSX.Element
+  showAccountSwitch?: boolean
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
@@ -49,26 +51,28 @@ const TabViewContainer = ({
         paddingHorizontal="l"
         alignItems="center"
       >
-        <TouchableOpacityBox
-          paddingRight="s"
-          paddingVertical="xs"
-          onPress={() => setModalVisible(true)}
-        >
-          <Box
-            flex={1}
-            borderRightWidth={2}
-            borderRightColor="primaryText"
-            paddingRight="xs"
+        {showAccountSwitch && (
+          <TouchableOpacityBox
+            paddingRight="s"
+            paddingVertical="xs"
+            onPress={() => setModalVisible(true)}
           >
-            <Icon
-              // name="reorder"
-              name="menu"
-              size={26}
-              color={primaryText}
-              tvParallaxProperties={undefined}
-            />
-          </Box>
-        </TouchableOpacityBox>
+            <Box
+              flex={1}
+              borderRightWidth={2}
+              borderRightColor="primaryText"
+              paddingRight="xs"
+            >
+              <Icon
+                // name="reorder"
+                name="menu"
+                size={26}
+                color={primaryText}
+                tvParallaxProperties={undefined}
+              />
+            </Box>
+          </TouchableOpacityBox>
+        )}
         <Box flex={1}>
           <Text variant="h3">{t(title)}</Text>
         </Box>

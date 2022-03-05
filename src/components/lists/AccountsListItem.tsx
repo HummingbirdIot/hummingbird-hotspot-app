@@ -39,7 +39,7 @@ const AccountsListItem = ({
       data={data}
       isCurrent={isCurrent}
       onCollapse={() => setCollapsed(true)}
-      onWatch={() => setCollapsed(true)}
+      onWatch={onSelect}
       onRename={() => setCollapsed(true)}
       onDelete={() => setCollapsed(true)}
     />

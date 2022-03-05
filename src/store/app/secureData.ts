@@ -4,16 +4,18 @@ import * as SecureStore from 'expo-secure-store'
 
 type AccountStoreKey = BooleanKey | StringKey | JSONKey
 
-const userKeys = [
-  'user.address',
-  'user.lastHNTBlance',
-  'user.lastFiatBlance',
+const userKeys = ['user.address', 'user.lastHNTBlance', 'user.lastFiatBlance']
+const settingKeys = [
   'settings.userPin',
   'settings.authInterval',
   'settings.language',
   'settings.currencyType',
 ]
-const stringKeys = [...userKeys, 'user.walletLinkToken'] as const
+const stringKeys = [
+  ...userKeys,
+  ...settingKeys,
+  'user.walletLinkToken',
+] as const
 type StringKey = typeof stringKeys[number]
 const jsonKeys = ['user.watchingAddressesJSON'] as const
 type JSONKey = typeof jsonKeys[number]
@@ -76,12 +78,16 @@ export const getWatchingAddress = async () => {
   return null
 }
 
-export const getLinkedAddress = async () => {
-  const token = await getSecureItem('user.walletLinkToken')
-  if (!token) return null
+export const parseLinkedAddress = (token: string) => {
   const parsed = WalletLink.parseWalletLinkToken(token)
   if (!parsed?.address) return null
   return parsed.address
+}
+
+export const getLinkedAddress = async () => {
+  const token = await getSecureItem('user.walletLinkToken')
+  if (!token) return null
+  return parseLinkedAddress(token)
 }
 
 export const getAddress = async () => {
@@ -105,7 +111,7 @@ export const deleteSecureItem = async (key: AccountStoreKey) =>
 
 const signOut = async () => {
   return Promise.all(
-    [...userKeys, ...boolKeys].map((key) => deleteSecureItem(key)),
+    [...userKeys, 'isBackedUp'].map((key) => deleteSecureItem(key)),
   )
 }
 
