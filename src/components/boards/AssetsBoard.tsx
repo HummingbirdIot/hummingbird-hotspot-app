@@ -25,6 +25,12 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
   const { lastHNTBlance, lastFiatBlance } = useSelector(
     (state: RootState) => state.app.user,
   )
+  const chartData =
+    useSelector(
+      (state: RootState) => state.rewards.chartData[account?.address || ''],
+    ) || {}
+  const [yesterday] =
+    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
   const { currencyType } = useSelector((state: RootState) => state.app.settings)
   const [fiat, setFiat] = useState<string>(lastFiatBlance)
 
@@ -43,7 +49,7 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
               {fiat}
             </Text>
             <Text variant="body1" paddingVertical="s" textAlign="center">
-              {lastHNTBlance || '0'} HNT
+              {lastHNTBlance || '0'} HNT (+ {yesterday?.total || '0'})
             </Text>
           </Box>
         ) : (
@@ -55,11 +61,11 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
               marginHorizontal="20%"
             />
             <SkeletonPlaceholder.Item
-              width="40%"
+              width="70%"
               height={17}
               borderRadius={5}
               marginVertical={spacing.s}
-              marginHorizontal="30%"
+              marginHorizontal="15%"
             />
           </SkeletonPlaceholder>
         )}

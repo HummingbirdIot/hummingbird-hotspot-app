@@ -37,6 +37,8 @@ const HotspotListItem = ({
     useSelector(
       (state: RootState) => state.rewards.chartData[hotspot.address],
     ) || {}
+  const [yesterday] =
+    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
   const { getMakerName } = useMaker()
   const {
     primaryBackground,
@@ -92,10 +94,6 @@ const HotspotListItem = ({
       )
     }
   }, [dispatch, hotspot.address])
-
-  const [yesterday] =
-    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
-  console.log('chartDatachartDatachartData', yesterday?.total)
 
   return (
     <ListItem
@@ -156,7 +154,7 @@ const HotspotListItem = ({
         </ListItem.Title>
         <HotspotCardGroup>
           <HotspotCardItem Icon={HNT} flex={1}>
-            + {yesterday?.total || '0.00000'}
+            + {yesterday?.total || '0.00000'} HNT
           </HotspotCardItem>
           <HotspotCardItem Icon={Maker} right>
             {getMakerName(hotspot.payer)}
