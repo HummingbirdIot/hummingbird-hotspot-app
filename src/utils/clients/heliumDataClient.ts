@@ -4,7 +4,7 @@ import { Platform } from 'react-native'
 import { getVersion } from 'react-native-device-info'
 import { subDays } from 'date-fns'
 import { Transaction } from '@helium/transactions'
-import { getAddress } from '../../store/app/secureData'
+import { getAddress } from '../secureData'
 import { fromNow } from '../timeUtils'
 import {
   AccountFilters,

@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react'
 
 import { Rect, Text } from 'react-native-svg'
-import { ChartData } from './types'
+import { RewardsData } from './types'
 
 type Props = {
   index: number
@@ -15,11 +15,11 @@ type Props = {
   stackedDownColor: string
   barGap: number
   maxUpBarHeight: number
-  focusedBar: ChartData | null
+  focusedBar: RewardsData | null
   labelColor: string
   height: number
-  data: ChartData
-  stackedData: ChartData
+  data: RewardsData
+  stackedData: RewardsData
 }
 
 const ChartBar = ({

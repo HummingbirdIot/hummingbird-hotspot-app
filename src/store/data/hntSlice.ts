@@ -6,11 +6,11 @@ import {
   getCurrentOraclePrice,
   getPredictedOraclePrice,
   getStatCounts,
-} from '../../utils/clients/appDataClient'
+} from '../../utils/clients/heliumDataClient'
 import { getCurrentPrices } from '../../utils/clients/coinGeckoClient'
 import { getMakers, Maker } from '../../utils/clients/stakingClient'
 
-export type HeliumDataState = {
+export type HNTState = {
   blockHeight?: number
   currentOraclePrice?: OraclePrice
   predictedOraclePrices: OraclePrice[]
@@ -19,7 +19,8 @@ export type HeliumDataState = {
   hotspotCount?: number
   blockTime?: number
 }
-const initialState: HeliumDataState = {
+
+const initialState: HNTState = {
   predictedOraclePrices: [],
   blockTime: 0,
 }
@@ -43,7 +44,7 @@ export const fetchStats = createAsyncThunk('helium/stats', async () =>
   Promise.all([getStatCounts(), getBlockStats()]),
 )
 
-export const fetchInitialData = createAsyncThunk<HeliumDataState>(
+export const fetchInitialData = createAsyncThunk<HNTState>(
   'helium/fetchInitialData',
   async () => {
     const vals = await Promise.all([
@@ -78,7 +79,7 @@ export const fetchCurrentPrices = createAsyncThunk(
 
 // This slice contains global helium data not specifically related to the current user
 const hntSlice = createSlice({
-  name: 'helium',
+  name: 'hnt',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

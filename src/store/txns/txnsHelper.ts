@@ -24,7 +24,7 @@ import {
   getHotspotActivityList,
   getHotspotRolesList,
   getPendingTransactions,
-} from '../../utils/clients/appDataClient'
+} from '../../utils/clients/heliumDataClient'
 import { hasValidCache } from '../../utils/cacheUtils'
 
 export type Roles = AddressIndexed<AccountRolesRecord | HotspotRolesRecord>

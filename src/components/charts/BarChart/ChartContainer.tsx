@@ -3,15 +3,15 @@ import React, { memo, useCallback, useState } from 'react'
 import { BoxProps } from '@shopify/restyle'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import Chart from './Chart'
-import { ChartData } from './types'
+import { RewardsData } from './types'
 import Box from '../../boxes/Box'
 import { Theme } from '../../../theme/theme'
 
 type Props = BoxProps<Theme> & {
   height: number
-  data?: ChartData[] | null
-  stackedData?: ChartData[]
-  onFocus: (data: ChartData | null, stackedData: ChartData | null) => void
+  data?: RewardsData[] | null
+  stackedData?: RewardsData[]
+  onFocus: (data: RewardsData | null, stackedData: RewardsData | null) => void
   showXAxisLabel?: boolean
   upColor?: string
   downColor?: string

@@ -7,7 +7,7 @@ import {
   getHotspotRewards,
   // eslint-disable-next-line import/named
   getValidatorRewards,
-} from '../../utils/clients/appDataClient'
+} from '../../utils/clients/heliumDataClient'
 import {
   CacheRecord,
   handleCacheRejected,
@@ -26,13 +26,13 @@ type FetchDetailsParams = {
   resource: RewardsResource
 }
 
-type GatewayChartData = {
+type GatewayRewardsData = {
   rewardSum?: Balance<NetworkTokens>
   rewards?: Sum[]
   // rewardsChange?: number
 }
 
-export type NetworkHotspotEarnings = {
+export type NetworkEarnings = {
   avg_rewards: number
   consensus: number
   hotspot_count: number
@@ -41,55 +41,53 @@ export type NetworkHotspotEarnings = {
   date: string
 }
 
-export type GatewayChartCache = CacheRecord<GatewayChartData>
+export type GatewayChartCache = CacheRecord<GatewayRewardsData>
 export type GatewayAddress = string
-export type GatewayChartRecord = Record<ChartTimelineValue, GatewayChartCache>
+export type GatewayRewardsRecord = Record<ChartTimelineValue, GatewayChartCache>
 export type GatewayIndex<T> = Record<GatewayAddress, T>
+export type RewardsData = GatewayIndex<GatewayRewardsRecord>
 
 type RewardsState = {
-  chartData: GatewayIndex<GatewayChartRecord>
-  accountEarnings: CacheRecord<{ data: NetworkHotspotEarnings[] }>
-  accountEarningsLoaded: boolean
-  networkHotspotEarnings: CacheRecord<{ data: NetworkHotspotEarnings[] }>
+  earnings: RewardsData
+  networkHotspotEarnings: CacheRecord<{ data: NetworkEarnings[] }>
   networkHotspotEarningsLoaded: boolean
 }
 const initialState: RewardsState = {
-  chartData: {},
+  earnings: {},
   networkHotspotEarnings: { lastFetchedTimestamp: 0, loading: false, data: [] },
-  accountEarnings: { lastFetchedTimestamp: 0, loading: false, data: [] },
-  accountEarningsLoaded: false,
   networkHotspotEarningsLoaded: false,
 }
 
-export const fetchNetworkHotspotEarnings = createAsyncThunk<
-  NetworkHotspotEarnings[]
->('rewards/fetchNetworkHotspotEarnings', async (_arg, { getState }) => {
-  const {
-    rewards: { networkHotspotEarnings },
-  } = (await getState()) as {
-    rewards: RewardsState
-  }
-  if (hasValidCache(networkHotspotEarnings, 30))
-    return networkHotspotEarnings.data
+export const fetchNetworkEarnings = createAsyncThunk<NetworkEarnings[]>(
+  'rewards/fetchNetworkEarnings',
+  async (_arg, { getState }) => {
+    const {
+      rewards: { networkHotspotEarnings },
+    } = (await getState()) as {
+      rewards: RewardsState
+    }
+    if (hasValidCache(networkHotspotEarnings, 30))
+      return networkHotspotEarnings.data
 
-  return getWalletExt('hotspots/earnings')
-})
+    return getWalletExt('hotspots/earnings')
+  },
+)
 
-export const fetchChartData = createAsyncThunk<
-  GatewayChartData,
+export const fetchRewardsData = createAsyncThunk<
+  GatewayRewardsData,
   FetchDetailsParams
 >(
-  'rewards/fetchChartData',
+  'rewards/fetchRewardsData',
   async ({ address, numDays, resource }: FetchDetailsParams, { getState }) => {
     const currentState = (
       getState() as {
         rewards: {
-          chartData: GatewayIndex<GatewayChartRecord>
+          earnings: GatewayIndex<GatewayRewardsRecord>
         }
       }
     ).rewards
-    const chartData = currentState.chartData[address] || {}
-    const details = chartData[numDays]
+    const earnings = currentState.earnings[address] || {}
+    const details = earnings[numDays]
     if (hasValidCache(details)) {
       return details
     }
@@ -127,46 +125,46 @@ const rewardsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchChartData.pending, (state, action) => {
+    builder.addCase(fetchRewardsData.pending, (state, action) => {
       const { address, numDays } = action.meta.arg
-      if (hasValidCache(state.chartData[address]?.[numDays])) return
+      if (hasValidCache(state.earnings[address]?.[numDays])) return
 
-      const prevDetails = state.chartData[address] || {}
+      const prevDetails = state.earnings[address] || {}
       const prevState = prevDetails[numDays] || {}
       const nextState = handleCachePending(prevState)
-      state.chartData[address] = {
-        ...state.chartData[address],
+      state.earnings[address] = {
+        ...state.earnings[address],
         [numDays]: nextState,
       }
     })
-    builder.addCase(fetchChartData.fulfilled, (state, action) => {
+    builder.addCase(fetchRewardsData.fulfilled, (state, action) => {
       const { address, numDays } = action.meta.arg
-      if (hasValidCache(state.chartData[address]?.[numDays])) return
+      if (hasValidCache(state.earnings[address]?.[numDays])) return
 
-      state.chartData[address][numDays] = handleCacheFulfilled(action.payload)
+      state.earnings[address][numDays] = handleCacheFulfilled(action.payload)
     })
-    builder.addCase(fetchChartData.rejected, (state, action) => {
+    builder.addCase(fetchRewardsData.rejected, (state, action) => {
       const { address, numDays } = action.meta.arg
-      if (hasValidCache(state.chartData[address]?.[numDays])) return
+      if (hasValidCache(state.earnings[address]?.[numDays])) return
 
-      const prevDetails = state.chartData[address] || {}
+      const prevDetails = state.earnings[address] || {}
       const prevState = prevDetails[numDays] || {}
       const nextState = handleCacheRejected(prevState)
-      state.chartData[address] = {
-        ...state.chartData[address],
+      state.earnings[address] = {
+        ...state.earnings[address],
         [numDays]: nextState,
       }
     })
-    builder.addCase(fetchNetworkHotspotEarnings.pending, (state, _action) => {
+    builder.addCase(fetchNetworkEarnings.pending, (state, _action) => {
       state.networkHotspotEarnings.loading = true
     })
-    builder.addCase(fetchNetworkHotspotEarnings.fulfilled, (state, action) => {
+    builder.addCase(fetchNetworkEarnings.fulfilled, (state, action) => {
       state.networkHotspotEarnings = handleCacheFulfilled({
         data: action.payload,
       })
       state.networkHotspotEarningsLoaded = true
     })
-    builder.addCase(fetchNetworkHotspotEarnings.rejected, (state, _action) => {
+    builder.addCase(fetchNetworkEarnings.rejected, (state, _action) => {
       state.networkHotspotEarnings.loading = false
       state.networkHotspotEarningsLoaded = true
     })

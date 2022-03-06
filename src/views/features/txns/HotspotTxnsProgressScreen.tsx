@@ -15,7 +15,7 @@ import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
-import { hotspotOnChain } from '../../../utils/clients/appDataClient'
+import { hotspotOnChain } from '../../../utils/clients/heliumDataClient'
 import useAlert from '../../../utils/hooks/useAlert'
 import {
   GatewayAction,

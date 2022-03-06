@@ -27,7 +27,6 @@ const TabViewContainer = ({
   children?: Array<JSX.Element> | JSX.Element
   showAccountSwitch?: boolean
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
   const [modalVisible, setModalVisible] = useState(false)

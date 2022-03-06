@@ -23,14 +23,14 @@ const AssetsBoard = ({ account }: { account?: Account }) => {
     isEqual,
   )
   const { lastHNTBlance, lastFiatBlance } = useSelector(
-    (state: RootState) => state.app.user,
+    (state: RootState) => state.account,
   )
-  const chartData =
+  const earnings =
     useSelector(
-      (state: RootState) => state.rewards.chartData[account?.address || ''],
+      (state: RootState) => state.rewards.earnings[account?.address || ''],
     ) || {}
   const [yesterday] =
-    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
+    (earnings['7'] || earnings['14'] || earnings['30'])?.rewards || []
   const { currencyType } = useSelector((state: RootState) => state.app.settings)
   const [fiat, setFiat] = useState<string>(lastFiatBlance)
 

@@ -19,7 +19,7 @@ import Elevation from '../../assets/images/elevation.svg'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
 import { useColors } from '../../theme/themeHooks'
 import { HotspotCardGroup, HotspotCardItem } from '../cards/HotspotCard'
-import { fetchChartData } from '../../store/data/rewardsSlice'
+import { fetchRewardsData } from '../../store/data/rewardsSlice'
 import { useAppDispatch } from '../../store/store'
 import { RootState } from '../../store/rootReducer'
 
@@ -33,12 +33,12 @@ const HotspotListItem = ({
   const { t } = useTranslation()
   const colorScheme: ColorSchemeName = useColorScheme()
   const dispatch = useAppDispatch()
-  const chartData =
+  const earnings =
     useSelector(
-      (state: RootState) => state.rewards.chartData[hotspot.address],
+      (state: RootState) => state.rewards.earnings[hotspot.address],
     ) || {}
   const [yesterday] =
-    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
+    (earnings['7'] || earnings['14'] || earnings['30'])?.rewards || []
   const { getMakerName } = useMaker()
   const {
     primaryBackground,
@@ -86,7 +86,7 @@ const HotspotListItem = ({
   useEffect(() => {
     if (hotspot.address) {
       dispatch(
-        fetchChartData({
+        fetchRewardsData({
           address: hotspot.address,
           numDays: 7,
           resource: 'hotspots',

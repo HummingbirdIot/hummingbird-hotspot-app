@@ -13,7 +13,7 @@ import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
 import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
-import { submitTxn } from '../../../utils/clients/appDataClient'
+import { submitTxn } from '../../../utils/clients/heliumDataClient'
 import { useColors } from '../../../theme/themeHooks'
 
 type Route = RouteProp<FeaturesStackParamList, 'HotspotTxnsSubmitScreen'>

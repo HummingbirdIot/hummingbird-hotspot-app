@@ -11,11 +11,13 @@ import { getBundleId } from 'react-native-device-info'
 import Box from '../boxes/Box'
 import { RootState } from '../../store/rootReducer'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
+import hotspotsSlice from '../../store/data/hotspotsSlice'
+import accountSlice from '../../store/data/accountSlice'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
-import { getLinkedAddress } from '../../store/app/secureData'
+import { getLinkedAddress } from '../../utils/secureData'
 import { B58Address } from '../../store/txns/txnsTypes'
 import { useAppDispatch } from '../../store/store'
-import hotspotsSlice from '../../store/data/hotspotsSlice'
+
 import AccountsListItem from '../lists/AccountsListItem'
 import AccountCard from '../cards/AccountCard'
 import AccountListHeader from './AccountListHeader'
@@ -32,25 +34,6 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
     (state: RootState) => state.app.user,
   )
   const [delegateApp] = WalletLink.delegateApps
-  const handleAppSelection = useCallback(
-    (app: WalletLink.DelegateApp) => async () => {
-      try {
-        const url = WalletLink.createWalletLinkUrl({
-          universalLink:
-            Platform.OS === 'android' ? app.urlScheme : app.universalLink,
-          requestAppId: getBundleId(),
-          callbackUrl: 'hummingbirdscheme://',
-          appName: 'Hummingbird',
-        })
-
-        Linking.openURL(url)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
-      }
-    },
-    [],
-  )
 
   useAsync(async () => {
     if (walletLinkToken) {
@@ -66,18 +49,43 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
     }
   }, [walletLinkToken, watchingAddresses])
 
-  const switchWatchingAccount = (address: B58Address) => {
-    if (address === accountAddress) {
-      handleClose()
-    } else {
-      dispatch(hotspotsSlice.actions.signOut())
-      dispatch(appSlice.actions.enableWatchMode(address))
-      handleClose()
-    }
-  }
+  const handleAppSelection = useCallback(
+    (app: WalletLink.DelegateApp) => async () => {
+      try {
+        const url = WalletLink.createWalletLinkUrl({
+          universalLink:
+            Platform.OS === 'android' ? app.urlScheme : app.universalLink,
+          requestAppId: getBundleId(),
+          callbackUrl: 'hummingbirdscheme://',
+          appName: 'Hummingbird',
+        })
+        handleClose()
+        Linking.openURL(url)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
+    },
+    [handleClose],
+  )
+
+  const switchWatchingAccount = useCallback(
+    (address: B58Address) => {
+      if (address === accountAddress) {
+        handleClose()
+      } else {
+        dispatch(hotspotsSlice.actions.signOut())
+        dispatch(accountSlice.actions.reset())
+        dispatch(appSlice.actions.enableWatchMode(address))
+        handleClose()
+      }
+    },
+    [accountAddress, dispatch, handleClose],
+  )
 
   const asOwner = useCallback(() => {
     dispatch(hotspotsSlice.actions.signOut())
+    dispatch(accountSlice.actions.reset())
     dispatch(appSlice.actions.asOwner())
     handleClose()
   }, [dispatch, handleClose])

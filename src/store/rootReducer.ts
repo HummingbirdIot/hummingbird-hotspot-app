@@ -3,16 +3,21 @@ import { createMigrate, persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import appSlice from './app/appSlice'
 import locationSlice from './app/locationSlice'
-import hntSlice from './hnt/hntSlice'
+import hntSlice from './data/hntSlice'
 import hotspotsSlice, { hotspotsSliceMigrations } from './data/hotspotsSlice'
 import rewardsSlice from './data/rewardsSlice'
 import txnsSlice from './txns/txnsSlice'
+import accountSlice from './data/accountSlice'
 
 const config = {
   app: {
     key: appSlice.name,
     storage: AsyncStorage,
     blacklist: [],
+  },
+  account: {
+    key: accountSlice.name,
+    storage: AsyncStorage,
   },
   hotspots: {
     key: hotspotsSlice.name,
@@ -26,6 +31,7 @@ const config = {
 const rootReducer = combineReducers({
   app: persistReducer(config.app, appSlice.reducer),
   location: locationSlice.reducer,
+  account: persistReducer(config.account, accountSlice.reducer),
   hotspots: persistReducer(config.hotspots, hotspotsSlice.reducer),
   rewards: rewardsSlice.reducer,
   hnt: hntSlice.reducer,

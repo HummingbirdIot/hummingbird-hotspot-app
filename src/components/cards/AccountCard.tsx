@@ -11,10 +11,11 @@ import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import { RootState } from '../../store/rootReducer'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
+import accountSlice from '../../store/data/accountSlice'
 import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 import { useAppDispatch } from '../../store/store'
-import { getAccount } from '../../utils/clients/appDataClient'
-import { fetchChartData } from '../../store/data/rewardsSlice'
+import { getAccount } from '../../utils/clients/heliumDataClient'
+import { fetchRewardsData } from '../../store/data/rewardsSlice'
 import { truncateAddress } from '../../utils/formatter'
 import { B58Address } from '../../store/txns/txnsTypes'
 import HNT from '../../assets/images/hnt.svg'
@@ -164,16 +165,16 @@ const Expand = ({
   const dispatch = useAppDispatch()
   const [account, setAccount] = useState<Account>()
   const [balance, setBalance] = useState('')
-  const chartData =
-    useSelector((state: RootState) => state.rewards.chartData[data.address]) ||
+  const earnings =
+    useSelector((state: RootState) => state.rewards.earnings[data.address]) ||
     {}
   const [yesterday] =
-    (chartData['7'] || chartData['14'] || chartData['30'])?.rewards || []
+    (earnings['7'] || earnings['14'] || earnings['30'])?.rewards || []
 
   useAsync(async () => {
     if (!isCurrent) {
       dispatch(
-        fetchChartData({
+        fetchRewardsData({
           address: data.address,
           numDays: 7,
           resource: 'accounts',
@@ -191,7 +192,7 @@ const Expand = ({
 
   const switchAccount = () => {
     if (account) {
-      dispatch(appSlice.actions.updateAccount({ account }))
+      dispatch(accountSlice.actions.updateAccount({ account }))
       onWatch(data.address)
     }
   }

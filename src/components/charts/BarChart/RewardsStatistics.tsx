@@ -8,14 +8,14 @@ import { addMinutes } from 'date-fns'
 import { useAppDispatch } from '../../../store/store'
 import { RootState } from '../../../store/rootReducer'
 import {
-  fetchChartData,
-  fetchNetworkHotspotEarnings,
+  fetchRewardsData,
+  fetchNetworkEarnings,
   RewardsResource,
 } from '../../../store/data/rewardsSlice'
 import usePrevious from '../../../utils/hooks/usePrevious'
 import RewardsChart from '../StatisticsChart/RewardsChart'
 
-export const getRewardChartData = (
+export const getRewardRewardsData = (
   rewardData: Sum[] | undefined,
   numDays: number | undefined,
 ) => {
@@ -46,8 +46,8 @@ const RewardsStatistics = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
-  const chartData =
-    useSelector((state: RootState) => state.rewards.chartData[address]) || {}
+  const earnings =
+    useSelector((state: RootState) => state.rewards.earnings[address]) || {}
 
   const [timelineValue, setTimelineValue] = useState(7)
   const [timelineIndex, setTimelineIndex] = useState(2)
@@ -57,9 +57,9 @@ const RewardsStatistics = ({
     rewardSum,
     // rewardsChange,
     loading = true,
-  } = chartData[timelineValue] || {}
-  const rewardChartData = useMemo(() => {
-    const data = getRewardChartData(rewards, timelineValue)
+  } = earnings[timelineValue] || {}
+  const rewardRewardsData = useMemo(() => {
+    const data = getRewardRewardsData(rewards, timelineValue)
     return data || []
   }, [timelineValue, rewards])
 
@@ -75,7 +75,7 @@ const RewardsStatistics = ({
       setTimelineIndex(index)
 
       dispatch(
-        fetchChartData({
+        fetchRewardsData({
           address,
           numDays: value,
           resource,
@@ -85,7 +85,7 @@ const RewardsStatistics = ({
     [address, dispatch, resource],
   )
 
-  // console.log('Root::rewardChartData:', rewardChartData)
+  // console.log('Root::rewardRewardsData:', rewardRewardsData)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [listIndex, setListIndex] = useState(-1)
@@ -101,10 +101,10 @@ const RewardsStatistics = ({
       return
     }
 
-    dispatch(fetchNetworkHotspotEarnings())
+    dispatch(fetchNetworkEarnings())
 
     dispatch(
-      fetchChartData({
+      fetchRewardsData({
         address,
         numDays: timelineValue,
         resource,
@@ -117,7 +117,7 @@ const RewardsStatistics = ({
       title={t('hotspot_details.reward_title')}
       number={rewardSum?.floatBalance.toFixed(2)}
       // change={rewardsChange}
-      data={rewardChartData}
+      data={rewardRewardsData}
       networkHotspotEarnings={networkHotspotEarnings}
       loading={loading || !networkHotspotEarningsLoaded}
       onTimelineChanged={onTimelineChanged}

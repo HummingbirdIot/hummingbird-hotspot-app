@@ -23,6 +23,7 @@ import {
 } from './appLinkTypes'
 import { useAppDispatch } from '../store/store'
 import appSlice from '../store/app/appSlice'
+import accountSlice from '../store/data/accountSlice'
 
 export const APP_LINK_PROTOCOL = 'hummingbirdscheme://'
 
@@ -37,7 +38,7 @@ const useAppLink = () => {
   >(null)
 
   const {
-    app: { isLocked },
+    app: { isLocked, user },
   } = useSelector((state: RootState) => state)
 
   const dispatch = useAppDispatch()
@@ -87,8 +88,11 @@ const useAppLink = () => {
         case 'link_wallet': {
           const walletLink = record as WalletLink
           if (walletLink.status === 'success' && walletLink.token) {
-            console.log('navToAppLink::link_wallet::token:', walletLink.token)
-            dispatch(appSlice.actions.storeWalletLinkToken(walletLink.token))
+            // console.log('navToAppLink::link_wallet::token:', walletLink.token)
+            if (user.isWatcher || walletLink.token !== user.walletLinkToken) {
+              dispatch(accountSlice.actions.reset())
+              dispatch(appSlice.actions.storeWalletLinkToken(walletLink.token))
+            }
           } else {
             // TODO: handle error
           }
@@ -120,7 +124,7 @@ const useAppLink = () => {
         }
       }
     },
-    [isLocked, dispatch],
+    [isLocked, user.isWatcher, user.walletLinkToken, dispatch],
   )
 
   useEffect(() => {

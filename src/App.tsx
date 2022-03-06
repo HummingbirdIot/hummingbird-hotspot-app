@@ -20,14 +20,15 @@ import { theme, darkThemeColors, lightThemeColors } from './theme/theme'
 import SecurityScreen from './views/more/SecurityScreen'
 import { useAppDispatch } from './store/store'
 import { RootState } from './store/rootReducer'
-import appSlice, { restoreAppSettings } from './store/app/appSlice'
+import appSlice, { restoreUserSettings } from './store/app/appSlice'
 import useMount from './utils/hooks/useMount'
-import { fetchInitialData } from './store/hnt/hntSlice'
+import { fetchInitialData } from './store/data/hntSlice'
 import { navigationRef } from './views/navigation/navigator'
 import RootNavigator from './views/navigation/RootNavigator'
 import { useElementsTheme } from './theme/themeHooks'
 import AppLinkProvider from './providers/AppLinkProvider'
-import { configChainVars } from './utils/clients/appDataClient'
+import { configChainVars } from './utils/clients/heliumDataClient'
+import { restoreAccountData } from './store/data/accountSlice'
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* reloading the app might trigger some race conditions, ignore them */
@@ -80,7 +81,8 @@ const App = () => {
   } = useSelector((state: RootState) => state.app)
 
   useMount(() => {
-    dispatch(restoreAppSettings())
+    dispatch(restoreUserSettings())
+    dispatch(restoreAccountData())
   })
 
   // 获取和更新初始信息

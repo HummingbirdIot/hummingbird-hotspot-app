@@ -4,7 +4,7 @@ import { sumBy } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useAsync } from 'react-async-hook'
 import { addMinutes, startOfYesterday, subDays } from 'date-fns'
-import { ChartData } from '../BarChart/types'
+import { RewardsData } from '../BarChart/types'
 import Box from '../../boxes/Box'
 import Text from '../../texts/Text'
 import ChartContainer from '../BarChart/ChartContainer'
@@ -16,15 +16,15 @@ import DateModule from '../../../utils/DateModule'
 import TimelinePicker from './TimelinePicker'
 import {
   ChartTimelineValue,
-  NetworkHotspotEarnings,
+  NetworkEarnings,
 } from '../../../store/data/rewardsSlice'
 
 type Props = {
   title: string
   number?: string
   // change?: number
-  data: ChartData[]
-  networkHotspotEarnings: NetworkHotspotEarnings[]
+  data: RewardsData[]
+  networkHotspotEarnings: NetworkEarnings[]
   loading?: boolean
   timelineIndex: number
   timelineValue: ChartTimelineValue
@@ -45,15 +45,15 @@ const RewardsChart = ({
   const { black, grayLight, purpleMain } = useColors()
   const { l } = useBorderRadii()
   const [loading, setLoading] = useState(propsLoading)
-  const [focusedData, setFocusedData] = useState<ChartData | null>(null)
+  const [focusedData, setFocusedData] = useState<RewardsData | null>(null)
   const [timeRange, setTimeRange] = useState('')
   // const [startOfYearStr, setStartOfYearStr] = useState('')
   const [focusedNetworkData, setFocusedNetworkData] =
-    useState<ChartData | null>(null)
+    useState<RewardsData | null>(null)
   const { t } = useTranslation()
 
   const findNetworkEarningForData = useCallback(
-    (d: ChartData) => {
+    (d: RewardsData) => {
       const date = d.label?.split('T')[0] // yyyy-mm-dd format
       const hotspotEarnings = networkHotspotEarnings.find(
         (e) => e.date === date,
@@ -107,24 +107,27 @@ const RewardsChart = ({
   }, [loading, propsLoading])
 
   const onFocus = useCallback(
-    async (chartData: ChartData | null, stackedChartData: ChartData | null) => {
+    async (
+      earnings: RewardsData | null,
+      stackedRewardsData: RewardsData | null,
+    ) => {
       animateTransition('RewardsChart.OnFocus', {
         enabledOnAndroid: false,
       })
 
-      if (!chartData) {
+      if (!earnings) {
         setFocusedData(null)
         setFocusedNetworkData(null)
         return
       }
 
       const label = await DateModule.formatDate(
-        chartData.label,
-        chartData.showTime ? 'MMM d h:mma' : 'EEE MMM d',
+        earnings.label,
+        earnings.showTime ? 'MMM d h:mma' : 'EEE MMM d',
       )
-      setFocusedData({ ...chartData, label })
-      if (stackedChartData) {
-        setFocusedNetworkData({ ...stackedChartData, label })
+      setFocusedData({ ...earnings, label })
+      if (stackedRewardsData) {
+        setFocusedNetworkData({ ...stackedRewardsData, label })
       }
     },
     [],

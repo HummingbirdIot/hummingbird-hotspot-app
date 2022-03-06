@@ -1,6 +1,4 @@
-import { Account } from '@helium/http'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getAccount } from '../../utils/clients/appDataClient'
 import { currencyType } from '../../utils/i18n'
 import {
   deleteSecureItem,
@@ -10,9 +8,9 @@ import {
   endWatching,
   getAddress,
   parseLinkedAddress,
-} from './secureData'
+} from '../../utils/secureData'
 import { Intervals } from '../../utils/hooks/useAuthIntervals'
-import { B58Address, Loading } from '../txns/txnsTypes'
+import { B58Address } from '../txns/txnsTypes'
 // import OneSignal from 'react-native-onesignal'
 
 const boolKeys = ['isPinRequired'] as const
@@ -20,10 +18,6 @@ type BooleanKey = typeof boolKeys[number]
 const stringKeys = ['currencyType'] as const
 type StringKey = typeof stringKeys[number]
 type SettingsBag = Array<{ key: string; value: string }>
-
-type AccountData = {
-  account?: Account
-}
 
 export type WatchingAddress = {
   address: B58Address
@@ -42,10 +36,6 @@ export type AppState = {
     walletLinkToken?: string
     watchingAddresses: WatchingAddress[]
     accountAddress?: B58Address
-    account?: Account
-    lastHNTBlance: string
-    lastFiatBlance: string
-    fetchAccountStatus: Loading
   }
   settings: {
     isPinRequired: boolean
@@ -64,9 +54,6 @@ const initialState: AppState = {
   isRequestingPermission: false,
   user: {
     isWatcher: false,
-    fetchAccountStatus: 'idle',
-    lastHNTBlance: '0.00000',
-    lastFiatBlance: '0.00',
     watchingAddresses: [],
   },
   settings: {
@@ -84,10 +71,6 @@ type Restore = {
     walletLinkToken?: string
     watchingAddresses: WatchingAddress[]
     accountAddress?: B58Address
-    account?: Account
-    lastHNTBlance: string
-    lastFiatBlance: string
-    fetchAccountStatus: Loading
   }
   settings: {
     isPinRequired: boolean
@@ -96,16 +79,14 @@ type Restore = {
   }
 }
 
-export const restoreAppSettings = createAsyncThunk<Restore>(
-  'app/restoreAppSettings',
+export const restoreUserSettings = createAsyncThunk<Restore>(
+  'app/restoreUserSettings',
   async () => {
     const [
       isBackedUp,
 
       isWatching,
       token,
-      lastHNTBlance,
-      lastFiatBlance,
       watchingAddressesJSON,
       address,
 
@@ -118,8 +99,6 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
 
       getSecureItem('user.isWatching'),
       getSecureItem('user.walletLinkToken'),
-      getSecureItem('user.lastHNTBlance'),
-      getSecureItem('user.lastFiatBlance'),
       getSecureItem('user.watchingAddressesJSON'),
       getAddress(),
 
@@ -188,9 +167,6 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
           walletLinkToken,
           accountAddress,
           watchingAddresses,
-          lastHNTBlance: lastHNTBlance || '0.00000',
-          lastFiatBlance: lastFiatBlance || '0.00',
-          fetchAccountStatus: 'idle',
         },
         settings: {
           isPinRequired: !!isPinRequired,
@@ -206,16 +182,6 @@ export const restoreAppSettings = createAsyncThunk<Restore>(
     return {} as unknown as Restore
   },
 )
-
-export const fetchAccount = createAsyncThunk<
-  AccountData,
-  { address: B58Address }
->('app/fetchAccount', async ({ address }) => {
-  const data = await getAccount(address)
-  return {
-    account: data,
-  }
-})
 
 export const updateSetting = createAsyncThunk<
   SettingsBag,
@@ -271,10 +237,7 @@ const appSlice = createSlice({
         setSecureItem('isBackedUp', true)
       })
 
-      if (state.user.accountAddress !== address) {
-        delete state.user.account
-        state.user.accountAddress = address as B58Address
-      }
+      state.user.accountAddress = address as B58Address
       state.user.walletLinkToken = token
       state.user.isWatcher = false
     },
@@ -288,7 +251,6 @@ const appSlice = createSlice({
             setSecureItem('isBackedUp', true)
           })
 
-        delete state.user.account
         state.user.accountAddress = address as B58Address
         state.user.isWatcher = false
       }
@@ -300,17 +262,6 @@ const appSlice = createSlice({
       state.user.walletLinkToken = ''
       state.user.accountAddress = ''
       state.user.isWatcher = false
-    },
-    updateAccount: (state, { payload }: PayloadAction<AccountData>) => {
-      state.user.account = payload.account
-    },
-    updateBlance: (state, { payload: blance }: PayloadAction<string>) => {
-      state.user.lastHNTBlance = blance
-      setSecureItem('user.lastHNTBlance', blance)
-    },
-    updateFiat: (state, { payload: blance }: PayloadAction<string>) => {
-      state.user.lastFiatBlance = blance
-      setSecureItem('user.lastFiatBlance', blance)
     },
     backupAccount: (state, action: PayloadAction<string>) => {
       setSecureItem('settings.isPinRequired', true)
@@ -343,8 +294,8 @@ const appSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(restoreAppSettings.fulfilled, (state, { payload }) => {
-      // console.log('restoreAppSettings', payload)
+    builder.addCase(restoreUserSettings.fulfilled, (state, { payload }) => {
+      // console.log('restoreUserSettings', payload)
       return { ...state, ...payload, isRestored: true }
     })
     builder.addCase(
@@ -364,16 +315,6 @@ const appSlice = createSlice({
         }
       },
     )
-    builder.addCase(fetchAccount.pending, (state, _action) => {
-      state.user.fetchAccountStatus = 'pending'
-    })
-    builder.addCase(fetchAccount.fulfilled, (state, { payload }) => {
-      state.user.fetchAccountStatus = 'fulfilled'
-      state.user.account = payload.account
-    })
-    builder.addCase(fetchAccount.rejected, (state, _action) => {
-      state.user.fetchAccountStatus = 'rejected'
-    })
   },
 })
 

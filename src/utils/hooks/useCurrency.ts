@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import CurrencyFormatter from 'react-native-currency-format'
 import { OraclePrice } from '@helium/http'
-import { fetchCurrentOraclePrice } from '../../store/hnt/hntSlice'
+import { fetchCurrentOraclePrice } from '../../store/data/hntSlice'
 import { RootState } from '../../store/rootReducer'
 import { useAppDispatch } from '../../store/store'
 import { currencyType as defaultCurrencyType } from '../i18n'
-import appSlice from '../../store/app/appSlice'
+import accountSlice from '../../store/data/accountSlice'
 
 export const SUPPORTED_CURRENCIES = {
   // AED: 'United Arab Emirates Dirham',
@@ -122,7 +122,7 @@ const useCurrency = () => {
           const decimalPart = t('generic.hnt_to_currency', { currencyType })
           return { integerPart: formattedValue, decimalPart }
         }
-        dispatch(appSlice.actions.updateFiat(formattedValue.toString()))
+        dispatch(accountSlice.actions.updateFiat(formattedValue.toString()))
         return formattedValue
       } catch (e) {
         return ''

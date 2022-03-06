@@ -22,8 +22,8 @@ import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import { decimalSeparator, groupSeparator } from '../../../utils/i18n'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
-import { getAddress } from '../../../store/app/secureData'
-import { getAccount } from '../../../utils/clients/appDataClient'
+import { getAddress } from '../../../utils/secureData'
+import { getAccount } from '../../../utils/clients/heliumDataClient'
 import { useColors } from '../../../theme/themeHooks'
 
 type Route = RouteProp<

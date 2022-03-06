@@ -9,7 +9,7 @@ import {
   RootNavigationProp,
   RootStackParamList,
 } from '../navigation/rootNavigationTypes'
-import { getSecureItem } from '../../store/app/secureData'
+import { getSecureItem } from '../../utils/secureData'
 import ConfirmPinView from '../../components/pads/ConfirmPinView'
 import { SettingsNavigationProp } from '../main/settings/settingsNavigationTypes'
 import { useAppDispatch } from '../../store/store'

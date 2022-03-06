@@ -13,8 +13,8 @@ import {
 import Text from '../../../components/texts/Text'
 import Box from '../../../components/boxes/Box'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
-import { getHotspotDetails } from '../../../utils/clients/appDataClient'
-import { getAddress } from '../../../store/app/secureData'
+import { getHotspotDetails } from '../../../utils/clients/heliumDataClient'
+import { getAddress } from '../../../utils/secureData'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { useColors } from '../../../theme/themeHooks'
 

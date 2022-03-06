@@ -5,8 +5,7 @@ import {
   getHotspotDetails,
   getHotspots,
   getWitnessedHotspots,
-} from '../../utils/clients/appDataClient'
-import { LocationCoords } from '../../utils/location'
+} from '../../utils/clients/heliumDataClient'
 import {
   CacheRecord,
   handleCacheFulfilled,
@@ -27,26 +26,24 @@ type HotspotDetail = {
 export type HotspotDetailCache = CacheRecord<HotspotDetail>
 export type HotspotAddress = string
 export type HotspotIndexed<T> = Record<HotspotAddress, T>
+export type HotspotsData = HotspotIndexed<HotspotDetailCache>
 
-export type HotspotsSliceState = {
+export type HotspotsState = {
   hotspots: CacheRecord<{ data: B58Address[] }>
-  connectedHotspotId: string
-  location?: LocationCoords
-  loadingRewards: boolean
   hotspotsLoaded: boolean
   failure: boolean
   syncStatuses: Record<string, CacheRecord<{ status: HotspotSyncStatus }>>
-  hotspotsData: HotspotIndexed<HotspotDetailCache>
+  hotspotsData: HotspotsData
+  connectedHotspotId: string
 }
 
-const initialState: HotspotsSliceState = {
+const initialState: HotspotsState = {
   hotspots: { lastFetchedTimestamp: 0, loading: false, data: [] },
-  connectedHotspotId: '',
-  loadingRewards: false,
   hotspotsLoaded: false,
   failure: false,
   syncStatuses: {},
   hotspotsData: {},
+  connectedHotspotId: '',
 }
 
 export const fetchHotspotDetail = createAsyncThunk<HotspotDetail, string>(
@@ -54,7 +51,7 @@ export const fetchHotspotDetail = createAsyncThunk<HotspotDetail, string>(
   async (address: string, { getState }) => {
     const state = (
       (await getState()) as {
-        hotspots: HotspotsSliceState
+        hotspots: HotspotsState
       }
     ).hotspots
     const hotspotsData = state.hotspotsData[address] || {}
@@ -89,8 +86,7 @@ export const fetchHotspotDetail = createAsyncThunk<HotspotDetail, string>(
 export const fetchHotspotsData = createAsyncThunk(
   'hotspots/fetchHotspotsData',
   async (_arg, { getState }) => {
-    const state = ((await getState()) as { hotspots: HotspotsSliceState })
-      .hotspots
+    const state = ((await getState()) as { hotspots: HotspotsState }).hotspots
     if (hasValidCache(state.hotspots) && state.hotspots.data?.length) {
       return {
         data: state.hotspots.data,
@@ -147,6 +143,10 @@ const hotspotsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchHotspotsData.rejected, (state, _action) => {
+      state.hotspotsLoaded = false
+      state.failure = false
+    })
     builder.addCase(fetchHotspotsData.fulfilled, (state, action) => {
       const { hotspots, data } = action.payload
       if (hotspots) {
@@ -160,7 +160,6 @@ const hotspotsSlice = createSlice({
       state.failure = false
     })
     builder.addCase(fetchHotspotsData.rejected, (state, _action) => {
-      state.loadingRewards = false
       state.hotspotsLoaded = true
       state.failure = true
     })

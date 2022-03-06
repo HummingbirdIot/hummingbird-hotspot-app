@@ -7,7 +7,7 @@ import {
 } from 'react-native-gesture-handler'
 import { Animated, GestureResponderEvent } from 'react-native'
 import useHaptic from '../../../utils/hooks/useHaptic'
-import { ChartData } from './types'
+import { RewardsData } from './types'
 import { useColors } from '../../../theme/themeHooks'
 import usePrevious from '../../../utils/hooks/usePrevious'
 import ChartBar from './ChartBar'
@@ -15,9 +15,9 @@ import ChartBar from './ChartBar'
 type Props = {
   width: number
   height: number
-  data: ChartData[]
-  stackedData?: ChartData[]
-  onFocus: (data: ChartData | null, stackedData: ChartData | null) => void
+  data: RewardsData[]
+  stackedData?: RewardsData[]
+  onFocus: (data: RewardsData | null, stackedData: RewardsData | null) => void
   showXAxisLabel?: boolean
   upColor?: string
   downColor?: string
@@ -39,10 +39,9 @@ const BarChart = ({
   stackedUpColor,
   stackedDownColor,
 }: Props) => {
-  const [focusedBar, setFocusedBar] = useState<ChartData | null>(null)
-  const [focusedStackedBar, setFocusedStackedBar] = useState<ChartData | null>(
-    null,
-  )
+  const [focusedBar, setFocusedBar] = useState<RewardsData | null>(null)
+  const [focusedStackedBar, setFocusedStackedBar] =
+    useState<RewardsData | null>(null)
   const prevFocusedBar = usePrevious(focusedBar)
   const { greenBright, blueBright, white, grayLight } = useColors()
   const { triggerImpact } = useHaptic()

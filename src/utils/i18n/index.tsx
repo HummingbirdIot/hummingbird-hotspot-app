@@ -6,7 +6,7 @@ import en from '../../locales/en'
 import ko from '../../locales/ko'
 import ja from '../../locales/ja'
 import zh from '../../locales/zh'
-import { getSecureItem, setSecureItem } from '../../store/app/secureData'
+import { getSecureItem, setSecureItem } from '../secureData'
 import { getTranslations } from '../../makers'
 
 const locales = RNLocalize.getLocales()

@@ -1,4 +1,4 @@
-export type ChartData = {
+export type RewardsData = {
   id: string
   timestamp?: string
   up: number
