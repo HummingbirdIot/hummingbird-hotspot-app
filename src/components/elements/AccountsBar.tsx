@@ -15,7 +15,7 @@ import { getLinkedAddress } from '../../utils/secureData'
 import AccountsListItem from '../lists/AccountsListItem'
 import AccountCard from '../cards/AccountCard'
 import AccountListHeader from './AccountListHeader'
-import useAccountsMgr from './useAccountsMgr'
+import useAccountsMgr from '../../utils/hooks/useAccountsMgr'
 
 const AccountsView = () => {
   const { t } = useTranslation()

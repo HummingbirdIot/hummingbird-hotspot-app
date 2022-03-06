@@ -183,6 +183,7 @@ const Expand = ({
         setAccount(acc || undefined)
         setBalance(acc?.balance?.floatBalance.toString() || '0.00000')
       } catch (error) {
+        setAccount(undefined)
         setBalance('0.00000')
       }
     }
@@ -210,21 +211,21 @@ const Expand = ({
           <Box flex={1} flexDirection="row" alignItems="center">
             <HNT width={11} height={11} />
             <Box flex={1} marginLeft="xs">
-              {balance ? (
+              {account ? (
                 <Text variant="body3">{balance} HNT</Text>
               ) : (
                 <SkeletonPlaceholder>
                   <SkeletonPlaceholder.Item
                     height={11}
                     borderRadius={5}
-                    marginRight="20"
+                    marginRight={20}
                   />
                 </SkeletonPlaceholder>
               )}
             </Box>
           </Box>
           <Box flex={1}>
-            {balance && yesterday ? (
+            {account && yesterday ? (
               <Text variant="body3" textAlign="right">
                 + {yesterday.total || 0}
               </Text>

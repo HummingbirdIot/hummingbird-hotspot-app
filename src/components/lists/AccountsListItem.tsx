@@ -3,7 +3,7 @@ import { Account } from '@helium/http'
 import { useAppDispatch } from '../../store/store'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import AccountCard from '../cards/AccountCard'
-import useAccountsMgr from '../elements/useAccountsMgr'
+import useAccountsMgr from '../../utils/hooks/useAccountsMgr'
 import accountSlice from '../../store/data/accountSlice'
 import useAlert from '../../utils/hooks/useAlert'
 
