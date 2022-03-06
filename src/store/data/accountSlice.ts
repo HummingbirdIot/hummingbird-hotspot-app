@@ -72,9 +72,8 @@ const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
-    reset: (state) => {
-      delete state.account
-      return initialState
+    reset: () => {
+      return { ...initialState, account: undefined }
     },
     updateAccount: (state, { payload }: PayloadAction<AccountData>) => {
       state.account = payload.account

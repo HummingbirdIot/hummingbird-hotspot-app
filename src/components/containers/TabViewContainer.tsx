@@ -1,16 +1,20 @@
-import React, { memo, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { GestureResponderEvent } from 'react-native'
 import { ColorSchemeName, useColorScheme } from 'react-native-appearance'
 import { Icon } from 'react-native-elements'
 import { Edge } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { useColors } from '../../theme/themeHooks'
 import SafeAreaBox from '../boxes/SafeAreaBox'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import LeftSideModal from '../modals/LeftSideModal'
-import AccountsView from '../elements/AccountsView'
+import AccountsBar from '../elements/AccountsBar'
 import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
+import { RootState } from '../../store/rootReducer'
+import { useAppDispatch } from '../../store/store'
+import viewSlice from '../../store/view/viewSlice'
 
 type IconInfo = {
   name: string
@@ -28,12 +32,18 @@ const TabViewContainer = ({
   showAccountSwitch?: boolean
 }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const colorScheme: ColorSchemeName = useColorScheme()
-  const [modalVisible, setModalVisible] = useState(false)
-
   const { primaryText } = useColors()
 
   const edges = useMemo(() => ['left', 'right', 'top'] as Edge[], [])
+
+  const { isAccountsBarVisible } = useSelector((state: RootState) => state.view)
+  const setModalVisible = useCallback(
+    (visible: boolean) =>
+      dispatch(viewSlice.actions.setAccountsBarVisible(visible)),
+    [dispatch],
+  )
 
   return (
     <SafeAreaBox
@@ -99,10 +109,10 @@ const TabViewContainer = ({
       </Box>
       <LeftSideModal
         title="Accounts"
-        modalVisible={modalVisible}
+        modalVisible={isAccountsBarVisible}
         handleClose={() => setModalVisible(false)}
       >
-        <AccountsView handleClose={() => setModalVisible(false)} />
+        <AccountsBar />
       </LeftSideModal>
     </SafeAreaBox>
   )

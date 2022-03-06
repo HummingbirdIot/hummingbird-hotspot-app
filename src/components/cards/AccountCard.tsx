@@ -11,13 +11,11 @@ import Box from '../boxes/Box'
 import Text from '../texts/Text'
 import { RootState } from '../../store/rootReducer'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
-import accountSlice from '../../store/data/accountSlice'
 import TouchableOpacityBox from '../boxes/TouchableOpacityBox'
 import { useAppDispatch } from '../../store/store'
 import { getAccount } from '../../utils/clients/heliumDataClient'
 import { fetchRewardsData } from '../../store/data/rewardsSlice'
 import { truncateAddress } from '../../utils/formatter'
-import { B58Address } from '../../store/txns/txnsTypes'
 import HNT from '../../assets/images/hnt.svg'
 
 export const flexProps = {
@@ -157,7 +155,7 @@ const Expand = ({
   data: WatchingAddress
   isCurrent: boolean
   onCollapse: () => void
-  onWatch: (address: B58Address) => void
+  onWatch: (account?: Account) => void
   onRename: () => void
   onDelete: () => void
 }) => {
@@ -189,13 +187,6 @@ const Expand = ({
       }
     }
   }, [])
-
-  const switchAccount = () => {
-    if (account) {
-      dispatch(accountSlice.actions.updateAccount({ account }))
-      onWatch(data.address)
-    }
-  }
 
   if (isCurrent) return null
 
@@ -252,7 +243,7 @@ const Expand = ({
           <Button
             backgroundColor="blueMain"
             disabled={!balance}
-            onPress={switchAccount}
+            onPress={() => onWatch(account)}
           >
             Watch
           </Button>

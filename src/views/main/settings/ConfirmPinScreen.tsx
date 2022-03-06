@@ -20,7 +20,7 @@ const AccountConfirmPinScreen = () => {
 
   const pinSuccess = useCallback(
     (pin: string) => {
-      dispatch(appSlice.actions.backupAccount(pin))
+      dispatch(appSlice.actions.backupSettings(pin))
       if (pinReset) {
         // TODO: Handle pin reset complete
         navigation.navigate('SettingsScreen')

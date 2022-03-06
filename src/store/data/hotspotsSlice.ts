@@ -143,7 +143,7 @@ const hotspotsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchHotspotsData.rejected, (state, _action) => {
+    builder.addCase(fetchHotspotsData.pending, (state, _action) => {
       state.hotspotsLoaded = false
       state.failure = false
     })

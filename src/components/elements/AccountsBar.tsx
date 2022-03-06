@@ -1,5 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
-import { Linking, Platform } from 'react-native'
+import React, { memo, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { FlatList } from 'react-native-gesture-handler'
@@ -7,25 +6,20 @@ import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useAsync } from 'react-async-hook'
 import { WalletLink } from '@helium/react-native-sdk'
-import { getBundleId } from 'react-native-device-info'
 import Box from '../boxes/Box'
 import { RootState } from '../../store/rootReducer'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
-import hotspotsSlice from '../../store/data/hotspotsSlice'
-import accountSlice from '../../store/data/accountSlice'
-import appSlice, { WatchingAddress } from '../../store/app/appSlice'
+import { WatchingAddress } from '../../store/app/appSlice'
 import { getLinkedAddress } from '../../utils/secureData'
-import { B58Address } from '../../store/txns/txnsTypes'
-import { useAppDispatch } from '../../store/store'
 
 import AccountsListItem from '../lists/AccountsListItem'
 import AccountCard from '../cards/AccountCard'
 import AccountListHeader from './AccountListHeader'
+import useAccountsMgr from './useAccountsMgr'
 
-const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
+const AccountsView = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
-  const dispatch = useAppDispatch()
   const [ownedAddress, setOwnedAddress] = useState('')
   const [addresses, setAddresses] = useState<WatchingAddress[]>([])
   const { bottom } = useSafeAreaInsets()
@@ -33,7 +27,10 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
   const { walletLinkToken, watchingAddresses, accountAddress } = useSelector(
     (state: RootState) => state.app.user,
   )
+
   const [delegateApp] = WalletLink.delegateApps
+
+  const { closeAccountsBar, linkWallet, asOwner } = useAccountsMgr()
 
   useAsync(async () => {
     if (walletLinkToken) {
@@ -49,53 +46,8 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
     }
   }, [walletLinkToken, watchingAddresses])
 
-  const handleAppSelection = useCallback(
-    (app: WalletLink.DelegateApp) => async () => {
-      try {
-        const url = WalletLink.createWalletLinkUrl({
-          universalLink:
-            Platform.OS === 'android' ? app.urlScheme : app.universalLink,
-          requestAppId: getBundleId(),
-          callbackUrl: 'hummingbirdscheme://',
-          appName: 'Hummingbird',
-        })
-        handleClose()
-        Linking.openURL(url)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
-      }
-    },
-    [handleClose],
-  )
-
-  const switchWatchingAccount = useCallback(
-    (address: B58Address) => {
-      if (address === accountAddress) {
-        handleClose()
-      } else {
-        dispatch(hotspotsSlice.actions.signOut())
-        dispatch(accountSlice.actions.reset())
-        dispatch(appSlice.actions.enableWatchMode(address))
-        handleClose()
-      }
-    },
-    [accountAddress, dispatch, handleClose],
-  )
-
-  const asOwner = useCallback(() => {
-    dispatch(hotspotsSlice.actions.signOut())
-    dispatch(accountSlice.actions.reset())
-    dispatch(appSlice.actions.asOwner())
-    handleClose()
-  }, [dispatch, handleClose])
-
   const renderItem = ({ item }: { item: WatchingAddress }) => (
-    <AccountsListItem
-      data={item}
-      isCurrent={item.address === accountAddress}
-      onSelect={switchWatchingAccount}
-    />
+    <AccountsListItem data={item} isCurrent={item.address === accountAddress} />
   )
 
   return (
@@ -106,7 +58,7 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
           ownedAddress
             ? {
                 icon: 'swap-vertical-circle',
-                handler: handleAppSelection(delegateApp),
+                handler: linkWallet(delegateApp),
               }
             : undefined
         }
@@ -128,7 +80,7 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
             <AccountCard.SingOut />
           </>
         ) : (
-          <AccountCard.LinkButton onPress={handleAppSelection(delegateApp)} />
+          <AccountCard.LinkButton onPress={linkWallet(delegateApp)} />
         )}
       </Box>
       <AccountListHeader
@@ -136,7 +88,7 @@ const AccountsView = ({ handleClose }: { handleClose: () => void }) => {
         action={{
           icon: 'add-circle',
           handler: () => {
-            handleClose()
+            closeAccountsBar()
             navigation.navigate('AddWatchingAccount')
           },
         }}

@@ -21,7 +21,7 @@ type SettingsBag = Array<{ key: string; value: string }>
 
 export type WatchingAddress = {
   address: B58Address
-  alias: string
+  alias?: string
 }
 
 export type AppState = {
@@ -263,7 +263,37 @@ const appSlice = createSlice({
       state.user.accountAddress = ''
       state.user.isWatcher = false
     },
-    backupAccount: (state, action: PayloadAction<string>) => {
+    renameAddress: (state, { payload }: PayloadAction<WatchingAddress>) => {
+      const account = state.user.watchingAddresses.find(
+        (item) => item.address === payload.address,
+      )
+      if (account) {
+        const watchingAddresses = [...state.user.watchingAddresses]
+        account.alias = payload.alias
+        setSecureItem(
+          'user.watchingAddressesJSON',
+          JSON.stringify(watchingAddresses),
+        )
+        state.user.watchingAddresses = watchingAddresses
+      }
+    },
+    deleteAddress: (state, { payload }: PayloadAction<WatchingAddress>) => {
+      const index = state.user.watchingAddresses.findIndex(
+        (item) => item.address === payload.address,
+      )
+      if (index > -1) {
+        const watchingAddresses = [
+          ...state.user.watchingAddresses.slice(0, index),
+          ...state.user.watchingAddresses.slice(index + 1),
+        ]
+        setSecureItem(
+          'user.watchingAddressesJSON',
+          JSON.stringify(watchingAddresses),
+        )
+        state.user.watchingAddresses = watchingAddresses
+      }
+    },
+    backupSettings: (state, action: PayloadAction<string>) => {
       setSecureItem('settings.isPinRequired', true)
       setSecureItem('settings.userPin', action.payload)
       state.settings.isPinRequired = true

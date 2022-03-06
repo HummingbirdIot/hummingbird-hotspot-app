@@ -11,7 +11,8 @@ import { DebouncedButton } from '../../../components/buttons/Button'
 import Box from '../../../components/boxes/Box'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { useAppDispatch } from '../../../store/store'
-import appSlice, { fetchAccount } from '../../../store/app/appSlice'
+import appSlice from '../../../store/app/appSlice'
+import { fetchAccount } from '../../../store/data/accountSlice'
 import useAlert from '../../../utils/hooks/useAlert'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { useColors } from '../../../theme/themeHooks'
@@ -32,7 +33,7 @@ const SingInAsAWatcherScreen = () => {
   const [address, setAddress] = useState<B58Address>('')
   const { primaryText } = useColors()
   const { fetchAccountStatus, account } = useSelector(
-    (state: RootState) => state.app.user,
+    (state: RootState) => state.account,
   )
 
   const handleClose = useCallback(() => {

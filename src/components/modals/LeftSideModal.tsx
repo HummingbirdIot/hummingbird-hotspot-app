@@ -76,8 +76,8 @@ const LeftSideModal = ({
   }, [animate, handleClose, modalVisible, modalWidth])
 
   useEffect(() => {
+    offset.value = -modalWidth
     if (modalVisible) {
-      offset.value = -modalWidth
       animate(0)
     }
   }, [animate, modalVisible, modalWidth, offset])

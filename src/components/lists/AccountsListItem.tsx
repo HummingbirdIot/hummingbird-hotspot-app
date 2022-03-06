@@ -1,25 +1,65 @@
-import React, { memo, useState } from 'react'
-import { WatchingAddress } from '../../store/app/appSlice'
-import { B58Address } from '../../store/txns/txnsTypes'
+import React, { memo, useState, useCallback } from 'react'
+import { Account } from '@helium/http'
+import { useAppDispatch } from '../../store/store'
+import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import AccountCard from '../cards/AccountCard'
+import useAccountsMgr from '../elements/useAccountsMgr'
+import accountSlice from '../../store/data/accountSlice'
+import useAlert from '../../utils/hooks/useAlert'
 
 const AccountsListItem = ({
   data,
   isCurrent,
-  onSelect,
 }: {
   data: WatchingAddress
   isCurrent: boolean
-  onSelect: (address: B58Address) => void
 }) => {
+  const dispatch = useAppDispatch()
+  const { showInputAlert } = useAlert()
   const [collapsed, setCollapsed] = useState(true)
+
+  const { watchAccount } = useAccountsMgr()
+
+  const switchAccount = useCallback(
+    (account?: Account) => {
+      if (account) {
+        watchAccount(account.address)
+        dispatch(accountSlice.actions.updateAccount({ account }))
+      }
+    },
+    [dispatch, watchAccount],
+  )
+
+  const rename = useCallback(async () => {
+    const result = await showInputAlert({
+      titleKey: 'Rename Account',
+      messageKey: 'Enter a new name below',
+    })
+    if (result) {
+      dispatch(
+        appSlice.actions.renameAddress({
+          address: data.address,
+          alias: result,
+        }),
+      )
+    }
+  }, [data.address, dispatch, showInputAlert])
+
+  const deleteAccount = useCallback(
+    (account?: Account) => {
+      if (account) {
+        dispatch(appSlice.actions.deleteAddress({ address: data.address }))
+      }
+    },
+    [data.address, dispatch],
+  )
 
   if (isCurrent) {
     return (
       <AccountCard.Collapsed
         data={data}
         isCurrent
-        onPress={() => onSelect(data.address)}
+        onPress={() => watchAccount(data.address)}
       />
     )
   }
@@ -39,9 +79,9 @@ const AccountsListItem = ({
       data={data}
       isCurrent={isCurrent}
       onCollapse={() => setCollapsed(true)}
-      onWatch={onSelect}
-      onRename={() => setCollapsed(true)}
-      onDelete={() => setCollapsed(true)}
+      onWatch={switchAccount}
+      onRename={rename}
+      onDelete={deleteAccount}
     />
   )
 }

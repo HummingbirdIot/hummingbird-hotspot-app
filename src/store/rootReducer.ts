@@ -8,6 +8,7 @@ import hotspotsSlice, { hotspotsSliceMigrations } from './data/hotspotsSlice'
 import rewardsSlice from './data/rewardsSlice'
 import txnsSlice from './txns/txnsSlice'
 import accountSlice from './data/accountSlice'
+import viewSlice from './view/viewSlice'
 
 const config = {
   app: {
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   rewards: rewardsSlice.reducer,
   hnt: hntSlice.reducer,
   txns: txnsSlice.reducer,
+  view: viewSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

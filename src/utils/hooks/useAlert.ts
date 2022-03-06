@@ -61,7 +61,50 @@ const useAlert = () => {
     [t],
   )
 
-  return { showOKCancelAlert, showOKAlert }
+  const showInputAlert = useCallback(
+    (options: {
+      titleKey: string
+      messageKey?: string
+      messageOptions?: Record<string, string>
+      okKey?: string
+      cancelKey?: string
+      cancelStyle?: 'destructive' | 'cancel'
+      defaultValue?: string
+    }): Promise<string> =>
+      new Promise((resolve) => {
+        const {
+          titleKey,
+          messageKey,
+          messageOptions,
+          okKey,
+          cancelKey,
+          cancelStyle = 'destructive',
+          defaultValue = '',
+        } = options
+        const title = t(titleKey)
+        const message = messageKey ? t(messageKey, messageOptions) : undefined
+        Alert.prompt(
+          title,
+          message,
+          [
+            {
+              text: t(cancelKey || 'generic.cancel'),
+              style: cancelStyle,
+              onPress: () => resolve(''),
+            },
+            {
+              text: t(okKey || 'generic.ok'),
+              onPress: (value?: string) => resolve(value || ''),
+            },
+          ],
+          'plain-text',
+          defaultValue,
+        )
+      }),
+    [t],
+  )
+
+  return { showOKCancelAlert, showOKAlert, showInputAlert }
 }
 
 export default useAlert
