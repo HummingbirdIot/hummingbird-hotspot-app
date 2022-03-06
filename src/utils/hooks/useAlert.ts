@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
+import { Alert, AlertType } from 'react-native'
 
 const useAlert = () => {
   const { t } = useTranslation()
@@ -70,6 +70,7 @@ const useAlert = () => {
       cancelKey?: string
       cancelStyle?: 'destructive' | 'cancel'
       defaultValue?: string
+      inputType?: Exclude<AlertType, 'default'>
     }): Promise<string> =>
       new Promise((resolve) => {
         const {
@@ -79,6 +80,7 @@ const useAlert = () => {
           okKey,
           cancelKey,
           cancelStyle = 'destructive',
+          inputType = 'plain-text',
           defaultValue = '',
         } = options
         const title = t(titleKey)
@@ -97,7 +99,7 @@ const useAlert = () => {
               onPress: (value?: string) => resolve(value || ''),
             },
           ],
-          'plain-text',
+          inputType,
           defaultValue,
         )
       }),

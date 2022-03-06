@@ -14,7 +14,6 @@ export type WatchingAddress = {
 }
 
 export type ApccountState = {
-  isBackedUp: boolean
   isRestored: boolean
   account?: Account
   lastHNTBlance: string
@@ -22,7 +21,6 @@ export type ApccountState = {
   fetchAccountStatus: Loading
 }
 const initialState: ApccountState = {
-  isBackedUp: false,
   isRestored: false,
   fetchAccountStatus: 'idle',
   lastHNTBlance: '0.00000',
@@ -30,8 +28,6 @@ const initialState: ApccountState = {
 }
 
 type Restore = {
-  isBackedUp: boolean
-  isLocked: boolean
   lastHNTBlance: string
   lastFiatBlance: string
   fetchAccountStatus: Loading
@@ -40,21 +36,16 @@ type Restore = {
 export const restoreAccountData = createAsyncThunk<Restore>(
   'account/restoreAccountData',
   async () => {
-    const [isBackedUp, lastHNTBlance, lastFiatBlance] = await Promise.all([
-      getSecureItem('isBackedUp'),
+    const [lastHNTBlance, lastFiatBlance] = await Promise.all([
       getSecureItem('user.lastHNTBlance'),
       getSecureItem('user.lastFiatBlance'),
     ])
 
-    if (isBackedUp) {
-      return {
-        lastHNTBlance: lastHNTBlance || '0.00000',
-        lastFiatBlance: lastFiatBlance || '0.00',
-        fetchAccountStatus: 'idle',
-      } as unknown as Restore
-    }
-
-    return {} as unknown as Restore
+    return {
+      lastHNTBlance: lastHNTBlance || '0.00000',
+      lastFiatBlance: lastFiatBlance || '0.00',
+      fetchAccountStatus: 'idle',
+    } as unknown as Restore
   },
 )
 

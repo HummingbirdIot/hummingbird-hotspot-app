@@ -73,12 +73,15 @@ const App = () => {
 
   const {
     lastIdle,
-    isRestored,
+    isRestored: isAppRestored,
     isBackedUp,
     isRequestingPermission,
     isLocked,
     settings: { isPinRequired, authInterval },
   } = useSelector((state: RootState) => state.app)
+  const { isRestored: isAccRestored } = useSelector(
+    (state: RootState) => state.account,
+  )
 
   useMount(() => {
     dispatch(restoreUserSettings())
@@ -122,10 +125,10 @@ const App = () => {
 
   // 启动界面状态管理
   useAsync(async () => {
-    if (isRestored) {
+    if (isAppRestored && isAccRestored) {
       await SplashScreen.hideAsync()
     }
-  }, [isRestored])
+  }, [isAppRestored, isAccRestored])
 
   useEffect(() => {
     // Hide splash after 5 seconds, deal with the consequences?

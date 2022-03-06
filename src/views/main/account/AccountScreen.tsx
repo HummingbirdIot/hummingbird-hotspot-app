@@ -25,7 +25,6 @@ const AccountScreen = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // getAccount(address).then(setAccount)
     if (address) dispatch(fetchAccount({ address }))
   }, [address, dispatch])
 
