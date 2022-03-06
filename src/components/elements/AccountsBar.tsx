@@ -75,7 +75,7 @@ const AccountsView = () => {
               }}
               isCurrent={ownedAddress === accountAddress}
               icon={ownedAddress === accountAddress ? 'verified' : 'bedtime'}
-              onPress={asOwner}
+              onPress={() => asOwner(ownedAddress)}
             />
             <AccountCard.SingOut />
           </>

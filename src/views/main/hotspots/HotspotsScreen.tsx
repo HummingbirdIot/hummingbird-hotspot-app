@@ -60,7 +60,7 @@ const HotspotsScreen = () => {
               />
             ))
           ) : (
-            <ActivityIndicator size={200} />
+            <ActivityIndicator size={40} style={{ marginTop: 80 }} />
           )}
         </ScrollView>
       </Box>

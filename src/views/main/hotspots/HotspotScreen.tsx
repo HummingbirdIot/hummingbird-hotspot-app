@@ -21,6 +21,7 @@ import useActions from '../../../utils/hooks/useActions'
 import HotspotActions from '../../../components/modals/HotspotActions'
 import HotspotCard from '../../../components/cards/HotspotCard'
 import HotspotDetails from '../../../components/elements/HotspotDetails'
+import useVisible from '../../../utils/hooks/useVisible'
 
 type Route = RouteProp<RootStackParamList, 'HotspotScreen'>
 
@@ -37,6 +38,8 @@ const HotspotDetailScreen = () => {
 
   const [isVisible, setIsVisible] = useState(false)
   const [locationName, setLocationName] = useState('')
+
+  useVisible({ onDisappear: () => setIsVisible(false) })
 
   const { assertLocation } = useActions({
     hotspot: hotspotData,

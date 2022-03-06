@@ -11,11 +11,11 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2C327B0927D53507006784C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C327B0827D53507006784C5 /* LaunchScreen.storyboard */; };
 		3AAA8194DB4D059944852532 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D65FC53696548063B0CA59 /* ExpoModulesProvider.swift */; };
 		3C2D26697DA9DE0D62775384 /* libPods-Hummingbird.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C2C551342F5A01DDC30CEC /* libPods-Hummingbird.a */; };
 		52DF7BF9B6F6812C987607E2 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7F384B36BEBF65291C3764 /* ExpoModulesProvider.swift */; };
 		78771B5356165C9F7AF63C78 /* libPods-Hummingbird-HummingbirdTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9B03F4EE6066C138C909EC /* libPods-Hummingbird-HummingbirdTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		964E9C302638CD0C00CCBCCC /* bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E9C2F2638CD0C00CCBCCC /* bridge.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,8 +56,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Hummingbird/main.m; sourceTree = "<group>"; };
 		1B7F384B36BEBF65291C3764 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Hummingbird-HummingbirdTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		25340B7256A37E523AF6B776 /* Pods-Hummingbird.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hummingbird.debug.xcconfig"; path = "Target Support Files/Pods-Hummingbird/Pods-Hummingbird.debug.xcconfig"; sourceTree = "<group>"; };
+		2C327B0827D53507006784C5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hummingbird/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		64D65FC53696548063B0CA59 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Hummingbird/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Hummingbird/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		964E9C2E2638CD0B00CCBCCC /* Hummingbird-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hummingbird-Bridging-Header.h"; sourceTree = "<group>"; };
 		964E9C2F2638CD0C00CCBCCC /* bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bridge.swift; sourceTree = "<group>"; };
 		A8C2C551342F5A01DDC30CEC /* libPods-Hummingbird.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hummingbird.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +115,6 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				964E9C2F2638CD0C00CCBCCC /* bridge.swift */,
 				964E9C2E2638CD0B00CCBCCC /* Hummingbird-Bridging-Header.h */,
@@ -167,6 +166,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				2C327B0827D53507006784C5 /* LaunchScreen.storyboard */,
 				13B07FAE1A68108700A75B9A /* Hummingbird */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* HummingbirdTests */,
@@ -308,8 +308,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2C327B0927D53507006784C5 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +634,7 @@
 				INFOPLIST_FILE = Hummingbird/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.0.4;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

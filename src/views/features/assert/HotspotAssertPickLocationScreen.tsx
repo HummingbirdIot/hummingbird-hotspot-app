@@ -9,8 +9,8 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Position } from 'geojson'
-import Search from '@assets/images/search.svg'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+// import Search from '@assets/images/search.svg'
+// import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -27,8 +27,8 @@ import {
   FeaturesStackParamList,
 } from '../../navigation/features/featuresNavigationTypes'
 import SafeAreaBox from '../../../components/boxes/SafeAreaBox'
-import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
-import { useColors, useSpacing } from '../../../theme/themeHooks'
+// import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
+import { useColors } from '../../../theme/themeHooks'
 import BSHandle from '../../../components/modals/BSHandle'
 import AddressSearchModal from '../../../components/modals/AddressSearchModal'
 import { PlaceGeography } from '../../../utils/clients/googlePlacesClient'
@@ -46,8 +46,8 @@ const HotspotAssertPickLocationScreen = () => {
   const [markerCenter, setMarkerCenter] = useState([-122.419, 37.775])
   const [hasGPSLocation, setHasGPSLocation] = useState(false)
   const [locationName, setLocationName] = useState('')
-  const spacing = useSpacing()
-  const insets = useSafeAreaInsets()
+  // const spacing = useSpacing()
+  // const insets = useSafeAreaInsets()
   const searchModal = useRef<BottomSheetModal>(null)
   const { surface } = useColors()
 
@@ -107,13 +107,13 @@ const HotspotAssertPickLocationScreen = () => {
     [],
   )
 
-  const handleSearchPress = useCallback(() => {
-    searchModal.current?.present()
-  }, [])
+  // const handleSearchPress = useCallback(() => {
+  //   searchModal.current?.present()
+  // }, [])
 
   const handleSelectPlace = useCallback((placeGeography: PlaceGeography) => {
     setMapCenter([placeGeography.lng, placeGeography.lat])
-    searchModal.current?.dismiss()
+    // searchModal.current?.dismiss()
   }, [])
 
   const searchSnapPoints = useMemo(() => ['85%'], [])
@@ -124,7 +124,7 @@ const HotspotAssertPickLocationScreen = () => {
       edges={['bottom']}
       backgroundColor="primaryBackground"
     >
-      <TouchableOpacityBox
+      {/* <TouchableOpacityBox
         onPress={handleSearchPress}
         position="absolute"
         padding="m"
@@ -133,7 +133,7 @@ const HotspotAssertPickLocationScreen = () => {
         zIndex={1}
       >
         <Search width={30} height={30} color="white" />
-      </TouchableOpacityBox>
+      </TouchableOpacityBox> */}
       <Box flex={1.2}>
         <Map
           maxZoomLevel={17}

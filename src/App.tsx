@@ -176,7 +176,6 @@ const App = () => {
                 </NavigationContainer>
               </SafeAreaProvider>
             </BottomSheetModalProvider>
-
             <SecurityScreen
               visible={appState !== 'active' && appState !== 'unknown'}
             />

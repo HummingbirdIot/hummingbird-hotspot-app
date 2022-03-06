@@ -1,7 +1,11 @@
 import { Account } from '@helium/http'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getAccount } from '../../utils/clients/heliumDataClient'
-import { getSecureItem, setSecureItem } from '../../utils/secureData'
+import {
+  deleteSecureItem,
+  getSecureItem,
+  setSecureItem,
+} from '../../utils/secureData'
 import { B58Address, Loading } from '../txns/txnsTypes'
 
 type AccountData = {
@@ -64,7 +68,9 @@ const accountSlice = createSlice({
   initialState,
   reducers: {
     reset: () => {
-      return { ...initialState, account: undefined }
+      deleteSecureItem('user.lastHNTBlance')
+      deleteSecureItem('user.lastFiatBlance')
+      return { ...initialState, account: undefined, isRestored: true }
     },
     updateAccount: (state, { payload }: PayloadAction<AccountData>) => {
       state.account = payload.account

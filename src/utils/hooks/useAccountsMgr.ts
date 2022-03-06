@@ -11,6 +11,7 @@ import { B58Address } from '../../store/txns/txnsTypes'
 import { useAppDispatch } from '../../store/store'
 
 import viewSlice from '../../store/view/viewSlice'
+import useVisible from './useVisible'
 
 const useAccountsMgr = () => {
   const dispatch = useAppDispatch()
@@ -55,12 +56,19 @@ const useAccountsMgr = () => {
     [accountAddress, dispatch, closeAccountsBar],
   )
 
-  const asOwner = useCallback(() => {
-    dispatch(hotspotsSlice.actions.signOut())
-    dispatch(accountSlice.actions.reset())
-    dispatch(appSlice.actions.asOwner())
-    closeAccountsBar()
-  }, [dispatch, closeAccountsBar])
+  const asOwner = useCallback(
+    (ownerAddress: B58Address) => {
+      if (accountAddress !== ownerAddress) {
+        dispatch(hotspotsSlice.actions.signOut())
+        dispatch(accountSlice.actions.reset())
+        dispatch(appSlice.actions.asOwner())
+      }
+      closeAccountsBar()
+    },
+    [accountAddress, closeAccountsBar, dispatch],
+  )
+
+  useVisible({ onDisappear: closeAccountsBar })
 
   return {
     closeAccountsBar,
