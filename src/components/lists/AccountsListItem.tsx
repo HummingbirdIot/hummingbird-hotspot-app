@@ -1,5 +1,6 @@
 import React, { memo, useState, useCallback } from 'react'
 import { Account } from '@helium/http'
+import { Platform } from 'react-native'
 import { useAppDispatch } from '../../store/store'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import AccountCard from '../cards/AccountCard'
@@ -15,7 +16,7 @@ const AccountsListItem = ({
   isCurrent: boolean
 }) => {
   const dispatch = useAppDispatch()
-  const { showInputAlert } = useAlert()
+  const { showInputAlert, showOKAlert } = useAlert()
   const [collapsed, setCollapsed] = useState(true)
 
   const { watchAccount } = useAccountsMgr()
@@ -31,19 +32,26 @@ const AccountsListItem = ({
   )
 
   const rename = useCallback(async () => {
-    const result = await showInputAlert({
-      titleKey: 'Rename Account',
-      messageKey: 'Enter a new name below',
-    })
-    if (result) {
-      dispatch(
-        appSlice.actions.renameAddress({
-          address: data.address,
-          alias: result,
-        }),
-      )
+    if (Platform.OS === 'ios') {
+      const result = await showInputAlert({
+        titleKey: 'Rename Account',
+        messageKey: 'Enter a new name below',
+      })
+      if (result) {
+        dispatch(
+          appSlice.actions.renameAddress({
+            address: data.address,
+            alias: result,
+          }),
+        )
+      }
+    } else {
+      await showOKAlert({
+        titleKey: 'Rename Account Error',
+        messageKey: 'Sorry, Android not supported right now!',
+      })
     }
-  }, [data.address, dispatch, showInputAlert])
+  }, [data.address, dispatch, showInputAlert, showOKAlert])
 
   const deleteAccount = useCallback(
     (account?: Account) => {
