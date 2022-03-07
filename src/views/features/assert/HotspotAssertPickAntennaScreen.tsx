@@ -8,7 +8,7 @@ import {
   FeaturesNavigationProp,
   FeaturesStackParamList,
 } from '../../navigation/features/featuresNavigationTypes'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import HotspotConfigurationPicker from '../../../components/pickers/HotspotConfigurationPicker'
@@ -76,7 +76,7 @@ const HotspotAssertPickAntennaScreen = () => {
   }, [antenna, elevation, gain, navigation, params])
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior="padding"
@@ -114,7 +114,7 @@ const HotspotAssertPickAntennaScreen = () => {
         variant="primary"
         onPress={navNext}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

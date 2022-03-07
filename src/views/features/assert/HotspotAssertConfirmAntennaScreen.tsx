@@ -16,7 +16,7 @@ import {
   FeaturesNavigationProp,
   FeaturesStackParamList,
 } from '../../navigation/features/featuresNavigationTypes'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
@@ -126,7 +126,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
 
   if (fetchFeeDataError) {
     return (
-      <BackScreen onClose={handleClose}>
+      <BackScreenContainer onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <Text textAlign="center" fontSize={30}>
             {t('hotspot_setup.antenna_fee.title_error')}
@@ -149,25 +149,25 @@ const HotspotAssertConfirmAntennaScreen = () => {
             </Text>
           </Box>
         </Box>
-      </BackScreen>
+      </BackScreenContainer>
     )
   }
 
   if (!feeData || fetchFeeDataStatus < 4) {
     return (
-      <BackScreen onClose={handleClose}>
+      <BackScreenContainer onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <ActivityIndicator color={gray} size={54} />
           <Text textAlign="center" variant="body1" marginTop="m">
             {t('hotspot_setup.antenna_fee.calculating_fee')}
           </Text>
         </Box>
-      </BackScreen>
+      </BackScreenContainer>
     )
   }
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <ScrollView>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <Text variant="h1" marginBottom="l" maxFontSizeMultiplier={1}>
@@ -243,7 +243,7 @@ const HotspotAssertConfirmAntennaScreen = () => {
           onPress={navNext}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

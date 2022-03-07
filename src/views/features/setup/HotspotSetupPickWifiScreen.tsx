@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { uniq } from 'lodash'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import { useSelector } from 'react-redux'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import {
   FeaturesNavigationProp,
@@ -181,7 +181,7 @@ const HotspotSetupPickWifiScreen = () => {
   }
 
   return (
-    <BackScreen
+    <BackScreenContainer
       padding="none"
       backgroundColor="primaryBackground"
       onClose={handleClose}
@@ -289,7 +289,7 @@ const HotspotSetupPickWifiScreen = () => {
           onPress={navSkip}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

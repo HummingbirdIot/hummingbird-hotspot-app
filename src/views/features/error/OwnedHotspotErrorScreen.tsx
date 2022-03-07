@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
@@ -16,7 +16,7 @@ const OwnedHotspotErrorScreen = () => {
   }, [navigation])
 
   return (
-    <BackScreen>
+    <BackScreenContainer>
       <Box flex={1} justifyContent="center">
         <Text variant="h1" marginBottom="l" maxFontSizeMultiplier={1}>
           {t('hotspot_setup.owned_hotspot.title')}
@@ -44,7 +44,7 @@ const OwnedHotspotErrorScreen = () => {
         variant="primary"
         onPress={navExit}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

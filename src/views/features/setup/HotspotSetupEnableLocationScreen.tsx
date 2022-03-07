@@ -8,7 +8,7 @@ import {
   FeaturesStackParamList,
 } from '../../navigation/features/featuresNavigationTypes'
 import Box from '../../../components/boxes/Box'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import useGetLocation from '../../../utils/hooks/useGetLocation'
 
@@ -40,7 +40,7 @@ const HotspotSetupEnableLocationScreen = () => {
   }
 
   return (
-    <BackScreen
+    <BackScreenContainer
       onClose={handleClose}
       backgroundColor="primaryBackground"
       padding="l"
@@ -84,7 +84,7 @@ const HotspotSetupEnableLocationScreen = () => {
         mode="text"
         title={t('hotspot_setup.enable_location.cancel')}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

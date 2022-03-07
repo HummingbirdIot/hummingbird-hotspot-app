@@ -13,7 +13,7 @@ import Toast from 'react-native-simple-toast'
 import { StyleSheet, Linking, ScrollView } from 'react-native'
 import Clipboard from '@react-native-community/clipboard'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import { FeaturesStackParamList } from '../../navigation/features/featuresNavigationTypes'
@@ -147,7 +147,7 @@ const HotspotSetupExternalScreen = () => {
   const scrollViewStyle = useMemo(() => ({ borderRadius: xl }), [xl])
 
   return (
-    <BackScreen
+    <BackScreenContainer
       backgroundColor="primaryBackground"
       paddingTop={{ smallPhone: 's', phone: 'lx' }}
       onClose={handleClose}
@@ -237,7 +237,7 @@ const HotspotSetupExternalScreen = () => {
             </Text>
           ))}
       </ScrollView>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

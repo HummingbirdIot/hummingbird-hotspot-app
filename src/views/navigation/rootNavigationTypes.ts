@@ -43,11 +43,17 @@ export type RootStackParamList = {
     gatewayAction: GatewayAction
   }
   AddWatchingAccount: undefined
+  ScanQRCode: {
+    pattern: RegExp | ScanResultMatcher
+    callback: (result: string) => void
+  }
   ScanStack: undefined
   ActivityScreen: undefined
   HotspotScreen: {
     address: B58Address
   }
 }
+
+export type ScanResultMatcher = (result: string) => boolean
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList>

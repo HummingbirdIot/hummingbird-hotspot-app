@@ -7,6 +7,7 @@ import {
 } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'
 import { ResponsiveValue } from '@shopify/restyle'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import Close from '../../assets/images/close.svg'
 import Text from '../texts/Text'
 import Box from '../boxes/Box'
@@ -87,7 +88,9 @@ const BottomModal = ({
       onRequestClose={handleClose}
       animationType="fade"
     >
-      <BlurBox position="absolute" top={0} bottom={0} left={0} right={0} />
+      <BlurBox position="absolute" top={0} bottom={0} left={0} right={0}>
+        <TouchableWithoutFeedback style={{ flex: 1 }} onPress={handleClose} />
+      </BlurBox>
       <Box flex={1}>
         <TouchableOpacityBox flex={1} onPress={handleClose} />
         <ReAnimatedBox

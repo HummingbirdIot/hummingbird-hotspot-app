@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
@@ -16,7 +16,7 @@ const NotHotspotOwnerErrorScreen = () => {
   }, [navigation])
 
   return (
-    <BackScreen>
+    <BackScreenContainer>
       <Box justifyContent="center" flex={1}>
         <Text
           variant="h2"
@@ -53,7 +53,7 @@ const NotHotspotOwnerErrorScreen = () => {
         variant="primary"
         onPress={navExit}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

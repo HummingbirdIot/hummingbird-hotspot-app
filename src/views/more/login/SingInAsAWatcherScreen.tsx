@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { useSelector } from 'react-redux'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import TextInput from '../../../components/texts/TextInput'
 import { DebouncedButton } from '../../../components/buttons/Button'
@@ -45,9 +45,25 @@ const SingInAsAWatcherScreen = () => {
       if (fetchAccountStatus === 'pending' || fetchAccountStatus === 'idle')
         return
       setCheckState(false)
-      if (fetchAccountStatus === 'fulfilled' && account?.address === address) {
-        nav.pop()
-        dispatch(appSlice.actions.enableWatchMode(account?.address))
+      if (fetchAccountStatus === 'fulfilled') {
+        if (account?.address === address) {
+          if (account.balance) {
+            nav.pop()
+            dispatch(appSlice.actions.enableWatchMode(account?.address))
+          } else {
+            // console.log('fetchAccountFulfilled', account)
+            showOKAlert({
+              titleKey: 'Address Invalid',
+              messageKey: 'The address you entered is not an account address.',
+            })
+          }
+        } else {
+          showOKAlert({
+            titleKey: 'Address Invalid',
+            messageKey:
+              'The address you entered is invalid, please check it carefully.',
+          })
+        }
       } else if (fetchAccountStatus === 'rejected') {
         showOKAlert({
           titleKey: 'Address Invalid',
@@ -57,6 +73,7 @@ const SingInAsAWatcherScreen = () => {
       }
     }
   }, [
+    account,
     account?.address,
     address,
     checking,
@@ -74,7 +91,7 @@ const SingInAsAWatcherScreen = () => {
   }, [address, dispatch])
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior="padding"
@@ -164,7 +181,12 @@ const SingInAsAWatcherScreen = () => {
               margin="s"
               borderRadius="s"
               justifyContent="center"
-              onPress={() => {}}
+              onPress={() =>
+                nav.push('ScanQRCode', {
+                  pattern: /[A-z0-9]{51}/i,
+                  callback: setAddress,
+                })
+              }
             >
               <Icon
                 name="qr-code-scanner"
@@ -194,7 +216,7 @@ const SingInAsAWatcherScreen = () => {
           disabled={fetchAccountStatus === 'pending' || !address}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

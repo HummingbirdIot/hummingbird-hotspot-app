@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import slides from '../hotspotSetupSlides'
@@ -71,7 +71,7 @@ const HotspotEducationScreen = () => {
   )
 
   return (
-    <BackScreen
+    <BackScreenContainer
       backgroundColor="primaryBackground"
       padding="none"
       justifyContent="center"
@@ -117,7 +117,7 @@ const HotspotEducationScreen = () => {
       <Box flexDirection="column" marginHorizontal="lx" marginBottom="s">
         {renderButton()}
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

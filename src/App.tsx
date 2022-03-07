@@ -58,6 +58,7 @@ const appConfig = () => {
     "Can't perform a React state update on an unmounted component.",
     'Sending `onAnimatedValueUpdate` with no listeners registered.',
     'Possible Unhandled Promise Rejection',
+    'Non-serializable values were found in the navigation state',
   ]) // Ignore log notification by message
 }
 

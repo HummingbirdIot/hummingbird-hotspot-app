@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, StyleSheet } from 'react-native'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import { useSelector } from 'react-redux'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import TextTransform from '../../../components/texts/TextTransform'
@@ -132,7 +132,10 @@ const HotspotSetupDiagnosticsScreen = () => {
   ])
 
   return (
-    <BackScreen backgroundColor="primaryBackground" onClose={handleClose}>
+    <BackScreenContainer
+      backgroundColor="primaryBackground"
+      onClose={handleClose}
+    >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Box alignItems="center">
           <Text
@@ -162,7 +165,7 @@ const HotspotSetupDiagnosticsScreen = () => {
         title={t(`makerHotspot.${hotspotType}.internal.${slideIndex}.button`)}
         onPress={handleNext}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

@@ -17,7 +17,7 @@ import {
   FeaturesNavigationProp,
   FeaturesStackParamList,
 } from '../../navigation/features/featuresNavigationTypes'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
@@ -167,7 +167,7 @@ const HotspotAssertConfirmLocationScreen = () => {
 
   if (fetchFeeDataError) {
     return (
-      <BackScreen onClose={handleClose}>
+      <BackScreenContainer onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <Text textAlign="center" fontSize={30}>
             Ooooops!
@@ -190,20 +190,20 @@ const HotspotAssertConfirmLocationScreen = () => {
             </Text>
           </Box>
         </Box>
-      </BackScreen>
+      </BackScreenContainer>
     )
   }
 
   if (!feeData || fetchFeeDataStatus < 4) {
     return (
-      <BackScreen onClose={handleClose}>
+      <BackScreenContainer onClose={handleClose}>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <ActivityIndicator color="#687A8C" />
           <Text textAlign="center" fontSize={16} marginTop="m">
             Getting Fee Data
           </Text>
         </Box>
-      </BackScreen>
+      </BackScreenContainer>
     )
   }
 
@@ -218,7 +218,7 @@ const HotspotAssertConfirmLocationScreen = () => {
   // )
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <ScrollView>
         <Box flex={1} justifyContent="center" paddingBottom="xxl">
           <Text variant="h1" marginBottom="l" maxFontSizeMultiplier={1}>
@@ -347,7 +347,7 @@ const HotspotAssertConfirmLocationScreen = () => {
           disabled={isFree ? false : !hasSufficientBalance}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import Fingerprint from '@assets/images/fingerprint.svg'
 import { ActivityIndicator } from 'react-native'
 import { AddGateway, useOnboarding } from '@helium/react-native-sdk'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import {
@@ -85,7 +85,7 @@ const HotspotTxnsConfirmExternalScreen = () => {
   }, [navigation, params, publicKey])
 
   return (
-    <BackScreen
+    <BackScreenContainer
       backgroundColor="primaryBackground"
       paddingTop={{ smallPhone: 's', phone: 'lx' }}
       onClose={handleClose}
@@ -181,7 +181,7 @@ const HotspotTxnsConfirmExternalScreen = () => {
         onPress={navNext}
         disabled={ownerAddress !== address}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Text from '../../../components/texts/Text'
 import {
   FeaturesNavigationProp,
@@ -60,7 +60,7 @@ const HotspotSetupWifiFormScreen = () => {
   }
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior="padding"
@@ -125,7 +125,7 @@ const HotspotSetupWifiFormScreen = () => {
           title={t('generic.connect')}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

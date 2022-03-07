@@ -8,7 +8,7 @@ import Text from '../../../components/texts/Text'
 import Box from '../../../components/boxes/Box'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { locale } from '../../../utils/i18n'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 
 const CreateAccount = () => {
@@ -38,7 +38,7 @@ const CreateAccount = () => {
   }, [nav])
 
   return (
-    <BackScreen
+    <BackScreenContainer
       flex={1}
       backgroundColor="primaryBackground"
       padding="xl"
@@ -67,7 +67,7 @@ const CreateAccount = () => {
       <Text variant="subtitle1" marginBottom="l">
         {t('account_setup.linkAccount.stepThree')}
       </Text>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

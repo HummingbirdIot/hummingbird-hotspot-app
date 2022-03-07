@@ -17,7 +17,7 @@ type Props = BoxProps<Theme> & {
   headerHorizontalPadding?: Spacing
 }
 
-const BackScreen = ({
+const BackScreenContainer = ({
   backgroundColor,
   children,
   flex,
@@ -55,4 +55,4 @@ const BackScreen = ({
   )
 }
 
-export default memo(BackScreen)
+export default memo(BackScreenContainer)

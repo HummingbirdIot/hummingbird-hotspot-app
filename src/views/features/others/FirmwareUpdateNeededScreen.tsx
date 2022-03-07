@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import { DebouncedButton } from '../../../components/buttons/Button'
 import Text from '../../../components/texts/Text'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
@@ -21,7 +21,7 @@ const FirmwareUpdateNeededScreen = () => {
   )
 
   return (
-    <BackScreen onClose={handleClose}>
+    <BackScreenContainer onClose={handleClose}>
       <Box flex={1} justifyContent="center" paddingBottom="xxl">
         <Box flexDirection="row" justifyContent="center" marginBottom="m">
           <Cloud />
@@ -61,7 +61,7 @@ const FirmwareUpdateNeededScreen = () => {
           title={t('hotspot_setup.firmware_update.next')}
         />
       </Box>
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 

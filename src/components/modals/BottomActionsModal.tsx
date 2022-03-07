@@ -31,7 +31,7 @@ const BottomActionsModal = ({
   const [sheetHeight, setSheetHeight] = useState(0)
 
   useEffect(() => {
-    let nextSheetHeight = data.length * 70 + 156 + (insets?.bottom || 0)
+    let nextSheetHeight = data.length * 72 + 156 + (insets?.bottom || 0)
     if (maxModalHeight && nextSheetHeight > maxModalHeight) {
       nextSheetHeight = maxModalHeight
     }
@@ -75,8 +75,7 @@ const BottomActionsModal = ({
               key={index}
               height={60}
               backgroundColor="primaryBackground"
-              borderBottomWidth={10}
-              borderBottomColor="surface"
+              marginBottom="m"
               borderRadius="m"
               justifyContent="center"
             >

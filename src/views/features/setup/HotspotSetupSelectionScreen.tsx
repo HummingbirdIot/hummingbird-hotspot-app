@@ -7,7 +7,7 @@ import { Linking, Platform } from 'react-native'
 import { useHotspotBle } from '@helium/react-native-sdk'
 import { useSelector } from 'react-redux'
 import usePermissionManager from '../../../utils/hooks/usePermissionManager'
-import BackScreen from '../../../components/containers/BackScreenContainer'
+import BackScreenContainer from '../../../components/containers/BackScreenContainer'
 import Box from '../../../components/boxes/Box'
 import Text from '../../../components/texts/Text'
 import HotspotSetupSelectionListItem from '../../../components/ble/HotspotSetupSelectionListItem'
@@ -155,7 +155,7 @@ const HotspotSetupSelectionScreen = () => {
   }, [radii.m])
 
   return (
-    <BackScreen
+    <BackScreenContainer
       backgroundColor="primaryBackground"
       paddingTop="m"
       padding="lx"
@@ -184,7 +184,7 @@ const HotspotSetupSelectionScreen = () => {
         renderItem={renderItem}
         ListFooterComponent={<Box height={32} />}
       />
-    </BackScreen>
+    </BackScreenContainer>
   )
 }
 
