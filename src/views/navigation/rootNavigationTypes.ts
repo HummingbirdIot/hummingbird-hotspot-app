@@ -44,6 +44,7 @@ export type RootStackParamList = {
   }
   AddWatchingAccount: undefined
   ScanQRCode: {
+    title?: string
     pattern: RegExp | ScanResultMatcher
     callback: (result: string) => void
   }

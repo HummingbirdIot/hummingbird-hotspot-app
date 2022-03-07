@@ -20,7 +20,7 @@ import ActivityScreen from '../main/account/ActivityScreen'
 import LockScreen from '../more/LockScreen'
 import HotspotScreen from '../main/hotspots/HotspotScreen'
 import Box from '../../components/boxes/Box'
-import ScanQRCodeScreen from '../more/login/ScanQRCodeScreen'
+import ScanQRCodeScreen from '../more/ScanQRCodeScreen'
 
 const LoginStack = createStackNavigator<LoginStackParamList>()
 const RootStack = createStackNavigator()

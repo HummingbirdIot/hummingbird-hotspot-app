@@ -12,18 +12,17 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 import {
   RootNavigationProp,
   RootStackParamList,
-} from '../../navigation/rootNavigationTypes'
-import Box from '../../../components/boxes/Box'
-import BackScreenContainer from '../../../components/containers/BackScreenContainer'
-import Text from '../../../components/texts/Text'
+} from '../navigation/rootNavigationTypes'
+import Box from '../../components/boxes/Box'
+import BackScreenContainer from '../../components/containers/BackScreenContainer'
+import Text from '../../components/texts/Text'
 
 type Route = RouteProp<RootStackParamList, 'ScanQRCode'>
 const ScanQRCodeScreen = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
   const nav = useNavigation<RootNavigationProp>()
   const {
-    params: { pattern, callback },
+    params: { title, pattern, callback },
   } = useRoute<Route>()
 
   const [perms] = usePermissions({
@@ -32,7 +31,7 @@ const ScanQRCodeScreen = () => {
 
   const handleBarCodeScanned = useDebouncedCallback(
     (result: BarCodeScannerResult) => {
-      console.log('BarCodeScannerResult', result)
+      // console.log('BarCodeScannerResult', result)
       if (typeof pattern === 'function') {
         if (pattern(result.data)) {
           callback(result.data)
@@ -76,15 +75,21 @@ const ScanQRCodeScreen = () => {
       onClose={handleClose}
     >
       <Box flex={1} alignItems="center">
-        <Box flex={6}>
+        <Box flex={2} marginTop="m" width="100%" alignItems="center">
+          <Text variant="h4" textAlign="center">
+            {title || t('Scan QRCode')}
+          </Text>
+        </Box>
+        <Box flex={5}>
           {perms?.granted ? (
             <Box
-              marginTop="m"
               borderRadius="xl"
               overflow="hidden"
               width="100%"
               aspectRatio={1}
-              backgroundColor="black"
+              backgroundColor="secondaryBackground"
+              borderColor="secondaryBackground"
+              borderWidth={3}
             >
               <Camera
                 barCodeScannerSettings={{
@@ -99,7 +104,7 @@ const ScanQRCodeScreen = () => {
             <Text variant="body1">No Perms</Text>
           )}
         </Box>
-        <Box flex={4} width="100%" padding="xl" />
+        <Box flex={5} width="100%" padding="xl" />
       </Box>
     </BackScreenContainer>
   )

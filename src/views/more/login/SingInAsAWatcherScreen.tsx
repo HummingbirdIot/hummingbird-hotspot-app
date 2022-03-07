@@ -183,6 +183,7 @@ const SingInAsAWatcherScreen = () => {
               justifyContent="center"
               onPress={() =>
                 nav.push('ScanQRCode', {
+                  title: t('Scan Account Address'),
                   pattern: /[A-z0-9]{51}/i,
                   callback: setAddress,
                 })
