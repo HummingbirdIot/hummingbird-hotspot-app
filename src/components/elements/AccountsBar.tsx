@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useAsync } from 'react-async-hook'
 import { WalletLink } from '@helium/react-native-sdk'
+import { Platform } from 'react-native'
 import Box from '../boxes/Box'
 import { RootState } from '../../store/rootReducer'
 import { RootNavigationProp } from '../../views/navigation/rootNavigationTypes'
@@ -17,7 +18,7 @@ import AccountCard from '../cards/AccountCard'
 import AccountListHeader from './AccountListHeader'
 import useAccountsMgr from '../../utils/hooks/useAccountsMgr'
 
-const AccountsView = () => {
+const AccountsBar = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
   const [ownedAddress, setOwnedAddress] = useState('')
@@ -99,11 +100,12 @@ const AccountsView = () => {
         data={addresses}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: bottom,
+          flex: 1,
+          paddingBottom: Platform.OS === 'ios' ? bottom : 0,
         }}
       />
     </>
   )
 }
 
-export default memo(AccountsView)
+export default memo(AccountsBar)

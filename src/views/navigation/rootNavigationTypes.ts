@@ -2,6 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Hotspot } from '@helium/http'
 import { B58Address } from '../../store/txns/txnsTypes'
 import { GatewayAction } from './features/featuresNavigationTypes'
+import { ScanResultMatcher } from './loginNavigationTypes'
 
 export type MainTabType = 'Account' | 'Hotspots' | 'Explorer' | 'Settings'
 
@@ -54,7 +55,5 @@ export type RootStackParamList = {
     address: B58Address
   }
 }
-
-export type ScanResultMatcher = (result: string) => boolean
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList>

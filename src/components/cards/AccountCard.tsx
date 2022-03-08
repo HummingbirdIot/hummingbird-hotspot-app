@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { useAsync } from 'react-async-hook'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import { Account } from '@helium/http'
+import { Platform } from 'react-native'
 import { useColors } from '../../theme/themeHooks'
 import Box from '../boxes/Box'
 import Text from '../texts/Text'
@@ -248,13 +249,15 @@ const Expand = ({
           >
             Watch
           </Button>
-          <Button
-            backgroundColor="primaryBackground"
-            borderColor="gray"
-            onPress={onRename}
-          >
-            Rename
-          </Button>
+          {Platform.OS === 'ios' ? (
+            <Button
+              backgroundColor="primaryBackground"
+              borderColor="gray"
+              onPress={onRename}
+            >
+              Rename
+            </Button>
+          ) : undefined}
           <Button backgroundColor="redMain" onPress={onDelete}>
             Delete
           </Button>

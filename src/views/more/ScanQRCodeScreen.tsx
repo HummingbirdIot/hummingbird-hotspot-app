@@ -1,14 +1,8 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { Camera } from 'expo-camera'
-import {
-  BarCodeScanner,
-  BarCodeScannerResult,
-  usePermissions,
-} from 'expo-barcode-scanner'
 import { useDebouncedCallback } from 'use-debounce/lib'
+import Toast from 'react-native-simple-toast'
 import {
   RootNavigationProp,
   RootStackParamList,
@@ -16,6 +10,9 @@ import {
 import Box from '../../components/boxes/Box'
 import BackScreenContainer from '../../components/containers/BackScreenContainer'
 import Text from '../../components/texts/Text'
+import useHaptic from '../../utils/hooks/useHaptic'
+import ScanQRCodeView from './ScanQRCodeView'
+import { wp } from '../../utils/layout'
 
 type Route = RouteProp<RootStackParamList, 'ScanQRCode'>
 const ScanQRCodeScreen = () => {
@@ -24,40 +21,38 @@ const ScanQRCodeScreen = () => {
   const {
     params: { title, pattern, callback },
   } = useRoute<Route>()
+  const [scanned, setScanned] = useState(false)
 
-  const [perms] = usePermissions({
-    request: true,
-  })
+  const { triggerNotification } = useHaptic()
 
   const handleBarCodeScanned = useDebouncedCallback(
-    (result: BarCodeScannerResult) => {
-      // console.log('BarCodeScannerResult', result)
-      if (typeof pattern === 'function') {
-        if (pattern(result.data)) {
-          callback(result.data)
-          nav.pop()
+    (data: string, type: string) => {
+      if (scanned) return
+      console.log(
+        `Bar code with type ${type} and data ${data} has been scanned!`,
+      )
+      try {
+        if (typeof pattern === 'function') {
+          if (pattern(data)) {
+            setScanned(true)
+            callback(data)
+            nav.pop()
+          }
+        } else if (typeof pattern === 'object' && pattern instanceof RegExp) {
+          if (pattern.test(data)) {
+            setScanned(true)
+            callback(data)
+            nav.pop()
+          }
         }
-      } else if (typeof pattern === 'object' && pattern instanceof RegExp) {
-        if (pattern.test(result.data)) {
-          callback(result.data)
-          nav.pop()
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.message) {
+          Toast.showWithGravity(error.message, Toast.LONG, Toast.CENTER)
         }
-      } else {
-        callback(result.data)
-        nav.pop()
+        triggerNotification('error')
       }
-      // try {
-      //   handleBarCode(result, 'add_gateway', {
-      //     hotspotType: params.hotspotType,
-      //   })
-      //   triggerNotification('success')
-      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      // } catch (error: any) {
-      //   if (error.message) {
-      //     Toast.showWithGravity(error.message, Toast.LONG, Toast.CENTER)
-      //   }
-      //   triggerNotification('error')
-      // }
     },
     1000,
     { leading: true, trailing: false },
@@ -75,36 +70,27 @@ const ScanQRCodeScreen = () => {
       onClose={handleClose}
     >
       <Box flex={1} alignItems="center">
-        <Box flex={2} marginTop="m" width="100%" alignItems="center">
+        <Box flex={2} alignItems="center" justifyContent="center">
           <Text variant="h4" textAlign="center">
             {title || t('Scan QRCode')}
           </Text>
         </Box>
-        <Box flex={5}>
-          {perms?.granted ? (
-            <Box
-              borderRadius="xl"
-              overflow="hidden"
-              width="100%"
-              aspectRatio={1}
-              backgroundColor="secondaryBackground"
-              borderColor="secondaryBackground"
-              borderWidth={3}
-            >
-              <Camera
-                barCodeScannerSettings={{
-                  barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-                }}
-                onBarCodeScanned={handleBarCodeScanned.callback}
-                ratio="1:1"
-                style={StyleSheet.absoluteFill}
-              />
-            </Box>
-          ) : (
-            <Text variant="body1">No Perms</Text>
-          )}
+        <Box flex={16} justifyContent="center">
+          <Box
+            flex={1}
+            aspectRatio={1}
+            backgroundColor="black"
+            borderColor="secondaryBackground"
+            borderWidth={3}
+            borderRadius="xl"
+            overflow="hidden"
+            maxWidth={wp(70)}
+            maxHeight={wp(70)}
+          >
+            <ScanQRCodeView handleScanned={handleBarCodeScanned.callback} />
+          </Box>
         </Box>
-        <Box flex={5} width="100%" padding="xl" />
+        <Box flex={2} padding="xl" />
       </Box>
     </BackScreenContainer>
   )

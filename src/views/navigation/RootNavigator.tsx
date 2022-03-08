@@ -101,6 +101,7 @@ const RootNavigator = () => {
           name="CreateHeliumAccount"
           component={CreateHeliumAccountScreen}
         />
+        <LoginStack.Screen name="ScanQRCode" component={ScanQRCodeScreen} />
       </LoginStack.Navigator>
     ),
     [],

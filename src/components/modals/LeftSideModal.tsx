@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from 'react'
-import { Modal } from 'react-native'
+import { Modal, Platform } from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -114,7 +114,7 @@ const LeftSideModal = ({
           <Box
             paddingHorizontal="m"
             style={{
-              paddingTop: top,
+              paddingTop: Platform.OS === 'ios' ? top : 0,
             }}
           >
             <Box
