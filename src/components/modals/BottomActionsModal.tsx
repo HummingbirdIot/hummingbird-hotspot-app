@@ -31,7 +31,7 @@ const BottomActionsModal = ({
   const [sheetHeight, setSheetHeight] = useState(0)
 
   useEffect(() => {
-    let nextSheetHeight = data.length * 72 + 156 + (insets?.bottom || 0)
+    let nextSheetHeight = data.length * 60 + 150 + (insets?.bottom || 0)
     if (maxModalHeight && nextSheetHeight > maxModalHeight) {
       nextSheetHeight = maxModalHeight
     }
@@ -45,7 +45,7 @@ const BottomActionsModal = ({
           onPress={handleClose}
           style={styles.cancelContainer}
           height={49}
-          marginVertical="m"
+          marginBottom="m"
           alignItems="center"
           justifyContent="center"
           borderRadius="ms"
@@ -73,9 +73,9 @@ const BottomActionsModal = ({
             <Box
               // eslint-disable-next-line react/no-array-index-key
               key={index}
-              height={60}
+              height={56}
               backgroundColor="primaryBackground"
-              marginBottom="m"
+              marginBottom="s"
               borderRadius="m"
               justifyContent="center"
             >

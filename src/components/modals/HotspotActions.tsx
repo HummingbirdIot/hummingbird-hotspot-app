@@ -1,8 +1,10 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { Hotspot } from '@helium/http'
+import { useSelector } from 'react-redux'
 import BottomActionsModal from './BottomActionsModal'
 import useActions from '../../utils/hooks/useActions'
 import useListWidgets from '../../utils/hooks/useListWidgets'
+import { RootState } from '../../store/rootReducer'
 
 const HotspotActions = ({
   hotspot,
@@ -20,25 +22,32 @@ const HotspotActions = ({
     locationName,
     setIsVisible,
   })
+  const { isWatcher } = useSelector((state: RootState) => state.app.user)
   const { ActivityIndicator } = useListWidgets()
 
-  const data = [
-    {
-      label: 'Assert Location And Antenna',
-      action: assertLocation,
-    },
-    {
-      label: 'Assert Antenna',
-      action: assertAntenna,
-    },
-    {
-      label: 'Update WiFi',
-      action: setWiFi,
-    },
-  ]
+  const data = useMemo(() => {
+    const list = [
+      {
+        label: 'Assert Location And Antenna',
+        action: assertLocation,
+      },
+      {
+        label: 'Assert Antenna',
+        action: assertAntenna,
+      },
+    ]
+    if (!isWatcher) {
+      list.push({
+        label: 'Update WiFi',
+        action: setWiFi,
+      })
+    }
+    return list
+  }, [assertAntenna, assertLocation, isWatcher, setWiFi])
+
   return hotspot ? (
     <BottomActionsModal
-      title="Actions"
+      title="Hotspot Actions"
       data={data}
       modalVisible={isVisible}
       handleClose={() => setIsVisible(false)}

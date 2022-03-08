@@ -47,7 +47,7 @@ const AccountsListItem = ({
       }
     } else {
       await showOKAlert({
-        titleKey: 'Rename Account Error',
+        titleKey: 'Account Setting Warning',
         messageKey: 'Sorry, Android not supported right now!',
       })
     }
@@ -68,6 +68,8 @@ const AccountsListItem = ({
         data={data}
         isCurrent
         onPress={() => watchAccount(data.address)}
+        onRename={rename}
+        onDelete={deleteAccount}
       />
     )
   }

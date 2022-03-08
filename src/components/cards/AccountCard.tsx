@@ -38,13 +38,19 @@ const Collapsed = ({
   isCurrent,
   onPress,
   icon,
+  onRename,
+  onDelete,
 }: {
   data: WatchingAddress
   isCurrent: boolean
   onPress: () => void
   icon?: string
+  onRename?: () => void
+  onDelete?: () => void
 }) => {
   const { blueMain, primaryText } = useColors()
+  const { isWatcher } = useSelector((state: RootState) => state.app.user)
+
   return (
     <Box paddingVertical="s" padding="m">
       <TouchableOpacityBox
@@ -58,6 +64,21 @@ const Collapsed = ({
           <Text variant="body3" marginTop="s">
             {truncateAddress(data.address, 8, 16)}
           </Text>
+          {isCurrent && isWatcher && (
+            <Box {...flexProps} marginTop="ms">
+              <Button
+                backgroundColor="primaryBackground"
+                borderColor="gray"
+                functionalDisable={Platform.OS === 'android'}
+                onPress={onRename}
+              >
+                Rename
+              </Button>
+              <Button backgroundColor="redMain" onPress={onDelete}>
+                Unwatch
+              </Button>
+            </Box>
+          )}
         </Box>
         <Icon
           name={icon || (isCurrent ? 'chevron-right' : 'expand-more')}
@@ -123,25 +144,30 @@ const Button = ({
   borderColor,
   onPress,
   disabled,
+  functionalDisable,
 }: {
   children: string
   backgroundColor: any
   borderColor?: any
-  onPress: () => void
+  onPress?: () => void
   disabled?: boolean
+  functionalDisable?: boolean
 }) => (
   <TouchableOpacityBox
+    flex={1}
     backgroundColor={backgroundColor}
-    paddingHorizontal="s"
-    paddingVertical="xs"
+    padding="xs"
     borderRadius="s"
     borderColor={borderColor || backgroundColor}
     borderWidth={1}
     disabled={disabled}
-    opacity={disabled ? 0.6 : 1}
+    opacity={disabled || functionalDisable ? 0.6 : 1}
     onPress={onPress}
+    marginRight="s"
   >
-    <Text variant="body2">{children}</Text>
+    <Text variant="body2" textAlign="center">
+      {children}
+    </Text>
   </TouchableOpacityBox>
 )
 
@@ -249,15 +275,14 @@ const Expand = ({
           >
             Watch
           </Button>
-          {Platform.OS === 'ios' ? (
-            <Button
-              backgroundColor="primaryBackground"
-              borderColor="gray"
-              onPress={onRename}
-            >
-              Rename
-            </Button>
-          ) : undefined}
+          <Button
+            backgroundColor="primaryBackground"
+            borderColor="gray"
+            functionalDisable={Platform.OS === 'android'}
+            onPress={onRename}
+          >
+            Rename
+          </Button>
           <Button backgroundColor="redMain" onPress={onDelete}>
             Delete
           </Button>

@@ -23,6 +23,7 @@ const useActions = ({
   const { permissionResponse, locationBlocked } = useSelector(
     (state: RootState) => state.location,
   )
+  const { isWatcher } = useSelector((state: RootState) => state.app.user)
   const { showOKCancelAlert } = useAlert()
   const { enable, getState } = useHotspotBle()
 
@@ -87,37 +88,55 @@ const useActions = ({
     }
   }, [enable, getState, showOKCancelAlert])
 
+  const showAlert = useCallback(
+    async () =>
+      showOKCancelAlert({
+        titleKey: 'Watching Mode Warning',
+        messageKey:
+          "Your are signing as a watcher now, and won't be able to complete the whole asserting operation.\nYou can cancel the operation or keep experiencing the process",
+        okKey: 'Keep Exp.',
+        cancelKey: 'Cancel',
+      }),
+    [showOKCancelAlert],
+  )
+
   const assertLocation = useCallback(async () => {
     if (!hotspot) return
-    setIsVisible(false)
-    await checkLocation()
-    navigation.push('HotspotAssert', {
-      hotspot,
-      hotspotAddress: hotspot.address,
-      gatewayAction: 'assertLocation',
-      gain: hotspot.gain ? hotspot.gain / 10 : 1.2,
-      elevation: hotspot.elevation || 0,
-    })
-  }, [hotspot, setIsVisible, checkLocation, navigation])
+    const result = isWatcher ? await showAlert() : true
+    if (result) {
+      setIsVisible(false)
+      await checkLocation()
+      navigation.push('HotspotAssert', {
+        hotspot,
+        hotspotAddress: hotspot.address,
+        gatewayAction: 'assertLocation',
+        gain: hotspot.gain ? hotspot.gain / 10 : 1.2,
+        elevation: hotspot.elevation || 0,
+      })
+    }
+  }, [hotspot, isWatcher, showAlert, setIsVisible, checkLocation, navigation])
 
   const assertAntenna = async () => {
     // console.log('HotspotDetailScreen::assertAntenna::hotspot:', hotspot)
     if (hotspot) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { lng, lat, geocode, location } = hotspot
-      if (lng && lat) {
-        setIsVisible(false)
-        await checkLocation()
+      const result = isWatcher ? await showAlert() : true
+      if (result) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { lng, lat, geocode, location } = hotspot
+        if (lng && lat) {
+          setIsVisible(false)
+          await checkLocation()
 
-        navigation.push('HotspotAssert', {
-          hotspot,
-          hotspotAddress: hotspot.address,
-          locationName,
-          coords: [lng, lat],
-          currentLocation: location,
-          gatewayAction: 'assertAntenna',
-        })
-      } else {
+          navigation.push('HotspotAssert', {
+            hotspot,
+            hotspotAddress: hotspot.address,
+            locationName,
+            coords: [lng, lat],
+            currentLocation: location,
+            gatewayAction: 'assertAntenna',
+          })
+        } else {
+        }
       }
     }
   }

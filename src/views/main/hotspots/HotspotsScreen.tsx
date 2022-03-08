@@ -19,7 +19,9 @@ const HotspotsScreen = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<RootNavigationProp>()
 
-  const { accountAddress } = useSelector((state: RootState) => state.app.user)
+  const { isWatcher, accountAddress } = useSelector(
+    (state: RootState) => state.app.user,
+  )
   const { hotspots, hotspotsData, hotspotsLoaded } = useSelector(
     (state: RootState) => state.hotspots,
   )
@@ -41,12 +43,16 @@ const HotspotsScreen = () => {
   return (
     <TabViewContainer
       title="Hotspots"
-      icons={[
-        {
-          name: 'add',
-          onPress: () => navigation.navigate('HotspotSetup'),
-        },
-      ]}
+      icons={
+        isWatcher
+          ? []
+          : [
+              {
+                name: 'add',
+                onPress: () => navigation.navigate('HotspotSetup'),
+              },
+            ]
+      }
       showAccountSwitch
     >
       <Box flex={1}>
