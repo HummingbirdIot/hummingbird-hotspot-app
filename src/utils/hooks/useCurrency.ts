@@ -110,31 +110,49 @@ const useCurrency = () => {
     async (
       balance: Balance<NetworkTokens>,
       split?: boolean,
-      // maxDecimalPlaces = 2,
+      maxDecimalPlaces = 2,
     ) => {
-      const multiplier = currentPrices?.[currencyType.toLowerCase()] || 0
+      if (balance) {
+        const multiplier = currentPrices?.[currencyType.toLowerCase()] || 0
 
-      try {
-        const convertedValue = multiplier * balance.floatBalance
-        const formattedValue: string = await formatCurrency(convertedValue)
+        try {
+          const convertedValue = multiplier * balance.floatBalance
+          const formattedValue: string = await formatCurrency(convertedValue)
 
-        if (split) {
-          const decimalPart = t('generic.hnt_to_currency', { currencyType })
-          return { integerPart: formattedValue, decimalPart }
-        }
-        dispatch(accountSlice.actions.updateFiat(formattedValue.toString()))
-        return formattedValue
-      } catch (e) {
-        return ''
+          if (split) {
+            const decimalPart = t('generic.hnt_to_currency', { currencyType })
+            return {
+              integerPart: convertedValue.toFixed(maxDecimalPlaces),
+              formattedValue,
+              decimalPart,
+            }
+          }
+          return formattedValue
+        } catch (e) {}
       }
+      return ''
     },
-    [currencyType, currentPrices, dispatch, formatCurrency, t],
+    [currencyType, currentPrices, formatCurrency, t],
   ) as StringReturn & PartsReturn
 
+  const updateFiatBlance = useCallback(
+    async (balance: Balance<NetworkTokens>) => {
+      const fiat = await hntBalanceToFiatBlance(balance, true)
+      if (fiat) {
+        dispatch(
+          accountSlice.actions.updateFiat(
+            `${fiat.integerPart} ${fiat.decimalPart}`,
+          ),
+        )
+      }
+    },
+    [dispatch, hntBalanceToFiatBlance],
+  )
+
   return {
+    updateFiatBlance,
     networkTokensToDataCredits,
     hntBalanceToFiatBlance,
-    // toggleConvertHntToCurrency,
     hntToDisplayVal,
   }
 }

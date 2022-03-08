@@ -111,6 +111,7 @@ export default {
     meters: '{{distance}}m',
     kilometers: '{{distance}}km',
     not_available: 'N/A',
+    hnt_to_currency: '{{currencyType}}',
   },
   hotspot_details: {
     no_location_body: 'Pair with the Hotspot to begin.',
