@@ -137,11 +137,15 @@ const HotspotTxnsProgressScreen = () => {
           makerAddress: onboardingRecord.maker.address,
           locationNonceLimit: onboardingRecord.maker.locationNonceLimit || 0,
         })
-        // console.log(
-        //   'HotspotTxnsProgressScreen::assertLocationTxn:',
-        //   assertLocationTxn,
-        // )
+        console.log(
+          'HotspotTxnsProgressScreen::assertLocationTxn:',
+          assertLocationTxn,
+        )
         updateParams.assertLocationTxn = assertLocationTxn.toString()
+        console.log(
+          'HotspotTxnsProgressScreen::assertLocationTxn.toString():',
+          updateParams.assertLocationTxn,
+        )
       }
     } catch (error) {
       console.log('HotspotTxnsProgressScreen::fixParams::error:', error)

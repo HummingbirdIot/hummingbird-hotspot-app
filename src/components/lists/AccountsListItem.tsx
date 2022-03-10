@@ -1,12 +1,15 @@
 import React, { memo, useState, useCallback } from 'react'
 import { Account } from '@helium/http'
 import { Platform } from 'react-native'
+import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../../store/store'
 import appSlice, { WatchingAddress } from '../../store/app/appSlice'
 import AccountCard from '../cards/AccountCard'
 import useAccountsMgr from '../../utils/hooks/useAccountsMgr'
 import accountSlice from '../../store/data/accountSlice'
 import useAlert from '../../utils/hooks/useAlert'
+import { RootState } from '../../store/rootReducer'
+import hotspotsSlice from '../../store/data/hotspotsSlice'
 
 const AccountsListItem = ({
   data,
@@ -18,6 +21,9 @@ const AccountsListItem = ({
   const dispatch = useAppDispatch()
   const { showInputAlert, showOKAlert } = useAlert()
   const [collapsed, setCollapsed] = useState(true)
+  const { accountAddress, walletLinkToken } = useSelector(
+    (state: RootState) => state.app.user,
+  )
 
   const { watchAccount } = useAccountsMgr()
 
@@ -57,9 +63,18 @@ const AccountsListItem = ({
     (account?: Account) => {
       if (account) {
         dispatch(appSlice.actions.deleteAddress({ address: data.address }))
+        if (accountAddress === data.address) {
+          dispatch(hotspotsSlice.actions.signOut())
+          dispatch(accountSlice.actions.reset())
+          if (walletLinkToken) {
+            dispatch(appSlice.actions.asOwner())
+          } else {
+            dispatch(appSlice.actions.unlinkAccount())
+          }
+        }
       }
     },
-    [data.address, dispatch],
+    [accountAddress, data.address, dispatch, walletLinkToken],
   )
 
   if (isCurrent) {

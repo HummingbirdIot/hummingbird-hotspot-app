@@ -1,6 +1,6 @@
 {
   "name": "hummingbird",
-  "version": "0.0.4-beta.3",
+  "version": "0.1.0-preview",
   "private": true,
   "scripts": {
     "android": "react-native run-android",

@@ -12,7 +12,8 @@ import Box from '../../../components/boxes/Box'
 import { RootNavigationProp } from '../../navigation/rootNavigationTypes'
 import { useAppDispatch } from '../../../store/store'
 import appSlice from '../../../store/app/appSlice'
-import { fetchAccount } from '../../../store/data/accountSlice'
+import accountSlice, { fetchAccount } from '../../../store/data/accountSlice'
+import hotspotsSlice from '../../../store/data/hotspotsSlice'
 import useAlert from '../../../utils/hooks/useAlert'
 import TouchableOpacityBox from '../../../components/boxes/TouchableOpacityBox'
 import { useColors } from '../../../theme/themeHooks'
@@ -49,6 +50,8 @@ const SingInAsAWatcherScreen = () => {
         if (account?.address === address) {
           if (account.balance) {
             nav.pop()
+            dispatch(hotspotsSlice.actions.signOut())
+            dispatch(accountSlice.actions.reset())
             dispatch(appSlice.actions.enableWatchMode(account?.address))
           } else {
             // console.log('fetchAccountFulfilled', account)
