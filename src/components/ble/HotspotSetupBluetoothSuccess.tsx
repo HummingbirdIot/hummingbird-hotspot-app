@@ -110,7 +110,7 @@ const HotspotSetupBluetoothSuccess = () => {
 
         const hotspotAddress = await getOnboardingAddress()
 
-        console.log('networks,', networks, connectedNetworks)
+        // console.log('networks,', hotspotAddress, networks, connectedNetworks)
         const onboardingRecord = await getOnboardingRecord(hotspotAddress)
         if (!onboardingRecord) return
 
